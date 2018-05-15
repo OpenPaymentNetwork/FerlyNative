@@ -1,8 +1,8 @@
-import {combineReducers} from 'redux';
+// import {combineReducers} from 'redux'
 
-import api from './api';
+import api from './api'
 
-export default api;
+export default api
 
 // export default combineReducers({
 //   api

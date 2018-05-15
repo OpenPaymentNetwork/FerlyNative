@@ -1,19 +1,17 @@
-import React from 'react';
-import { Button, View, Text, TextInput } from 'react-native';
-import { Provider } from 'react-redux';
-import configureStore from './store/store.js';
+import configureStore from './store/store.js'
+import React from 'react'
+import {Provider} from 'react-redux'
 
-import Navigation from './navigation';
+import Navigation from './navigation'
 
-const store = configureStore();
-
+const store = configureStore()
 
 export default class App extends React.Component {
-  render() {
+  render () {
     return (
       <Provider store={store}>
         <Navigation />
       </Provider>
-    );
+    )
   }
 }

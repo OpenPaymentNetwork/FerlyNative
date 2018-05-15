@@ -1,14 +1,18 @@
-import React from 'react';
-import { Text, View, Image, StyleSheet } from 'react-native';
+import PropTypes from 'prop-types'
+import React from 'react'
+import {View} from 'react-native'
 
 export default class HorizontalRuler extends React.Component {
-
-  render() {
+  render () {
     return (
       <View style={{
-          borderWidth: 0.5,
-          borderColor: this.props.color || 'black',
-          marginVertical: 10}} />
-    );
+        borderWidth: 0.5,
+        borderColor: this.props.color || 'black',
+        marginVertical: 10}} />
+    )
   }
+}
+
+HorizontalRuler.propTypes = {
+  color: PropTypes.string
 }

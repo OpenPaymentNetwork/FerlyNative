@@ -1,21 +1,19 @@
-
-import { StackNavigator } from 'react-navigation';
-import GiveScreen from './views/give';
-import WalletScreen from './views/wallet';
-
+import GiveScreen from './views/give'
+import WalletScreen from './views/wallet'
+import {StackNavigator} from 'react-navigation'
 
 const Navigation = StackNavigator(
   {
     Wallet: {
-      screen: WalletScreen,
+      screen: WalletScreen
     },
     Give: {
-      screen: GiveScreen,
-    },
+      screen: GiveScreen
+    }
   },
   {
-    initialRouteName: 'Wallet',
+    initialRouteName: 'Wallet'
   }
-);
+)
 
-export default Navigation;
+export default Navigation
