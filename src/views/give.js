@@ -38,8 +38,8 @@ export default class GiveScreen extends React.Component {
           style={{
             paddingLeft: 30,
             fontSize: 22,
-            height: 10,
-            flex: '.1',
+            maxHeight: 70,
+            flex: 1,
             borderWidth: 9,
             borderColor: '#E4E4E4'}}
           onChangeText={(t) => this.setState({text: t})}

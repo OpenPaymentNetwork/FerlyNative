@@ -12,9 +12,9 @@ import {connect} from 'react-redux'
 import {createUrl} from '../utils/fetch'
 
 export class WalletScreen extends React.Component {
-  // static navigationOptions = {
-  //   title: 'Wallet',
-  // };
+  static navigationOptions = {
+    title: 'Wallet'
+  };
 
   componentDidMount () {
     this.props.apiRequire(this.props.walletUrl)
@@ -72,7 +72,7 @@ WalletScreen.propTypes = {
   apiRequire: PropTypes.func.isRequired,
   amounts: PropTypes.array.isRequired,
   walletUrl: PropTypes.string.isRequired,
-  navigation: PropTypes.func.isRequired
+  navigation: PropTypes.object.isRequired
 }
 
 function map (state) {

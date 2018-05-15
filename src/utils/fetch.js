@@ -7,7 +7,6 @@ const baseUrl = host + prefix
 // Used in GET calls. Convert api url and query params into a full url
 // with query string. Adds device_id.
 export function createUrl (urlTail, params = {}) {
-  console.log('using:', urlTail)
   const url = baseUrl + urlTail
   const queries = []
   for (const key in params) {

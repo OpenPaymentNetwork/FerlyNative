@@ -32,7 +32,7 @@ export default class CashDisplay extends React.Component {
 }
 
 CashDisplay.propTypes = {
-  amount: PropTypes.amount,
+  amount: PropTypes.string,
   name: PropTypes.string,
   url: PropTypes.string
 }

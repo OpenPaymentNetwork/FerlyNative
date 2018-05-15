@@ -22,5 +22,5 @@ export default class ProfileDisplay extends React.Component {
 
 ProfileDisplay.propTypes = {
   name: PropTypes.string,
-  url: PropTypes.url
+  url: PropTypes.string
 }
