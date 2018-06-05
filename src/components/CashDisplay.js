@@ -4,26 +4,27 @@ import {Text, View, Image} from 'react-native'
 
 export default class CashDisplay extends React.Component {
   render () {
-    const {name, url, amount} = this.props
+    const design = this.props.design
     return (
       <View style={{flexDirection: 'row', marginVertical: 10}}>
-        <View style={{
-          flexDirection: 'row',
-          height: 90,
-          backgroundColor: '#FFF',
-          borderWidth: 0.5,
-          borderColor: 'black',
-          borderRadius: 10}}>
+        <View
+          style={{
+            flexDirection: 'row',
+            height: 90,
+            backgroundColor: '#FFF',
+            borderWidth: 0.5,
+            borderColor: 'black',
+            borderRadius: 10}}>
           <Image
             style={{width: 85, height: 70, margin: 10}}
-            source={{uri: url}} />
+            source={{uri: design.url}} />
           <Text style={{width: 80, textAlign: 'center', marginTop: 32}}>
-            {name}
+            {design.title}
           </Text>
         </View>
         <View style={{justifyContent: 'center', flex: 1}}>
           <Text style={{textAlign: 'center'}}>
-            ${amount}
+            ${design.amount}
           </Text>
         </View>
       </View>
@@ -32,7 +33,5 @@ export default class CashDisplay extends React.Component {
 }
 
 CashDisplay.propTypes = {
-  amount: PropTypes.string,
-  name: PropTypes.string,
-  url: PropTypes.string
+  design: PropTypes.object, // specify as {id,title,url,amount}
 }

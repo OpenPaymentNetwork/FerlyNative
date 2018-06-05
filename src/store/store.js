@@ -14,11 +14,20 @@ const apiMiddleware = (store) => (next) => (action) => {
       fetch(action.url)
         .then((response) => response.json())
         .then((responseJson) => {
-          next(apiInject(action.url, responseJson))
+          console.log('CALL:', action.url, responseJson)
+          // It shouldn't return a 200 OK response, handle it in catch
+          if (!responseJson.hasOwnProperty('error')) {
+            next(apiInject(action.url, responseJson))
+          } else {
+            console.log('REMOVE THIS ERROR STUFF')
+          }
         })
         .catch((error) => {
-          console.error(error)
+          console.log('there was an error connecting to ferly server')
+          // console.error(error)
         })
+    } else {
+      console.log('retrieving from cache:', action.url)
     }
   } else {
     next(action)

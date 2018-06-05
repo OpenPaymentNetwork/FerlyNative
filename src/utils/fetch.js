@@ -1,6 +1,8 @@
 import {Constants} from 'expo'
 
-const host = 'http://ferly-env.xccscenpxm.us-east-2.elasticbeanstalk.com/'
+// const host = 'http://ferly-env.xccscenpxm.us-east-2.elasticbeanstalk.com/'
+// const host = 'http://192.168.3.6:44225/' // wingcashguest
+const host = 'http://192.168.2.131:44225/' // sendmi5g
 const prefix = 'api/'
 const baseUrl = host + prefix
 

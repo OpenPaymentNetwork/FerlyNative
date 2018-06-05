@@ -1,5 +1,4 @@
-// import { Constants } from 'expo'
-// import { Permissions, Notifications } from 'expo'
+import { Permissions, Notifications, Constants } from 'expo'
 import CashDisplay from '../components/CashDisplay'
 import HorizontalRuler from '../components/HorizontalRuler'
 import ProfileDisplay from '../components/ProfileDisplay'
@@ -7,7 +6,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import Theme from '../utils/theme'
 import {apiRequire} from '../store/api'
-import {Button, View} from 'react-native'
+import {Button, View, ActivityIndicator, TouchableOpacity} from 'react-native'
 import {connect} from 'react-redux'
 import {createUrl} from '../utils/fetch'
 
@@ -18,51 +17,43 @@ export class WalletScreen extends React.Component {
 
   componentDidMount () {
     this.props.apiRequire(this.props.walletUrl)
+    // this.getToken()
   }
 
+  // async getToken () {
+  //   const status = await Permissions.askAsync(Permissions.NOTIFICATIONS)
+  //   let token = await Notifications.getExpoPushTokenAsync()
+  //   console.log('token:', token)
+  // }
+
   render () {
-    const myUrl = (
-      'https://scontent.fsnc1-1.fna.fbcdn.net/v/t31.0-8/17917329_116311286047' +
-      '7719_8773797763845911478_o.jpg?_nc_cat=0&oh=3242425b5f0b4a154713edd53d' +
-      'dcba5c&oe=5B6DBC5F')
-    const appleUrl = (
-      'https://pbs.twimg.com' +
-      '/profile_images/856508346190381057/DaVvCgBo_400x400.jpg')
-    const amazonUrl = (
-      'https://pmcdeadline2.files.wordpress.com' +
-      '/2015/08/amazon-featured-image.jpg?w=446&h=299&crop=1')
+    const {title, profileImage} = this.props
+    const amounts = this.props.amounts || []
+
+    if (!title) {
+      return (
+        <View
+          style={{flex: 1, justifyContent: 'center', flexDirection: 'row'}}>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      )
+    }
     return (
       <View style={{flex: 1, paddingHorizontal: 20}}>
-
-        <ProfileDisplay name='Brad Wilkes' url={myUrl} />
+        <ProfileDisplay name={title} url={profileImage} />
         <HorizontalRuler marginVertical='0' color={Theme.yellow} />
         {
-          this.props.amounts.map((cashRow) => {
-            let url
-            switch (cashRow.title) {
-              case 'Amazon':
-                url = amazonUrl
-                break
-              case 'Apple':
-                url = appleUrl
-                break
-            }
+          amounts.map((cashRow) => {
             return (
-              <CashDisplay
-                key={cashRow.id}
-                name={cashRow.title}
-                url={url}
-                amount={cashRow.amount} />
+              <TouchableOpacity
+                onPress={() => this.props.navigation.navigate('Cash', cashRow)}>
+                <CashDisplay
+                  design={cashRow}
+                  key={cashRow.id} />
+              </TouchableOpacity>
             )
           })
         }
-        <HorizontalRuler color={Theme.lightBlue} />
-        <Button
-          title="Give Gift"
-          color={Theme.darkBlue}
-          onPress={
-            () => this.props.navigation.navigate('Give', {name: 'BRAD!'})}
-        />
       </View>
     )
   }
@@ -70,20 +61,24 @@ export class WalletScreen extends React.Component {
 
 WalletScreen.propTypes = {
   apiRequire: PropTypes.func.isRequired,
-  amounts: PropTypes.array.isRequired,
+  amounts: PropTypes.array,
+  title: PropTypes.string,
+  profileImage: PropTypes.string,
   walletUrl: PropTypes.string.isRequired,
   navigation: PropTypes.object.isRequired
 }
 
 function map (state) {
-  const walletUrl = createUrl('/wallet')
-
+  const walletUrl = createUrl('wallet')
   const apiStore = state.apiStore
-  const amounts = apiStore[walletUrl] || []
+  const myWallet = apiStore[walletUrl] || {}
+  const {amounts, title, profileImage} = myWallet
 
   return {
     walletUrl,
-    amounts
+    amounts,
+    title,
+    profileImage
   }
 }
 

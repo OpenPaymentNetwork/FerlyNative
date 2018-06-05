@@ -1,10 +1,15 @@
 import ProfileDisplay from '../components/ProfileDisplay'
+import PropTypes from 'prop-types'
 import React from 'react'
+import {apiRequire} from '../store/api'
+import {connect} from 'react-redux'
+import {createUrl} from '../utils/fetch'
 import {View, TextInput} from 'react-native'
 
-export default class GiveScreen extends React.Component {
+class GiveScreen extends React.Component {
   static navigationOptions = {
-    title: 'Give Gifts'
+    title: 'Give',
+    drawerLabel: 'Give Gift'
   };
 
   constructor (props) {
@@ -12,20 +17,24 @@ export default class GiveScreen extends React.Component {
     this.state = {text: ''}
   }
 
+  componentDidMount () {
+    this.props.apiRequire(this.props.usersUrl)
+  }
+
   renderResults () {
-    const myUrl = (
-      'https://scontent.fsnc1-1.fna.fbcdn.net/v/t31.0-8/17917329_116311286047' +
-      '7719_8773797763845911478_o.jpg?_nc_cat=0&oh=3242425b5f0b4a154713edd53d' +
-      'dcba5c&oe=5B6DBC5F')
-    const bradUrl = (
-      'https://res.cloudinary.com/tech-beach-retreat/image/upload/v1498676493' +
-      '/bradley-wilkes-speaking-at-tech-beach-retreat_bxoill.png')
     const text = this.state.text || ''
-    if (text.toLowerCase().startsWith('bra')) {
+    if (text.length > 1) {
       return (
         <View>
-          <ProfileDisplay name='Brad Wilkes' url={bradUrl} />
-          <ProfileDisplay name='Bradley Wilkes' url={myUrl} />
+          {
+            this.props.users.map((user) => {
+              if (user.title.toLowerCase().startsWith(text.toLowerCase())) {
+                return <ProfileDisplay key={user.title} name={user.title} url={user.picture} />
+              } else {
+                return null
+              }
+            })
+          }
         </View>
       )
     }
@@ -51,3 +60,27 @@ export default class GiveScreen extends React.Component {
     )
   }
 }
+
+GiveScreen.propTypes = {
+  apiRequire: PropTypes.func.isRequired,
+  users: PropTypes.array.isRequired,
+  usersUrl: PropTypes.string.isRequired,
+  navigation: PropTypes.object.isRequired
+}
+
+function map (state) {
+  const usersUrl = createUrl('users')
+  const apiStore = state.apiStore
+  const users = apiStore[usersUrl] || []
+
+  return {
+    usersUrl,
+    users
+  }
+}
+
+const dispatch = {
+  apiRequire
+}
+
+export default connect(map, dispatch)(GiveScreen)
