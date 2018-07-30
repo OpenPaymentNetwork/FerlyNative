@@ -1,18 +1,18 @@
 import React from 'react'
 import {View, Text} from 'react-native'
 
-export class HistoryScreen extends React.Component {
+export class FerlyCard extends React.Component {
   static navigationOptions = {
-    title: 'History'
+    title: 'Ferly Card'
   };
 
   render () {
     return (
       <View>
-        <Text>History</Text>
+        <Text>My Ferly Card</Text>
       </View>
     )
   }
 }
 
-export default HistoryScreen
+export default FerlyCard

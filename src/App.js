@@ -1,8 +1,8 @@
-import configureStore from './store/store.js'
+import AppEntry from 'ferly/views/AppEntry'
+import EventListener from 'ferly/components/EventListener'
 import React from 'react'
+import configureStore from 'ferly/store/store.js'
 import {Provider} from 'react-redux'
-
-import Navigation from './navigation'
 
 const store = configureStore()
 
@@ -10,7 +10,9 @@ export default class App extends React.Component {
   render () {
     return (
       <Provider store={store}>
-        <Navigation />
+        <EventListener>
+          <AppEntry />
+        </EventListener>
       </Provider>
     )
   }

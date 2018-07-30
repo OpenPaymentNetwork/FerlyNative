@@ -1,8 +1,7 @@
 import {Constants} from 'expo'
 
 // const host = 'http://ferly-env.xccscenpxm.us-east-2.elasticbeanstalk.com/'
-// const host = 'http://192.168.3.6:44225/' // wingcashguest
-const host = 'http://192.168.2.131:44225/' // sendmi5g
+const host = 'http://10.1.10.6:44225/'
 const prefix = 'api/'
 const baseUrl = host + prefix
 
@@ -19,4 +18,17 @@ export function createUrl (urlTail, params = {}) {
   queries.push(`device_id=${Constants.deviceId}`)
   const queryString = queries.join('&')
   return [url, queryString].join('?')
+}
+
+export function post (urlTail, params = {}) {
+  Object.assign(params, {device_id: Constants.deviceId})
+  const url = baseUrl + urlTail
+  return fetch(url, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(params)
+  })
 }

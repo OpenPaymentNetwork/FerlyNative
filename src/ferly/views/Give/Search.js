@@ -1,12 +1,12 @@
-import ProfileDisplay from '../components/ProfileDisplay'
+import ProfileDisplay from 'ferly/components/ProfileDisplay'
 import PropTypes from 'prop-types'
 import React from 'react'
-import {apiRequire} from '../store/api'
+import {apiRequire} from 'ferly/store/api'
 import {connect} from 'react-redux'
-import {createUrl} from '../utils/fetch'
-import {View, TextInput} from 'react-native'
+import {createUrl} from 'ferly/utils/fetch'
+import {View, TextInput, TouchableOpacity, StyleSheet} from 'react-native'
 
-class GiveScreen extends React.Component {
+class Search extends React.Component {
   static navigationOptions = {
     title: 'Give',
     drawerLabel: 'Give Gift'
@@ -23,13 +23,23 @@ class GiveScreen extends React.Component {
 
   renderResults () {
     const text = this.state.text || ''
+    const design = this.props.navigation.state.params
+    const {navigation, users} = this.props
+
     if (text.length > 1) {
       return (
         <View>
           {
-            this.props.users.map((user) => {
+            users.map((user) => {
               if (user.title.toLowerCase().startsWith(text.toLowerCase())) {
-                return <ProfileDisplay key={user.title} name={user.title} url={user.picture} />
+                return (
+                  <TouchableOpacity
+                    key={user.id}
+                    onPress={
+                      () => navigation.navigate('Amount', {user, design})}>
+                    <ProfileDisplay name={user.title} url={user.picture} />
+                  </TouchableOpacity>
+                )
               } else {
                 return null
               }
@@ -44,13 +54,7 @@ class GiveScreen extends React.Component {
     return (
       <View style={{flex: 1}}>
         <TextInput
-          style={{
-            paddingLeft: 30,
-            fontSize: 22,
-            maxHeight: 70,
-            flex: 1,
-            borderWidth: 9,
-            borderColor: '#E4E4E4'}}
+          style={styles.searchInput}
           onChangeText={(t) => this.setState({text: t})}
           placeholder="Search" />
         <View style={{paddingHorizontal: 20}}>
@@ -61,14 +65,25 @@ class GiveScreen extends React.Component {
   }
 }
 
-GiveScreen.propTypes = {
+const styles = StyleSheet.create({
+  searchInput: {
+    paddingLeft: 30,
+    fontSize: 22,
+    maxHeight: 70,
+    flex: 1,
+    borderWidth: 9,
+    borderColor: '#E4E4E4'
+  }
+})
+
+Search.propTypes = {
   apiRequire: PropTypes.func.isRequired,
   users: PropTypes.array.isRequired,
   usersUrl: PropTypes.string.isRequired,
   navigation: PropTypes.object.isRequired
 }
 
-function map (state) {
+function mapStateToProps (state) {
   const usersUrl = createUrl('users')
   const apiStore = state.apiStore
   const users = apiStore[usersUrl] || []
@@ -79,8 +94,8 @@ function map (state) {
   }
 }
 
-const dispatch = {
+const mapDispatchToProps = {
   apiRequire
 }
 
-export default connect(map, dispatch)(GiveScreen)
+export default connect(mapStateToProps, mapDispatchToProps)(Search)
