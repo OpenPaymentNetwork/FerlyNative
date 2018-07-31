@@ -2,6 +2,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import Theme from 'ferly/utils/theme'
 import {Button, View, Text, TextInput} from 'react-native'
+import {Notifications} from 'expo'
 import {post} from 'ferly/utils/fetch'
 
 export default class SignUp extends React.Component {
@@ -14,16 +15,27 @@ export default class SignUp extends React.Component {
     this.state = {
       firstName: '',
       lastName: '',
-      invalid: {}
+      invalid: {},
+      expoToken: ''
     }
   }
 
+  componentDidMount () {
+    this.getToken()
+  }
+
+  async getToken () {
+    let token = await Notifications.getExpoPushTokenAsync()
+    this.setState({expoToken: token})
+  }
+
   handleSubmit () {
-    const {firstName, lastName} = this.state
+    const {firstName, lastName, expoToken} = this.state
     const {navigation} = this.props
     const params = {
       first_name: firstName,
-      last_name: lastName
+      last_name: lastName,
+      expo_token: expoToken
     }
     post('signup', params)
       .then((response) => response.json())
