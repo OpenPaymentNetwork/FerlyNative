@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import Theme from 'ferly/utils/theme'
 import {Button, View, Text, TextInput} from 'react-native'
-import {Notifications} from 'expo'
+import {Notifications, Permissions} from 'expo'
 import {post} from 'ferly/utils/fetch'
 
 export default class SignUp extends React.Component {
@@ -16,7 +16,8 @@ export default class SignUp extends React.Component {
       firstName: '',
       lastName: '',
       invalid: {},
-      expoToken: ''
+      expoToken: '',
+      submitting: false
     }
   }
 
@@ -25,13 +26,20 @@ export default class SignUp extends React.Component {
   }
 
   async getToken () {
-    let token = await Notifications.getExpoPushTokenAsync()
-    this.setState({expoToken: token})
+    const { status: existingStatus } = await Permissions.getAsync(
+      Permissions.NOTIFICATIONS
+    )
+    let finalStatus = existingStatus
+    if (finalStatus !== 'granted') {
+      let token = await Notifications.getExpoPushTokenAsync()
+      this.setState({expoToken: token})
+    }
   }
 
   handleSubmit () {
     const {firstName, lastName, expoToken} = this.state
     const {navigation} = this.props
+    this.setState({submitting: true})
     const params = {
       first_name: firstName,
       last_name: lastName,
@@ -42,6 +50,8 @@ export default class SignUp extends React.Component {
       .then((responseJson) => {
         if (this.validate(responseJson)) {
           navigation.navigate('Wallet')
+        } else {
+          this.setState({submitting: false})
         }
       })
   }
@@ -57,7 +67,7 @@ export default class SignUp extends React.Component {
   }
 
   render () {
-    const {firstName, lastName} = this.state
+    const {firstName, lastName, submitting} = this.state
     return (
       <View style={{flex: 1, paddingHorizontal: 20}}>
         <Text>
@@ -83,7 +93,7 @@ export default class SignUp extends React.Component {
         }
         <Button
           title="Sign Up"
-          disabled={firstName === '' || lastName === ''}
+          disabled={firstName === '' || lastName === '' || submitting}
           color={Theme.darkBlue}
           onPress={this.handleSubmit.bind(this)} />
       </View>

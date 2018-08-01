@@ -79,8 +79,10 @@ Wallet.propTypes = {
 
 function mapStateToProps (state) {
   const walletUrl = createUrl('wallet')
+  console.log('calling url:', walletUrl)
   const apiStore = state.apiStore
   const myWallet = apiStore[walletUrl] || {}
+  console.log('wallet:', myWallet)
   const {amounts, title, profileImage} = myWallet
 
   return {

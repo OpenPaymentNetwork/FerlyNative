@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "20950032890",
+    "firebase_url": "https://ferly-99.firebaseio.com",
+    "project_id": "ferly-99",
+    "storage_bucket": "ferly-99.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:20950032890:android:36479a81a21fedd1",
+        "android_client_info": {
+          "package_name": "com.ferly.ferly"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "20950032890-gpb7tfbu6kth6qcf6utlne7bhl23pu98.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdGPOySrz1tqx-mWOLnjEbTSEyrcgsux8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

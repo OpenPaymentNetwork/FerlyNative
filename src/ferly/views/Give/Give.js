@@ -25,6 +25,7 @@ export class Give extends React.Component {
     this.setState({submitting: true})
 
     post('send', params).then((response) => {
+      // TODO handle errors ex) sending more than available
       apiExpire(createUrl('wallet'))
       apiExpire(createUrl('history'))
       navigation.navigate('History')

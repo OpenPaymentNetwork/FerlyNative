@@ -1,5 +1,9 @@
 {
   "expo": {
-    "sdkVersion": "26.0.0"
+    "sdkVersion": "28.0.0",
+      "android": {
+        "package": "com.ferly.ferly",
+        // "googleServicesFile": "./google-services.json"
+      }
   }
 }
