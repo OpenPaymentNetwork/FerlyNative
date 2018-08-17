@@ -16,7 +16,7 @@ export class Give extends React.Component {
 
   constructor (props) {
     super(props)
-    this.state = {amount: 0, submitting: false}
+    this.state = {amount: 0, error: '', submitting: false}
   }
 
   send (e, params) {
@@ -24,12 +24,18 @@ export class Give extends React.Component {
     const {navigation, apiExpire} = this.props
     this.setState({submitting: true})
 
-    post('send', params).then((response) => {
-      // TODO handle errors ex) sending more than available
-      apiExpire(createUrl('wallet'))
-      apiExpire(createUrl('history'))
-      navigation.navigate('History')
-    })
+    post('send', params)
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if (responseJson['success']) {
+          apiExpire(createUrl('wallet')) // but the drawer is dependent on this
+          apiExpire(createUrl('history'))
+          navigation.navigate('History')
+        } else {
+          const error = responseJson['invalid']['amounts.0']
+          this.setState({error: error, submitting: false})
+        }
+      })
   }
 
   render () {
@@ -48,7 +54,9 @@ export class Give extends React.Component {
         <CashDisplay design={params.design} />
         <ProfileDisplay name={params.user.title} url={params.user.picture} />
         <Text>Select Amount</Text>
-        <CurrencyInput callback={(value) => this.setState({amount: value})} />
+        <CurrencyInput
+          error={this.state.error}
+          callback={(value) => this.setState({amount: value})} />
         <Button
           title="Send"
           disabled={amount === 0 || submitting}

@@ -1,6 +1,13 @@
 {
   "expo": {
+    "name": "Ferly",
+    "icon": "./ferly-icon.png",
+    "version": "1.0.0",
     "sdkVersion": "28.0.0",
+    "slug":"ferly",
+    "ios": {
+      "bundleIdentifier": "com.ferly.ferly"
+    },
       "android": {
         "package": "com.ferly.ferly",
         // "googleServicesFile": "./google-services.json"

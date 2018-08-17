@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import {View, TextInput} from 'react-native'
+import {View, TextInput, Text} from 'react-native'
 import accounting from 'ferly/utils/accounting'
 
 export default class CurrencyInput extends React.Component {
@@ -42,6 +42,7 @@ export default class CurrencyInput extends React.Component {
             this.refs.hiddenInput.focus()
           }}
           value={formattedValue} />
+        <Text style={{color: 'red'}}>{this.props.error}</Text>
       </View>
     )
   }
