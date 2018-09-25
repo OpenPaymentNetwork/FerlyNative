@@ -1,6 +1,4 @@
 import CashDisplay from 'ferly/components/CashDisplay'
-import HorizontalRuler from 'ferly/components/HorizontalRuler'
-import ProfileDisplay from 'ferly/components/ProfileDisplay'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Spinner from 'ferly/components/Spinner'
@@ -31,14 +29,14 @@ export class Wallet extends React.Component {
     const {navigation} = this.props
     const amounts = this.props.amounts || []
     if (amounts.length === 0) {
-      return <Text>You have no money.</Text>
+      return <Text>You have no gift value.</Text>
     } else {
       const wallet = amounts.map((cashRow) => {
         return (
           <TouchableOpacity
             key={cashRow.id}
             onPress={() => navigation.navigate('Cash', cashRow)}>
-            <CashDisplay design={cashRow} />
+            <CashDisplay showCaret design={cashRow} />
           </TouchableOpacity>
         )
       })
@@ -47,20 +45,23 @@ export class Wallet extends React.Component {
   }
 
   render () {
-    const {title, profileImage, navigation} = this.props
+    const {title, navigation} = this.props
 
     if (!title) {
       return <Spinner />
     }
     return (
-      <View style={{flex: 1, paddingHorizontal: 20}}>
-        <ProfileDisplay name={title} url={profileImage} />
-        <HorizontalRuler marginVertical='0' color={Theme.lightBlue} />
-        {this.renderAmounts()}
-        <HorizontalRuler marginVertical='0' color={Theme.yellow} />
+      <View style={{flex: 1}}>
+        <View style={{flex: 1, backgroundColor: 'white'}}>
+          {this.renderAmounts()}
+        </View>
         <Button
-          title="Add"
-          color={Theme.darkBlue}
+          title="Add Gift Value"
+          color={Theme.lightBlue}
+          style={{
+            width: '100%',
+            position: 'absolute',
+            bottom: 0}}
           onPress={() => navigation.navigate('Market')}
         />
       </View>
@@ -79,10 +80,8 @@ Wallet.propTypes = {
 
 function mapStateToProps (state) {
   const walletUrl = createUrl('wallet')
-  console.log('calling url:', walletUrl)
   const apiStore = state.apiStore
   const myWallet = apiStore[walletUrl] || {}
-  console.log('wallet:', myWallet)
   const {amounts, title, profileImage} = myWallet
 
   return {

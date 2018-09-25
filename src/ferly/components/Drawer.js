@@ -1,16 +1,21 @@
-import ProfileDisplay from 'ferly/components/ProfileDisplay'
 import PropTypes from 'prop-types'
 import React from 'react'
+import Theme from 'ferly/utils/theme'
+import UserAvatar from 'ferly/components/UserAvatar'
+import {apiRequire} from 'ferly/store/api'
+import {connect} from 'react-redux'
+import {createUrl} from 'ferly/utils/fetch'
 import {DrawerItems} from 'react-navigation'
+import {logoHorizontal} from 'ferly/images/index'
 import {
   ScrollView,
   SafeAreaView,
   StyleSheet,
-  TouchableOpacity
+  TouchableOpacity,
+  Image,
+  Text,
+  View
 } from 'react-native'
-import {apiRequire} from 'ferly/store/api'
-import {connect} from 'react-redux'
-import {createUrl} from 'ferly/utils/fetch'
 
 class DrawerContent extends React.Component {
   // constructor (props) {
@@ -29,11 +34,13 @@ class DrawerContent extends React.Component {
         <SafeAreaView
           style={styles.container}
           forceInset={{ top: 'always', horizontal: 'never' }}>
-          <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-            <ProfileDisplay
-              name={title}
-              url={profileImage} />
-          </TouchableOpacity>
+          <View style={styles.innerContainer}>
+            <Image source={logoHorizontal} style={styles.image} />
+            <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+              <UserAvatar title={title} profileImage={profileImage} />
+              <Text style={styles.text}>{title}</Text>
+            </TouchableOpacity>
+          </View>
           <DrawerItems items={filteredItems} {...otherProps} />
         </SafeAreaView>
       </ScrollView>
@@ -44,7 +51,10 @@ class DrawerContent extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1
-  }
+  },
+  image: {width: 90, height: 32, marginTop: 40, marginBottom: 18},
+  text: {color: 'white', fontSize: 24, paddingVertical: 18},
+  innerContainer: {backgroundColor: Theme.darkBlue, paddingHorizontal: 18}
 })
 
 DrawerContent.propTypes = {

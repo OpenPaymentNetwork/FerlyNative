@@ -8,13 +8,8 @@ import {View, TextInput, TouchableOpacity, StyleSheet} from 'react-native'
 
 class Search extends React.Component {
   static navigationOptions = {
-    title: 'Give',
-    drawerLabel: 'Give Gift'
-  };
-
-  constructor (props) {
-    super(props)
-    this.state = {text: ''}
+    title: 'Recipient'
+    // drawerLabel: 'Recipient'
   }
 
   componentDidMount () {
@@ -22,42 +17,34 @@ class Search extends React.Component {
   }
 
   renderResults () {
-    const text = this.state.text || ''
     const design = this.props.navigation.state.params
     const {navigation, users} = this.props
-
-    if (text.length > 1) {
-      return (
-        <View>
-          {
-            users.map((user) => {
-              if (user.title.toLowerCase().startsWith(text.toLowerCase())) {
-                return (
-                  <TouchableOpacity
-                    key={user.id}
-                    onPress={
-                      () => navigation.navigate('Amount', {user, design})}>
-                    <ProfileDisplay name={user.title} url={user.picture} />
-                  </TouchableOpacity>
-                )
-              } else {
-                return null
-              }
-            })
-          }
-        </View>
-      )
-    }
+    return (
+      <View>
+        {
+          users.map((user) => {
+            return (
+              <TouchableOpacity
+                key={user.id}
+                onPress={
+                  () => navigation.navigate('Amount', {user, design})}>
+                <ProfileDisplay name={user.title} url={user.picture} />
+              </TouchableOpacity>
+            )
+          })
+        }
+      </View>
+    )
   }
 
   render () {
+    //        <TextInput
+    //         style={styles.searchInput}
+    //          onChangeText={(t) => this.setState({text: t})}
+    //          placeholder="Search" />
     return (
-      <View style={{flex: 1}}>
-        <TextInput
-          style={styles.searchInput}
-          onChangeText={(t) => this.setState({text: t})}
-          placeholder="Search" />
-        <View style={{paddingHorizontal: 20}}>
+      <View style={{flex: 1, backgroundColor: 'white'}}>
+        <View style={{paddingHorizontal: 10}}>
           {this.renderResults()}
         </View>
       </View>

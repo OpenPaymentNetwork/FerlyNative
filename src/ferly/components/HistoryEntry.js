@@ -1,39 +1,81 @@
+// import Icon from 'react-native-vector-icons/FontAwesome'
 import PropTypes from 'prop-types'
 import React from 'react'
-import {Text} from 'react-native'
+import Theme from 'ferly/utils/theme'
+import {giveBlue, addBlue, spendBlue, receiveBlue} from 'ferly/images/index'
+import {Text, View, Image, StyleSheet} from 'react-native'
 
 export default class HistoryEntry extends React.Component {
   render () {
     const {entry} = this.props
-    const {amount, title, timestamp} = entry
+    const {amount, title} = entry
     const transferType = entry.transfer_type
     const counterParty = entry.counter_party
 
-    let text
-    const time = new Date(timestamp).toLocaleDateString()
+    // const icon = (
+    //   <Icon
+    //     name="angle-right"
+    //     color="black"
+    //     size={28} />
+    // )
+
+    let iconSource
+    let titleVerb
+    let involved
     switch (transferType) {
       case 'purchase':
-        text = `You purchased $${amount} ${title} on ${time}`
+        iconSource = addBlue
+        titleVerb = 'Added'
+        involved = 'to your Wallet'
         break
       case 'send':
-        text = `You gave $${amount} ${title} to ${counterParty} on ${time}`
+        iconSource = giveBlue
+        titleVerb = 'Gave'
+        involved = `to ${counterParty}`
         break
       case 'receive':
-        text = (
-          `You received $${amount} ${title} from ${counterParty} on ${time}`)
+        iconSource = receiveBlue
+        titleVerb = 'Received'
+        involved = `from ${counterParty}`
         break
       case 'redeem':
-        text = `You redeemed $${amount} ${title} on ${time}`
+        iconSource = spendBlue
+        titleVerb = 'Paid'
+        involved = 'with your Ferly Card'
         break
     }
 
     return (
-      <Text>
-        {text}
-      </Text>
+      <View style={styles.entry}>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <Image style={{height: 44, width: 44}} source={iconSource} />
+          <View style={{flexDirection: 'column', paddingLeft: 15}}>
+            <Text style={{fontWeight: 'bold', fontSize: 20}}>
+              {`${titleVerb} $${amount}`}
+            </Text>
+            <Text style={{color: Theme.lightBlue, fontSize: 13}}>
+              {`${title} ${involved}`}
+            </Text>
+          </View>
+        </View>
+        <View></View>
+      </View>
     )
   }
 }
+
+const styles = StyleSheet.create({
+  entry: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    height: 90,
+    alignItems: 'center',
+    borderWidth: 0.5,
+    borderColor: 'black',
+    paddingHorizontal: 15
+  }
+})
 
 HistoryEntry.propTypes = {
   entry: PropTypes.shape({

@@ -34,15 +34,18 @@ export default class CurrencyInput extends React.Component {
             () => this.props.callback(accounting.parse(formattedValue))}
           value={currentText} />
         <TextInput
-          style={{textAlign: 'right'}}
+          style={{textAlign: 'right', height: 80, fontSize: 32}}
           returnKeyType='done'
           keyboardType='numeric'
+          underlineColorAndroid='transparent'
           onFocus={() => {
             this.setState({text: ''})
             this.refs.hiddenInput.focus()
           }}
           value={formattedValue} />
-        <Text style={{color: 'red'}}>{this.props.error}</Text>
+        <Text style={{color: 'red', width: '100%', textAlign: 'right'}}>
+          {this.props.error}
+        </Text>
       </View>
     )
   }

@@ -1,15 +1,12 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import Theme from 'ferly/utils/theme'
-import {Button, View, Text, TextInput} from 'react-native'
-import {Notifications, Permissions} from 'expo'
+import {Button, View, Text, TextInput, Image} from 'react-native'
+import {Notifications, Permissions, Constants} from 'expo'
 import {post} from 'ferly/utils/fetch'
+import {logoWhite} from 'ferly/images/index'
 
 export default class SignUp extends React.Component {
-  static navigationOptions = {
-    title: 'Sign Up'
-  };
-
   constructor (props) {
     super(props)
     this.state = {
@@ -26,11 +23,22 @@ export default class SignUp extends React.Component {
   }
 
   async getToken () {
+    console.log('getting token')
     const { status: existingStatus } = await Permissions.getAsync(
       Permissions.NOTIFICATIONS
     )
     let finalStatus = existingStatus
-    if (finalStatus !== 'granted') {
+    // only ask if permissions have not already been determined, because
+    // iOS won't necessarily prompt the user a second time.
+    if (existingStatus !== 'granted') {
+      // console.log('asking for permission')
+      // Android remote notification permissions are granted during the app
+      // install, so this will only ask on iOS
+      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS)
+      finalStatus = status
+    }
+
+    if (finalStatus === 'granted') {
       let token = await Notifications.getExpoPushTokenAsync()
       this.setState({expoToken: token})
     }
@@ -39,7 +47,7 @@ export default class SignUp extends React.Component {
   handleSubmit () {
     const {firstName, lastName, expoToken} = this.state
     const {navigation} = this.props
-    this.setState({submitting: true})
+    // this.setState({submitting: true})
     const params = {
       first_name: firstName,
       last_name: lastName,
@@ -66,35 +74,60 @@ export default class SignUp extends React.Component {
     return true
   }
 
+  renderDebug () {
+    const debug = false
+    if (debug) {
+      return (
+        <View>
+          <Text>
+            device id: {Constants.deviceId}
+          </Text>
+          <Text>
+            token: {this.state.expoToken}
+          </Text>
+        </View>
+      )
+    }
+  }
+
   render () {
     const {firstName, lastName, submitting} = this.state
     return (
-      <View style={{flex: 1, paddingHorizontal: 20}}>
-        <Text>
-          Please Sign Up!
-        </Text>
-        <TextInput
-          placeholder='First Name'
-          onChangeText={(text) => this.setState({firstName: text})}
-          value={firstName} />
-        {
-          this.state.invalid.first_name
-            ? (<Text>{this.state.invalid.first_name}</Text>)
-            : null
-        }
-        <TextInput
-          placeholder='Last Name'
-          onChangeText={(text) => this.setState({lastName: text})}
-          value={lastName} />
-        {
-          this.state.invalid.last_name
-            ? (<Text>{this.state.invalid.last_name}</Text>)
-            : null
-        }
+      <View style={{flex: 1}}>
+        <View style={{flex: 1, paddingHorizontal: 20, paddingVertical: 40, backgroundColor: Theme.darkBlue, alignItems: 'center'}}>
+          <Image source={logoWhite} style={{width: 80, height: 78}} />
+          <TextInput
+            style={{width: '100%', color: 'white'}}
+            underlineColorAndroid={'gray'}
+            placeholder='First Name'
+            onChangeText={(text) => this.setState({firstName: text})}
+            value={firstName} />
+          {
+            this.state.invalid.first_name
+              ? (<Text>{this.state.invalid.first_name}</Text>)
+              : null
+          }
+          <TextInput
+            style={{width: '100%', color: 'white'}}
+            underlineColorAndroid={'gray'}
+            placeholder='Last Name'
+            onChangeText={(text) => this.setState({lastName: text})}
+            value={lastName} />
+          {
+            this.state.invalid.last_name
+              ? (<Text>{this.state.invalid.last_name}</Text>)
+              : null
+          }
+          {this.renderDebug()}
+        </View>
         <Button
           title="Sign Up"
           disabled={firstName === '' || lastName === '' || submitting}
-          color={Theme.darkBlue}
+          color={Theme.lightBlue}
+          style={{
+            width: '100%',
+            position: 'absolute',
+            bottom: 0}}
           onPress={this.handleSubmit.bind(this)} />
       </View>
     )

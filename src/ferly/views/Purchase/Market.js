@@ -2,9 +2,9 @@ import CashDisplay from 'ferly/components/CashDisplay'
 import PropTypes from 'prop-types'
 import React from 'react'
 import {apiRequire} from 'ferly/store/api'
-import {View, TouchableOpacity} from 'react-native'
 import {connect} from 'react-redux'
 import {createUrl} from 'ferly/utils/fetch'
+import {View, TouchableOpacity} from 'react-native'
 
 export class Market extends React.Component {
   static navigationOptions = {
@@ -18,7 +18,7 @@ export class Market extends React.Component {
   render () {
     const {designs} = this.props
     return (
-      <View style={{flex: 1, paddingHorizontal: 20}}>
+      <View style={{flex: 1, backgroundColor: 'white'}}>
         {
           designs.map((design) => {
             return (

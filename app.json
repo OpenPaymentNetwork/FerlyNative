@@ -10,7 +10,7 @@
     },
       "android": {
         "package": "com.ferly.ferly",
-        // "googleServicesFile": "./google-services.json"
+        "googleServicesFile": "./google-services.json"
       }
   }
 }

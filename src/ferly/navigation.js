@@ -9,22 +9,27 @@ import React from 'react'
 import SignUp from 'ferly/views/SignUp'
 import Home from 'ferly/views/Wallet/Home'
 import Purchase from 'ferly/views/Purchase/Purchase'
+import Offer from 'ferly/views/Purchase/Offer'
 import Market from 'ferly/views/Purchase/Market'
+import BrainTree from 'ferly/views/Purchase/BrainTree'
 import {
   createDrawerNavigator,
   createStackNavigator,
   createSwitchNavigator
 } from 'react-navigation'
 import DrawerContent from 'ferly/components/Drawer'
+import Theme from 'ferly/utils/theme'
 
 const drawerOptions = ({navigation}) => ({
   headerRight: (
     <Icon
       name="bars"
+      color="white"
       size={26}
       onPress={() => navigation.toggleDrawer()} />
   ),
-  headerStyle: {paddingRight: 20}
+  headerStyle: {paddingRight: 20, backgroundColor: Theme.darkBlue},
+  headerTintColor: 'white'
 })
 
 const ProfileStack = createStackNavigator({
@@ -38,7 +43,9 @@ const WalletStack = createStackNavigator(
     Cash: {screen: GiftCard, navigationOptions: drawerOptions},
     Amount: {screen: Give, navigationOptions: drawerOptions},
     Market: {screen: Market, navigationOptions: drawerOptions},
-    Purchase: {screen: Purchase, navigationOptions: drawerOptions}
+    Purchase: {screen: Purchase, navigationOptions: drawerOptions},
+    BrainTree: {screen: BrainTree, navigationOptions: drawerOptions},
+    Offer: {screen: Offer, navigationOptions: drawerOptions}
   },
   {
     initialRouteName: 'Home'
@@ -49,7 +56,7 @@ const AuthDrawer = createDrawerNavigator(
   {
     Wallet: WalletStack,
     Profile: ProfileStack,
-    Card: createStackNavigator(
+    'Ferly Card': createStackNavigator(
       {Card: {screen: FerlyCard, navigationOptions: drawerOptions}}),
     History: createStackNavigator(
       {History: {screen: History, navigationOptions: drawerOptions}})
@@ -60,19 +67,19 @@ const AuthDrawer = createDrawerNavigator(
   }
 )
 
-const PubStack = createStackNavigator(
-  {
-    Info: {screen: SignUp}
-  },
-  {
-    initialRouteName: 'Info'
-  }
-)
+// const PubStack = createStackNavigator(
+//   {
+//     Info: {screen: SignUp}
+//   },
+//   {
+//     initialRouteName: 'Info'
+//   }
+// )
 
 export const CreateAuthSwitch = (props) => {
   const AppLayout = createSwitchNavigator(
     {
-      Pub: PubStack,
+      Pub: SignUp,
       Auth: AuthDrawer
     },
     {

@@ -5,6 +5,9 @@ import {CreateAuthSwitch} from 'ferly/navigation'
 import {apiRequire} from 'ferly/store/api'
 import {connect} from 'react-redux'
 import {createUrl} from 'ferly/utils/fetch'
+import Theme from 'ferly/utils/theme'
+import {StyleSheet, View, Text, Image} from 'react-native'
+import {logoWhite} from 'ferly/images/index'
 
 export class AppEntry extends React.Component {
   componentDidMount () {
@@ -14,7 +17,17 @@ export class AppEntry extends React.Component {
   render () {
     const auth = this.props.auth
     if (auth === undefined) {
-      return <Spinner />
+      return (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: Theme.darkBlue
+          }}>
+          <Image source={logoWhite} style={{height: 140, width: 150}}/>
+        </View>
+      )
     }
     const Layout = CreateAuthSwitch(auth)
     return <Layout />

@@ -1,16 +1,81 @@
 import React from 'react'
-import {View, Text} from 'react-native'
+import {View, Text, Image, StyleSheet} from 'react-native'
+import Theme from 'ferly/utils/theme'
+import {apiRequire} from 'ferly/store/api'
+import {connect} from 'react-redux'
+import {createUrl} from 'ferly/utils/fetch'
 
-export default class Profile extends React.Component {
+class Profile extends React.Component {
   static navigationOptions = {
     title: 'Profile'
   };
 
+  componentDidMount () {
+    this.props.apiRequire(this.props.walletUrl)
+  }
+
+  renderAvatar () {
+    const {title, profileImage} = this.props
+
+    if (profileImage) {
+      return <Image style={styles.avatarContainer} source={{uri: profileImage}} />
+    } else {
+      return (
+        <View style={[styles.avatarContainer, styles.profileText]}>
+          <Text style={{fontSize: 34, color: 'gray'}}>
+            {title.charAt(0) + title.charAt(title.indexOf(' ') + 1)}
+          </Text>
+        </View>
+      )
+    }
+  }
+
   render () {
+    const {title} = this.props
+
     return (
-      <View>
-        <Text>Profile</Text>
+      <View style={{flex: 1}}>
+        <View style={{flex: 1, justifyContent: 'space-around', backgroundColor: Theme.darkBlue, alignItems: 'center'}}>
+          <View></View>
+          {this.renderAvatar()}
+          <Text style={{fontSize: 30, fontWeight: 'bold', color: 'white'}}>{title}</Text>
+        </View>
+        <View style={{flex: 1, backgroundColor: 'white'}}>
+        </View>
       </View>
     )
   }
 }
+
+const styles = StyleSheet.create({
+  avatarContainer: {
+    width: 140,
+    height: 140,
+    borderRadius: 70
+  },
+  profileText: {
+    backgroundColor: 'lightgray',
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
+})
+
+function mapStateToProps (state) {
+  const walletUrl = createUrl('wallet')
+  const apiStore = state.apiStore
+  const myWallet = apiStore[walletUrl] || {}
+  const {amounts, title, profileImage} = myWallet
+
+  return {
+    walletUrl,
+    amounts,
+    title,
+    profileImage
+  }
+}
+
+const mapDispatchToProps = {
+  apiRequire
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Profile)

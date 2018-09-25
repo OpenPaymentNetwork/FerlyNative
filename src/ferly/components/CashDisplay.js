@@ -1,31 +1,41 @@
+import Icon from 'react-native-vector-icons/FontAwesome'
+import MerchantLogo from 'ferly/components/MerchantLogo'
 import PropTypes from 'prop-types'
 import React from 'react'
-import {Text, View, Image, StyleSheet} from 'react-native'
+import Theme from 'ferly/utils/theme'
+import {Text, View, StyleSheet} from 'react-native'
 
 export default class CashDisplay extends React.Component {
+  renderCaret () {
+    if (this.props.showCaret) {
+      return (
+        <Icon
+          name="angle-right"
+          color="black"
+          size={28} />
+      )
+    }
+  }
+
   render () {
     const design = this.props.design
 
     let amount
     if (design.amount) {
-      amount = (
-        <View style={{justifyContent: 'center', flex: 1}}>
-          <Text style={{textAlign: 'center'}}>
-            ${design.amount}
-          </Text>
-        </View>
-      )
+      amount = <Text style={{color: Theme.lightBlue}}>${design.amount}</Text>
     }
-
     return (
-      <View style={{flexDirection: 'row', marginVertical: 10}}>
-        <View style={styles.card}>
-          <Image style={styles.image} source={{uri: design.url}} />
-          <Text style={{width: 80, textAlign: 'center', marginTop: 32}}>
+      <View style={styles.card}>
+        <MerchantLogo source={design.url}/>
+        <View style={{flex: 1, paddingHorizontal: 10}}>
+          <Text style={{fontSize: 18, fontWeight: 'bold'}}>
             {design.title}
           </Text>
+          {amount}
         </View>
-        {amount}
+        <View>
+          {this.renderCaret()}
+        </View>
       </View>
     )
   }
@@ -35,10 +45,12 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: 'row',
     height: 90,
+    alignItems: 'center',
     backgroundColor: '#FFF',
     borderWidth: 0.5,
+    justifyContent: 'space-between',
     borderColor: 'black',
-    borderRadius: 10
+    paddingHorizontal: 15
   },
   image: {
     width: 68,
@@ -49,9 +61,10 @@ const styles = StyleSheet.create({
 
 CashDisplay.propTypes = {
   design: PropTypes.shape({
-    amount: PropTypes.string,
+    amount: PropTypes.string.isRequired,
     id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
     url: PropTypes.string.isRequired
-  })
+  }),
+  showCaret: PropTypes.bool
 }

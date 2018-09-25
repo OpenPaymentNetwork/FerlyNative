@@ -1,5 +1,6 @@
 import React from 'react'
-import {View, Text} from 'react-native'
+import {View, Text, Image} from 'react-native'
+import {ferlyCard} from 'ferly/images/index'
 
 export class FerlyCard extends React.Component {
   static navigationOptions = {
@@ -8,8 +9,8 @@ export class FerlyCard extends React.Component {
 
   render () {
     return (
-      <View>
-        <Text>My Ferly Card</Text>
+      <View style={{flex: 1, justifyContent: 'space-around', flexDirection: 'row'}}>
+        <Image style={{width: 300, height: 200}} source={ferlyCard} />
       </View>
     )
   }

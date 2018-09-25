@@ -19,7 +19,8 @@ const apiMiddleware = (store) => (next) => (action) => {
       fetch(action.url)
         .then((response) => response.json())
         .then((responseJson) => {
-          // It shouldn't return a 200 OK response, handle it in catch
+          // It shouldn't return a 200 OK response, handle it in catch,
+          // not here.
           if (!responseJson.hasOwnProperty('error')) {
             next(apiInject(action.url, responseJson))
           }
