@@ -19,14 +19,15 @@ const apiMiddleware = (store) => (next) => (action) => {
       fetch(action.url)
         .then((response) => response.json())
         .then((responseJson) => {
-          // It shouldn't return a 200 OK response, handle it in catch,
-          // not here.
+          // All responses return, only network errors are "caught"
           if (!responseJson.hasOwnProperty('error')) {
             next(apiInject(action.url, responseJson))
           }
         })
         .catch((error) => {
+          // network error
           console.error(error)
+          next(apiInject(action.url, error.toString()))
         })
     }
   } else {

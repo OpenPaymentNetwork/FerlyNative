@@ -16,6 +16,10 @@ export class AppEntry extends React.Component {
 
   render () {
     const auth = this.props.auth
+    let errorMessage
+    if (this.props.error) {
+      errorMessage = <Text style={{color: 'red'}}>{this.props.error}</Text>
+    }
     if (auth === undefined) {
       return (
         <View
@@ -26,6 +30,7 @@ export class AppEntry extends React.Component {
             backgroundColor: Theme.darkBlue
           }}>
           <Image source={logoWhite} style={{height: 140, width: 150}}/>
+          {errorMessage}
         </View>
       )
     }
@@ -47,12 +52,17 @@ function mapStateToProps (state) {
   const isUser = myWallet.is_user
 
   let auth
-  if (Object.keys(myWallet).length !== 0) {
+
+  let error = ''
+  if (isUser) {
     auth = isUser
+  } else if (typeof myWallet === 'string') {
+    error = myWallet
   }
 
   return {
     auth,
+    error,
     isUserUrl
   }
 }
