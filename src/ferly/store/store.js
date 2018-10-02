@@ -20,9 +20,7 @@ const apiMiddleware = (store) => (next) => (action) => {
         .then((response) => response.json())
         .then((responseJson) => {
           // All responses return, only network errors are "caught"
-          if (!responseJson.hasOwnProperty('error')) {
-            next(apiInject(action.url, responseJson))
-          }
+          next(apiInject(action.url, responseJson))
         })
         .catch((error) => {
           // network error

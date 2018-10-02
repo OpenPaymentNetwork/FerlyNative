@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import Spinner from 'ferly/components/Spinner'
 import {CreateAuthSwitch} from 'ferly/navigation'
 import {apiRequire} from 'ferly/store/api'
 import {connect} from 'react-redux'
@@ -42,6 +41,7 @@ export class AppEntry extends React.Component {
 AppEntry.propTypes = {
   apiRequire: PropTypes.func.isRequired,
   auth: PropTypes.bool,
+  error: PropTypes.string,
   isUserUrl: PropTypes.string.isRequired
 }
 
@@ -49,16 +49,10 @@ function mapStateToProps (state) {
   const isUserUrl = createUrl('is-user')
   const apiStore = state.apiStore
   const myWallet = apiStore[isUserUrl] || {}
-  const isUser = myWallet.is_user
+  const auth = myWallet.is_user
 
-  let auth
-
-  let error = ''
-  if (isUser) {
-    auth = isUser
-  } else if (typeof myWallet === 'string') {
-    error = myWallet
-  }
+  const errorString = JSON.stringify(myWallet)
+  const error = errorString === '{}' ? '' : errorString
 
   return {
     auth,
