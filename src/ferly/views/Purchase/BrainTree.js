@@ -6,10 +6,6 @@ import {connect} from 'react-redux'
 import {createUrl, post} from 'ferly/utils/fetch'
 
 export class BrainTree extends React.Component {
-  static navigationOptions = {
-    title: 'Purchase'
-  }
-
   constructor (props) {
     super(props)
     this.state = {token: ''}
@@ -26,7 +22,6 @@ export class BrainTree extends React.Component {
       .then((response) => response.json())
       .then((responseJson) => {
         this.setState({token: responseJson['token']})
-        console.log('Got token:', responseJson['token'])
       })
       .catch((error) => {
         console.error(error)
@@ -34,7 +29,6 @@ export class BrainTree extends React.Component {
   }
 
   receiveMessage (event) {
-    const {navigation} = this.props
     const data = event.nativeEvent.data
     if (data.startsWith('paymentnonce:')) {
       const nonce = data.substring(data.indexOf(':') + 1)
@@ -42,7 +36,7 @@ export class BrainTree extends React.Component {
         .then((response) => response.json())
         .then((responseJson) => {
           if (responseJson['result']) {
-            navigation.navigate('Wallet')
+            this.props.onSuccess(responseJson)
           }
         })
     }
@@ -53,6 +47,7 @@ export class BrainTree extends React.Component {
       var button = document.querySelector('#submit-button');
       braintree.dropin.create({
         authorization: '${this.state.token}',
+        vaultManager: true,
         container: '#dropin-container'
       }, function (createErr, instance) {
         button.addEventListener('click', function () {
@@ -92,31 +87,15 @@ export class BrainTree extends React.Component {
   }
 }
 
-// AppEntry.propTypes = {
-//   apiRequire: PropTypes.func.isRequired,
-//   auth: PropTypes.bool,
-//   isUserUrl: PropTypes.string.isRequired
-// }
+BrainTree.propTypes = {
+  onSuccess: PropTypes.func.isRequired
+}
 
 function mapStateToProps (state) {
-  // const isUserUrl = createUrl('is-user')
-  // const apiStore = state.apiStore
-  // const myWallet = apiStore[isUserUrl] || {}
-  // const isUser = myWallet.is_user
-
-  // let auth
-  // if (Object.keys(myWallet).length !== 0) {
-  //   auth = isUser
-  // }
-
-  return {
-    // auth,
-    // isUserUrl
-  }
+  return {}
 }
 
 const mapDispatchToProps = {
-  // apiRequire
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(BrainTree)

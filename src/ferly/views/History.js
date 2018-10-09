@@ -31,6 +31,7 @@ export class History extends React.Component {
         <FlatList
           // onEndReached={(info) => console.log('end!!:', info)}
           // onEndReachedThreshold={50}
+          keyExtractor={(entry) => entry.timestamp}
           data={history}
           renderItem={(entry) => <HistoryEntry entry={entry.item} />} />
       </View>

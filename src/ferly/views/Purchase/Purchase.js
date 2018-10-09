@@ -4,10 +4,10 @@ import Spinner from 'ferly/components/Spinner'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Theme from 'ferly/utils/theme'
-import {View, Text, Button, TouchableOpacity} from 'react-native'
+import {View, Text, Button} from 'react-native'
 import {apiExpire, apiRequire} from 'ferly/store/api'
 import {connect} from 'react-redux'
-import {createUrl, post} from 'ferly/utils/fetch'
+import {createUrl} from 'ferly/utils/fetch'
 
 export class Purchase extends React.Component {
   static navigationOptions = {
@@ -20,57 +20,35 @@ export class Purchase extends React.Component {
   }
 
   componentDidMount () {
-    // this.props.apiRequire(this.props.designUrl)
+    this.props.apiRequire(this.props.walletUrl)
   }
 
   onPurchase () {
-    const params = this.props.navigation.state.params
+    const {navigation} = this.props
+    const params = navigation.state.params
     const {design} = params
-    const {navigation, apiExpire} = this.props
-    this.setState({submitting: true})
-
-    const purchaseParams = {
-      amount: this.state.amount,
-      design_id: design.id.toString()
-    }
-
-    post('purchase', purchaseParams)
-      .then((response) => response.json())
-      .then((responseJson) => {
-        // TODO handle errors
-        apiExpire(createUrl('history'))
-        apiExpire(createUrl('wallet'))
-        navigation.navigate('History')
-      })
+    const {amount} = this.state
+    navigation.navigate('Cart', {amount, design})
   }
-
-  // renderOffers () {
-  //   const offers = this.props.offers || []
-  //   return offers.map((offer) => {
-  //     return (
-  //       <TouchableOpacity
-  //         key={offer.id}
-  //         onPress={() => this.props.navigation.navigate('Offer', {offer})}>
-  //         <View style={{borderColor: 'black', borderBottomWidth: 1}}>
-  //           <Text>{offer.title}</Text>
-  //           <Text>You pay: ${offer.amount || 0}</Text>
-  //           <Text>You get: ${offer.receive_amount}</Text>
-  //         </View>
-  //       </TouchableOpacity>
-  //     )
-  //   })
-  // }
 
   render () {
     const params = this.props.navigation.state.params
     const {amount, submitting} = this.state
-    const {design} = params
+    const design = params.design || {}
+    const amounts = this.props.amounts || []
+
+    const found = amounts.find((cashRow) => {
+      return cashRow.id === design.id
+    })
+
+    const displayAmount = found ? found.amount : 0
 
     return (
       <View style={{flex: 1, justifyContent: 'space-between'}}>
         <View>
           <CashDisplay design={design} />
           <View style={{paddingHorizontal: 30}}>
+            <Text style={{color: 'gray'}}>Balance: ${displayAmount}</Text>
             <CurrencyInput callback={(value) => this.setState({amount: value})} />
           </View>
         </View>
@@ -89,25 +67,27 @@ export class Purchase extends React.Component {
 }
 
 Purchase.propTypes = {
+  amounts: PropTypes.array,
   apiExpire: PropTypes.func.isRequired,
-  navigation: PropTypes.object.isRequired
+  apiRequire: PropTypes.func.isRequired,
+  navigation: PropTypes.object.isRequired,
+  walletUrl: PropTypes.string.isRequired
 }
 
 function mapStateToProps (state, ownProps) {
-  // const params = ownProps.navigation.state.params
-  // const {design} = params
-  // const designUrl = createUrl('design', {design_id: design.id})
-  // const apiStore = state.apiStore
-  // const {offers} = apiStore[designUrl] || {}
+  const walletUrl = createUrl('wallet')
+  const apiStore = state.apiStore
+  const myWallet = apiStore[walletUrl] || {}
+  const {amounts} = myWallet
   return {
-    // designUrl: designUrl,
-    // offers: offers
+    amounts,
+    walletUrl
   }
 }
 
 const mapDispatchToProps = {
-  apiExpire
-  // apiRequire
+  apiExpire,
+  apiRequire
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Purchase)

@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
 
 CashDisplay.propTypes = {
   design: PropTypes.shape({
-    amount: PropTypes.string.isRequired,
+    amount: PropTypes.string,
     id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
     url: PropTypes.string.isRequired

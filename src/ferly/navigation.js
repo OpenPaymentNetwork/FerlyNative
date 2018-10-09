@@ -8,6 +8,7 @@ import Profile from 'ferly/views/Profile'
 import React from 'react'
 import SignUp from 'ferly/views/SignUp'
 import Home from 'ferly/views/Wallet/Home'
+import Cart from 'ferly/views/Purchase/Cart'
 import Purchase from 'ferly/views/Purchase/Purchase'
 import Offer from 'ferly/views/Purchase/Offer'
 import Market from 'ferly/views/Purchase/Market'
@@ -44,6 +45,7 @@ const WalletStack = createStackNavigator(
     Amount: {screen: Give, navigationOptions: drawerOptions},
     Market: {screen: Market, navigationOptions: drawerOptions},
     Purchase: {screen: Purchase, navigationOptions: drawerOptions},
+    Cart: {screen: Cart, navigationOptions: drawerOptions},
     BrainTree: {screen: BrainTree, navigationOptions: drawerOptions},
     Offer: {screen: Offer, navigationOptions: drawerOptions}
   },
