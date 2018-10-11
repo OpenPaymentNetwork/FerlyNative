@@ -64,7 +64,7 @@ export class Purchase extends React.Component {
         <Button
           title="Checkout"
           disabled={fieldValue === '$0.00' || submitting}
-          color={Theme.darkBlue}
+          color={Theme.lightBlue}
           onPress={this.onPurchase.bind(this)}
         />
         { // this.renderOffers()

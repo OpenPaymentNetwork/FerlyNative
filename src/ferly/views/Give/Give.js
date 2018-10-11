@@ -66,7 +66,7 @@ export class Give extends React.Component {
     }
 
     return (
-      <View style={{flex: 1}}>
+      <View style={{flex: 1, backgroundColor: 'white'}}>
         <View style={{flex: 1}}>
           <View style={{paddingHorizontal: 20, height: 60, justifyContent: 'space-between', flexDirection: 'row', borderWidth: 0.5, borderColor: 'black', alignItems: 'center'}}>
             <Text style={{fontSize: 20, fontWeight: 'bold'}}>Send</Text>
