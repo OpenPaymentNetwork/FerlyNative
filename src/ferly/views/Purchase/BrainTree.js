@@ -15,7 +15,7 @@ import {
 export default class BrainTree extends React.Component {
   constructor (props) {
     super(props)
-    this.state = {token: ''}
+    this.state = {token: '', loaded: false}
   }
 
   componentDidMount () {
@@ -79,6 +79,7 @@ export default class BrainTree extends React.Component {
           source={require('./drop-in.html')}
           injectedJavaScript={this.createBrainTreeJS()}
           onMessage={this.receiveMessage.bind(this)}
+          onLoadEnd={() => this.setState({loaded: true})}
           // onError={console.error.bind(console, 'error')}
           // bounces={false}
           // onShouldStartLoadWithRequest={() => true}
@@ -110,7 +111,7 @@ export default class BrainTree extends React.Component {
         {body}
         <Button
           title="Complete Purchase"
-          // disabled={this.webview === undefined}
+          disabled={!this.state.loaded}
           color={Theme.lightBlue}
           onPress={this.buttonCallback.bind(this)}
         />
