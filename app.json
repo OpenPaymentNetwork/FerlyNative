@@ -16,5 +16,8 @@
     "notification": {
       "icon": "./notification-icon.png"
     },
+    "splash": {
+      "backgroundColor": "#1D3A54",
+    },
   }
 }

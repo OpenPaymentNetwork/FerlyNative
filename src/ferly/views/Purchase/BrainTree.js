@@ -1,11 +1,18 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import Spinner from 'ferly/components/Spinner'
-import {View, WebView} from 'react-native'
-import {connect} from 'react-redux'
-import {createUrl, post} from 'ferly/utils/fetch'
+import Theme from 'ferly/utils/theme'
+import {createUrl} from 'ferly/utils/fetch'
+import {
+  View,
+  WebView,
+  Platform,
+  Button,
+  ScrollView,
+  KeyboardAvoidingView
+} from 'react-native'
 
-export class BrainTree extends React.Component {
+export default class BrainTree extends React.Component {
   constructor (props) {
     super(props)
     this.state = {token: ''}
@@ -17,7 +24,6 @@ export class BrainTree extends React.Component {
 
   requestPaymentToken () {
     const url = createUrl('request-token')
-    console.log('requesting token')
     fetch(url)
       .then((response) => response.json())
       .then((responseJson) => {
@@ -32,13 +38,7 @@ export class BrainTree extends React.Component {
     const data = event.nativeEvent.data
     if (data.startsWith('paymentnonce:')) {
       const nonce = data.substring(data.indexOf(':') + 1)
-      post('create-purchase', {nonce: nonce})
-        .then((response) => response.json())
-        .then((responseJson) => {
-          if (responseJson['result']) {
-            this.props.onSuccess(responseJson)
-          }
-        })
+      this.props.onSuccess(nonce)
     }
   }
 
@@ -60,6 +60,13 @@ export class BrainTree extends React.Component {
     `
   }
 
+  buttonCallback () {
+    if (this.webview) {
+      this.webview.injectJavaScript(
+        "document.getElementById('submit-button').click()")
+    }
+  }
+
   render () {
     const {token} = this.state
 
@@ -67,11 +74,30 @@ export class BrainTree extends React.Component {
     if (token) {
       body = (
         <WebView
-          onMessage={this.receiveMessage.bind(this)}
+          ref={ref => (this.webview = ref)}
+          scalesPageToFit={Platform.OS !== 'ios'}
           source={require('./drop-in.html')}
           injectedJavaScript={this.createBrainTreeJS()}
-          style={{ flex: 1 }} />
+          onMessage={this.receiveMessage.bind(this)}
+          // onError={console.error.bind(console, 'error')}
+          // bounces={false}
+          // onShouldStartLoadWithRequest={() => true}
+          // javaScriptEnabledAndroid={true}
+          // startInLoadingState={true}
+          style={{flex: 1}} />
       )
+      if (Platform.OS !== 'ios') {
+        body = (
+          <KeyboardAvoidingView
+            style={{flex: 1}}
+            behavior="padding"
+            keyboardVerticalOffset={100}>
+            <ScrollView contentContainerStyle={{flexGrow: 1}}>
+              {body}
+            </ScrollView>
+          </KeyboardAvoidingView>
+        )
+      }
     } else {
       body = <Spinner />
     }
@@ -82,6 +108,12 @@ export class BrainTree extends React.Component {
           flex: 1
         }}>
         {body}
+        <Button
+          title="Complete Purchase"
+          // disabled={this.webview === undefined}
+          color={Theme.lightBlue}
+          onPress={this.buttonCallback.bind(this)}
+        />
       </View>
     )
   }
@@ -90,12 +122,3 @@ export class BrainTree extends React.Component {
 BrainTree.propTypes = {
   onSuccess: PropTypes.func.isRequired
 }
-
-function mapStateToProps (state) {
-  return {}
-}
-
-const mapDispatchToProps = {
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(BrainTree)

@@ -1,37 +1,51 @@
+import accounting from 'ferly/utils/accounting'
+import BrainTree from 'ferly/views/Purchase/BrainTree'
 import PropTypes from 'prop-types'
 import React from 'react'
+import Spinner from 'ferly/components/Spinner'
 import {apiRequire, apiExpire} from 'ferly/store/api'
 import {connect} from 'react-redux'
 import {createUrl, post} from 'ferly/utils/fetch'
-import {View, Text} from 'react-native'
-import accounting from 'ferly/utils/accounting'
-import BrainTree from 'ferly/views/Purchase/BrainTree'
+import {View, Text, Alert} from 'react-native'
 
 export class Cart extends React.Component {
   static navigationOptions = {
     title: 'Cart'
   };
 
-  componentDidMount () {
-    // this.props.apiRequire(this.props.walletUrl)
+  constructor (props) {
+    super(props)
+    this.state = {showBrainTree: true}
   }
 
-  onSuccess (responseJson) {
+  onSuccess (nonce) {
     const {navigation} = this.props
     const params = this.props.navigation.state.params
     const {design, amount} = params
 
     const purchaseParams = {
       amount: amount,
-      design_id: design.id.toString()
+      design_id: design.id.toString(),
+      nonce: nonce
     }
 
-    post('purchase', purchaseParams)
+    this.setState({showBrainTree: false})
+
+    post('create-purchase', purchaseParams)
       .then((response) => response.json())
       .then((responseJson) => {
-        this.props.apiExpire(createUrl('history'))
-        this.props.apiExpire(createUrl('wallet'))
-        navigation.navigate('History')
+        if (responseJson['result']) {
+          this.props.apiExpire(createUrl('history'))
+          this.props.apiExpire(createUrl('wallet'))
+          navigation.navigate('History')
+          Alert.alert('Success', 'You purchased some money!')
+        } else {
+          Alert.alert(
+            'Error',
+            'There was a problem processing your credit card; please double ' +
+            'check your payment information and try again.')
+          this.setState({showBrainTree: true})
+        }
       })
   }
 
@@ -39,6 +53,11 @@ export class Cart extends React.Component {
     const {params} = this.props.navigation.state
     const {amount, design} = params
     const formatted = accounting.formatMoney(parseFloat(amount))
+    const {showBrainTree} = this.state
+
+    const page = showBrainTree
+      ? <BrainTree onSuccess={this.onSuccess.bind(this)} />
+      : <Spinner />
 
     return (
       <View style={{flex: 1, flexDirection: 'column', backgroundColor: 'white'}}>
@@ -48,7 +67,7 @@ export class Cart extends React.Component {
           </View>
           <Text style={{flexGrow: 1, fontWeight: 'bold', flexWrap: 'wrap', fontSize: 18, textAlign: 'right'}}>{formatted}</Text>
         </View>
-        <BrainTree onSuccess={this.onSuccess.bind(this)} />
+        {page}
       </View>
     )
   }

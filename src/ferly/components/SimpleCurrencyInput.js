@@ -11,7 +11,6 @@ export default class SimpleCurrencyInput extends React.Component {
   }
 
   onChange (newText) {
-    console.log('comp on change called')
     this.props.onChangeText(newText)
     this.setState({text: newText})
   }
