@@ -14,8 +14,6 @@ export class History extends React.Component {
 
   componentDidMount () {
     this.props.apiRequire(this.props.historyUrl)
-    // Use wallet url for keeping profile info in drawer for now.
-    this.props.apiRequire(createUrl('wallet'))
   }
 
   render () {

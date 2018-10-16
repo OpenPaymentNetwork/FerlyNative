@@ -6,6 +6,7 @@ import Spinner from 'ferly/components/Spinner'
 import {apiRequire, apiExpire} from 'ferly/store/api'
 import {connect} from 'react-redux'
 import {createUrl, post} from 'ferly/utils/fetch'
+import {StackActions} from 'react-navigation'
 import {View, Text, Alert} from 'react-native'
 
 export class Cart extends React.Component {
@@ -20,7 +21,7 @@ export class Cart extends React.Component {
 
   onSuccess (nonce) {
     const {navigation} = this.props
-    const params = this.props.navigation.state.params
+    const params = navigation.state.params
     const {design, amount} = params
 
     const purchaseParams = {
@@ -37,8 +38,14 @@ export class Cart extends React.Component {
         if (responseJson['result']) {
           this.props.apiExpire(createUrl('history'))
           this.props.apiExpire(createUrl('wallet'))
-          navigation.navigate('History')
-          Alert.alert('Success', 'You purchased some money!')
+          const resetAction = StackActions.reset({
+            index: 0,
+            actions: [StackActions.push({routeName: 'Home'})]
+          })
+          navigation.dispatch(resetAction)
+          const formatted = accounting.formatMoney(parseFloat(amount))
+          const desc = `You added ${formatted} ${design.title} to your wallet.`
+          Alert.alert('Complete!', desc)
         } else {
           Alert.alert(
             'Error',
