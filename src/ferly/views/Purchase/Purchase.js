@@ -1,13 +1,13 @@
-import SimpleCurrencyInput from 'ferly/components/SimpleCurrencyInput'
-import Spinner from 'ferly/components/Spinner'
 import accounting from 'ferly/utils/accounting'
+import PrimaryButton from 'ferly/components/PrimaryButton'
 import PropTypes from 'prop-types'
 import React from 'react'
-import Theme from 'ferly/utils/theme'
+import SimpleCurrencyInput from 'ferly/components/SimpleCurrencyInput'
+import Spinner from 'ferly/components/Spinner'
 import {apiExpire, apiRequire} from 'ferly/store/api'
 import {connect} from 'react-redux'
 import {createUrl} from 'ferly/utils/fetch'
-import {View, Text, Button} from 'react-native'
+import {View, Text} from 'react-native'
 
 export class Purchase extends React.Component {
   static navigationOptions = {
@@ -61,10 +61,9 @@ export class Purchase extends React.Component {
           </View>
         </View>
         {submitting ? <Spinner /> : null}
-        <Button
+        <PrimaryButton
           title="Checkout"
           disabled={fieldValue === '$0.00' || submitting}
-          color={Theme.lightBlue}
           onPress={this.onPurchase.bind(this)}
         />
       </View>

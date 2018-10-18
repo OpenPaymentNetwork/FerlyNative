@@ -1,3 +1,4 @@
+import PrimaryButton from 'ferly/components/PrimaryButton'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Spinner from 'ferly/components/Spinner'
@@ -109,10 +110,9 @@ export default class BrainTree extends React.Component {
           flex: 1
         }}>
         {body}
-        <Button
+        <PrimaryButton
           title="Complete Purchase"
           disabled={!this.state.loaded}
-          color={Theme.lightBlue}
           onPress={this.buttonCallback.bind(this)}
         />
       </View>

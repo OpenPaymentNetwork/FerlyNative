@@ -1,4 +1,5 @@
 import accounting from 'ferly/utils/accounting'
+import PrimaryButton from 'ferly/components/PrimaryButton'
 import PropTypes from 'prop-types'
 import React from 'react'
 import SimpleCurrencyInput from 'ferly/components/SimpleCurrencyInput'
@@ -24,8 +25,7 @@ export class Give extends React.Component {
     this.props.apiRequire(this.props.walletUrl)
   }
 
-  send (e) {
-    e.preventDefault()
+  send () {
     const {navigation, apiExpire} = this.props
     const params = navigation.state.params
     const {design, user} = params
@@ -93,15 +93,11 @@ export class Give extends React.Component {
           </View>
           {submitting ? <Spinner /> : null}
         </View>
-        <Button
+        <PrimaryButton
           title="Send"
           disabled={fieldValue === '$0.00' || submitting}
           color={Theme.lightBlue}
-          style={{
-            width: '100%',
-            position: 'absolute',
-            bottom: 0}}
-          onPress={(e) => this.send(e)}
+          onPress={this.send.bind(this)}
         />
       </View>
     )
