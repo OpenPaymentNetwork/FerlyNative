@@ -30,7 +30,7 @@ export default class HistoryEntry extends React.Component {
         break
       case 'send':
         iconSource = giveBlue
-        titleVerb = 'Gave'
+        titleVerb = 'Gifted'
         involved = `to ${counterParty}`
         break
       case 'receive':

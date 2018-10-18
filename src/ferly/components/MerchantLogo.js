@@ -5,7 +5,7 @@ import {View, Image, StyleSheet} from 'react-native'
 export default class MerchantLogo extends React.Component {
   render () {
     return (
-      <View style={styles.card}>
+      <View style={styles.container}>
         <Image style={styles.image} source={{uri: this.props.source}} />
       </View>
     )
@@ -13,14 +13,20 @@ export default class MerchantLogo extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  card: {
+  container: {
     height: 68,
-    width: 68
+    width: 68,
+    borderRadius: 34,
+    elevation: 4,
+    shadowOffset: {width: 3, height: 3},
+    shadowColor: 'lightgray',
+    shadowOpacity: 1,
+    backgroundColor: 'white'
   },
   image: {
     borderRadius: 34,
-    borderWidth: 0.5,
-    borderColor: 'black',
+    borderWidth: 1,
+    borderColor: 'lightgray',
     width: 68,
     height: 68
   }

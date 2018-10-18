@@ -46,10 +46,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     height: 90,
     alignItems: 'center',
-    backgroundColor: '#FFF',
-    borderWidth: 0.5,
     justifyContent: 'space-between',
-    borderColor: 'black',
     paddingHorizontal: 15
   },
   image: {
