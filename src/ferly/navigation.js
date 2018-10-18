@@ -10,7 +10,6 @@ import SignUp from 'ferly/views/SignUp'
 import Home from 'ferly/views/Wallet/Home'
 import Cart from 'ferly/views/Purchase/Cart'
 import Purchase from 'ferly/views/Purchase/Purchase'
-import Offer from 'ferly/views/Purchase/Offer'
 import Market from 'ferly/views/Purchase/Market'
 import BrainTree from 'ferly/views/Purchase/BrainTree'
 import {
@@ -46,8 +45,7 @@ const WalletStack = createStackNavigator(
     Market: {screen: Market, navigationOptions: drawerOptions},
     Purchase: {screen: Purchase, navigationOptions: drawerOptions},
     Cart: {screen: Cart, navigationOptions: drawerOptions},
-    BrainTree: {screen: BrainTree, navigationOptions: drawerOptions},
-    Offer: {screen: Offer, navigationOptions: drawerOptions}
+    BrainTree: {screen: BrainTree, navigationOptions: drawerOptions}
   },
   {
     initialRouteName: 'Home'

@@ -16,14 +16,12 @@ export default class SimpleCurrencyInput extends React.Component {
   }
 
   render () {
-    // const design = this.props.design
-
     return (
       <View>
-        <View style={{flexGrow: 1, flexDirection: 'row', alignItems: 'flex-start'}}>
-          <Text style={{flexGrow: 1, textAlign: 'right', height: 65, paddingTop: 16, fontSize: 24, fontWeight: 'bold'}}>$</Text>
+        <View style={styles.inputContainer}>
+          <Text style={styles.dollarSign}>$</Text>
           <TextInput
-            style={{textAlign: 'right', height: 65, fontSize: 22, fontWeight: 'bold', marginLeft: 4}}
+            style={styles.input}
             returnKeyType='done'
             keyboardType='numeric'
             underlineColorAndroid='transparent'
@@ -32,7 +30,7 @@ export default class SimpleCurrencyInput extends React.Component {
             autoFocus
             value={this.state.text} />
         </View>
-        <Text style={{color: 'red', width: '100%', textAlign: 'right'}}>
+        <Text style={styles.error}>
           {this.props.error}
         </Text>
       </View>
@@ -40,30 +38,35 @@ export default class SimpleCurrencyInput extends React.Component {
   }
 }
 
-// const styles = StyleSheet.create({
-//   card: {
-//     flexDirection: 'row',
-//     height: 90,
-//     alignItems: 'center',
-//     backgroundColor: '#FFF',
-//     borderWidth: 0.5,
-//     justifyContent: 'space-between',
-//     borderColor: 'black',
-//     paddingHorizontal: 15
-//   },
-//   image: {
-//     width: 68,
-//     height: 68,
-//     margin: 10
-//   }
-// })
+const styles = StyleSheet.create({
+  input: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    height: 65,
+    marginLeft: 4,
+    textAlign: 'right'
+  },
+  inputContainer: {
+    alignItems: 'flex-start',
+    flexDirection: 'row',
+    flexGrow: 1
+  },
+  dollarSign: {
+    flexGrow: 1,
+    fontSize: 24,
+    fontWeight: 'bold',
+    height: 65,
+    paddingTop: 16,
+    textAlign: 'right'
+  },
+  error: {
+    color: 'red',
+    textAlign: 'right',
+    width: '100%'
+  }
+})
 
-// SimpleCurrencyInput.propTypes = {
-//   design: PropTypes.shape({
-//     amount: PropTypes.string.isRequired,
-//     id: PropTypes.number.isRequired,
-//     title: PropTypes.string.isRequired,
-//     url: PropTypes.string.isRequired
-//   }),
-//   showCaret: PropTypes.bool
-// }
+SimpleCurrencyInput.propTypes = {
+  error: PropTypes.string,
+  onChangeText: PropTypes.func.isRequired
+}

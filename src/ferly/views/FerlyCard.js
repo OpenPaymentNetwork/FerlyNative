@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, Text, Image} from 'react-native'
+import {View, Image} from 'react-native'
 import {ferlyCard} from 'ferly/images/index'
 
 export class FerlyCard extends React.Component {

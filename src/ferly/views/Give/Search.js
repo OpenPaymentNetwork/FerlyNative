@@ -4,12 +4,16 @@ import React from 'react'
 import {apiRequire} from 'ferly/store/api'
 import {connect} from 'react-redux'
 import {createUrl} from 'ferly/utils/fetch'
-import {View, TextInput, TouchableOpacity, StyleSheet} from 'react-native'
+import {
+  View,
+  ScrollView,
+  TouchableOpacity
+  // StyleSheet
+} from 'react-native'
 
 class Search extends React.Component {
   static navigationOptions = {
     title: 'Recipient'
-    // drawerLabel: 'Recipient'
   }
 
   componentDidMount () {
@@ -20,7 +24,7 @@ class Search extends React.Component {
     const design = this.props.navigation.state.params
     const {navigation, users} = this.props
     return (
-      <View>
+      <ScrollView>
         {
           users.map((user) => {
             return (
@@ -33,7 +37,7 @@ class Search extends React.Component {
             )
           })
         }
-      </View>
+      </ScrollView>
     )
   }
 
@@ -52,16 +56,16 @@ class Search extends React.Component {
   }
 }
 
-const styles = StyleSheet.create({
-  searchInput: {
-    paddingLeft: 30,
-    fontSize: 22,
-    maxHeight: 70,
-    flex: 1,
-    borderWidth: 9,
-    borderColor: '#E4E4E4'
-  }
-})
+// const styles = StyleSheet.create({
+//   searchInput: {
+//     paddingLeft: 30,
+//     fontSize: 22,
+//     maxHeight: 70,
+//     flex: 1,
+//     borderWidth: 9,
+//     borderColor: '#E4E4E4'
+//   }
+// })
 
 Search.propTypes = {
   apiRequire: PropTypes.func.isRequired,

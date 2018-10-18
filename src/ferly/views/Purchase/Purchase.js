@@ -67,8 +67,6 @@ export class Purchase extends React.Component {
           color={Theme.lightBlue}
           onPress={this.onPurchase.bind(this)}
         />
-        { // this.renderOffers()
-        }
       </View>
     )
   }
