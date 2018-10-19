@@ -9,7 +9,7 @@ import {apiExpire, apiRequire} from 'ferly/store/api'
 import {connect} from 'react-redux'
 import {createUrl, post} from 'ferly/utils/fetch'
 import {StackActions} from 'react-navigation'
-import {View, Button, Text, Alert} from 'react-native'
+import {View, Text, Alert} from 'react-native'
 
 export class Give extends React.Component {
   static navigationOptions = {

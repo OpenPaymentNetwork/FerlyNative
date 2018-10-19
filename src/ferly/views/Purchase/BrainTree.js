@@ -2,13 +2,11 @@ import PrimaryButton from 'ferly/components/PrimaryButton'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Spinner from 'ferly/components/Spinner'
-import Theme from 'ferly/utils/theme'
 import {createUrl} from 'ferly/utils/fetch'
 import {
   View,
   WebView,
   Platform,
-  Button,
   ScrollView,
   KeyboardAvoidingView
 } from 'react-native'
@@ -40,6 +38,8 @@ export default class BrainTree extends React.Component {
     if (data.startsWith('paymentnonce:')) {
       const nonce = data.substring(data.indexOf(':') + 1)
       this.props.onSuccess(nonce)
+    } else if (data === 'loaded') {
+      this.setState({loaded: true})
     }
   }
 
@@ -51,6 +51,7 @@ export default class BrainTree extends React.Component {
         vaultManager: true,
         container: '#dropin-container'
       }, function (createErr, instance) {
+        window.postMessage('loaded');
         button.addEventListener('click', function () {
           instance.requestPaymentMethod(
             function (requestPaymentMethodErr, payload) {
@@ -80,7 +81,6 @@ export default class BrainTree extends React.Component {
           source={require('./drop-in.html')}
           injectedJavaScript={this.createBrainTreeJS()}
           onMessage={this.receiveMessage.bind(this)}
-          onLoadEnd={() => this.setState({loaded: true})}
           // onError={console.error.bind(console, 'error')}
           // bounces={false}
           // onShouldStartLoadWithRequest={() => true}

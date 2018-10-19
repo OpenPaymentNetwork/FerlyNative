@@ -114,7 +114,7 @@ export class Wallet extends React.Component {
       return <Spinner />
     }
     return (
-      <View style={{flex: 1, backgroundColor: 'white'}}>
+      <View style={{flex: 1}}>
         {this.renderAmounts()}
         <TouchableOpacity
           style={{

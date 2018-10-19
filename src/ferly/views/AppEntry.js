@@ -5,7 +5,7 @@ import {apiRequire} from 'ferly/store/api'
 import {connect} from 'react-redux'
 import {createUrl} from 'ferly/utils/fetch'
 import Theme from 'ferly/utils/theme'
-import {StyleSheet, View, Text, Image} from 'react-native'
+import {View, Text, Image} from 'react-native'
 import {logoWhite} from 'ferly/images/index'
 
 export class AppEntry extends React.Component {

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import Theme from 'ferly/utils/theme'
-import {Button, View, Text, TextInput, Image} from 'react-native'
+import {Button, View, Text, TextInput, Image, StyleSheet} from 'react-native'
 import {Notifications, Permissions, Constants} from 'expo'
 import {post} from 'ferly/utils/fetch'
 import {logoWhite} from 'ferly/images/index'
@@ -23,7 +23,6 @@ export default class SignUp extends React.Component {
   }
 
   async getToken () {
-    console.log('getting token')
     const { status: existingStatus } = await Permissions.getAsync(
       Permissions.NOTIFICATIONS
     )
@@ -94,11 +93,12 @@ export default class SignUp extends React.Component {
     const {firstName, lastName, submitting} = this.state
     return (
       <View style={{flex: 1}}>
-        <View style={{flex: 1, paddingHorizontal: 20, paddingVertical: 40, backgroundColor: Theme.darkBlue, alignItems: 'center'}}>
-          <Image source={logoWhite} style={{width: 80, height: 78}} />
+        <View style={styles.container}>
+          <Image source={logoWhite} style={styles.logo} />
           <TextInput
-            style={{width: '100%', color: 'white'}}
-            underlineColorAndroid={'gray'}
+            style={styles.field}
+            underlineColorAndroid={'transparent'}
+            placeholderTextColor={'gray'}
             placeholder='First Name'
             onChangeText={(text) => this.setState({firstName: text})}
             value={firstName} />
@@ -108,8 +108,9 @@ export default class SignUp extends React.Component {
               : null
           }
           <TextInput
-            style={{width: '100%', color: 'white'}}
-            underlineColorAndroid={'gray'}
+            style={styles.field}
+            underlineColorAndroid={'transparent'}
+            placeholderTextColor={'gray'}
             placeholder='Last Name'
             onChangeText={(text) => this.setState({lastName: text})}
             value={lastName} />
@@ -133,6 +134,24 @@ export default class SignUp extends React.Component {
     )
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    alignItems: 'center',
+    backgroundColor: Theme.darkBlue,
+    flex: 1,
+    padding: 40
+  },
+  field: {
+    borderBottomWidth: 1,
+    borderColor: 'gray',
+    color: 'white',
+    fontSize: 18,
+    marginVertical: 6,
+    width: '100%'
+  },
+  logo: {width: 160, height: 156, marginVertical: 40}
+})
 
 SignUp.propTypes = {
   navigation: PropTypes.object.isRequired
