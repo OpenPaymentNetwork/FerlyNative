@@ -95,7 +95,7 @@ export class Wallet extends React.Component {
     const amounts = this.props.amounts || []
     if (amounts.length === 0) {
       return (
-        <Text>
+        <Text style={{margin: 20, fontSize: 18}}>
           There’s nothing here! Click ‘+’ below to purchase your first gift.
         </Text>
       )
