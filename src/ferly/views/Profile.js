@@ -133,7 +133,7 @@ class Profile extends React.Component {
 
       return (
         <View style={{flex: 1, justifyContent: 'space-between', width: '100%'}}>
-          <View style={{paddingHorizontal: 40, paddingVertical: 20}}>
+          <View style={{paddingHorizontal: 40, paddingBottom: 18}}>
             <Text style={styles.label}>First Name</Text>
             <TextInput
               style={styles.field}
@@ -223,13 +223,13 @@ class Profile extends React.Component {
 
 const styles = StyleSheet.create({
   avatarContainer: {
-    width: 120,
-    height: 120,
-    borderRadius: 60
+    width: 110,
+    height: 110,
+    borderRadius: 55
   },
   label: {
     color: 'gray',
-    marginTop: 14
+    marginTop: 12
   },
   profileText: {
     backgroundColor: 'lightgray',
