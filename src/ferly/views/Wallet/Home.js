@@ -103,6 +103,7 @@ export class Wallet extends React.Component {
       return (
         <ScrollView>
           {amounts.map((cashRow) => this.renderCard(cashRow))}
+          <View style={{height: 80}} />
         </ScrollView>
       )
     }

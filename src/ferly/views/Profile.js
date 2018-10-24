@@ -115,7 +115,7 @@ class Profile extends React.Component {
 
     if (!editing) {
       return (
-        <View>
+        <View style={{alignItems: 'center'}}>
           <Text style={styles.name}>{firstName + ' ' + lastName}</Text>
           <Text style={styles.username}>{'@' + username}</Text>
         </View>
@@ -244,7 +244,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   name: {fontSize: 30},
-  username: {fontSize: 20, color: 'lightgray'},
+  username: {fontSize: 20, color: 'gray'},
   field: {
     borderBottomWidth: 1,
     borderColor: 'gray',
