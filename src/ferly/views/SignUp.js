@@ -12,6 +12,8 @@ export default class SignUp extends React.Component {
     this.state = {
       firstName: '',
       lastName: '',
+      username: '',
+      showUsernameError: false,
       invalid: {},
       expoToken: '',
       submitting: false
@@ -44,21 +46,22 @@ export default class SignUp extends React.Component {
   }
 
   handleSubmit () {
-    const {firstName, lastName, expoToken} = this.state
+    const {firstName, lastName, username, expoToken} = this.state
     const {navigation} = this.props
-    // this.setState({submitting: true})
+    this.setState({submitting: true})
     const params = {
       first_name: firstName,
       last_name: lastName,
+      username: username,
       expo_token: expoToken
     }
+
     post('signup', params)
       .then((response) => response.json())
       .then((responseJson) => {
+        this.setState({submitting: false})
         if (this.validate(responseJson)) {
           navigation.navigate('Wallet')
-        } else {
-          this.setState({submitting: false})
         }
       })
   }
@@ -69,8 +72,39 @@ export default class SignUp extends React.Component {
         invalid: responseJson.invalid
       })
       return false
+    } else if (responseJson.error === 'existing_username') {
+      this.setState({invalid: {username: 'Username already taken'}})
+      return false
+    } else {
+      return true
     }
-    return true
+  }
+
+  invalidUsernameMessage (username) {
+    let msg
+    if (username.length < 4 || username.length > 20) {
+      msg = 'Must be 4-20 characters long'
+    } else if (!username.charAt(0).match('^[a-zA-Z]$')) {
+      msg = 'Must start with a letter'
+    } else if (!username.match('^[0-9a-zA-Z.]+$')) {
+      msg = 'Must contain only letters, numbers, and periods'
+    }
+    return msg
+  }
+
+  validateUsername (username) {
+    let msg = this.invalidUsernameMessage(username)
+    if (msg) {
+      const nextState = {username: username, invalid: {username: msg}}
+      if (username.length > 3) {
+        nextState.showUsernameError = true
+      }
+      this.setState(nextState)
+    } else {
+      const newInvalid = Object.assign({}, this.state.invalid)
+      delete newInvalid.username
+      this.setState({invalid: newInvalid})
+    }
   }
 
   renderDebug () {
@@ -90,7 +124,7 @@ export default class SignUp extends React.Component {
   }
 
   render () {
-    const {firstName, lastName, submitting} = this.state
+    const {firstName, lastName, username, submitting, invalid} = this.state
     return (
       <View style={{flex: 1}}>
         <View style={styles.container}>
@@ -103,8 +137,8 @@ export default class SignUp extends React.Component {
             onChangeText={(text) => this.setState({firstName: text})}
             value={firstName} />
           {
-            this.state.invalid.first_name
-              ? (<Text>{this.state.invalid.first_name}</Text>)
+            invalid.first_name
+              ? (<Text style={styles.error}>{invalid.first_name}</Text>)
               : null
           }
           <TextInput
@@ -115,15 +149,37 @@ export default class SignUp extends React.Component {
             onChangeText={(text) => this.setState({lastName: text})}
             value={lastName} />
           {
-            this.state.invalid.last_name
-              ? (<Text>{this.state.invalid.last_name}</Text>)
+            invalid.last_name
+              ? (<Text style={styles.error}>{invalid.last_name}</Text>)
+              : null
+          }
+          <TextInput
+            style={styles.field}
+            underlineColorAndroid={'transparent'}
+            placeholderTextColor={'gray'}
+            placeholder='Username'
+            onBlur={() => this.setState({showUsernameError: true})}
+            onChangeText={
+              (text) => {
+                this.validateUsername(text); this.setState({username: text})
+              }
+            }
+            value={username} />
+          {
+            invalid.username && this.state.showUsernameError
+              ? (<Text style={styles.error}>{invalid.username}</Text>)
               : null
           }
           {this.renderDebug()}
         </View>
         <Button
           title="Sign Up"
-          disabled={firstName === '' || lastName === '' || submitting}
+          disabled={
+            firstName === '' ||
+            lastName === '' ||
+            submitting ||
+            !!invalid.username
+          }
           color={Theme.lightBlue}
           style={{
             width: '100%',
@@ -142,6 +198,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 40
   },
+  error: {color: 'red', width: '100%'},
   field: {
     borderBottomWidth: 1,
     borderColor: 'gray',

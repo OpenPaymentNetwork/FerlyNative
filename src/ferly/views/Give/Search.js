@@ -32,7 +32,10 @@ class Search extends React.Component {
                 key={user.id}
                 onPress={
                   () => navigation.navigate('Amount', {user, design})}>
-                <ProfileDisplay name={user.title} url={user.picture} />
+                <ProfileDisplay
+                  name={user.first_name + ' ' + user.last_name}
+                  username={user.username}
+                  url={user.picture} />
               </TouchableOpacity>
             )
           })

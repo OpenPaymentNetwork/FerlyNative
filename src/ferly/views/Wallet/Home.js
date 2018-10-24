@@ -34,7 +34,7 @@ export class Wallet extends React.Component {
 
     const img = walletUrl
       ? <Image source={{uri: walletUrl}} style={{height: 130, width: 130}} />
-      : <Text>{design.title}</Text>
+      : <Text>{title}</Text>
 
     return (
       <View key={id} style={{
@@ -108,9 +108,9 @@ export class Wallet extends React.Component {
     }
   }
   render () {
-    const {title, navigation} = this.props
+    const {firstName, navigation} = this.props
 
-    if (!title) {
+    if (!firstName) {
       return <Spinner />
     }
     return (
@@ -146,24 +146,28 @@ export class Wallet extends React.Component {
 }
 
 Wallet.propTypes = {
-  apiRequire: PropTypes.func.isRequired,
   amounts: PropTypes.array,
-  title: PropTypes.string,
+  apiRequire: PropTypes.func.isRequired,
+  firstName: PropTypes.string,
+  lastName: PropTypes.string,
+  navigation: PropTypes.object.isRequired,
   profileImage: PropTypes.string,
-  walletUrl: PropTypes.string.isRequired,
-  navigation: PropTypes.object.isRequired
+  walletUrl: PropTypes.string.isRequired
 }
 
 function mapStateToProps (state) {
   const walletUrl = createUrl('wallet')
   const apiStore = state.apiStore
   const myWallet = apiStore[walletUrl] || {}
-  const {amounts, title, profileImage} = myWallet
+  const {amounts, profileImage} = myWallet
+  const firstName = myWallet.first_name
+  const lastName = myWallet.last_name
 
   return {
     walletUrl,
     amounts,
-    title,
+    firstName,
+    lastName,
     profileImage
   }
 }

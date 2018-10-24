@@ -50,7 +50,7 @@ export class Give extends React.Component {
             actions: [StackActions.push({routeName: 'Home'})]
           })
           navigation.dispatch(resetAction)
-          const desc = `You gifted ${formatted} ${design.title} to ${user.title}.`
+          const desc = `You gifted ${formatted} ${design.title} to ${user.first_name} ${user.last_name}.`
           Alert.alert('Complete!', desc)
         } else {
           const error = responseJson['invalid']['amounts.0']
@@ -82,7 +82,7 @@ export class Give extends React.Component {
         <View style={{flex: 1}}>
           <View style={{paddingHorizontal: 20, height: 60, justifyContent: 'space-between', flexDirection: 'row', borderWidth: 0.5, borderColor: 'black', alignItems: 'center'}}>
             <Text style={{fontSize: 20, fontWeight: 'bold'}}>Send</Text>
-            <Text style={{fontSize: 20, fontWeight: 'bold', paddingLeft: 40}}>{params.user.title}</Text>
+            <Text style={{fontSize: 20, fontWeight: 'bold', paddingLeft: 40}}>{`${params.user.first_name} ${params.user.last_name}`}</Text>
           </View>
           <View style={{flexShrink: 1, justifyContent: 'space-between', flexDirection: 'row', paddingHorizontal: 20}}>
             <View style={{flexShrink: 1, paddingVertical: 14}}>

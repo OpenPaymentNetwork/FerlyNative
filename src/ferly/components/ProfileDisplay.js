@@ -4,7 +4,7 @@ import {Text, View, Image, StyleSheet} from 'react-native'
 
 export default class ProfileDisplay extends React.Component {
   render () {
-    const {name, url} = this.props
+    const {name, url, username} = this.props
 
     let img
     if (url) {
@@ -27,6 +27,9 @@ export default class ProfileDisplay extends React.Component {
         <View style={{justifyContent: 'center', flex: 1}}>
           <Text style={{fontSize: 24}}>
             {name}
+          </Text>
+          <Text style={{fontSize: 20, color: 'gray'}}>
+            {'@' + username}
           </Text>
         </View>
       </View>
@@ -53,5 +56,6 @@ const styles = StyleSheet.create({
 
 ProfileDisplay.propTypes = {
   name: PropTypes.string,
+  username: PropTypes.string,
   url: PropTypes.string
 }

@@ -27,7 +27,7 @@ class DrawerContent extends React.Component {
 
   render () {
     const {items, ...otherProps} = this.props
-    const {navigation, title, profileImage} = this.props
+    const {navigation, firstName, lastName, profileImage} = this.props
     const filteredItems = items.filter(item => item.key !== 'Profile')
     return (
       <ScrollView>
@@ -37,8 +37,8 @@ class DrawerContent extends React.Component {
           <View style={styles.innerContainer}>
             <Image source={logoHorizontal} style={styles.image} />
             <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-              <UserAvatar title={title} profileImage={profileImage} />
-              <Text style={styles.text}>{title}</Text>
+              <UserAvatar title={`${firstName} ${lastName}`} profileImage={profileImage} />
+              <Text style={styles.text}>{`${firstName} ${lastName}`}</Text>
             </TouchableOpacity>
           </View>
           <DrawerItems items={filteredItems} {...otherProps} />
@@ -58,21 +58,25 @@ const styles = StyleSheet.create({
 })
 
 DrawerContent.propTypes = {
+  firstName: PropTypes.string,
   items: PropTypes.array.isRequired,
+  lastName: PropTypes.string,
   navigation: PropTypes.object.isRequired,
-  profileImage: PropTypes.string,
-  title: PropTypes.string
+  profileImage: PropTypes.string
 }
 
 function mapStateToProps (state) {
   const walletUrl = createUrl('wallet')
   const apiStore = state.apiStore
   const myWallet = apiStore[walletUrl] || {}
-  const {title, profileImage} = myWallet
+  const {profileImage} = myWallet
+  const firstName = myWallet.first_name || ''
+  const lastName = myWallet.last_name || ''
 
   return {
     walletUrl,
-    title,
+    firstName,
+    lastName,
     profileImage
   }
 }
