@@ -83,7 +83,7 @@ export class Wallet extends React.Component {
             <TouchableOpacity
               style={{alignItems: 'center', justifyContent: 'center', height: 40, flex: 1, maxWidth: 100}}
               onPress={() => navigation.navigate('Purchase', {design})}>
-              <Text style={{color: Theme.lightBlue}}>TOP UP</Text>
+              <Text style={{color: Theme.lightBlue}}>BUY</Text>
             </TouchableOpacity>
           </View>
         </View>

@@ -15,7 +15,8 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  ScrollView
 } from 'react-native'
 
 class Profile extends React.Component {
@@ -144,52 +145,55 @@ class Profile extends React.Component {
         <View
           style={{flex: 1, justifyContent: 'space-between', width: '100%'}}>
           <KeyboardAvoidingView
-            behavior="position"
-            keyboardVerticalOffset={-40}
-            style={{paddingHorizontal: 40, flex: 1, paddingTop: 20}}>
-            <View style={{alignItems: 'center', width: '100%'}}>
-              {this.renderAvatar()}
-            </View>
-            <Text style={styles.label}>First Name</Text>
-            <TextInput
-              style={styles.field}
-              underlineColorAndroid={'transparent'}
-              onChangeText={(text) => {
-                this.setState({form: Object.assign(form, {firstName: text})})
-              }}
-              value={formFirstName} />
-            {
-              invalid.first_name
-                ? (<Text style={styles.error}>{invalid.first_name}</Text>)
-                : null
-            }
-            <Text style={styles.label}>Last Name</Text>
-            <TextInput
-              style={styles.field}
-              underlineColorAndroid={'transparent'}
-              onChangeText={(text) => {
-                this.setState({form: Object.assign(form, {lastName: text})})
-              }}
-              value={formLastName} />
-            {
-              invalid.last_name
-                ? (<Text style={styles.error}>{invalid.last_name}</Text>)
-                : null
-            }
-            <Text style={styles.label}>Username</Text>
-            <TextInput
-              style={styles.field}
-              underlineColorAndroid={'transparent'}
-              onChangeText={(text) => {
-                this.validateUsername(text)
-                this.setState({form: Object.assign(form, {username: text})})
-              }}
-              value={formUsername} />
-            {
-              invalid.username
-                ? (<Text style={styles.error}>{invalid.username}</Text>)
-                : null
-            }
+            behavior="padding"
+            keyboardVerticalOffset={80}
+            style={{flex: 1}}>
+            <ScrollView contentContainerStyle={styles.scrollContainer}>
+              <View style={{alignItems: 'center', width: '100%'}}>
+                {this.renderAvatar()}
+              </View>
+              <Text style={styles.label}>First Name</Text>
+              <TextInput
+                style={styles.field}
+                underlineColorAndroid={'transparent'}
+                onChangeText={(text) => {
+                  this.setState({form: Object.assign(form, {firstName: text})})
+                }}
+                value={formFirstName} />
+              {
+                invalid.first_name
+                  ? (<Text style={styles.error}>{invalid.first_name}</Text>)
+                  : null
+              }
+              <Text style={styles.label}>Last Name</Text>
+              <TextInput
+                style={styles.field}
+                underlineColorAndroid={'transparent'}
+                onChangeText={(text) => {
+                  this.setState({form: Object.assign(form, {lastName: text})})
+                }}
+                value={formLastName} />
+              {
+                invalid.last_name
+                  ? (<Text style={styles.error}>{invalid.last_name}</Text>)
+                  : null
+              }
+              <Text style={styles.label}>Username</Text>
+              <TextInput
+                style={styles.field}
+                underlineColorAndroid={'transparent'}
+                onChangeText={(text) => {
+                  this.validateUsername(text)
+                  this.setState({form: Object.assign(form, {username: text})})
+                }}
+                value={formUsername} />
+              {
+                invalid.username
+                  ? (<Text style={styles.error}>{invalid.username}</Text>)
+                  : null
+              }
+              <View style={{height: 80}} />
+            </ScrollView>
           </KeyboardAvoidingView>
           <PrimaryButton
             title="Save"
@@ -254,6 +258,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'lightgray',
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  scrollContainer: {
+    flexGrow: 1,
+    paddingTop: 20,
+    width: '100%',
+    paddingHorizontal: 40
   },
   error: {color: 'red', width: '100%'},
   topView: {
