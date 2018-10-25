@@ -8,7 +8,15 @@ import {apiRequire, apiExpire} from 'ferly/store/api'
 import {connect} from 'react-redux'
 import {createUrl, post} from 'ferly/utils/fetch'
 import {StackActions} from 'react-navigation'
-import {View, Text, Image, StyleSheet, TouchableOpacity, TextInput} from 'react-native'
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  TextInput,
+  KeyboardAvoidingView
+} from 'react-native'
 
 class Profile extends React.Component {
   static navigationOptions = {
@@ -115,7 +123,8 @@ class Profile extends React.Component {
 
     if (!editing) {
       return (
-        <View style={{alignItems: 'center'}}>
+        <View style={{alignItems: 'center', paddingTop: 20}}>
+          {this.renderAvatar()}
           <Text style={styles.name}>{firstName + ' ' + lastName}</Text>
           <Text style={styles.username}>{'@' + username}</Text>
         </View>
@@ -132,13 +141,22 @@ class Profile extends React.Component {
         username !== formUsername)
 
       return (
-        <View style={{flex: 1, justifyContent: 'space-between', width: '100%'}}>
-          <View style={{paddingHorizontal: 40, paddingBottom: 18}}>
+        <View
+          style={{flex: 1, justifyContent: 'space-between', width: '100%'}}>
+          <KeyboardAvoidingView
+            behavior="position"
+            keyboardVerticalOffset={-40}
+            style={{paddingHorizontal: 40, flex: 1, paddingTop: 20}}>
+            <View style={{alignItems: 'center', width: '100%'}}>
+              {this.renderAvatar()}
+            </View>
             <Text style={styles.label}>First Name</Text>
             <TextInput
               style={styles.field}
               underlineColorAndroid={'transparent'}
-              onChangeText={(text) => this.setState({form: Object.assign(form, {firstName: text})})}
+              onChangeText={(text) => {
+                this.setState({form: Object.assign(form, {firstName: text})})
+              }}
               value={formFirstName} />
             {
               invalid.first_name
@@ -149,7 +167,9 @@ class Profile extends React.Component {
             <TextInput
               style={styles.field}
               underlineColorAndroid={'transparent'}
-              onChangeText={(text) => this.setState({form: Object.assign(form, {lastName: text})})}
+              onChangeText={(text) => {
+                this.setState({form: Object.assign(form, {lastName: text})})
+              }}
               value={formLastName} />
             {
               invalid.last_name
@@ -170,7 +190,7 @@ class Profile extends React.Component {
                 ? (<Text style={styles.error}>{invalid.username}</Text>)
                 : null
             }
-          </View>
+          </KeyboardAvoidingView>
           <PrimaryButton
             title="Save"
             disabled={
@@ -205,7 +225,8 @@ class Profile extends React.Component {
     }
 
     return (
-      <View style={{flex: 1, backgroundColor: 'white', alignItems: 'center', paddingTop: 20}}>
+      <View style={{flex: 1, backgroundColor: 'white', alignItems: 'center'}}>
+        {this.renderPage()}
         <TouchableOpacity
           style={{alignSelf: 'flex-end', position: 'absolute', padding: 20}}
           onPress={() => this.toggleEdit()}>
@@ -214,8 +235,6 @@ class Profile extends React.Component {
             color={Theme.lightBlue}
             size={24} />
         </TouchableOpacity>
-        {this.renderAvatar()}
-        {this.renderPage()}
       </View>
     )
   }
