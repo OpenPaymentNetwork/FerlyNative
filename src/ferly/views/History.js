@@ -3,7 +3,7 @@ import Spinner from 'ferly/components/Spinner'
 import PropTypes from 'prop-types'
 import React from 'react'
 import {View, FlatList, Text} from 'react-native'
-import {apiRequire} from 'ferly/store/api'
+import {apiRequire, apiInject} from 'ferly/store/api'
 import {connect} from 'react-redux'
 import {createUrl} from 'ferly/utils/fetch'
 
@@ -12,23 +12,53 @@ export class History extends React.Component {
     title: 'History'
   };
 
+  constructor (props) {
+    super(props)
+    this.state = {
+      updating: false
+    }
+  }
+
   componentDidMount () {
     this.props.apiRequire(this.props.historyUrl)
+  }
+
+  loadMore () {
+    const {hasMore, limit, history, historyUrl} = this.props
+    const {updating} = this.state
+    this.setState({updating: true})
+    if (!hasMore || updating) {
+      return
+    }
+    const nextUrl = createUrl('history', {limit: limit, offset: history.length})
+    fetch(nextUrl)
+      .then((response) => response.json())
+      .then((responseJson) => {
+        const newHistory = history.concat(responseJson.history)
+        this.props.apiInject(historyUrl, {
+          'history': newHistory,
+          'has_more': responseJson.has_more
+        })
+
+        // TODO don't set state here in case they navigate away while loading
+        this.setState({updating: false})
+      })
   }
 
   render () {
     const {history} = this.props
     if (!history) {
       return <Spinner />
-    } else if (history.length === 0) {
-      return <Text>You have no history</Text>
     }
-
     return (
       <View>
         <FlatList
-          // onEndReached={(info) => console.log('end!!:', info)}
-          // onEndReachedThreshold={50}
+          ListEmptyComponent={<Text>You have no history</Text>}
+          initialNumToRender={10}
+          getItemLayout={(data, index) => (
+            {length: 90, offset: index * 90, index})}
+          onEndReached={(info) => this.loadMore()}
+          onEndReachedThreshold={10}
           keyExtractor={(entry) => entry.timestamp}
           data={history}
           renderItem={(entry) => <HistoryEntry entry={entry.item} />} />
@@ -38,23 +68,31 @@ export class History extends React.Component {
 }
 
 History.propTypes = {
+  apiInject: PropTypes.func.isRequired,
   apiRequire: PropTypes.func.isRequired,
+  hasMore: PropTypes.bool,
   history: PropTypes.array,
-  historyUrl: PropTypes.string.isRequired
+  historyUrl: PropTypes.string.isRequired,
+  limit: PropTypes.number.isRequired
 }
 
 function mapStateToProps (state) {
-  const historyUrl = createUrl('history')
+  const limit = 30
+  const historyUrl = createUrl('history', {limit: limit})
   const apiStore = state.apiStore
   const historyResponse = apiStore[historyUrl] || {}
   const history = historyResponse.history
+  const hasMore = historyResponse.has_more
   return {
+    hasMore,
     historyUrl,
-    history
+    history,
+    limit
   }
 }
 
 const mapDispatchToProps = {
+  apiInject,
   apiRequire
 }
 

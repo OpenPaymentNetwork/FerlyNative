@@ -48,7 +48,7 @@ export default class HistoryEntry extends React.Component {
     return (
       <View style={styles.entry}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <Image style={{height: 44, width: 44}} source={iconSource} />
+          <Image style={styles.image} source={iconSource} />
           <View style={{flexDirection: 'column', paddingLeft: 15}}>
             <Text style={{fontWeight: 'bold', fontSize: 20}}>
               {`${titleVerb} $${amount}`}
@@ -74,6 +74,11 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderColor: 'black',
     paddingHorizontal: 15
+  },
+  image: {
+    resizeMode: 'contain',
+    height: 44,
+    width: 44
   }
 })
 
