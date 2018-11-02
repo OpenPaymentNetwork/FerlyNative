@@ -158,7 +158,10 @@ export default class SignUp extends React.Component {
             underlineColorAndroid={'transparent'}
             placeholderTextColor={'gray'}
             placeholder='Username'
-            onBlur={() => this.setState({showUsernameError: true})}
+            onBlur={() => {
+              this.validateUsername(username)
+              this.setState({showUsernameError: true})
+            }}
             onChangeText={
               (text) => {
                 this.validateUsername(text); this.setState({username: text})
@@ -178,7 +181,8 @@ export default class SignUp extends React.Component {
             firstName === '' ||
             lastName === '' ||
             submitting ||
-            !!invalid.username
+            !!invalid.username ||
+            !username
           }
           color={Theme.lightBlue}
           style={{
