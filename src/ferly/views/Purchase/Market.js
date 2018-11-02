@@ -4,7 +4,7 @@ import React from 'react'
 import {apiRequire} from 'ferly/store/api'
 import {connect} from 'react-redux'
 import {createUrl} from 'ferly/utils/fetch'
-import {View, TouchableOpacity} from 'react-native'
+import {TouchableOpacity, ScrollView} from 'react-native'
 
 export class Market extends React.Component {
   static navigationOptions = {
@@ -18,7 +18,7 @@ export class Market extends React.Component {
   render () {
     const {designs} = this.props
     return (
-      <View style={{flex: 1, backgroundColor: 'white'}}>
+      <ScrollView style={{flex: 1, backgroundColor: 'white'}}>
         {
           designs.map((design) => {
             return (
@@ -31,7 +31,7 @@ export class Market extends React.Component {
             )
           })
         }
-      </View>
+      </ScrollView>
     )
   }
 }

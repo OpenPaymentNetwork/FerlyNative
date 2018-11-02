@@ -43,7 +43,7 @@ export class Give extends React.Component {
       .then((response) => response.json())
       .then((responseJson) => {
         if (Object.keys(responseJson).length === 0) {
-          apiExpire(createUrl('history'))
+          apiExpire(createUrl('history', {limit: 30}))
           apiExpire(createUrl('wallet'))
           const resetAction = StackActions.reset({
             index: 0,

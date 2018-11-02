@@ -36,7 +36,7 @@ export class Cart extends React.Component {
       .then((response) => response.json())
       .then((responseJson) => {
         if (responseJson['result']) {
-          this.props.apiExpire(createUrl('history'))
+          this.props.apiExpire(createUrl('history', {limit: 30}))
           this.props.apiExpire(createUrl('wallet'))
           const resetAction = StackActions.reset({
             index: 0,
