@@ -198,6 +198,8 @@ class Profile extends React.Component {
           <PrimaryButton
             title="Save"
             disabled={
+              formFirstName === '' ||
+              formLastName === '' ||
               !changed ||
               submitting ||
               !!invalid.username
