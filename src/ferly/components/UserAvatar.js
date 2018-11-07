@@ -4,18 +4,18 @@ import {Text, View, Image, StyleSheet} from 'react-native'
 
 export default class UserAvatar extends React.Component {
   render () {
-    const {title, profileImage} = this.props
+    const {firstName, lastName, profileImage} = this.props
 
     let render
     if (profileImage) {
       return <Image style={styles.image} source={{uri: profileImage}} />
     }
 
-    if (title && !render) {
+    if (firstName && !render) {
       return (
         <View style={styles.container}>
           <Text style={{fontSize: 32, color: 'gray'}}>
-            {title.charAt(0) + title.charAt(title.indexOf(' ') + 1)}
+            {firstName.charAt(0) + lastName.charAt(0)}
           </Text>
         </View>
       )
@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
 })
 
 UserAvatar.propTypes = {
-  title: PropTypes.string,
+  firstName: PropTypes.string,
+  lastName: PropTypes.string,
   profileImage: PropTypes.string
 }

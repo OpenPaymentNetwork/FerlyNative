@@ -37,7 +37,10 @@ class DrawerContent extends React.Component {
           <View style={styles.innerContainer}>
             <Image source={logoHorizontal} style={styles.image} />
             <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-              <UserAvatar title={`${firstName} ${lastName}`} profileImage={profileImage} />
+              <UserAvatar
+                firstName={firstName}
+                lastName={lastName}
+                profileImage={profileImage} />
               <Text style={styles.text}>{`${firstName} ${lastName}`}</Text>
             </TouchableOpacity>
           </View>

@@ -83,9 +83,7 @@ class Profile extends React.Component {
 
   validateResponse (responseJson) {
     if (responseJson.invalid) {
-      this.setState({
-        invalid: responseJson.invalid
-      })
+      this.setState({invalid: responseJson.invalid})
       return false
     } else if (responseJson.error === 'existing_username') {
       this.setState({invalid: {username: 'Username already taken'}})
