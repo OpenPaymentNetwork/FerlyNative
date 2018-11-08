@@ -6,11 +6,13 @@ import History from 'ferly/views/History'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import Profile from 'ferly/views/Profile'
 import React from 'react'
+import Settings from 'ferly/views/Settings/Settings'
 import SignUp from 'ferly/views/SignUp'
 import Home from 'ferly/views/Wallet/Home'
 import Cart from 'ferly/views/Purchase/Cart'
 import Purchase from 'ferly/views/Purchase/Purchase'
 import Market from 'ferly/views/Purchase/Market'
+import Recovery from 'ferly/views/Settings/Recovery'
 import BrainTree from 'ferly/views/Purchase/BrainTree'
 import {
   createDrawerNavigator,
@@ -52,6 +54,16 @@ const WalletStack = createStackNavigator(
   }
 )
 
+const SettingsStack = createStackNavigator(
+  {
+    Settings: {screen: Settings, navigationOptions: drawerOptions},
+    Recovery: {screen: Recovery, navigationOptions: drawerOptions}
+  },
+  {
+    initialRouteName: 'Settings'
+  }
+)
+
 const AuthDrawer = createDrawerNavigator(
   {
     Wallet: WalletStack,
@@ -59,7 +71,8 @@ const AuthDrawer = createDrawerNavigator(
     'Ferly Card': createStackNavigator(
       {Card: {screen: FerlyCard, navigationOptions: drawerOptions}}),
     History: createStackNavigator(
-      {History: {screen: History, navigationOptions: drawerOptions}})
+      {History: {screen: History, navigationOptions: drawerOptions}}),
+    Settings: SettingsStack
   },
   {
     drawerPosition: 'right',
