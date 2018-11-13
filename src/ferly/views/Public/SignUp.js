@@ -1,0 +1,236 @@
+import PrimaryButton from 'ferly/components/PrimaryButton'
+import PropTypes from 'prop-types'
+import React from 'react'
+import Theme from 'ferly/utils/theme'
+import {Notifications, Permissions, Constants} from 'expo'
+import {post} from 'ferly/utils/fetch'
+import {logoWhite} from 'ferly/images/index'
+import {
+  View,
+  Text,
+  TextInput,
+  Image,
+  StyleSheet,
+  TouchableOpacity
+} from 'react-native'
+
+export default class SignUp extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      firstName: '',
+      lastName: '',
+      username: '',
+      showUsernameError: false,
+      invalid: {},
+      expoToken: '',
+      submitting: false
+    }
+  }
+
+  componentDidMount () {
+    this.getToken()
+  }
+
+  async getToken () {
+    const { status: existingStatus } = await Permissions.getAsync(
+      Permissions.NOTIFICATIONS
+    )
+    let finalStatus = existingStatus
+    // only ask if permissions have not already been determined, because
+    // iOS won't necessarily prompt the user a second time.
+    if (existingStatus !== 'granted') {
+      // console.log('asking for permission')
+      // Android remote notification permissions are granted during the app
+      // install, so this will only ask on iOS
+      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS)
+      finalStatus = status
+    }
+
+    if (finalStatus === 'granted') {
+      let token = await Notifications.getExpoPushTokenAsync()
+      this.setState({expoToken: token})
+    }
+  }
+
+  handleSubmit () {
+    const {firstName, lastName, username, expoToken} = this.state
+    const {navigation} = this.props
+    this.setState({submitting: true})
+    const params = {
+      first_name: firstName,
+      last_name: lastName,
+      username: username,
+      expo_token: expoToken
+    }
+
+    post('signup', params)
+      .then((response) => response.json())
+      .then((responseJson) => {
+        this.setState({submitting: false})
+        if (this.validate(responseJson)) {
+          navigation.navigate('Wallet')
+        }
+      })
+  }
+
+  validate (responseJson) {
+    if (responseJson.invalid) {
+      this.setState({
+        invalid: responseJson.invalid
+      })
+      return false
+    } else if (responseJson.error === 'existing_username') {
+      this.setState({invalid: {username: 'Username already taken'}})
+      return false
+    } else {
+      return true
+    }
+  }
+
+  invalidUsernameMessage (username) {
+    let msg
+    if (username.length < 4 || username.length > 20) {
+      msg = 'Must be 4-20 characters long'
+    } else if (!username.charAt(0).match('^[a-zA-Z]$')) {
+      msg = 'Must start with a letter'
+    } else if (!username.match('^[0-9a-zA-Z.]+$')) {
+      msg = 'Must contain only letters, numbers, and periods'
+    }
+    return msg
+  }
+
+  validateUsername (username) {
+    let msg = this.invalidUsernameMessage(username)
+    if (msg) {
+      const nextState = {username: username, invalid: {username: msg}}
+      if (username.length > 3) {
+        nextState.showUsernameError = true
+      }
+      this.setState(nextState)
+    } else {
+      const newInvalid = Object.assign({}, this.state.invalid)
+      delete newInvalid.username
+      this.setState({invalid: newInvalid})
+    }
+  }
+
+  renderDebug () {
+    const debug = false
+    if (debug) {
+      return (
+        <View>
+          <Text>
+            device id: {Constants.deviceId}
+          </Text>
+          <Text>
+            token: {this.state.expoToken}
+          </Text>
+        </View>
+      )
+    }
+  }
+
+  renderRecoveryOption () {
+    const {navigation} = this.props
+    return (
+      <View style={{paddingTop: 10, width: '100%', justifyContent: 'flex-end', flexDirection: 'row'}}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('RecoveryChannel')}>
+          <Text style={{color: Theme.lightBlue, textDecorationLine: 'underline', fontSize: 16}}>Already have an account?</Text>
+        </TouchableOpacity>
+      </View>
+    )
+  }
+
+  render () {
+    const {firstName, lastName, username, submitting, invalid} = this.state
+    return (
+      <View style={{flex: 1}}>
+        <View style={styles.container}>
+          <Image source={logoWhite} style={styles.logo} />
+          <TextInput
+            style={styles.field}
+            underlineColorAndroid={'transparent'}
+            placeholderTextColor={'gray'}
+            placeholder='First Name'
+            onChangeText={(text) => this.setState({firstName: text})}
+            value={firstName} />
+          {
+            invalid.first_name
+              ? (<Text style={styles.error}>{invalid.first_name}</Text>)
+              : null
+          }
+          <TextInput
+            style={styles.field}
+            underlineColorAndroid={'transparent'}
+            placeholderTextColor={'gray'}
+            placeholder='Last Name'
+            onChangeText={(text) => this.setState({lastName: text})}
+            value={lastName} />
+          {
+            invalid.last_name
+              ? (<Text style={styles.error}>{invalid.last_name}</Text>)
+              : null
+          }
+          <TextInput
+            style={styles.field}
+            underlineColorAndroid={'transparent'}
+            placeholderTextColor={'gray'}
+            placeholder='Username'
+            onBlur={() => {
+              this.validateUsername(username)
+              this.setState({showUsernameError: true})
+            }}
+            onChangeText={
+              (text) => {
+                this.validateUsername(text); this.setState({username: text})
+              }
+            }
+            value={username} />
+          {
+            invalid.username && this.state.showUsernameError
+              ? (<Text style={styles.error}>{invalid.username}</Text>)
+              : null
+          }
+          {this.renderDebug()}
+          {this.renderRecoveryOption()}
+        </View>
+        <PrimaryButton
+          title="Sign Up"
+          disabled={
+            firstName === '' ||
+            lastName === '' ||
+            submitting ||
+            !!invalid.username ||
+            !username
+          }
+          color={Theme.lightBlue}
+          onPress={this.handleSubmit.bind(this)} />
+      </View>
+    )
+  }
+}
+
+const styles = StyleSheet.create({
+  container: {
+    alignItems: 'center',
+    backgroundColor: Theme.darkBlue,
+    flex: 1,
+    paddingHorizontal: 40
+  },
+  error: {color: 'red', width: '100%'},
+  field: {
+    borderBottomWidth: 1,
+    borderColor: 'gray',
+    color: 'white',
+    fontSize: 18,
+    marginVertical: 6,
+    width: '100%'
+  },
+  logo: {width: 160, height: 156, marginVertical: 40}
+})
+
+SignUp.propTypes = {
+  navigation: PropTypes.object.isRequired
+}

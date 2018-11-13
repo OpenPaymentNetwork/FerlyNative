@@ -6,8 +6,10 @@ import History from 'ferly/views/History'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import Profile from 'ferly/views/Profile'
 import React from 'react'
+import RecoveryChannel from 'ferly/views/Public/RecoveryChannel'
+import RecoveryCode from 'ferly/views/Public/RecoveryCode'
 import Settings from 'ferly/views/Settings/Settings'
-import SignUp from 'ferly/views/SignUp'
+import SignUp from 'ferly/views/Public/SignUp'
 import Home from 'ferly/views/Wallet/Home'
 import Cart from 'ferly/views/Purchase/Cart'
 import Purchase from 'ferly/views/Purchase/Purchase'
@@ -80,19 +82,26 @@ const AuthDrawer = createDrawerNavigator(
   }
 )
 
-// const PubStack = createStackNavigator(
-//   {
-//     Info: {screen: SignUp}
-//   },
-//   {
-//     initialRouteName: 'Info'
-//   }
-// )
+const publicHeader = {
+  headerStyle: {backgroundColor: Theme.darkBlue},
+  headerTintColor: 'white'
+}
+
+const PubStack = createStackNavigator(
+  {
+    SignUp: {screen: SignUp, navigationOptions: {header: null}},
+    RecoveryCode: {screen: RecoveryCode, navigationOptions: publicHeader},
+    RecoveryChannel: {screen: RecoveryChannel, navigationOptions: publicHeader}
+  },
+  {
+    initialRouteName: 'SignUp'
+  }
+)
 
 export const CreateAuthSwitch = (props) => {
   const AppLayout = createSwitchNavigator(
     {
-      Pub: SignUp,
+      Pub: PubStack,
       Auth: AuthDrawer
     },
     {

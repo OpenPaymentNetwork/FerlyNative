@@ -41,8 +41,8 @@ export class Give extends React.Component {
     this.setState({submitting: true})
     post('send', postParams)
       .then((response) => response.json())
-      .then((responseJson) => {
-        if (Object.keys(responseJson).length === 0) {
+      .then((json) => {
+        if (Object.keys(json).length === 0) {
           apiExpire(createUrl('history', {limit: 30}))
           apiExpire(createUrl('wallet'))
           const resetAction = StackActions.reset({
@@ -53,7 +53,7 @@ export class Give extends React.Component {
           const desc = `You gifted ${formatted} ${design.title} to ${user.first_name} ${user.last_name}.`
           Alert.alert('Complete!', desc)
         } else {
-          const error = responseJson['invalid']['amounts.0']
+          const error = json.invalid['amounts.0'] || json.invalid['amount']
           this.setState({error: error, amount: 0, submitting: false})
         }
       })

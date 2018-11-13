@@ -60,7 +60,7 @@ Settings.propTypes = {
   navigation: PropTypes.object.isRequired
 }
 
-const styles = StyleSheet.Create({
+const styles = StyleSheet.create({
   title: {
     fontWeight: 'bold',
     fontSize: 20

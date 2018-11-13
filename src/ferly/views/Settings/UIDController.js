@@ -161,6 +161,7 @@ export class UIDController extends React.Component {
               <TextInput
                 onChangeText={(text) => this.setState({code: text})}
                 autoFocus
+                underlineColorAndroid={'transparent'}
                 style={styles.button}
                 keyboardType="numeric"
                 value={code} />
@@ -194,6 +195,7 @@ export class UIDController extends React.Component {
               <TextInput
                 onChangeText={(text) => this.setState({formValue: text})}
                 autoFocus
+                underlineColorAndroid={'transparent'}
                 style={styles.button}
                 keyboardType={keyboardType}
                 value={formValue} />

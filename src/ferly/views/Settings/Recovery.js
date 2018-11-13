@@ -43,7 +43,7 @@ export class Recovery extends React.Component {
         style={{flex: 1}}
         keyboardVerticalOffset={80}
         behavior="padding">
-        <ScrollView>
+        <ScrollView contentContainerStyle={{flexGrow: 1}}>
           <View style={{paddingHorizontal: 20, paddingTop: 20}}>
             <Text style={{fontSize: 16, marginBottom: 8}}>{message}</Text>
             <Text style={{fontSize: 16}}>
