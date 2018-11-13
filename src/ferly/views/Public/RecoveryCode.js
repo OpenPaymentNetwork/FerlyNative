@@ -83,6 +83,7 @@ export default class RecoveryCode extends React.Component {
               style={{fontSize: 18}}
               onChangeText={(text) => this.setState({fieldValue: text})}
               autoFocus
+              returnKeyType='done'
               placeholder="Enter code"
               keyboardType="numeric"
               value={fieldValue} />
