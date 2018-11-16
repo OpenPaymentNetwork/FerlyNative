@@ -37,7 +37,7 @@ export class UIDController extends React.Component {
     const {type} = this.props
     const postParams = {
       login: formValue,
-      uidType: type
+      uid_type: type
     }
 
     this.setState({submitting: true})
