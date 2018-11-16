@@ -33,6 +33,7 @@ export default class RecoveryChannel extends React.Component {
       .then((response) => response.json())
       .then((responseJson) => {
         if (this.validate(responseJson)) {
+          this.setState({submitting: false})
           const codeLength = responseJson.code_length
           let code = ''
           if (responseJson.revealed_codes) {
