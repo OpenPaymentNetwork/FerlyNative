@@ -108,6 +108,7 @@ export class Wallet extends React.Component {
       )
     }
   }
+
   render () {
     const {firstName, navigation} = this.props
 

@@ -1,6 +1,7 @@
 import PrimaryButton from 'ferly/components/PrimaryButton'
 import PropTypes from 'prop-types'
 import React from 'react'
+import Recaptcha from 'ferly/components/Recaptcha'
 import Theme from 'ferly/utils/theme'
 import {post} from 'ferly/utils/fetch'
 import {View, Text, TextInput, StyleSheet, Alert} from 'react-native'
@@ -15,7 +16,8 @@ export default class RecoveryCode extends React.Component {
     this.state = {
       fieldValue: props.navigation.state.params.code || '',
       invalid: '',
-      submitting: false
+      submitting: false,
+      recaptchaResponse: ''
     }
   }
 
@@ -23,14 +25,15 @@ export default class RecoveryCode extends React.Component {
     const {navigation} = this.props
     const params = navigation.state.params
     const {attemptPath, secret, factorId} = params
-    const {fieldValue} = this.state
+    const {fieldValue, recaptchaResponse} = this.state
     this.setState({'submitting': true, invalid: ''})
 
     const postParams = {
       attempt_path: attemptPath,
       secret: secret,
       factor_id: factorId,
-      code: fieldValue
+      code: fieldValue,
+      recaptcha_response: recaptchaResponse
     }
 
     post('recover-code', postParams)
@@ -48,14 +51,25 @@ export default class RecoveryCode extends React.Component {
         invalid: json.invalid[Object.keys(json.invalid)[0]],
         submitting: false})
       return false
-    } else if (json.error) {
+    } else if (json.error === 'unexpected_auth_attempt') {
       this.setState({submitting: false})
-
       Alert.alert(
         'Error', 'This account does not exist. Please go back and try again.')
       return false
+    } else if (json.error === 'recaptcha_required') {
+      this.setState({invalid: 'recaptcha required', submitting: false})
+      return false
+    } else if (json.error === 'code_expired') {
+      Alert.alert(
+        'Sorry', 'This code has expired. Please try again with a new code.')
+      return false
+    } else {
+      return true
     }
-    return true
+  }
+
+  onExecute (response) {
+    this.setState({recaptchaResponse: response})
   }
 
   render () {
@@ -87,6 +101,7 @@ export default class RecoveryCode extends React.Component {
               placeholder="Enter code"
               keyboardType="numeric"
               value={fieldValue} />
+            <Recaptcha onExecute={this.onExecute.bind(this)}/>
           </View>
           {invalid ? (<Text style={styles.error}>{invalid}</Text>) : null}
         </View>

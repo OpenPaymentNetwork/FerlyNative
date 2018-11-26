@@ -1,6 +1,7 @@
 import Icon from 'react-native-vector-icons/FontAwesome'
 import PropTypes from 'prop-types'
 import React from 'react'
+import Recaptcha from 'ferly/components/Recaptcha'
 import Theme from 'ferly/utils/theme'
 import {apiExpire} from 'ferly/store/api'
 import {connect} from 'react-redux'
@@ -28,8 +29,13 @@ export class UIDController extends React.Component {
       code: '',
       codeLength: 6,
       invalid: '',
-      submitting: false
+      submitting: false,
+      recaptchaResponse: ''
     }
+  }
+
+  onExecute (response) {
+    this.setState({recaptchaResponse: response})
   }
 
   handleUIDRequest () {
@@ -71,8 +77,9 @@ export class UIDController extends React.Component {
         invalid: json.invalid[Object.keys(json.invalid)[0]],
         submitting: false})
       return false
-    } else if (json.error === 'bad_attempt') {
-      Alert.alert('Attempt failed', 'Please retry later')
+    } else if (json.error === 'code_expired') {
+      Alert.alert(
+        'Sorry', 'This code has expired. Please try again with a new code.')
       this.setState({
         invalid: '',
         showCode: false,
@@ -84,6 +91,9 @@ export class UIDController extends React.Component {
         showForm: false
       })
       return false
+    } else if (json.error === 'recaptcha_required') {
+      this.setState({invalid: 'recaptcha required', submitting: false})
+      return false
     } else {
       return true
     }
@@ -91,11 +101,12 @@ export class UIDController extends React.Component {
 
   handleCodeSubmit () {
     const {type, uid, navigation} = this.props
-    const {secret, attemptId, code} = this.state
+    const {secret, attemptId, code, recaptchaResponse} = this.state
     const postParams = {
       secret: secret,
       attempt_id: attemptId,
-      code: code
+      code: code,
+      recaptcha_response: recaptchaResponse
     }
     if (uid) {
       postParams['replace_uid'] = `${type}:${uid}`
@@ -138,7 +149,8 @@ export class UIDController extends React.Component {
       code,
       codeLength,
       invalid,
-      submitting
+      submitting,
+      recaptchaResponse
     } = this.state
 
     let title
@@ -146,6 +158,11 @@ export class UIDController extends React.Component {
       title = 'Email Address'
     } else if (type === 'phone') {
       title = 'Phone Number'
+    }
+
+    let recaptcha
+    if (showCode) {
+      recaptcha = <Recaptcha onExecute={this.onExecute.bind(this)}/>
     }
 
     let body
@@ -170,7 +187,7 @@ export class UIDController extends React.Component {
             <Button
               title="VERIFY"
               color={Theme.lightBlue}
-              disabled={submitting}
+              disabled={submitting || !recaptchaResponse}
               onPress={this.handleCodeSubmit.bind(this)} />
           </View>
         </View>
@@ -245,6 +262,7 @@ export class UIDController extends React.Component {
         <Text style={styles.label}>{title}</Text>
         {body}
         {error}
+        {recaptcha}
       </View>
     )
   }
