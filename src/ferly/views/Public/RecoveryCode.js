@@ -101,7 +101,9 @@ export default class RecoveryCode extends React.Component {
               placeholder="Enter code"
               keyboardType="numeric"
               value={fieldValue} />
-            <Recaptcha onExecute={this.onExecute.bind(this)}/>
+            <Recaptcha
+              onExecute={this.onExecute.bind(this)}
+              action="Recovery" />
           </View>
           {invalid ? (<Text style={styles.error}>{invalid}</Text>) : null}
         </View>

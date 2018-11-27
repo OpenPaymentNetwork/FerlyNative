@@ -162,7 +162,8 @@ export class UIDController extends React.Component {
 
     let recaptcha
     if (showCode) {
-      recaptcha = <Recaptcha onExecute={this.onExecute.bind(this)}/>
+      recaptcha = (
+        <Recaptcha onExecute={this.onExecute.bind(this)} action="Add UID" />)
     }
 
     let body

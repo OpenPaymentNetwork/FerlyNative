@@ -24,7 +24,7 @@ export class Recaptcha extends React.Component {
       <ReCaptcha
         recaptchaType='invisible'
         containerStyle={{}} // Empty overrides default style
-        action="wallet"
+        action={this.props.action}
         url="http://ferly.com"
         siteKey={sitekey}
         onExecute={(response) => this.onExecute(response)}
@@ -34,6 +34,7 @@ export class Recaptcha extends React.Component {
 }
 
 Recaptcha.propTypes = {
+  action: PropTypes.string.isRequired,
   apiRequire: PropTypes.func.isRequired,
   bypass: PropTypes.string,
   onExecute: PropTypes.func.isRequired,
