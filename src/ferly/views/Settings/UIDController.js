@@ -94,6 +94,10 @@ export class UIDController extends React.Component {
     } else if (json.error === 'recaptcha_required') {
       this.setState({invalid: 'recaptcha required', submitting: false})
       return false
+    } else if (json.error) {
+      Alert.alert(
+        'Error', 'Please try again with a new code.')
+      return false
     } else {
       return true
     }
