@@ -103,7 +103,7 @@ export default class RecoveryCode extends React.Component {
               value={fieldValue} />
             <Recaptcha
               onExecute={this.onExecute.bind(this)}
-              action="Recovery" />
+              action="recovery" />
           </View>
           {invalid ? (<Text style={styles.error}>{invalid}</Text>) : null}
         </View>

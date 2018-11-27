@@ -160,12 +160,6 @@ export class UIDController extends React.Component {
       title = 'Phone Number'
     }
 
-    let recaptcha
-    if (showCode) {
-      recaptcha = (
-        <Recaptcha onExecute={this.onExecute.bind(this)} action="Add UID" />)
-    }
-
     let body
     if (showCode) {
       body = (
@@ -188,9 +182,10 @@ export class UIDController extends React.Component {
             <Button
               title="VERIFY"
               color={Theme.lightBlue}
-              disabled={submitting || !recaptchaResponse}
+              disabled={submitting || !recaptchaResponse || code === ''}
               onPress={this.handleCodeSubmit.bind(this)} />
           </View>
+          <Recaptcha onExecute={this.onExecute.bind(this)} action="uid" />
         </View>
       )
     } else if (showForm) {
@@ -263,7 +258,6 @@ export class UIDController extends React.Component {
         <Text style={styles.label}>{title}</Text>
         {body}
         {error}
-        {recaptcha}
       </View>
     )
   }

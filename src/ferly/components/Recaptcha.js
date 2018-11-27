@@ -15,7 +15,7 @@ export class Recaptcha extends React.Component {
   }
 
   render () {
-    const {sitekey} = this.props
+    const {sitekey, action} = this.props
     if (!sitekey) {
       return null
     }
@@ -24,7 +24,7 @@ export class Recaptcha extends React.Component {
       <ReCaptcha
         recaptchaType='invisible'
         containerStyle={{}} // Empty overrides default style
-        action={this.props.action}
+        action={action}
         url="http://ferly.com"
         siteKey={sitekey}
         onExecute={(response) => this.onExecute(response)}
