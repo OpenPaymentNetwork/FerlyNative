@@ -127,7 +127,7 @@ export class UIDController extends React.Component {
             title = 'Phone Number'
           }
           const lowerTitle = title.toLowerCase()
-          const message = `Thank you! your ${lowerTitle} has been verified ` +
+          const message = `Thank you! Your ${lowerTitle} has been verified ` +
             `and can be used for account recovery in the future.`
           Alert.alert(`${title} Verified`, message)
           this.props.apiExpire(createUrl('wallet'))
