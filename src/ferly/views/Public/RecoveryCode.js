@@ -73,7 +73,7 @@ export default class RecoveryCode extends React.Component {
   }
 
   render () {
-    const {fieldValue, submitting, invalid} = this.state
+    const {fieldValue, submitting, invalid, recaptchaResponse} = this.state
     const {navigation} = this.props
     const params = navigation.state.params
     const {codeLength, loginType} = params
@@ -109,7 +109,7 @@ export default class RecoveryCode extends React.Component {
         </View>
         <PrimaryButton
           title="Recover Account"
-          disabled={fieldValue === '' || submitting}
+          disabled={fieldValue === '' || submitting || !recaptchaResponse}
           color={Theme.lightBlue}
           onPress={this.handleSubmit.bind(this)} />
       </View>
