@@ -32,7 +32,7 @@ export default class RecoveryCode extends React.Component {
       attempt_path: attemptPath,
       secret: secret,
       factor_id: factorId,
-      code: fieldValue,
+      code: fieldValue.replace(/-/g, ''),
       recaptcha_response: recaptchaResponse
     }
 

@@ -109,7 +109,7 @@ export class UIDController extends React.Component {
     const postParams = {
       secret: secret,
       attempt_id: attemptId,
-      code: code,
+      code: code.replace(/-/g, ''),
       recaptcha_response: recaptchaResponse
     }
     if (uid) {
