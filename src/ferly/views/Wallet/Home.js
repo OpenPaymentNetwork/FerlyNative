@@ -4,7 +4,14 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import Spinner from 'ferly/components/Spinner'
 import Theme from 'ferly/utils/theme'
-import {View, TouchableOpacity, Text, ScrollView, Image} from 'react-native'
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  ScrollView,
+  Image,
+  Alert
+} from 'react-native'
 import {apiRequire} from 'ferly/store/api'
 import {connect} from 'react-redux'
 import {createUrl} from 'ferly/utils/fetch'
@@ -13,6 +20,15 @@ export class Wallet extends React.Component {
   static navigationOptions = {
     title: 'Wallet'
   };
+
+  constructor (props) {
+    super(props)
+    const {amounts} = props
+    const shouldCheckRecovery = amounts === undefined
+    this.state = {
+      shouldCheckRecovery: shouldCheckRecovery
+    }
+  }
 
   componentDidMount () {
     this.props.apiRequire(this.props.walletUrl)
@@ -109,12 +125,42 @@ export class Wallet extends React.Component {
     }
   }
 
+  showAddAccountRecoveryDialog () {
+    const {navigation, amounts, uids} = this.props
+    if (uids.length > 0 || amounts.length === 0) {
+      return
+    }
+    const title = 'Add Account Recovery'
+    const message = (
+      'If you replace your phone or uninstall the app you\'ll need to ' +
+      'recover your account using a verified email address or phone number. ' +
+      'You may lose your gift cards if account recovery is not set up prior ' +
+      'to replacing your phone or uninstalling the app.'
+    )
+    const buttons = [
+      {
+        text: 'Close',
+        onPress: () => this.setState({shouldCheckRecovery: false})},
+      {
+        text: 'Add',
+        onPress: () => navigation.navigate('Recovery')
+      }
+    ]
+    Alert.alert(title, message, buttons, {cancelable: false})
+  }
+
   render () {
     const {firstName, navigation} = this.props
+    const {shouldCheckRecovery} = this.state
 
     if (!firstName) {
       return <Spinner />
     }
+
+    if (shouldCheckRecovery) {
+      this.showAddAccountRecoveryDialog()
+    }
+
     return (
       <View style={{flex: 1}}>
         {this.renderAmounts()}
@@ -154,6 +200,7 @@ Wallet.propTypes = {
   lastName: PropTypes.string,
   navigation: PropTypes.object.isRequired,
   profileImage: PropTypes.string,
+  uids: PropTypes.array,
   walletUrl: PropTypes.string.isRequired
 }
 
@@ -164,13 +211,15 @@ function mapStateToProps (state) {
   const {amounts, profileImage} = myWallet
   const firstName = myWallet.first_name
   const lastName = myWallet.last_name
+  const uids = myWallet.uids || []
 
   return {
     walletUrl,
     amounts,
     firstName,
     lastName,
-    profileImage
+    profileImage,
+    uids
   }
 }
 

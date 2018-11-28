@@ -79,7 +79,7 @@ Purchase.propTypes = {
   walletUrl: PropTypes.string.isRequired
 }
 
-function mapStateToProps (state, ownProps) {
+function mapStateToProps (state) {
   const walletUrl = createUrl('wallet')
   const apiStore = state.apiStore
   const myWallet = apiStore[walletUrl] || {}
