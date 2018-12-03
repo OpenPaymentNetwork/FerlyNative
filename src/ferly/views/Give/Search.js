@@ -79,7 +79,7 @@ Search.propTypes = {
 
 function mapStateToProps (state) {
   const usersUrl = createUrl('users')
-  const apiStore = state.apiStore
+  const apiStore = state.api.apiStore
   const users = apiStore[usersUrl] || []
 
   return {

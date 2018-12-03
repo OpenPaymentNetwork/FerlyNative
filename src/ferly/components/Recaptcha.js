@@ -44,7 +44,7 @@ Recaptcha.propTypes = {
 
 function mapStateToProps (state) {
   const recaptchaUrl = createUrl('recaptcha-sitekey')
-  const apiStore = state.apiStore
+  const apiStore = state.api.apiStore
   const recaptchaInfo = apiStore[recaptchaUrl] || {}
   const {sitekey} = recaptchaInfo
   const bypass = recaptchaInfo.captcha_bypass

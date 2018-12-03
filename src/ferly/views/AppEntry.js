@@ -47,7 +47,7 @@ AppEntry.propTypes = {
 
 function mapStateToProps (state) {
   const isUserUrl = createUrl('is-user')
-  const apiStore = state.apiStore
+  const apiStore = state.api.apiStore
   const myWallet = apiStore[isUserUrl] || {}
   const auth = myWallet.is_user
 

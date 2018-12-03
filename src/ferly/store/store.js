@@ -8,7 +8,7 @@ const apiMiddleware = (store) => (next) => (action) => {
   const {type} = action
   if (type === API_REQUIRE || type === API_REFRESH) {
     const currentStore = store.getState()
-    const currentApiStore = currentStore.apiStore
+    const currentApiStore = currentStore.api.apiStore
 
     // and if the data has expired (add meta to store),
     // and if the data is already being fetched

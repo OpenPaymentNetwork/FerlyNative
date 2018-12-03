@@ -69,7 +69,7 @@ Recovery.propTypes = {
 
 function mapStateToProps (state) {
   const walletUrl = createUrl('wallet')
-  const apiStore = state.apiStore
+  const apiStore = state.api.apiStore
   const myWallet = apiStore[walletUrl] || {}
   const uids = myWallet.uids || []
   let emails = []

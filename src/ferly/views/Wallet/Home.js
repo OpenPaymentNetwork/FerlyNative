@@ -13,6 +13,7 @@ import {
   Alert
 } from 'react-native'
 import {apiRequire} from 'ferly/store/api'
+import {checkedUidPrompt} from 'ferly/store/load'
 import {connect} from 'react-redux'
 import {createUrl} from 'ferly/utils/fetch'
 
@@ -21,26 +22,9 @@ export class Wallet extends React.Component {
     title: 'Wallet'
   };
 
-  constructor (props) {
-    super(props)
-    const {amounts} = props
-    const shouldCheckRecovery = amounts === undefined
-    this.state = {
-      shouldCheckRecovery: shouldCheckRecovery
-    }
-  }
-
   componentDidMount () {
     this.props.apiRequire(this.props.walletUrl)
-    // this.getToken()
   }
-
-  // async getToken () {
-  //   const status = await Permissions.askAsync(Permissions.NOTIFICATIONS)
-  //   let token = await Notifications.getExpoPushTokenAsync()
-  //   console.log('token:', token)
-  //   console.log('id:', Constants.deviceId)
-  // }
 
   renderCard (design) {
     const {navigation} = this.props
@@ -140,24 +124,27 @@ export class Wallet extends React.Component {
     const buttons = [
       {
         text: 'Close',
-        onPress: () => this.setState({shouldCheckRecovery: false})},
+        onPress: () => this.props.checkedUidPrompt()
+      },
       {
         text: 'Add',
-        onPress: () => navigation.navigate('Recovery')
+        onPress: () => {
+          this.props.checkedUidPrompt()
+          navigation.navigate('Recovery')
+        }
       }
     ]
     Alert.alert(title, message, buttons, {cancelable: false})
   }
 
   render () {
-    const {firstName, navigation} = this.props
-    const {shouldCheckRecovery} = this.state
+    const {firstName, navigation, checkUidPrompt} = this.props
 
     if (!firstName) {
       return <Spinner />
     }
 
-    if (shouldCheckRecovery) {
+    if (checkUidPrompt) {
       this.showAddAccountRecoveryDialog()
     }
 
@@ -196,6 +183,8 @@ export class Wallet extends React.Component {
 Wallet.propTypes = {
   amounts: PropTypes.array,
   apiRequire: PropTypes.func.isRequired,
+  checkUidPrompt: PropTypes.bool,
+  checkedUidPrompt: PropTypes.func.isRequired,
   firstName: PropTypes.string,
   lastName: PropTypes.string,
   navigation: PropTypes.object.isRequired,
@@ -206,7 +195,8 @@ Wallet.propTypes = {
 
 function mapStateToProps (state) {
   const walletUrl = createUrl('wallet')
-  const apiStore = state.apiStore
+  const apiStore = state.api.apiStore
+  const {checkUidPrompt} = state.load
   const myWallet = apiStore[walletUrl] || {}
   const {amounts, profileImage} = myWallet
   const firstName = myWallet.first_name
@@ -219,12 +209,14 @@ function mapStateToProps (state) {
     firstName,
     lastName,
     profileImage,
-    uids
+    uids,
+    checkUidPrompt
   }
 }
 
 const mapDispatchToProps = {
-  apiRequire
+  apiRequire,
+  checkedUidPrompt
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Wallet)

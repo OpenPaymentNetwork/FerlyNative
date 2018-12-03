@@ -295,7 +295,7 @@ Profile.propTypes = {
 
 function mapStateToProps (state) {
   const walletUrl = createUrl('wallet')
-  const apiStore = state.apiStore
+  const apiStore = state.api.apiStore
   const myWallet = apiStore[walletUrl] || {}
   const {amounts, username, profileImage} = myWallet
   const firstName = myWallet.first_name

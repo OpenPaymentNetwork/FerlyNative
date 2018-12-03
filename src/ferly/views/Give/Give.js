@@ -114,7 +114,7 @@ Give.propTypes = {
 
 function mapStateToProps (state) {
   const walletUrl = createUrl('wallet')
-  const apiStore = state.apiStore
+  const apiStore = state.api.apiStore
   const myWallet = apiStore[walletUrl] || {}
   const {amounts} = myWallet
   return {

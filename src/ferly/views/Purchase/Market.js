@@ -45,7 +45,7 @@ Market.propTypes = {
 
 function mapStateToProps (state) {
   const designsUrl = createUrl('list-designs')
-  const apiStore = state.apiStore
+  const apiStore = state.api.apiStore
   const designs = apiStore[designsUrl] || []
 
   return {

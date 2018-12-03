@@ -79,7 +79,7 @@ History.propTypes = {
 function mapStateToProps (state) {
   const limit = 30 // If you change this. change url in give/purchase also
   const historyUrl = createUrl('history', {limit: limit})
-  const apiStore = state.apiStore
+  const apiStore = state.api.apiStore
   const historyResponse = apiStore[historyUrl] || {}
   const history = historyResponse.history
   const hasMore = historyResponse.has_more
