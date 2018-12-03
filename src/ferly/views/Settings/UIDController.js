@@ -220,7 +220,7 @@ export class UIDController extends React.Component {
                 value={formValue} />
             </View>
             <Button
-              title="SEND CODE"
+              title="NEXT"
               style={{flexShrink: 1}}
               color={Theme.lightBlue}
               disabled={submitting}
