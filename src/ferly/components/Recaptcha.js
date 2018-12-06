@@ -6,8 +6,23 @@ import {connect} from 'react-redux'
 import {createUrl} from 'ferly/utils/fetch'
 
 export class Recaptcha extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      hasBypass: false
+    }
+  }
+
   componentDidMount () {
     this.props.apiRequire(this.props.recaptchaUrl)
+  }
+
+  static getDerivedStateFromProps (nextProps, prevState) {
+    if (nextProps.bypass && prevState && !prevState.hasBypass) {
+      nextProps.onExecute(nextProps.bypass)
+      return { 'hasBypass': true }
+    }
+    return null
   }
 
   onExecute (response) {
@@ -15,8 +30,8 @@ export class Recaptcha extends React.Component {
   }
 
   render () {
-    const {sitekey, action} = this.props
-    if (!sitekey) {
+    const {sitekey, action, bypass} = this.props
+    if (!sitekey || bypass) {
       return null
     }
 
@@ -25,6 +40,8 @@ export class Recaptcha extends React.Component {
         recaptchaType='invisible'
         containerStyle={{}} // Empty overrides default style
         action={action}
+        // On some iOS versions, this opens the url in the browser. Broken.
+        // react-native-recaptcha-v3/index.js line 85
         url="http://ferly.com"
         siteKey={sitekey}
         onExecute={(response) => this.onExecute(response)}
