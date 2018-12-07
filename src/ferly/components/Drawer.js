@@ -18,13 +18,6 @@ import {
 } from 'react-native'
 
 class DrawerContent extends React.Component {
-  // constructor (props) {
-  //   super(props)
-  //   // the drawer and wallet page both load at once, so don't double require
-  //   // unless we have a 'fetching' status in the api store meta
-  //   props.apiRequire(props.walletUrl)
-  // }
-
   render () {
     const {items, ...otherProps} = this.props
     const {navigation, firstName, lastName, profileImage} = this.props

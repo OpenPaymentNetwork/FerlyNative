@@ -1,9 +1,13 @@
+import Contact from 'ferly/views/Invitations/Contact'
+import Contacts from 'ferly/views/Invitations/Contacts'
 import FerlyCard from 'ferly/views/FerlyCard'
 import GiftCard from 'ferly/views/Wallet/GiftCard'
 import Give from 'ferly/views/Give/Give'
 import Search from 'ferly/views/Give/Search'
 import History from 'ferly/views/History'
+import Invitations from 'ferly/views/Invitations/Invitations'
 import Icon from 'react-native-vector-icons/FontAwesome'
+import ManualAdd from 'ferly/views/Invitations/ManualAdd'
 import Profile from 'ferly/views/Profile'
 import React from 'react'
 import RecoveryChannel from 'ferly/views/Public/RecoveryChannel'
@@ -66,6 +70,18 @@ const SettingsStack = createStackNavigator(
   }
 )
 
+const InvitationsStack = createStackNavigator(
+  {
+    Invitations: {screen: Invitations, navigationOptions: drawerOptions},
+    Contacts: {screen: Contacts, navigationOptions: drawerOptions},
+    ManualAdd: {screen: ManualAdd, navigationOptions: drawerOptions},
+    Contact: {screen: Contact, navigationOptions: drawerOptions}
+  },
+  {
+    initialRouteName: 'Invitations'
+  }
+)
+
 const AuthDrawer = createDrawerNavigator(
   {
     Wallet: WalletStack,
@@ -74,6 +90,7 @@ const AuthDrawer = createDrawerNavigator(
       {Card: {screen: FerlyCard, navigationOptions: drawerOptions}}),
     History: createStackNavigator(
       {History: {screen: History, navigationOptions: drawerOptions}}),
+    Invitations: InvitationsStack,
     Settings: SettingsStack
   },
   {

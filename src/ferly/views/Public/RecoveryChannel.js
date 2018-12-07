@@ -88,7 +88,7 @@ export default class RecoveryChannel extends React.Component {
           }
         </View>
         <PrimaryButton
-          title="Send Recovery Link"
+          title="Next"
           disabled={fieldValue === '' || submitting}
           color={Theme.lightBlue}
           onPress={this.handleSubmit.bind(this)} />
