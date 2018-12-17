@@ -3,7 +3,7 @@
     "name": "Ferly",
     "icon": "./ferly-icon.png",
 
-    "version": "0.0.0",
+    "version": "1.0.0",
     "sdkVersion": "30.0.0",
     "slug":"ferly",
     "ios": {
@@ -19,5 +19,8 @@
     "splash": {
       "backgroundColor": "#1D3A54",
     },
+    "updates": {
+      "fallbackToCacheTimeout": 0,
+    }
   }
 }
