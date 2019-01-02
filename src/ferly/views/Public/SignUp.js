@@ -11,7 +11,8 @@ import {
   TextInput,
   Image,
   StyleSheet,
-  TouchableOpacity
+  TouchableOpacity,
+  Platform
 } from 'react-native'
 
 export default class SignUp extends React.Component {
@@ -61,7 +62,8 @@ export default class SignUp extends React.Component {
       first_name: firstName,
       last_name: lastName,
       username: username,
-      expo_token: expoToken
+      expo_token: expoToken,
+      os: `${Platform.OS}:${Platform.Version}`
     }
 
     post('signup', params)
