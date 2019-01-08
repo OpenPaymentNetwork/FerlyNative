@@ -46,7 +46,7 @@ export class History extends React.Component {
   }
 
   render () {
-    const {history} = this.props
+    const {history, navigation} = this.props
     if (!history) {
       return <Spinner />
     }
@@ -61,7 +61,10 @@ export class History extends React.Component {
           onEndReachedThreshold={10}
           keyExtractor={(entry) => entry.timestamp}
           data={history}
-          renderItem={(entry) => <HistoryEntry entry={entry.item} />} />
+          renderItem={
+            (entry) => (
+              <HistoryEntry navigation={navigation} entry={entry.item} />
+            )} />
       </View>
     )
   }
@@ -71,6 +74,7 @@ History.propTypes = {
   apiInject: PropTypes.func.isRequired,
   apiRequire: PropTypes.func.isRequired,
   hasMore: PropTypes.bool,
+  navigation: PropTypes.object.isRequired,
   history: PropTypes.array,
   historyUrl: PropTypes.string.isRequired,
   limit: PropTypes.number.isRequired

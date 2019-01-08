@@ -1,23 +1,24 @@
-// import Icon from 'react-native-vector-icons/FontAwesome'
+import Icon from 'react-native-vector-icons/FontAwesome'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Theme from 'ferly/utils/theme'
 import {giveBlue, addBlue, spendBlue, receiveBlue} from 'ferly/images/index'
-import {Text, View, Image, StyleSheet} from 'react-native'
+import {Text, View, Image, StyleSheet, TouchableOpacity} from 'react-native'
 
 export default class HistoryEntry extends React.Component {
   render () {
-    const {entry} = this.props
-    const {amount, title} = entry
+    const {entry, navigation} = this.props
+    const {amount} = entry
+    const designTitle = entry.design_title
     const transferType = entry.transfer_type
     const counterParty = entry.counter_party
 
-    // const icon = (
-    //   <Icon
-    //     name="angle-right"
-    //     color="black"
-    //     size={28} />
-    // )
+    const icon = (
+      <Icon
+        name="angle-right"
+        color="black"
+        size={28} />
+    )
 
     let iconSource
     let titleVerb
@@ -46,7 +47,9 @@ export default class HistoryEntry extends React.Component {
     }
 
     return (
-      <View style={styles.entry}>
+      <TouchableOpacity
+        style={styles.entry}
+        onPress={() => navigation.navigate('Transfer', entry)}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <Image style={styles.image} source={iconSource} />
           <View style={{flexDirection: 'column', paddingLeft: 15}}>
@@ -54,12 +57,12 @@ export default class HistoryEntry extends React.Component {
               {`${titleVerb} $${amount}`}
             </Text>
             <Text style={{color: Theme.lightBlue, fontSize: 13}}>
-              {`${title} ${involved}`}
+              {`${designTitle} ${involved}`}
             </Text>
           </View>
         </View>
-        <View></View>
-      </View>
+        {icon}
+      </TouchableOpacity>
     )
   }
 }
@@ -87,7 +90,8 @@ HistoryEntry.propTypes = {
     amount: PropTypes.string.isRequired,
     counter_party: PropTypes.string.isRequired,
     timestamp: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
+    design_title: PropTypes.string.isRequired,
     transfer_type: PropTypes.string.isRequired
-  })
+  }),
+  navigation: PropTypes.object.isRequired
 }

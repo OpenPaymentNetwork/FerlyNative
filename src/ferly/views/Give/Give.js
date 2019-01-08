@@ -9,7 +9,7 @@ import {apiExpire, apiRequire} from 'ferly/store/api'
 import {connect} from 'react-redux'
 import {createUrl, post} from 'ferly/utils/fetch'
 import {StackActions} from 'react-navigation'
-import {View, Text, Alert} from 'react-native'
+import {View, Text, Alert, TextInput} from 'react-native'
 
 export class Give extends React.Component {
   static navigationOptions = {
@@ -18,7 +18,7 @@ export class Give extends React.Component {
 
   constructor (props) {
     super(props)
-    this.state = {amount: 0, error: '', submitting: false}
+    this.state = {amount: 0, error: '', submitting: false, message: ''}
   }
 
   componentDidMount () {
@@ -29,13 +29,14 @@ export class Give extends React.Component {
     const {navigation, apiExpire} = this.props
     const params = navigation.state.params
     const {design, user} = params
-    const {amount} = this.state
+    const {amount, message} = this.state
     const formatted = accounting.formatMoney(parseFloat(amount))
 
     const postParams = {
       recipient_id: user.id.toString(),
       amount: amount,
-      design_id: design.id.toString()
+      design_id: design.id.toString(),
+      message: message
     }
 
     this.setState({submitting: true})
@@ -80,7 +81,7 @@ export class Give extends React.Component {
     return (
       <View style={{flex: 1, backgroundColor: 'white'}}>
         <View style={{flex: 1}}>
-          <View style={{paddingHorizontal: 20, height: 60, justifyContent: 'space-between', flexDirection: 'row', borderWidth: 0.5, borderColor: 'black', alignItems: 'center'}}>
+          <View style={{paddingHorizontal: 20, height: 60, justifyContent: 'space-between', flexDirection: 'row', borderBottomWidth: 0.5, borderColor: 'black', alignItems: 'center'}}>
             <Text style={{fontSize: 20, fontWeight: 'bold'}}>Send</Text>
             <Text style={{fontSize: 20, fontWeight: 'bold', paddingLeft: 40}}>{`${params.user.first_name} ${params.user.last_name}`}</Text>
           </View>
@@ -90,6 +91,19 @@ export class Give extends React.Component {
               <Text style={{color: 'gray'}}>Available: {formatted}</Text>
             </View>
             <SimpleCurrencyInput onChangeText={this.onChange.bind(this)} error={error} />
+          </View>
+          <View style={{paddingHorizontal: 20}}>
+            <Text style={{fontSize: 16}}>Message</Text>
+            <View>
+              <TextInput
+                multiline
+                placeholder="Optional"
+                maxLength={400}
+                style={{borderWidth: 0.5, borderColor: 'darkgray', paddingBottom: 20}}
+                underlineColorAndroid={'transparent'}
+                onChangeText={(text) => this.setState({message: text})}
+                value={this.state.message} />
+            </View>
           </View>
           {submitting ? <Spinner /> : null}
         </View>

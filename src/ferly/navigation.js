@@ -4,7 +4,7 @@ import FerlyCard from 'ferly/views/FerlyCard'
 import GiftCard from 'ferly/views/Wallet/GiftCard'
 import Give from 'ferly/views/Give/Give'
 import Search from 'ferly/views/Give/Search'
-import History from 'ferly/views/History'
+import History from 'ferly/views/History/History'
 import Invitations from 'ferly/views/Invitations/Invitations'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import ManualAdd from 'ferly/views/Invitations/ManualAdd'
@@ -14,6 +14,7 @@ import RecoveryChannel from 'ferly/views/Public/RecoveryChannel'
 import RecoveryCode from 'ferly/views/Public/RecoveryCode'
 import Settings from 'ferly/views/Settings/Settings'
 import SignUp from 'ferly/views/Public/SignUp'
+import Transfer from 'ferly/views/History/Transfer'
 import Home from 'ferly/views/Wallet/Home'
 import Cart from 'ferly/views/Purchase/Cart'
 import Purchase from 'ferly/views/Purchase/Purchase'
@@ -82,14 +83,23 @@ const InvitationsStack = createStackNavigator(
   }
 )
 
+const HistoryStack = createStackNavigator(
+  {
+    History: {screen: History, navigationOptions: drawerOptions},
+    Transfer: {screen: Transfer, navigationOptions: drawerOptions}
+  },
+  {
+    initialRouteName: 'History'
+  }
+)
+
 const AuthDrawer = createDrawerNavigator(
   {
     Wallet: WalletStack,
     Profile: ProfileStack,
     'Ferly Card': createStackNavigator(
       {Card: {screen: FerlyCard, navigationOptions: drawerOptions}}),
-    History: createStackNavigator(
-      {History: {screen: History, navigationOptions: drawerOptions}}),
+    History: HistoryStack,
     Invitations: InvitationsStack,
     Settings: SettingsStack
   },

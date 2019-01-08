@@ -11,8 +11,6 @@ class EventListener extends React.Component {
   // };
 
   componentDidMount () {
-    // make sure we have permission to show notifications
-
     // Handle notifications that are received or selected while the app
     // is open. If the app was closed and then opened by tapping the
     // notification (rather than just tapping the app icon to open it),
