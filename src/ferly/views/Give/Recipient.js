@@ -1,17 +1,12 @@
-import ProfileDisplay from 'ferly/components/ProfileDisplay'
+import Avatar from 'ferly/components/Avatar'
 import PropTypes from 'prop-types'
 import React from 'react'
 import {apiRequire} from 'ferly/store/api'
 import {connect} from 'react-redux'
 import {createUrl} from 'ferly/utils/fetch'
-import {
-  View,
-  ScrollView,
-  TouchableOpacity
-  // StyleSheet
-} from 'react-native'
+import {View, ScrollView, TouchableOpacity, Text} from 'react-native'
 
-class Search extends React.Component {
+class Recipient extends React.Component {
   static navigationOptions = {
     title: 'Recipient'
   }
@@ -27,15 +22,30 @@ class Search extends React.Component {
       <ScrollView>
         {
           users.map((user) => {
+            const firstName = user.first_name
+            const lastName = user.last_name
             return (
               <TouchableOpacity
                 key={user.id}
                 onPress={
                   () => navigation.navigate('Amount', {user, design})}>
-                <ProfileDisplay
-                  name={user.first_name + ' ' + user.last_name}
-                  username={user.username}
-                  url={user.picture} />
+                <View marginVertical={10} style={{flexDirection: 'row'}}>
+                  <View style={{marginHorizontal: 10}}>
+                    <Avatar
+                      size={68}
+                      pictureUrl={user.picture}
+                      firstWord={firstName}
+                      secondWord={lastName} />
+                  </View>
+                  <View style={{justifyContent: 'center', flex: 1}}>
+                    <Text style={{fontSize: 24}}>
+                      {`${firstName} ${lastName}`}
+                    </Text>
+                    <Text style={{fontSize: 20, color: 'gray'}}>
+                      {'@' + user.username}
+                    </Text>
+                  </View>
+                </View>
               </TouchableOpacity>
             )
           })
@@ -70,7 +80,7 @@ class Search extends React.Component {
 //   }
 // })
 
-Search.propTypes = {
+Recipient.propTypes = {
   apiRequire: PropTypes.func.isRequired,
   users: PropTypes.array.isRequired,
   usersUrl: PropTypes.string.isRequired,
@@ -92,4 +102,4 @@ const mapDispatchToProps = {
   apiRequire
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Search)
+export default connect(mapStateToProps, mapDispatchToProps)(Recipient)

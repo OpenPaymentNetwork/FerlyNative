@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import Theme from 'ferly/utils/theme'
-import UserAvatar from 'ferly/components/UserAvatar'
+import Avatar from 'ferly/components/Avatar'
 import {apiRequire} from 'ferly/store/api'
 import {connect} from 'react-redux'
 import {createUrl} from 'ferly/utils/fetch'
@@ -30,10 +30,12 @@ class DrawerContent extends React.Component {
           <View style={styles.innerContainer}>
             <Image source={logoHorizontal} style={styles.image} />
             <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-              <UserAvatar
-                firstName={firstName}
-                lastName={lastName}
-                profileImage={profileImage} />
+              <Avatar
+                size={100}
+                shade={true}
+                firstWord={firstName}
+                secondWord={lastName}
+                pictureUrl={profileImage} />
               <Text style={styles.text}>{`${firstName} ${lastName}`}</Text>
             </TouchableOpacity>
           </View>

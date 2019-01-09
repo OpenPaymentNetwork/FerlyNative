@@ -1,3 +1,4 @@
+import Avatar from 'ferly/components/Avatar'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import PrimaryButton from 'ferly/components/PrimaryButton'
 import PropTypes from 'prop-types'
@@ -11,7 +12,7 @@ import {StackActions} from 'react-navigation'
 import {
   View,
   Text,
-  Image,
+  // Image,
   StyleSheet,
   TouchableOpacity,
   TextInput,
@@ -36,23 +37,6 @@ class Profile extends React.Component {
 
   componentDidMount () {
     this.props.apiRequire(this.props.walletUrl)
-  }
-
-  renderAvatar () {
-    const {firstName, lastName, profileImage} = this.props
-
-    if (profileImage) {
-      return (
-        <Image style={styles.avatarContainer} source={{uri: profileImage}} />)
-    } else {
-      return (
-        <View style={[styles.avatarContainer, styles.profileText]}>
-          <Text style={{fontSize: 34, color: 'gray'}}>
-            {firstName.charAt(0) + lastName.charAt(0)}
-          </Text>
-        </View>
-      )
-    }
   }
 
   formSubmit () {
@@ -120,10 +104,18 @@ class Profile extends React.Component {
     const {firstName, lastName, username} = this.props
     const {editing, submitting, invalid} = this.state
 
+    const userAvatar = (
+      <Avatar
+        size={110}
+        firstWord={firstName}
+        secondWord={lastName}
+        pictureUrl={profileImage} />
+    )
+
     if (!editing) {
       return (
         <View style={{alignItems: 'center', paddingTop: 20}}>
-          {this.renderAvatar()}
+          {userAvatar}
           <Text style={styles.name}>{firstName + ' ' + lastName}</Text>
           <Text style={styles.username}>{'@' + username}</Text>
         </View>
@@ -148,7 +140,7 @@ class Profile extends React.Component {
             style={{flex: 1}}>
             <ScrollView contentContainerStyle={styles.scrollContainer}>
               <View style={{alignItems: 'center', width: '100%'}}>
-                {this.renderAvatar()}
+                {userAvatar}
               </View>
               <Text style={styles.label}>First Name</Text>
               <TextInput

@@ -1,13 +1,13 @@
 // import Icon from 'react-native-vector-icons/FontAwesome'
 import PropTypes from 'prop-types'
 import React from 'react'
-import MerchantLogo from 'ferly/components/MerchantLogo'
+import Avatar from 'ferly/components/Avatar'
 // import Spinner from 'ferly/components/Spinner'
 // import Theme from 'ferly/utils/theme'
 import {apiRequire} from 'ferly/store/api'
 import {connect} from 'react-redux'
 import {createUrl} from 'ferly/utils/fetch'
-import {View, Text, Image} from 'react-native'
+import {View, Text} from 'react-native'
 import {format as formatDate} from 'date-fns'
 
 export class Transfer extends React.Component {
@@ -19,40 +19,12 @@ export class Transfer extends React.Component {
     this.props.apiRequire(this.props.transferUrl)
   }
 
-  renderUserAvatar () {
-    const {transferDetails} = this.props
-    const counterParty = transferDetails.counter_party
-    const counterPartyImageUrl = transferDetails.counter_party_image_url
-
-    if (counterPartyImageUrl) {
-      return <Image
-        style={{width: 68, height: 68, borderRadius: 34}}
-        source={{uri: counterPartyImageUrl}} />
-    } else {
-      return (
-        <View style={{
-          height: 68,
-          width: 68,
-          borderRadius: 34,
-          backgroundColor: 'lightgray',
-          justifyContent: 'center',
-          alignItems: 'center',
-          elevation: 4,
-          shadowOffset: {width: 3, height: 3},
-          shadowColor: 'lightgray',
-          shadowOpacity: 1
-        }}>
-          <Text style={{fontSize: 28, color: 'gray'}}>{counterParty.charAt(0)}</Text>
-        </View>
-      )
-    }
-  }
-
   render () {
     const {transferDetails} = this.props
     const {amount, message, timestamp, id} = transferDetails
     const designTitle = transferDetails.design_title
     const counterParty = transferDetails.counter_party
+    const counterPartyImageUrl = transferDetails.counter_party_image_url
     const transferType = transferDetails.transfer_type
     const designImageUrl = transferDetails.design_image_url
     const b = timestamp.split(/\D+/)
@@ -90,8 +62,8 @@ export class Transfer extends React.Component {
       <View style={{flex: 1}}>
         <View style={{height: 90, flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}}>
           <Text style={{fontSize: 28}}>${amount}</Text>
-          <MerchantLogo source={designImageUrl}/>
-          {this.renderUserAvatar()}
+          <Avatar size={68} shade={true} pictureUrl={designImageUrl}/>
+          <Avatar size={68} shade={true} firstWord={counterParty} pictureUrl={counterPartyImageUrl} />
         </View>
         <View style={{flexGrow: 1}}>
           <Text>{desc}</Text>

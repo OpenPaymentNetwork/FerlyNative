@@ -1,14 +1,9 @@
+import Avatar from 'ferly/components/Avatar'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Spinner from 'ferly/components/Spinner'
 import {Permissions, Contacts as expoContacts} from 'expo'
-import {
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  Image
-} from 'react-native'
+import {View, Text, ScrollView, TouchableOpacity} from 'react-native'
 
 export default class Contacts extends React.Component {
   static navigationOptions = {
@@ -51,20 +46,12 @@ export default class Contacts extends React.Component {
           return phone.number
         })
 
-        const display = {uri: '', initials: ''}
+        const display = {uri: '', firstName: '', lastName: ''}
         if (contact.image) {
           display.uri = contact.image.uri
-        } else {
-          const {firstName, lastName} = contact
-          let initials = ''
-          if (firstName) {
-            initials = initials.concat(firstName.charAt(0))
-          }
-          if (lastName) {
-            initials = initials.concat(lastName.charAt(0))
-          }
-          display.initials = initials
         }
+        display.firstName = contact.firstName
+        display.lastName = contact.lastName
         return {
           id: contact.id,
           name: contact.name,
@@ -80,27 +67,7 @@ export default class Contacts extends React.Component {
 
   renderContact (contact) {
     const {name, id, display} = contact
-
-    let image
-    if (display.uri) {
-      image = (
-        <Image
-          source={{uri: display.uri}}
-          style={{borderRadius: 30, height: 60, width: 60}}/>)
-    } else {
-      image = (
-        <View style={{
-          height: 60,
-          width: 60,
-          borderRadius: 30,
-          backgroundColor: 'lightgray',
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}>
-          <Text style={{fontSize: 20}}>{display.initials}</Text>
-        </View>
-      )
-    }
+    const {firstName, lastName, uri} = display
     return (
       <TouchableOpacity
         key={id}
@@ -111,7 +78,11 @@ export default class Contacts extends React.Component {
           alignItems: 'center'
         }}
         onPress={() => this.props.navigation.navigate('Contact', contact)}>
-        {image}
+        <Avatar
+          size={60}
+          firstWord={firstName}
+          secondWord={lastName}
+          pictureUrl={uri} />
         <Text style={{fontSize: 20, paddingLeft: 10}}>{name}</Text>
       </TouchableOpacity>
     )

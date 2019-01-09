@@ -1,3 +1,4 @@
+import Avatar from 'ferly/components/Avatar'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import PropTypes from 'prop-types'
 import React from 'react'
@@ -73,27 +74,6 @@ export class Contact extends React.Component {
     const contact = this.props.navigation.state.params
     const options = contact.phones.concat(contact.emails)
     const {display} = contact
-
-    let image
-    if (display.uri) {
-      image = (
-        <Image
-          source={{uri: display.uri}}
-          style={{borderRadius: 50, height: 100, width: 100}}/>)
-    } else {
-      image = (
-        <View style={{
-          height: 100,
-          width: 100,
-          borderRadius: 50,
-          backgroundColor: 'lightgray',
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}>
-          <Text style={{fontSize: 32}}>{display.initials}</Text>
-        </View>
-      )
-    }
     return (
       <ScrollView contentContainerStyle={{flex: 1}}>
         <View
@@ -103,7 +83,11 @@ export class Contact extends React.Component {
             flexDirection: 'row',
             justifyContent: 'center'}}>
           <View style={{alignItems: 'center'}}>
-            {image}
+            <Avatar
+              size={100}
+              firstWord={display.firstName}
+              secondWord={display.lastName}
+              pictureUrl={display.uri} />
             <Text style={{fontSize: 26, paddingTop: 10}}>{contact.name}</Text>
           </View>
         </View>

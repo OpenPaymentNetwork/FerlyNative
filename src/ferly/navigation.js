@@ -1,9 +1,8 @@
 import Contact from 'ferly/views/Invitations/Contact'
 import Contacts from 'ferly/views/Invitations/Contacts'
 import FerlyCard from 'ferly/views/FerlyCard'
-import GiftCard from 'ferly/views/Wallet/GiftCard'
 import Give from 'ferly/views/Give/Give'
-import Search from 'ferly/views/Give/Search'
+import Recipient from 'ferly/views/Give/Recipient'
 import History from 'ferly/views/History/History'
 import Invitations from 'ferly/views/Invitations/Invitations'
 import Icon from 'react-native-vector-icons/FontAwesome'
@@ -48,8 +47,7 @@ const ProfileStack = createStackNavigator({
 const WalletStack = createStackNavigator(
   {
     Home: {screen: Home, navigationOptions: drawerOptions},
-    Give: {screen: Search, navigationOptions: drawerOptions},
-    Cash: {screen: GiftCard, navigationOptions: drawerOptions},
+    Give: {screen: Recipient, navigationOptions: drawerOptions},
     Amount: {screen: Give, navigationOptions: drawerOptions},
     Market: {screen: Market, navigationOptions: drawerOptions},
     Purchase: {screen: Purchase, navigationOptions: drawerOptions},
