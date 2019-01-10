@@ -101,7 +101,7 @@ class Profile extends React.Component {
   }
 
   renderPage () {
-    const {firstName, lastName, username} = this.props
+    const {firstName, lastName, username, profileImage} = this.props
     const {editing, submitting, invalid} = this.state
 
     const userAvatar = (
