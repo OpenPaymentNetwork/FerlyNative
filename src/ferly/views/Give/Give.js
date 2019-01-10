@@ -100,6 +100,7 @@ export class Give extends React.Component {
                 placeholder="Optional"
                 maxLength={400}
                 returnKeyType='done'
+                blurOnSubmit={true}
                 style={{borderWidth: 0.5, borderColor: 'darkgray', paddingBottom: 20}}
                 underlineColorAndroid={'transparent'}
                 onChangeText={(text) => this.setState({message: text})}
