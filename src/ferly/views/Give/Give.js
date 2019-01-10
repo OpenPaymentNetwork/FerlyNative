@@ -99,6 +99,7 @@ export class Give extends React.Component {
                 multiline
                 placeholder="Optional"
                 maxLength={400}
+                returnKeyType='done'
                 style={{borderWidth: 0.5, borderColor: 'darkgray', paddingBottom: 20}}
                 underlineColorAndroid={'transparent'}
                 onChangeText={(text) => this.setState({message: text})}
