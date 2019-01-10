@@ -32,7 +32,6 @@ class DrawerContent extends React.Component {
             <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
               <Avatar
                 size={100}
-                shade={true}
                 firstWord={firstName}
                 secondWord={lastName}
                 pictureUrl={profileImage} />
