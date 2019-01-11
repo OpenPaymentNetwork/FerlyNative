@@ -58,12 +58,23 @@ export class Transfer extends React.Component {
     const desc = (
       `You ${verb} $${amount} ${designTitle}${cp} on ${dateDisplay}${msg}`)
 
+    let counterPartyAvatar
+    if (transferType === 'send' || transferType === 'receive') {
+      counterPartyAvatar = (
+        <Avatar
+          size={68}
+          shade={true}
+          firstWord={counterParty}
+          pictureUrl={counterPartyImageUrl} />
+      )
+    }
+
     return (
       <View style={{flex: 1}}>
         <View style={{height: 90, flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}}>
           <Text style={{fontSize: 28}}>${amount}</Text>
           <Avatar size={68} shade={true} pictureUrl={designImageUrl}/>
-          <Avatar size={68} shade={true} firstWord={counterParty} pictureUrl={counterPartyImageUrl} />
+          {counterPartyAvatar}
         </View>
         <View style={{flexGrow: 1}}>
           <Text>{desc}</Text>
