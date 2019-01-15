@@ -49,7 +49,8 @@ export default class HistoryEntry extends React.Component {
     return (
       <TouchableOpacity
         style={styles.entry}
-        onPress={() => navigation.navigate('Transfer', entry)}>
+        onPress={
+          () => navigation.navigate('Transfer', {...entry, title: titleVerb})}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <Image style={styles.image} source={iconSource} />
           <View style={{flexDirection: 'column', paddingLeft: 15}}>

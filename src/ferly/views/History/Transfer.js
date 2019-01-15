@@ -3,17 +3,17 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import Avatar from 'ferly/components/Avatar'
 // import Spinner from 'ferly/components/Spinner'
-// import Theme from 'ferly/utils/theme'
+import Theme from 'ferly/utils/theme'
 import {apiRequire} from 'ferly/store/api'
 import {connect} from 'react-redux'
 import {createUrl} from 'ferly/utils/fetch'
-import {View, Text} from 'react-native'
+import {View, Text, ScrollView, StyleSheet} from 'react-native'
 import {format as formatDate} from 'date-fns'
 
 export class Transfer extends React.Component {
-  static navigationOptions = {
-    title: 'Transaction'
-  };
+  static navigationOptions = ({navigation}) => ({
+    title: `${navigation.state.params.title}`
+  });
 
   componentDidMount () {
     this.props.apiRequire(this.props.transferUrl)
@@ -21,7 +21,7 @@ export class Transfer extends React.Component {
 
   render () {
     const {transferDetails} = this.props
-    const {amount, message, timestamp, id} = transferDetails
+    const {amount, message, timestamp} = transferDetails
     const designTitle = transferDetails.design_title
     const counterParty = transferDetails.counter_party
     const counterPartyImageUrl = transferDetails.counter_party_image_url
@@ -35,57 +35,151 @@ export class Transfer extends React.Component {
 
     let verb = ''
     let cp = ''
+    let messageTitle = ''
     switch (transferType) {
       case 'purchase':
         verb = 'added'
+        cp = ' to your Wallet'
         break
       case 'send':
         verb = 'gifted'
         cp = ` to ${counterParty}`
+        messageTitle = 'Your '
         break
       case 'receive':
         verb = 'received'
         cp = ` from ${counterParty}`
+        messageTitle = 'Their '
         break
       case 'redeem':
         verb = 'paid'
         break
     }
-    let msg = ''
-    if (message) {
-      msg = ` with the message: "${message}"`
-    }
-    const desc = (
-      `You ${verb} $${amount} ${designTitle}${cp} on ${dateDisplay}${msg}`)
 
     let counterPartyAvatar
     if (transferType === 'send' || transferType === 'receive') {
       counterPartyAvatar = (
-        <Avatar
-          size={68}
-          shade={true}
-          firstWord={counterParty}
-          pictureUrl={counterPartyImageUrl} />
+        <View style={{marginLeft: -20, zIndex: -1}}>
+          <Avatar
+            size={100}
+            firstWord={counterParty}
+            pictureUrl={counterPartyImageUrl} />
+        </View>
       )
     }
 
+    let messageSection
+    if (message) {
+      messageSection = (
+        <View style={styles.section}>
+          <Text style={styles.sectionHeader}>
+            {`${messageTitle}Message:`}
+          </Text>
+          <Text
+            style={{fontSize: 18, color: Theme.lightBlue, paddingLeft: 20}}>
+            {message}
+          </Text>
+        </View>
+      )
+    }
+
+    let purchaseDetailsSection
+    let termsSection
+    if (transferType === 'purchase') {
+      purchaseDetailsSection = (
+        <View style={styles.section}>
+          <Text style={styles.sectionHeader}>Purchase Details</Text>
+          <View style={{paddingLeft: 20}}>
+            <View style={styles.functionRow}>
+              <Text style={styles.sectionText}>Purchase Amount</Text>
+              <Text style={[styles.sectionText, {color: Theme.lightBlue}]}>
+                ${amount}
+              </Text>
+            </View>
+            <View style={[
+              styles.functionRow,
+              {borderBottomWidth: 0.5, borderColor: 'darkgray'}
+            ]}>
+              <Text style={styles.sectionText}>Tax</Text>
+              <Text style={[styles.sectionText, {color: Theme.lightBlue}]}>
+                $0.00
+              </Text>
+            </View>
+            <View style={styles.functionRow}>
+              <Text style={styles.sectionText}>Total</Text>
+              <Text style={[styles.sectionText, {color: Theme.lightBlue}]}>
+                ${amount}
+              </Text>
+            </View>
+          </View>
+        </View>
+      )
+      termsSection = (
+        <View style={styles.section}>
+          <Text style={styles.sectionHeader}>Terms</Text>
+          <View style={{paddingLeft: 20}}>
+            <Text style={styles.sectionText}>
+              The payment for your purchase was processed by Ferly, Inc. 481
+              E 1000 S, STE B, Pleasant Grove, UT 84062.
+            </Text>
+            <View style={{height: 8}} />
+            <Text style={styles.sectionText}>
+              {'The purchase of this gift value is subject to Ferly\'s ' +
+               'Privacy Policy, Refund Policy, and Cardholder Agreement.'}
+            </Text>
+            <View style={{height: 8}} />
+            <Text style={styles.sectionText}>
+              If you need more information, please contact (801) 792-2358.
+            </Text>
+          </View>
+
+        </View>
+      )
+    }
     return (
-      <View style={{flex: 1}}>
-        <View style={{height: 90, flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}}>
-          <Text style={{fontSize: 28}}>${amount}</Text>
-          <Avatar size={68} shade={true} pictureUrl={designImageUrl}/>
+      <ScrollView>
+        <View style={{
+          alignItems: 'center',
+          flexDirection: 'row',
+          height: 110,
+          justifyContent: 'center'
+        }}>
+          <Avatar size={100} shade={true} pictureUrl={designImageUrl}/>
           {counterPartyAvatar}
         </View>
-        <View style={{flexGrow: 1}}>
-          <Text>{desc}</Text>
+        <View style={{
+          alignItems: 'center',
+          borderBottomWidth: 1,
+          borderColor: 'darkgray',
+          marginHorizontal: 20,
+          paddingBottom: 10
+        }}>
+          <Text style={{textAlign: 'center', fontSize: 22}}>
+            {`You ${verb} ${designTitle}${cp}.`}
+          </Text>
+          <View style={styles.spacer} />
+          <Text style={{color: Theme.lightBlue, fontSize: 22}}>
+            ${amount}
+          </Text>
+          <View style={styles.spacer} />
+          <Text style={styles.sectionText}>
+            {dateDisplay}
+          </Text>
         </View>
-        <View style={{flexDirection: 'row-reverse'}}>
-          <Text style={{color: 'darkgray'}}>{id}</Text>
-        </View>
-      </View>
+        {messageSection}
+        {purchaseDetailsSection}
+        {termsSection}
+      </ScrollView>
     )
   }
 }
+
+const styles = StyleSheet.create({
+  functionRow: {flexDirection: 'row', justifyContent: 'space-between'},
+  section: {marginTop: 10, paddingHorizontal: 20},
+  sectionHeader: {fontSize: 18},
+  sectionText: {color: 'darkgray', fontSize: 16}
+})
 
 Transfer.propTypes = {
   apiRequire: PropTypes.func.isRequired,
