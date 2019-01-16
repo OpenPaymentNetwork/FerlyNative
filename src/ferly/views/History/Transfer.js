@@ -137,7 +137,7 @@ export class Transfer extends React.Component {
       )
     }
     return (
-      <ScrollView>
+      <ScrollView style={{backgroundColor: 'white'}}>
         <View style={{
           alignItems: 'center',
           flexDirection: 'row',

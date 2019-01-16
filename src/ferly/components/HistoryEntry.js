@@ -77,7 +77,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 0.5,
     borderColor: 'black',
-    paddingHorizontal: 15
+    paddingHorizontal: 15,
+    backgroundColor: 'white'
   },
   image: {
     resizeMode: 'contain',
