@@ -29,11 +29,11 @@
   },
   "dependencies": {
     "date-fns": "^1.29.0",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-30.0.0.tar.gz",
     "expo": "^30.0.0",
     "react": "16.3.1",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-30.0.0.tar.gz",
     "react-native-device-info": "^0.21.5",
-    "react-native-recaptcha-v3": "0.0.13",
+    "react-native-recaptcha-v3": "0.0.16",
     "react-native-vector-icons": "^4.6.0",
     "react-navigation": "^2.0.0",
     "react-redux": "^5.0.7",

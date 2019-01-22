@@ -30,19 +30,19 @@ export class Recaptcha extends React.Component {
   }
 
   render () {
-    const {sitekey, action, bypass} = this.props
-    if (!sitekey || bypass) {
+    const {sitekey, action} = this.props
+    if (!sitekey) {
       return null
     }
-
     return (
       <ReCaptcha
         recaptchaType='invisible'
         containerStyle={{}} // Empty overrides default style
         action={action}
         // On some iOS versions, this opens the url in the browser. Broken.
-        // react-native-recaptcha-v3/index.js line 85
-        url="http://ferly.com"
+        // react-native-recaptcha-v3/index.js line 85. version 0.0.16
+        // the slash at the end prevents this
+        url="http://ferly.com/"
         siteKey={sitekey}
         onExecute={(response) => this.onExecute(response)}
       />
