@@ -30,7 +30,16 @@ export class UIDController extends React.Component {
       codeLength: 6,
       invalid: '',
       submitting: false,
-      recaptchaResponse: ''
+      recaptchaResponse: '',
+      showRecaptcha: false,
+      resubmit: false
+    }
+  }
+
+  componentDidUpdate (prevProps, prevState) {
+    const {resubmit, recaptchaResponse} = this.state
+    if (resubmit && recaptchaResponse) {
+      this.handleCodeSubmit()
     }
   }
 
@@ -92,7 +101,7 @@ export class UIDController extends React.Component {
       })
       return false
     } else if (json.error === 'recaptcha_required') {
-      this.setState({invalid: 'recaptcha required', submitting: false})
+      this.setState({showRecaptcha: true, resubmit: true})
       return false
     } else if (json.error) {
       Alert.alert(
@@ -115,11 +124,11 @@ export class UIDController extends React.Component {
     if (uid) {
       postParams['replace_uid'] = `${type}:${uid}`
     }
-    this.setState({submitting: true})
+    this.setState({submitting: true, resubmit: false})
     post('confirm-uid', postParams)
       .then((response) => response.json())
-      .then((responseJson) => {
-        if (this.validate(responseJson)) {
+      .then((json) => {
+        if (this.validate(json)) {
           let title
           if (type === 'email') {
             title = 'Email Address'
@@ -154,7 +163,7 @@ export class UIDController extends React.Component {
       codeLength,
       invalid,
       submitting,
-      recaptchaResponse
+      showRecaptcha
     } = this.state
 
     let title
@@ -166,6 +175,8 @@ export class UIDController extends React.Component {
 
     let body
     if (showCode) {
+      const recaptchaComponent = (
+        <Recaptcha onExecute={this.onExecute.bind(this)} action="uid" />)
       body = (
         <View>
           <Text style={styles.subtitle}>
@@ -186,10 +197,10 @@ export class UIDController extends React.Component {
             <Button
               title="VERIFY"
               color={Theme.lightBlue}
-              disabled={submitting || !recaptchaResponse || code === ''}
+              disabled={submitting || code === ''}
               onPress={this.handleCodeSubmit.bind(this)} />
           </View>
-          <Recaptcha onExecute={this.onExecute.bind(this)} action="uid" />
+          {showRecaptcha ? recaptchaComponent : null}
         </View>
       )
     } else if (showForm) {

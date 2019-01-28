@@ -19,12 +19,21 @@ export default class RecoveryCode extends React.Component {
       invalid: '',
       submitting: false,
       recaptchaResponse: '',
-      expoToken: ''
+      expoToken: '',
+      showRecaptcha: false,
+      resubmit: false
     }
   }
 
   componentDidMount () {
     this.getToken()
+  }
+
+  componentDidUpdate (prevProps, prevState) {
+    const {resubmit, recaptchaResponse} = this.state
+    if (resubmit && recaptchaResponse) {
+      this.handleSubmit()
+    }
   }
 
   async getToken () {
@@ -52,7 +61,7 @@ export default class RecoveryCode extends React.Component {
     const params = navigation.state.params
     const {attemptPath, secret, factorId} = params
     const {fieldValue, recaptchaResponse, expoToken} = this.state
-    this.setState({'submitting': true, invalid: ''})
+    this.setState({'submitting': true, invalid: '', resubmit: false})
 
     const postParams = {
       attempt_path: attemptPath,
@@ -85,7 +94,7 @@ export default class RecoveryCode extends React.Component {
         'Error', 'This account does not exist. Please go back and try again.')
       return false
     } else if (json.error === 'recaptcha_required') {
-      this.setState({invalid: 'recaptcha required', submitting: false})
+      this.setState({showRecaptcha: true, resubmit: true})
       return false
     } else if (json.error === 'code_expired') {
       Alert.alert(
@@ -101,7 +110,7 @@ export default class RecoveryCode extends React.Component {
   }
 
   render () {
-    const {fieldValue, submitting, invalid, recaptchaResponse} = this.state
+    const {fieldValue, submitting, invalid, showRecaptcha} = this.state
     const {navigation} = this.props
     const params = navigation.state.params
     const {codeLength, loginType} = params
@@ -112,6 +121,9 @@ export default class RecoveryCode extends React.Component {
     } else if (loginType === 'phone') {
       channelType = 'phone number'
     }
+
+    const recaptchaComponent = (
+      <Recaptcha onExecute={this.onExecute.bind(this)} action="recovery" />)
 
     return (
       <View style={{flex: 1, justifyContent: 'space-between'}}>
@@ -129,15 +141,13 @@ export default class RecoveryCode extends React.Component {
               placeholder="Enter code"
               keyboardType="numeric"
               value={fieldValue} />
-            <Recaptcha
-              onExecute={this.onExecute.bind(this)}
-              action="recovery" />
+            {showRecaptcha ? recaptchaComponent : null}
           </View>
           {invalid ? (<Text style={styles.error}>{invalid}</Text>) : null}
         </View>
         <PrimaryButton
           title="Recover Account"
-          disabled={fieldValue === '' || submitting || !recaptchaResponse}
+          disabled={fieldValue === '' || submitting}
           color={Theme.lightBlue}
           onPress={this.handleSubmit.bind(this)} />
       </View>
