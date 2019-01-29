@@ -7,7 +7,11 @@ import {createUrl} from 'ferly/utils/fetch'
 
 export class Recaptcha extends React.Component {
   componentDidMount () {
-    this.props.apiRequire(this.props.recaptchaUrl)
+    const {apiRequire, recaptchaUrl, bypass, onExecute} = this.props
+    apiRequire(recaptchaUrl)
+    if (onExecute && bypass) {
+      onExecute(bypass)
+    }
   }
 
   componentDidUpdate (prevProps, prevState) {
