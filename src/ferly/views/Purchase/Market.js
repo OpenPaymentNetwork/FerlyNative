@@ -1,5 +1,5 @@
 import Avatar from 'ferly/components/Avatar'
-import SearchBar from 'ferly/components/SearchBar'
+// import SearchBar from 'ferly/components/SearchBar'
 import PropTypes from 'prop-types'
 import React from 'react'
 import {apiRequire} from 'ferly/store/api'
@@ -30,10 +30,10 @@ export class Market extends React.Component {
   render () {
     const {designs, navigation} = this.props
     const display = this.state.searchResults || designs
+    // <SearchBar url='search-market' onSearch={this.onSearch.bind(this)} />
     return (
-      <View style={{flex: 1}}>
-        <SearchBar url='search-market' onSearch={this.onSearch.bind(this)} />
-        <ScrollView style={{flex: 1, backgroundColor: 'white'}}>
+      <View style={{flex: 1, backgroundColor: 'white'}}>
+        <ScrollView style={{flex: 1}}>
           {
             display.map((design) => {
               return (

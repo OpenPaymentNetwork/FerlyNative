@@ -1,6 +1,7 @@
 import Avatar from 'ferly/components/Avatar'
 import PropTypes from 'prop-types'
 import React from 'react'
+import SearchBar from 'ferly/components/SearchBar'
 import {apiRequire} from 'ferly/store/api'
 import {connect} from 'react-redux'
 import {createUrl} from 'ferly/utils/fetch'
@@ -11,17 +12,31 @@ class Recipient extends React.Component {
     title: 'Recipient'
   }
 
+  constructor (props) {
+    super(props)
+    this.state = {
+      searchResults: null
+    }
+  }
+
   componentDidMount () {
     this.props.apiRequire(this.props.usersUrl)
   }
 
-  renderResults () {
-    const design = this.props.navigation.state.params
-    const {navigation, users} = this.props
-    return (
-      <ScrollView>
+  onSearch (results) {
+    this.setState({searchResults: results})
+  }
+
+  render () {
+    const {users, navigation} = this.props
+    const design = navigation.state.params
+    const {searchResults} = this.state
+    const display = searchResults || users
+
+    const results = (
+      <ScrollView style={{flex: 1}}>
         {
-          users.map((user) => {
+          display.map((user) => {
             const firstName = user.first_name
             const lastName = user.last_name
             return (
@@ -52,33 +67,20 @@ class Recipient extends React.Component {
         }
       </ScrollView>
     )
-  }
 
-  render () {
-    //        <TextInput
-    //         style={styles.searchInput}
-    //          onChangeText={(t) => this.setState({text: t})}
-    //          placeholder="Search" />
+    let body = results
+    if (searchResults && searchResults.length === 0) {
+      body = <Text>No users match your search.</Text>
+    }
+
     return (
       <View style={{flex: 1, backgroundColor: 'white'}}>
-        <View style={{paddingHorizontal: 10}}>
-          {this.renderResults()}
-        </View>
+        <SearchBar url='search-users' onSearch={this.onSearch.bind(this)} />
+        {body}
       </View>
     )
   }
 }
-
-// const styles = StyleSheet.create({
-//   searchInput: {
-//     paddingLeft: 30,
-//     fontSize: 22,
-//     maxHeight: 70,
-//     flex: 1,
-//     borderWidth: 9,
-//     borderColor: '#E4E4E4'
-//   }
-// })
 
 Recipient.propTypes = {
   apiRequire: PropTypes.func.isRequired,
