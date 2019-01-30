@@ -1,4 +1,5 @@
 import Avatar from 'ferly/components/Avatar'
+import SearchBar from 'ferly/components/SearchBar'
 import PropTypes from 'prop-types'
 import React from 'react'
 import {apiRequire} from 'ferly/store/api'
@@ -11,40 +12,54 @@ export class Market extends React.Component {
     title: 'Marketplace'
   };
 
+  constructor (props) {
+    super(props)
+    this.state = {
+      searchResults: null
+    }
+  }
+
   componentDidMount () {
     this.props.apiRequire(this.props.designsUrl)
   }
 
+  onSearch (results) {
+    this.setState({searchResults: results})
+  }
+
   render () {
-    const {designs} = this.props
+    const {designs, navigation} = this.props
+    const display = this.state.searchResults || designs
     return (
-      <ScrollView style={{flex: 1, backgroundColor: 'white'}}>
-        {
-          designs.map((design) => {
-            return (
-              <TouchableOpacity
-                key={design.id}
-                onPress={
-                  () => this.props.navigation.navigate('Purchase', {design})}>
-                <View style={{
-                  flexDirection: 'row',
-                  height: 90,
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  paddingHorizontal: 15
-                }}>
-                  <Avatar size={68} shade={true} pictureUrl={design.url}/>
-                  <View style={{flex: 1, paddingHorizontal: 10}}>
-                    <Text style={{fontSize: 18, fontWeight: 'bold'}}>
-                      {design.title}
-                    </Text>
+      <View style={{flex: 1}}>
+        <SearchBar url='search-market' onSearch={this.onSearch.bind(this)} />
+        <ScrollView style={{flex: 1, backgroundColor: 'white'}}>
+          {
+            display.map((design) => {
+              return (
+                <TouchableOpacity
+                  key={design.id}
+                  onPress={() => navigation.navigate('Purchase', {design})}>
+                  <View style={{
+                    flexDirection: 'row',
+                    height: 90,
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    paddingHorizontal: 15
+                  }}>
+                    <Avatar size={68} shade={true} pictureUrl={design.url}/>
+                    <View style={{flex: 1, paddingHorizontal: 10}}>
+                      <Text style={{fontSize: 18, fontWeight: 'bold'}}>
+                        {design.title}
+                      </Text>
+                    </View>
                   </View>
-                </View>
-              </TouchableOpacity>
-            )
-          })
-        }
-      </ScrollView>
+                </TouchableOpacity>
+              )
+            })
+          }
+        </ScrollView>
+      </View>
     )
   }
 }
