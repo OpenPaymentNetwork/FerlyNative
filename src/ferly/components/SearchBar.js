@@ -14,10 +14,11 @@ export default class SearchBar extends React.Component {
 
   onSearch (text) {
     const {onSearch, url} = this.props
-    if (text === '') {
+    const query = text[0] === '@' ? text.slice(1) : text
+    if (query === '') {
       onSearch(null)
     } else {
-      fetch(createUrl(url, {query: text}))
+      fetch(createUrl(url, {query: query}))
         .then((response) => response.json())
         .then((json) => {
           if (this.state.searchText === text) { // The user is done typing.
