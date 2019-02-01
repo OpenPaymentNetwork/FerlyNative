@@ -1,7 +1,8 @@
+import Icon from 'react-native-vector-icons/FontAwesome'
 import PropTypes from 'prop-types'
 import React from 'react'
 import {createUrl} from 'ferly/utils/fetch'
-import {TextInput} from 'react-native'
+import {TextInput, View, StyleSheet} from 'react-native'
 
 export default class SearchBar extends React.Component {
   constructor (props) {
@@ -31,23 +32,38 @@ export default class SearchBar extends React.Component {
 
   render () {
     return (
-      <TextInput
-        underlineColorAndroid='transparent'
-        style={{
-          backgroundColor: 'white',
-          borderColor: '#E4E4E4',
-          borderWidth: 9,
-          flex: 1,
-          fontSize: 22,
-          maxHeight: 70,
-          paddingLeft: 30
-        }}
-        onChangeText={this.onSearch.bind(this)}
-        value={this.state.searchText}
-        placeholder="Search" />
+      <View style={styles.container}>
+        <Icon
+          name="search"
+          color="black"
+          style={{paddingHorizontal: 12}}
+          size={20} />
+        <TextInput
+          underlineColorAndroid='transparent'
+          style={styles.input}
+          onChangeText={this.onSearch.bind(this)}
+          value={this.state.searchText}
+          placeholder="Search" />
+      </View>
     )
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 9,
+    borderColor: '#E4E4E4',
+    maxHeight: 70
+  },
+  input: {
+    flex: 1,
+    backgroundColor: 'white',
+    fontSize: 22
+  }
+})
 
 SearchBar.propTypes = {
   onSearch: PropTypes.func.isRequired,
