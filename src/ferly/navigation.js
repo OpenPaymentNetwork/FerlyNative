@@ -33,10 +33,11 @@ const drawerOptions = ({navigation}) => ({
     <Icon
       name="bars"
       color="white"
+      style={{padding: 12}}
       size={26}
       onPress={() => navigation.toggleDrawer()} />
   ),
-  headerStyle: {paddingRight: 20, backgroundColor: Theme.darkBlue},
+  headerStyle: {paddingRight: 10, backgroundColor: Theme.darkBlue},
   headerTintColor: 'white'
 })
 

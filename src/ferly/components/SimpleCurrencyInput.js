@@ -44,7 +44,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     height: 65,
     marginLeft: 4,
-    textAlign: 'right'
+    textAlign: 'right',
+    minWidth: 30
   },
   inputContainer: {
     alignItems: 'flex-start',
