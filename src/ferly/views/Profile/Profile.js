@@ -1,6 +1,7 @@
 import Avatar from 'ferly/components/Avatar'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import PrimaryButton from 'ferly/components/PrimaryButton'
+import ProfilePicturePicker from 'ferly/views/Profile/ProfilePicturePicker'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Spinner from 'ferly/components/Spinner'
@@ -12,7 +13,6 @@ import {StackActions} from 'react-navigation'
 import {
   View,
   Text,
-  // Image,
   StyleSheet,
   TouchableOpacity,
   TextInput,
@@ -27,11 +27,13 @@ class Profile extends React.Component {
 
   constructor (props) {
     super(props)
+    const {firstName, lastName, username} = props
     this.state = {
       editing: false,
       submitting: false,
-      form: {firstName: '', lastName: '', username: ''},
-      invalid: {}
+      form: {firstName, lastName, username},
+      invalid: {},
+      image: ''
     }
   }
 
@@ -39,30 +41,86 @@ class Profile extends React.Component {
     this.props.apiRequire(this.props.walletUrl)
   }
 
-  formSubmit () {
-    const form = this.state.form || {}
-    const {apiExpire, navigation} = this.props
-    this.setState({submitting: true})
+  updateProfileImage () {
+    const {image} = this.state
+    let uriParts = image.split('.')
+    let fileType = uriParts[uriParts.length - 1]
+    const formData = new FormData()
+    formData.append('image', {
+      uri: image,
+      name: `photo.${fileType}`,
+      type: `image/${fileType}`
+    })
+    let options = {
+      method: 'POST',
+      body: formData,
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'multipart/form-data'
+      }
+    }
+    return fetch(createUrl('upload-profile-image'), options)
+  }
 
+  updateProfileInfo () {
+    const form = this.state.form
     const postParams = {
       first_name: form.firstName,
       last_name: form.lastName,
       username: form.username
     }
+    return post('edit-profile', postParams)
+  }
 
-    post('edit-profile', postParams)
-      .then((response) => response.json())
-      .then((responseJson) => {
-        this.setState({submitting: false})
-        if (this.validateResponse(responseJson)) {
-          apiExpire(createUrl('wallet'))
-          const resetAction = StackActions.reset({
-            index: 0,
-            actions: [StackActions.push({routeName: 'Profile'})]
-          })
-          navigation.dispatch(resetAction)
-        }
-      })
+  onSuccessfulEdit () {
+    const {apiExpire, navigation} = this.props
+    apiExpire(createUrl('wallet'))
+    const resetAction = StackActions.reset({
+      index: 0,
+      actions: [StackActions.push({routeName: 'Profile'})]
+    })
+    navigation.dispatch(resetAction)
+  }
+
+  formSubmit () {
+    const {firstName, lastName, username} = this.props
+    const {form, image} = this.state
+    const {
+      firstName: formFirstName,
+      lastName: formLastName,
+      username: formUsername
+    } = form
+    const formChanged = (
+      firstName !== formFirstName ||
+      lastName !== formLastName ||
+      username !== formUsername)
+    const imageChanged = image !== ''
+    this.setState({submitting: true})
+    if (formChanged) {
+      this.updateProfileInfo()
+        .then((response) => response.json())
+        .then((json) => {
+          if (this.validateResponse(json)) {
+            if (imageChanged) {
+              this.updateProfileImage()
+                .then((response) => response.json())
+                .then((json) => {
+                  this.onSuccessfulEdit()
+                })
+            } else {
+              this.onSuccessfulEdit()
+            }
+          } else {
+            this.setState({submitting: false})
+          }
+        })
+    } else if (imageChanged) {
+      this.updateProfileImage()
+        .then((response) => response.json())
+        .then((json) => {
+          this.onSuccessfulEdit()
+        })
+    }
   }
 
   validateResponse (responseJson) {
@@ -104,32 +162,35 @@ class Profile extends React.Component {
     const {firstName, lastName, username, profileImage} = this.props
     const {editing, submitting, invalid} = this.state
 
-    const userAvatar = (
-      <Avatar
-        size={110}
-        firstWord={firstName}
-        secondWord={lastName}
-        pictureUrl={profileImage} />
-    )
+    const avatarProps = {
+      size: 110,
+      firstWord: firstName,
+      secondWord: lastName,
+      pictureUrl: profileImage
+    }
 
     if (!editing) {
       return (
         <View style={{alignItems: 'center', paddingTop: 20}}>
-          {userAvatar}
+          <Avatar {...avatarProps} />
           <Text style={styles.name}>{firstName + ' ' + lastName}</Text>
           <Text style={styles.username}>{'@' + username}</Text>
         </View>
       )
     } else {
-      const form = this.state.form || {}
-      const formFirstName = form.firstName
-      const formLastName = form.lastName
-      const formUsername = form.username
+      const {form, image} = this.state
+      const {
+        firstName: formFirstName,
+        lastName: formLastName,
+        username: formUsername
+      } = form
 
-      const changed = (
+      const formChanged = (
         firstName !== formFirstName ||
         lastName !== formLastName ||
         username !== formUsername)
+
+      const imageChanged = image !== ''
 
       return (
         <View
@@ -140,7 +201,9 @@ class Profile extends React.Component {
             style={{flex: 1}}>
             <ScrollView contentContainerStyle={styles.scrollContainer}>
               <View style={{alignItems: 'center', width: '100%'}}>
-                {userAvatar}
+                <ProfilePicturePicker
+                  onImageChange={this.onImageChange.bind(this)}
+                  avatarProps={avatarProps} />
               </View>
               <Text style={styles.label}>First Name</Text>
               <TextInput
@@ -190,7 +253,7 @@ class Profile extends React.Component {
             disabled={
               formFirstName === '' ||
               formLastName === '' ||
-              !changed ||
+              !(formChanged || imageChanged) ||
               submitting ||
               !!invalid.username
             }
@@ -204,19 +267,18 @@ class Profile extends React.Component {
   toggleEdit () {
     const {editing} = this.state
     const {firstName, lastName, username} = this.props
-    const refreshedFormState = {
-      firstName: firstName,
-      lastName: lastName,
-      username: username
-    }
+    const refreshedFormState = {firstName, lastName, username}
     this.setState({editing: !editing, form: refreshedFormState, invalid: {}})
+  }
+
+  onImageChange (image) {
+    this.setState({image: image})
   }
 
   render () {
     const {editing} = this.state
-    const {firstName} = this.props
 
-    if (!firstName) {
+    if (!this.props.firstName) {
       return <Spinner />
     }
 
