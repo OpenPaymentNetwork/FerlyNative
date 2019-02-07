@@ -11,15 +11,8 @@ export default class ProfilePicturePicker extends React.Component {
     super(props)
     this.state = {
       image: null,
-      cameraRollPermission: '',
-      cameraPermission: '',
       showModal: true
     }
-  }
-
-  componentDidMount () {
-    this.askCameraRollPermission()
-    this.askCameraPermission()
   }
 
   onImageChange (imageUri) {
@@ -33,12 +26,11 @@ export default class ProfilePicturePicker extends React.Component {
     )
     let finalStatus = existingStatus
 
-    // Android doesn't require permission to access the camera roll.
-    if (Platform.OS === 'ios' && finalStatus !== 'granted') {
+    if (finalStatus !== 'granted') {
       const {status} = await Permissions.askAsync(Permissions.CAMERA_ROLL)
       finalStatus = status
     }
-    this.setState({'cameraRollPermission': finalStatus})
+    return finalStatus
   }
 
   async askCameraPermission () {
@@ -50,15 +42,13 @@ export default class ProfilePicturePicker extends React.Component {
       const {status} = await Permissions.askAsync(Permissions.CAMERA)
       finalStatus = status
     }
-    this.setState({'cameraPermission': finalStatus})
+    return finalStatus
   }
 
   async takeImage () {
-    if (this.state.cameraRollPermission !== 'granted') {
-      Alert.alert('Error', 'We need permission to access photos.')
-    } else if (this.state.cameraPermission !== 'granted') {
-      Alert.alert('Error', 'We need permission to access the camera.')
-    } else {
+    const cameraRollPermission = await this.askCameraRollPermission()
+    const cameraPermission = await this.askCameraPermission()
+    if (cameraRollPermission === 'granted' && cameraPermission === 'granted') {
       let result = await ImagePicker.launchCameraAsync({
         allowsEditing: true,
         quality: 0.1,
@@ -67,14 +57,15 @@ export default class ProfilePicturePicker extends React.Component {
       if (!result.cancelled) {
         this.onImageChange(result.uri)
       }
+    } else {
+      Alert.alert(
+        'Error', 'We need permission to access the camera and photos.')
     }
   }
 
   async pickImage () {
-    if (Platform.OS === 'ios' &&
-      this.state.cameraRollPermission !== 'granted') {
-      Alert.alert('Error', 'We need permission to access to photos.')
-    } else {
+    const cameraRollPermission = await this.askCameraRollPermission()
+    if (cameraRollPermission === 'granted') {
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: 'Images',
         allowsEditing: true,
@@ -84,6 +75,8 @@ export default class ProfilePicturePicker extends React.Component {
       if (!result.cancelled) {
         this.onImageChange(result.uri)
       }
+    } else {
+      Alert.alert('Error', 'We need permission to access photos.')
     }
   }
 
