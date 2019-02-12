@@ -13,7 +13,7 @@ import {
   Alert
 } from 'react-native'
 import {apiRequire} from 'ferly/store/api'
-import {checkedUidPrompt} from 'ferly/store/load'
+import {checkedUidPrompt} from 'ferly/store/settings'
 import {connect} from 'react-redux'
 import {createUrl} from 'ferly/utils/fetch'
 
@@ -110,7 +110,7 @@ export class Wallet extends React.Component {
   }
 
   showAddAccountRecoveryDialog () {
-    const {navigation, amounts, uids} = this.props
+    const {navigation, amounts, uids, checkedUidPrompt} = this.props
     if (uids.length > 0 || amounts.length === 0) {
       return
     }
@@ -124,12 +124,12 @@ export class Wallet extends React.Component {
     const buttons = [
       {
         text: 'Close',
-        onPress: () => this.props.checkedUidPrompt()
+        onPress: () => checkedUidPrompt()
       },
       {
         text: 'Add',
         onPress: () => {
-          this.props.checkedUidPrompt()
+          checkedUidPrompt()
           navigation.navigate('Recovery')
         }
       }
@@ -196,7 +196,7 @@ Wallet.propTypes = {
 function mapStateToProps (state) {
   const walletUrl = createUrl('wallet')
   const apiStore = state.api.apiStore
-  const {checkUidPrompt} = state.load
+  const {checkUidPrompt, updateDownloaded} = state.settings
   const myWallet = apiStore[walletUrl] || {}
   const {amounts, profileImage} = myWallet
   const firstName = myWallet.first_name
@@ -210,7 +210,8 @@ function mapStateToProps (state) {
     lastName,
     profileImage,
     uids,
-    checkUidPrompt
+    checkUidPrompt,
+    updateDownloaded
   }
 }
 

@@ -2,10 +2,11 @@
 import Icon from 'react-native-vector-icons/FontAwesome'
 import PropTypes from 'prop-types'
 import React from 'react'
-import {Notifications, Permissions, Constants} from 'expo'
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native'
+import {connect} from 'react-redux'
+import {Notifications, Permissions, Constants, Updates} from 'expo'
+import {View, Text, TouchableOpacity, StyleSheet, Alert} from 'react-native'
 
-export default class Settings extends React.Component {
+export class Settings extends React.Component {
   static navigationOptions = {
     title: 'Settings'
   };
@@ -33,40 +34,25 @@ export default class Settings extends React.Component {
     }
   }
 
-  renderItem (title, description, onPress = null) {
-    let icon
-    if (onPress) {
-      icon = (
-        <Icon
-          name="angle-right"
-          color="gray"
-          size={28} />
-      )
-    }
-
-    return (
-      <TouchableOpacity
-        style={{height: 80}}
-        disabled={onPress === null}
-        onPress={onPress}>
-        <View style={styles.sectionContainer}>
-          <View>
-            <Text style={styles.title}>{title}</Text>
-            <Text style={styles.description}>{description}</Text>
-          </View>
-          {icon}
-        </View>
-      </TouchableOpacity>
-    )
-  }
-
   toggleDebug () {
     const {showDebug} = this.state
     this.setState({showDebug: !showDebug})
   }
 
+  handleUpdateClick () {
+    const buttons = [
+      {text: 'No', onPress: null, style: 'cancel'},
+      {text: 'Yes', onPress: () => Updates.reloadFromCache()}
+    ]
+    Alert.alert(
+      'New version available',
+      'Would you like to update to the newest version?',
+      buttons
+    )
+  }
+
   render () {
-    const {navigation} = this.props
+    const {navigation, updateDownloaded} = this.props
     const devFlag = __DEV__ ? 'd' : 'p'
     const version = `${Constants.manifest.version}/${devFlag}`
 
@@ -81,16 +67,47 @@ export default class Settings extends React.Component {
       </View>
     )
 
+    const arrowIcon = (
+      <Icon
+        name="angle-right"
+        color="gray"
+        size={28} />
+    )
+
+    const updateIcon = (
+      <Icon
+        name="exclamation-circle"
+        color="red"
+        size={28} />
+    )
+
     return (
       <View style={{flex: 1, backgroundColor: 'white'}}>
-        {
-          this.renderItem(
-            'Account Recovery',
-            'Because you don\'t want to lose anything.',
-            () => navigation.navigate('Recovery')
-          )
-        }
-        {this.renderItem('About', `Version ${version}`)}
+        <TouchableOpacity
+          style={styles.item}
+          onPress={() => navigation.navigate('Recovery')}>
+          <View style={styles.sectionContainer}>
+            <View>
+              <Text style={styles.title}>{'Account Recovery'}</Text>
+              <Text style={styles.description}>
+                {'Because you don\'t want to lose anything.'}
+              </Text>
+            </View>
+            {arrowIcon}
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.item}
+          disabled={!updateDownloaded}
+          onPress={this.handleUpdateClick.bind(this)}>
+          <View style={styles.sectionContainer}>
+            <View>
+              <Text style={styles.title}>{'About'}</Text>
+              <Text style={styles.description}>{`Version ${version}`}</Text>
+            </View>
+            {updateDownloaded ? updateIcon : null}
+          </View>
+        </TouchableOpacity>
         <View style={{flexGrow: 1}} />
         <View style={{height: 40, flexDirection: 'row'}}>
           {this.state.showDebug ? debugInfo : null}
@@ -105,7 +122,8 @@ export default class Settings extends React.Component {
 }
 
 Settings.propTypes = {
-  navigation: PropTypes.object.isRequired
+  navigation: PropTypes.object.isRequired,
+  updateDownloaded: PropTypes.bool.isRequired
 }
 
 const styles = StyleSheet.create({
@@ -125,5 +143,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     paddingVertical: 8
+  },
+  item: {
+    height: 80
   }
 })
+
+function mapStateToProps (state) {
+  const {updateDownloaded} = state.settings
+  return {
+    updateDownloaded
+  }
+}
+
+const mapDispatchToProps = {}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Settings)

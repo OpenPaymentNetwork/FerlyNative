@@ -1,9 +1,9 @@
 import {combineReducers} from 'redux'
 
 import api from './api'
-import load from './load'
+import settings from './settings'
 
 export default combineReducers({
   api,
-  load
+  settings
 })
