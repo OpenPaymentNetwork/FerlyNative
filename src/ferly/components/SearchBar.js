@@ -43,7 +43,7 @@ export default class SearchBar extends React.Component {
           style={styles.input}
           onChangeText={this.onSearch.bind(this)}
           value={this.state.searchText}
-          placeholder="Search" />
+          placeholder={this.props.placeholder || 'Search'} />
       </View>
     )
   }
@@ -67,5 +67,6 @@ const styles = StyleSheet.create({
 
 SearchBar.propTypes = {
   onSearch: PropTypes.func.isRequired,
+  placeholder: PropTypes.string,
   url: PropTypes.string.isRequired
 }

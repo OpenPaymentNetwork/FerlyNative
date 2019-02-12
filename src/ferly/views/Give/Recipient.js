@@ -20,23 +20,21 @@ class Recipient extends React.Component {
   }
 
   componentDidMount () {
-    this.props.apiRequire(this.props.usersUrl)
+    this.props.apiRequire(this.props.walletUrl)
   }
 
   onSearch (results) {
     this.setState({searchResults: results})
   }
 
-  render () {
-    const {users, navigation} = this.props
+  listUsers (users) {
+    const {navigation} = this.props
     const design = navigation.state.params
-    const {searchResults} = this.state
-    const display = searchResults || users
 
-    const results = (
+    return (
       <ScrollView style={{flex: 1}}>
         {
-          display.map((user) => {
+          users.map((user) => {
             const firstName = user.first_name
             const lastName = user.last_name
             return (
@@ -67,15 +65,41 @@ class Recipient extends React.Component {
         }
       </ScrollView>
     )
+  }
 
-    let body = results
-    if (searchResults && searchResults.length === 0) {
-      body = <Text>No users match your search.</Text>
+  render () {
+    const {recents} = this.props
+    const {searchResults} = this.state
+    let body
+    if (searchResults) {
+      if (searchResults.length === 0) {
+        body = <Text>No users match your search.</Text>
+      } else {
+        body = this.listUsers(searchResults)
+      }
+    } else if (recents.length > 0) {
+      body = (
+        <View style={{flex: 1}}>
+          <View
+            style={{
+              marginHorizontal: 10,
+              paddingLeft: 10,
+              borderBottomWidth: 0.5,
+              borderColor: 'darkgray'
+            }}>
+            <Text style={{fontSize: 20}}>Recent</Text>
+          </View>
+          {this.listUsers(recents)}
+        </View>
+      )
     }
 
     return (
       <View style={{flex: 1, backgroundColor: 'white'}}>
-        <SearchBar url='search-users' onSearch={this.onSearch.bind(this)} />
+        <SearchBar
+          url='search-users'
+          placeholder='Search all users'
+          onSearch={this.onSearch.bind(this)} />
         {body}
       </View>
     )
@@ -84,19 +108,19 @@ class Recipient extends React.Component {
 
 Recipient.propTypes = {
   apiRequire: PropTypes.func.isRequired,
-  users: PropTypes.array.isRequired,
-  usersUrl: PropTypes.string.isRequired,
-  navigation: PropTypes.object.isRequired
+  navigation: PropTypes.object.isRequired,
+  recents: PropTypes.array,
+  walletUrl: PropTypes.string.isRequired
 }
 
 function mapStateToProps (state) {
-  const usersUrl = createUrl('users')
   const apiStore = state.api.apiStore
-  const users = apiStore[usersUrl] || []
+  const walletUrl = createUrl('wallet')
+  const {recents} = apiStore[walletUrl] || []
 
   return {
-    usersUrl,
-    users
+    walletUrl,
+    recents
   }
 }
 

@@ -1,13 +1,10 @@
 /* global __DEV__ */
 import {Constants} from 'expo'
 
-// const host = 'https://www.ferly.com/'
-// const host = 'http://ferlyenv.bkk9wx3qnc.us-east-2.elasticbeanstalk.com/'
-// const host = 'http://10.1.10.6:6543/' // Prod.ini
-// const host = 'http://10.1.10.6:44225/' // Dev.ini
 let host
 if (__DEV__) {
-  host = 'http://10.1.10.6:44225/'
+  host = 'http://10.1.10.6:44225/' // Dev.ini
+  // host = 'http://10.1.10.6:6543/' // Prod.ini
 } else {
   host = 'https://www.ferly.com/'
 }
