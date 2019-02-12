@@ -1,33 +1,19 @@
 import Icon from 'react-native-vector-icons/FontAwesome'
 import PropTypes from 'prop-types'
 import React from 'react'
-import {createUrl} from 'ferly/utils/fetch'
 import {TextInput, View, StyleSheet} from 'react-native'
 
 export default class SearchBar extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      searchText: '',
-      searchResults: null
+      searchText: ''
     }
   }
 
-  onSearch (text) {
-    const {onSearch, url} = this.props
-    const query = text[0] === '@' ? text.slice(1) : text
-    if (query === '') {
-      onSearch(null)
-    } else {
-      fetch(createUrl(url, {query: query}))
-        .then((response) => response.json())
-        .then((json) => {
-          if (this.state.searchText === text) { // The user is done typing.
-            onSearch(json.results)
-          }
-        })
-    }
+  onChangeText (text) {
     this.setState({searchText: text})
+    this.props.onChangeText(text)
   }
 
   render () {
@@ -41,7 +27,7 @@ export default class SearchBar extends React.Component {
         <TextInput
           underlineColorAndroid='transparent'
           style={styles.input}
-          onChangeText={this.onSearch.bind(this)}
+          onChangeText={this.onChangeText.bind(this)}
           value={this.state.searchText}
           placeholder={this.props.placeholder || 'Search'} />
       </View>
@@ -54,19 +40,18 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: 'white',
     borderWidth: 9,
     borderColor: '#E4E4E4',
     maxHeight: 70
   },
   input: {
     flex: 1,
-    backgroundColor: 'white',
     fontSize: 22
   }
 })
 
 SearchBar.propTypes = {
-  onSearch: PropTypes.func.isRequired,
-  placeholder: PropTypes.string,
-  url: PropTypes.string.isRequired
+  onChangeText: PropTypes.func.isRequired,
+  placeholder: PropTypes.string
 }

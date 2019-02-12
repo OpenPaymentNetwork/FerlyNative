@@ -15,7 +15,8 @@ class Recipient extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      searchResults: null
+      searchResults: null,
+      searchText: ''
     }
   }
 
@@ -23,8 +24,20 @@ class Recipient extends React.Component {
     this.props.apiRequire(this.props.walletUrl)
   }
 
-  onSearch (results) {
-    this.setState({searchResults: results})
+  onChangeText (text) {
+    const query = text[0] === '@' ? text.slice(1) : text
+    if (query === '') {
+      this.setState({searchResults: null})
+    } else {
+      fetch(createUrl('search-users', {query: query}))
+        .then((response) => response.json())
+        .then((json) => {
+          if (this.state.searchText === text) { // The user is done typing.
+            this.setState({searchResults: json.results})
+          }
+        })
+    }
+    this.setState({searchText: text})
   }
 
   listUsers (users) {
@@ -97,9 +110,8 @@ class Recipient extends React.Component {
     return (
       <View style={{flex: 1, backgroundColor: 'white'}}>
         <SearchBar
-          url='search-users'
           placeholder='Search all users'
-          onSearch={this.onSearch.bind(this)} />
+          onChangeText={this.onChangeText.bind(this)} />
         {body}
       </View>
     )
