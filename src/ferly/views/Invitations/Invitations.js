@@ -137,7 +137,7 @@ export class Invitations extends React.Component {
     }
 
     return (
-      <ScrollView contentContainerStyle={{paddingVertical: 15}}>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
         <Text style={{color: Theme.darkBlue, fontSize: 22, paddingLeft: 20}}>
           Send
         </Text>
@@ -183,7 +183,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 20
   },
   button: {alignItems: 'center', flexDirection: 'row', paddingVertical: 10},
-  buttonText: {color: Theme.lightBlue, fontSize: 18}
+  buttonText: {color: Theme.lightBlue, fontSize: 18},
+  scrollContent: {flex: 1, backgroundColor: 'white', paddingVertical: 15}
 })
 
 Invitations.propTypes = {

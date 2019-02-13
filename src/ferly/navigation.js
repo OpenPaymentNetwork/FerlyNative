@@ -103,6 +103,7 @@ const AuthDrawer = createDrawerNavigator(
     Settings: SettingsStack
   },
   {
+    initialRouteName: 'Wallet',
     drawerPosition: 'right',
     contentComponent: DrawerContent
   }

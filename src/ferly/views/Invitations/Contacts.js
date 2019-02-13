@@ -1,9 +1,17 @@
 import Avatar from 'ferly/components/Avatar'
 import PropTypes from 'prop-types'
 import React from 'react'
+import SearchBar from 'ferly/components/SearchBar'
 import Spinner from 'ferly/components/Spinner'
 import {Permissions, Contacts as expoContacts} from 'expo'
-import {View, Text, ScrollView, TouchableOpacity} from 'react-native'
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  FlatList,
+  Platform
+} from 'react-native'
 
 export default class Contacts extends React.Component {
   static navigationOptions = {
@@ -13,56 +21,88 @@ export default class Contacts extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      contacts: [],
-      permission: undefined
+      permission: undefined,
+      contacts: undefined,
+      hasMore: true,
+      pageSize: 10,
+      pageOffset: 0,
+      searchResults: null
     }
   }
 
   componentDidMount () {
-    this.askContactPermissions()
+    this.askContactPermission()
   }
 
-  async askContactPermissions () {
+  async askContactPermission () {
     const {status: existingStatus} = await Permissions.getAsync(
       Permissions.CONTACTS
     )
     let finalStatus = existingStatus
-    if (existingStatus !== 'granted') {
-      const { status } = await Permissions.askAsync(Permissions.CONTACTS)
+    if (finalStatus !== 'granted') {
+      const {status} = await Permissions.askAsync(Permissions.CONTACTS)
       finalStatus = status
     }
+    this.setState({permission: finalStatus})
+  }
 
-    let contacts = []
-    if (finalStatus === 'granted') {
-      const {data} = await expoContacts.getContactsAsync()
+  async searchContacts (name) {
+    const {data} = await expoContacts.getContactsAsync({name: name})
+    this.setState({searchResults: this.convertDataToContacts(data)})
+  }
 
-      contacts = data.map((contact) => {
-        const contactEmails = contact.emails || []
-        const contactPhones = contact.phoneNumbers || []
-        const emails = contactEmails.map((email) => {
-          return email.email
-        })
-        const phones = contactPhones.map((phone) => {
-          return phone.number
-        })
+  async getContacts () {
+    const {pageSize, pageOffset, contacts: currentContacts = []} = this.state
+    const {data} = await expoContacts.getContactsAsync({
+      pageSize, pageOffset, sort: expoContacts.SortTypes.FirstName})
+    const moreContacts = this.convertDataToContacts(data)
+    const hasMore = pageSize === moreContacts.length
+    this.setState({
+      contacts: currentContacts.concat(moreContacts),
+      pageOffset: pageOffset + pageSize,
+      hasMore
+    })
+  }
 
-        const display = {uri: '', firstName: '', lastName: ''}
-        if (contact.image) {
-          display.uri = contact.image.uri
-        }
-        display.firstName = contact.firstName
-        display.lastName = contact.lastName
-        return {
-          id: contact.id,
-          name: contact.name,
-          display: display,
-          phones: Array.from(new Set(phones)),
-          emails: Array.from(new Set(emails))
-        }
-      })
-      contacts.sort((a, b) => a.name.localeCompare(b.name))
+  loadMore () {
+    if (this.state.hasMore) {
+      this.getContacts()
     }
-    this.setState({permission: finalStatus, contacts: contacts})
+  }
+
+  convertDataToContacts (data) {
+    return data.map((contact) => {
+      const contactEmails = contact.emails || []
+      const contactPhones = contact.phoneNumbers || []
+      const emails = contactEmails.map((email) => {
+        return email.email
+      })
+      const phones = contactPhones.map((phone) => {
+        return phone.number
+      })
+
+      const display = {uri: '', firstName: '', lastName: ''}
+      if (contact.image) {
+        display.uri = contact.image.uri
+      }
+      display.firstName = contact.firstName
+      display.lastName = contact.lastName
+      return {
+        id: contact.id,
+        name: contact.name,
+        display: display,
+        phones: Array.from(new Set(phones)),
+        emails: Array.from(new Set(emails))
+      }
+    })
+  }
+
+  onChangeText (text) {
+    if (text !== '') {
+      this.searchContacts(text)
+    } else {
+      this.setState({searchResults: null})
+    }
   }
 
   renderContact (contact) {
@@ -75,7 +115,8 @@ export default class Contacts extends React.Component {
           paddingLeft: 12,
           marginVertical: 6,
           flexDirection: 'row',
-          alignItems: 'center'
+          alignItems: 'center',
+          backgroundColor: 'white'
         }}
         onPress={() => this.props.navigation.navigate('Contact', contact)}>
         <Avatar
@@ -88,44 +129,56 @@ export default class Contacts extends React.Component {
     )
   }
 
-  renderContacts () {
-    const {contacts} = this.state
-    return (
-      <ScrollView>
-        {contacts.map((contact) => this.renderContact(contact))}
-      </ScrollView>
-    )
-  }
-
   render () {
-    const {contacts, permission} = this.state
-
-    let body
-    if (permission === 'granted') {
-      if (contacts.length === 0) {
-        body = (
-          <View
-            style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-            <Text>You have no contacts.</Text>
-          </View>
-        )
-      } else {
-        body = this.renderContacts()
-      }
-    } else if (permission === 'denied') {
-      body = (
+    const {contacts, permission, searchResults} = this.state
+    if (permission === 'denied') {
+      return (
         <View
           style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
           <Text>Ferly needs permission to access your contacts.</Text>
         </View>
       )
+    } else if (permission !== 'granted') {
+      return <Spinner />
+    } else if (contacts && contacts.length === 0) {
+      return (
+        <View
+          style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <Text>You have no contacts.</Text>
+        </View>
+      )
+    }
+
+    // Search only works on ios
+    const searchBar = (
+      <SearchBar onChangeText={this.onChangeText.bind(this)} />
+    )
+    let contactsList
+    if (searchResults) {
+      if (searchResults.length === 0) {
+        contactsList = <Text>No contacts match your search.</Text>
+      } else {
+        contactsList = (
+          <ScrollView>
+            {searchResults.map((contact) => this.renderContact(contact))}
+          </ScrollView>
+        )
+      }
     } else {
-      body = <Spinner />
+      contactsList = (
+        <FlatList
+          onEndReached={this.loadMore()}
+          onEndReachedThreshold={10}
+          keyExtractor={(contact) => contact.id}
+          data={contacts}
+          renderItem={(contact) => this.renderContact(contact.item)} />
+      )
     }
 
     return (
-      <View style={{flex: 1}}>
-        {body}
+      <View style={{flex: 1, backgroundColor: 'white'}}>
+        {Platform.OS === 'ios' ? searchBar : null}
+        {contactsList}
       </View>
     )
   }
