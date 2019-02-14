@@ -1,10 +1,11 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import {apiRefresh} from 'ferly/store/api'
-import {updateDownloaded} from 'ferly/store/settings'
 import {connect} from 'react-redux'
 import {createUrl} from 'ferly/utils/fetch'
 import {Notifications, Updates, Constants} from 'expo'
+import {Platform} from 'react-native'
+import {updateDownloaded} from 'ferly/store/settings'
 
 class EventListener extends React.Component {
   componentDidMount () {
@@ -15,6 +16,20 @@ class EventListener extends React.Component {
     // with the notification data.
     this._notificationSubscription = (
       Notifications.addListener(this._handleNotification))
+
+    // Create android notification channels.
+    if (Platform.OS === 'android') {
+      Notifications.createChannelAndroidAsync('gift-received', {
+        name: 'Gift Received',
+        sound: true,
+        vibrate: 750
+      })
+      Notifications.createChannelAndroidAsync('card-used', {
+        name: 'Card Used',
+        sound: true,
+        vibrate: 500
+      })
+    }
 
     // Handle events related to downloading updates.
     this._updateSubscription = (
