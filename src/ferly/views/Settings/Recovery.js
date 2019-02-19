@@ -40,7 +40,7 @@ export class Recovery extends React.Component {
       `value you hold.`
     return (
       <KeyboardAvoidingView
-        style={{flex: 1}}
+        style={{flex: 1, backgroundColor: 'white'}}
         keyboardVerticalOffset={80}
         behavior="padding">
         <ScrollView contentContainerStyle={{flexGrow: 1}}>

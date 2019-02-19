@@ -58,7 +58,11 @@ export class ManualAdd extends React.Component {
   render () {
     const {fieldValue, error, submitting} = this.state
     return (
-      <View style={{flex: 1, justifyContent: 'space-between'}}>
+      <View style={{
+        flex: 1,
+        justifyContent: 'space-between',
+        backgroundColor: 'white'
+      }}>
         <View style={{margin: 20}}>
           <Text style={{fontSize: 16, marginBottom: 14}}>
             Enter an email address or phone number to send an invitation to.

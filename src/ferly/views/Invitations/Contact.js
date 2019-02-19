@@ -75,7 +75,7 @@ export class Contact extends React.Component {
     const options = contact.phones.concat(contact.emails)
     const {display} = contact
     return (
-      <ScrollView contentContainerStyle={{flex: 1}}>
+      <ScrollView contentContainerStyle={{flex: 1, backgroundColor: 'white'}}>
         <View
           style={{
             paddingTop: 40,
