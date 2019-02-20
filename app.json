@@ -21,6 +21,18 @@
     },
     "updates": {
       "fallbackToCacheTimeout": 0,
+    },
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "ferly",
+            "project": "ferlyapp",
+            "authToken": "02b4ddeca10d44129ff65ac845bc13e580d558e013f74d66890da5470bbe1370"
+          }
+        }
+      ]
     }
   }
 }
