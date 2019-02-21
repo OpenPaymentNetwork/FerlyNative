@@ -5,8 +5,6 @@ import React from 'react'
 import Sentry from 'sentry-expo'
 import {Provider} from 'react-redux'
 
-// Remove this once Sentry is correctly setup.
-Sentry.enableInExpoDevelopment = true
 Sentry.config(
   'https://20f3964a92714c59a5ae17e74e40c8ec@sentry.io/1398868').install()
 
