@@ -1,13 +1,12 @@
 import accounting from 'ferly/utils/accounting'
-import BrainTree from 'ferly/views/Purchase/BrainTree'
+import Stripe from 'ferly/views/Purchase/Stripe'
 import PropTypes from 'prop-types'
 import React from 'react'
-import Spinner from 'ferly/components/Spinner'
 import {apiRequire, apiExpire} from 'ferly/store/api'
 import {connect} from 'react-redux'
 import {createUrl, post} from 'ferly/utils/fetch'
 import {StackActions} from 'react-navigation'
-import {View, Text, Alert} from 'react-native'
+import {View, Text, Alert, StyleSheet} from 'react-native'
 
 export class Cart extends React.Component {
   static navigationOptions = {
@@ -16,10 +15,10 @@ export class Cart extends React.Component {
 
   constructor (props) {
     super(props)
-    this.state = {showBrainTree: true}
+    this.state = {invalid: ''}
   }
 
-  onSuccess (nonce) {
+  onSuccess (token) {
     const {navigation} = this.props
     const params = navigation.state.params
     const {design, amount} = params
@@ -27,15 +26,13 @@ export class Cart extends React.Component {
     const purchaseParams = {
       amount: amount,
       design_id: design.id.toString(),
-      nonce: nonce
+      stripe_token: token
     }
 
-    this.setState({showBrainTree: false})
-
-    post('create-purchase', purchaseParams)
+    post('purchase', purchaseParams)
       .then((response) => response.json())
       .then((responseJson) => {
-        if (responseJson['result']) {
+        if (this.validate(responseJson)) {
           this.props.apiExpire(createUrl('history', {limit: 30}))
           this.props.apiExpire(createUrl('wallet'))
           const resetAction = StackActions.reset({
@@ -46,39 +43,60 @@ export class Cart extends React.Component {
           const formatted = accounting.formatMoney(parseFloat(amount))
           const desc = `You added ${formatted} ${design.title} to your wallet.`
           Alert.alert('Complete!', desc)
-        } else {
-          Alert.alert(
-            'Error',
-            'There was a problem processing your credit card; please double ' +
-            'check your payment information and try again.')
-          this.setState({showBrainTree: true})
         }
       })
+  }
+
+  validate (json) {
+    if (json.invalid) {
+      this.setState({invalid: json.invalid[Object.keys(json.invalid)[0]]})
+      return false
+    } else if (!json.result) {
+      Alert.alert('Error', 'There was a problem processing your credit card.')
+      return false
+    } else {
+      return true
+    }
   }
 
   render () {
     const {params} = this.props.navigation.state
     const {amount, design} = params
     const formatted = accounting.formatMoney(parseFloat(amount))
-    const {showBrainTree} = this.state
-
-    const page = showBrainTree
-      ? <BrainTree onSuccess={this.onSuccess.bind(this)} />
-      : <Spinner />
+    const {invalid} = this.state
 
     return (
-      <View style={{flex: 1, flexDirection: 'column', backgroundColor: 'white'}}>
-        <View style={{flexShrink: 1, justifyContent: 'space-between', flexDirection: 'row', padding: 18}}>
-          <View>
-            <Text style={{flexShrink: 1, fontWeight: 'bold', flexWrap: 'wrap', fontSize: 18}}>{design.title}</Text>
+      <View style={styles.page}>
+        <View style={styles.designContainer}>
+          <Text style={styles.designText}>{design.title}</Text>
+          <View style={{flexGrow: 1, flexWrap: 'wrap'}}>
+            <Text style={styles.amountText}>{formatted}</Text>
+            <Text style={styles.invalidText}>{invalid}</Text>
           </View>
-          <Text style={{flexGrow: 1, fontWeight: 'bold', flexWrap: 'wrap', fontSize: 18, textAlign: 'right'}}>{formatted}</Text>
         </View>
-        {page}
+        <Stripe onSuccess={this.onSuccess.bind(this)} />
       </View>
     )
   }
 }
+
+const styles = StyleSheet.create({
+  amountText: {fontSize: 18, fontWeight: 'bold', textAlign: 'right'},
+  designContainer: {
+    flexShrink: 1,
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    padding: 18
+  },
+  designText: {
+    flexShrink: 1,
+    fontWeight: 'bold',
+    flexWrap: 'wrap',
+    fontSize: 18
+  },
+  invalidText: {fontSize: 14, color: 'red', textAlign: 'right'},
+  page: {flex: 1, flexDirection: 'column', backgroundColor: 'white'}
+})
 
 Cart.propTypes = {
   amounts: PropTypes.array,

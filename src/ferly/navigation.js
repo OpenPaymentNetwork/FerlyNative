@@ -19,7 +19,7 @@ import Cart from 'ferly/views/Purchase/Cart'
 import Purchase from 'ferly/views/Purchase/Purchase'
 import Market from 'ferly/views/Purchase/Market'
 import Recovery from 'ferly/views/Settings/Recovery'
-import BrainTree from 'ferly/views/Purchase/BrainTree'
+import Stripe from 'ferly/views/Purchase/Stripe'
 import {
   createDrawerNavigator,
   createStackNavigator,
@@ -53,7 +53,7 @@ const WalletStack = createStackNavigator(
     Market: {screen: Market, navigationOptions: drawerOptions},
     Purchase: {screen: Purchase, navigationOptions: drawerOptions},
     Cart: {screen: Cart, navigationOptions: drawerOptions},
-    BrainTree: {screen: BrainTree, navigationOptions: drawerOptions}
+    Stripe: {screen: Stripe, navigationOptions: drawerOptions}
   },
   {
     initialRouteName: 'Home'
