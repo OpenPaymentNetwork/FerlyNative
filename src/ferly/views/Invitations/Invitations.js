@@ -49,65 +49,25 @@ export class Invitations extends React.Component {
     // use date-fns. Expect the JavaScriptCore to be updated in SDK 31.
     const dateDisplay = formatDate(date, 'MMM D, YYYY h:mm A')
     return (
-      <View key={invite.id} style={{
-        marginBottom: 14,
-        borderRadius: 5,
-        height: 160,
-        backgroundColor: 'white',
-        borderWidth: 1,
-        borderColor: 'lightgray',
-        elevation: 1.8,
-        shadowOffset: {width: 2, height: 2},
-        shadowColor: 'lightgray',
-        shadowOpacity: 1
-      }}>
-        <View
-          style={{
-            paddingLeft: 20,
-            height: 40,
-            backgroundColor: Theme.lightBlue,
-            justifyContent: 'center'
-          }}>
+      <View key={invite.id} style={styles.invitationContainer}>
+        <View style={styles.invitationHeader}>
           <Text style={{fontSize: 22, color: Theme.darkBlue}}>Invited</Text>
         </View>
-        <View
-          style={{
-            height: 80,
-            flexDirection: 'row',
-            borderBottomWidth: 1,
-            borderColor: 'lightgray',
-            alignItems: 'center',
-            paddingLeft: 20
-          }}>
-          <View
-            style={{
-              width: 36,
-              height: 36,
-              borderRadius: 18,
-              backgroundColor: 'gray',
-              justifyContent: 'center',
-              alignItems: 'center'
-            }}>
+        <View style={styles.invitationBody}>
+          <View style={styles.invitationIconContainer}>
             <Icon
               name={invite.recipient.indexOf('@') > -1 ? 'envelope' : 'phone'}
               color="white"
               size={22} />
           </View>
           <View style={{marginLeft: 20}}>
-            <Text style={{fontSize: 18, color: Theme.darkBlue}}>
-              {invite.recipient}
-            </Text>
+            <Text style={styles.recipientText}>{invite.recipient}</Text>
             <Text style={{color: 'gray'}}>{dateDisplay}</Text>
           </View>
         </View>
         <View style={{flex: 1}}>
           <TouchableOpacity
-            style={{
-              width: 110,
-              paddingLeft: 20,
-              height: 40,
-              justifyContent: 'center'
-            }}
+            style={styles.invitationActionButton}
             onPress={() => this.deleteInvite(invite)}>
             <Text style={{fontSize: 20, color: Theme.lightBlue}}>DELETE</Text>
           </TouchableOpacity>
@@ -122,48 +82,33 @@ export class Invitations extends React.Component {
     let renderedPending
     if (pending && pending.length > 0) {
       renderedPending = (
-        <View
-          style={{borderTopWidth: 1,
-            borderColor: 'lightgray',
-            paddingHorizontal: 20
-          }}>
-          <Text
-            style={{color: Theme.darkBlue, fontSize: 22, paddingVertical: 12}}>
-            Pending Invitations
-          </Text>
+        <View style={styles.pendingTitleContainer}>
+          <Text style={styles.pendingTitle}>Pending Invitations</Text>
           {pending.map((invite) => this.renderInvite(invite))}
         </View>
       )
     }
 
+    const addIcon = (
+      <View style={styles.addIconContainer}>
+        <Icon name='plus' color="white" size={16} />
+      </View>
+    )
+
     return (
       <View style={{flex: 1, backgroundColor: 'white'}}>
         <ScrollView contentContainerStyle={{paddingVertical: 15}}>
-          <Text style={{color: Theme.darkBlue, fontSize: 22, paddingLeft: 20}}>
-            Send
-          </Text>
+          <Text style={styles.headerText}>Send</Text>
           <TouchableOpacity
             style={styles.button}
             onPress={() => navigation.navigate('Contacts')}>
-            <View
-              style={styles.iconContainer}>
-              <Icon
-                name='plus'
-                color="white"
-                size={16} />
-            </View>
+            {addIcon}
             <Text style={styles.buttonText}>From Contacts</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.button}
             onPress={() => navigation.navigate('ManualAdd')}>
-            <View
-              style={styles.iconContainer}>
-              <Icon
-                name='plus'
-                color="white"
-                size={16} />
-            </View>
+            {addIcon}
             <Text style={styles.buttonText}>New</Text>
           </TouchableOpacity>
           <View style={{marginTop: 10}} />
@@ -175,7 +120,47 @@ export class Invitations extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  iconContainer: {
+  invitationContainer: {
+    marginBottom: 14,
+    borderRadius: 5,
+    height: 160,
+    backgroundColor: 'white',
+    borderWidth: 1,
+    borderColor: 'lightgray',
+    elevation: 1.8,
+    shadowOffset: {width: 2, height: 2},
+    shadowColor: 'lightgray',
+    shadowOpacity: 1
+  },
+  invitationHeader: {
+    paddingLeft: 20,
+    height: 40,
+    backgroundColor: Theme.lightBlue,
+    justifyContent: 'center'
+  },
+  invitationBody: {
+    height: 80,
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderColor: 'lightgray',
+    alignItems: 'center',
+    paddingLeft: 20
+  },
+  invitationIconContainer: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'gray',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  invitationActionButton: {
+    width: 110,
+    paddingLeft: 20,
+    height: 40,
+    justifyContent: 'center'
+  },
+  addIconContainer: {
     width: 24,
     height: 24,
     borderRadius: 12,
@@ -185,7 +170,15 @@ const styles = StyleSheet.create({
     marginHorizontal: 20
   },
   button: {alignItems: 'center', flexDirection: 'row', paddingVertical: 10},
-  buttonText: {color: Theme.lightBlue, fontSize: 18}
+  buttonText: {color: Theme.lightBlue, fontSize: 18},
+  headerText: {color: Theme.darkBlue, fontSize: 22, paddingLeft: 20},
+  pendingTitleContainer: {
+    borderTopWidth: 1,
+    borderColor: 'lightgray',
+    paddingHorizontal: 20
+  },
+  pendingTitle: {color: Theme.darkBlue, fontSize: 22, paddingVertical: 12},
+  recipientText: {fontSize: 18, color: Theme.darkBlue}
 })
 
 Invitations.propTypes = {
