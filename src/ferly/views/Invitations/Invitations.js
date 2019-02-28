@@ -137,37 +137,39 @@ export class Invitations extends React.Component {
     }
 
     return (
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        <Text style={{color: Theme.darkBlue, fontSize: 22, paddingLeft: 20}}>
-          Send
-        </Text>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.navigate('Contacts')}>
-          <View
-            style={styles.iconContainer}>
-            <Icon
-              name='plus'
-              color="white"
-              size={16} />
-          </View>
-          <Text style={styles.buttonText}>From Contacts</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.navigate('ManualAdd')}>
-          <View
-            style={styles.iconContainer}>
-            <Icon
-              name='plus'
-              color="white"
-              size={16} />
-          </View>
-          <Text style={styles.buttonText}>New</Text>
-        </TouchableOpacity>
-        <View style={{marginTop: 10}} />
-        {renderedPending}
-      </ScrollView>
+      <View style={{flex: 1, backgroundColor: 'white'}}>
+        <ScrollView contentContainerStyle={{paddingVertical: 15}}>
+          <Text style={{color: Theme.darkBlue, fontSize: 22, paddingLeft: 20}}>
+            Send
+          </Text>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate('Contacts')}>
+            <View
+              style={styles.iconContainer}>
+              <Icon
+                name='plus'
+                color="white"
+                size={16} />
+            </View>
+            <Text style={styles.buttonText}>From Contacts</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate('ManualAdd')}>
+            <View
+              style={styles.iconContainer}>
+              <Icon
+                name='plus'
+                color="white"
+                size={16} />
+            </View>
+            <Text style={styles.buttonText}>New</Text>
+          </TouchableOpacity>
+          <View style={{marginTop: 10}} />
+          {renderedPending}
+        </ScrollView>
+      </View>
     )
   }
 }
@@ -183,8 +185,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20
   },
   button: {alignItems: 'center', flexDirection: 'row', paddingVertical: 10},
-  buttonText: {color: Theme.lightBlue, fontSize: 18},
-  scrollContent: {flex: 1, backgroundColor: 'white', paddingVertical: 15}
+  buttonText: {color: Theme.lightBlue, fontSize: 18}
 })
 
 Invitations.propTypes = {
@@ -198,8 +199,7 @@ Invitations.propTypes = {
 function mapStateToProps (state) {
   const invitationsUrl = createUrl('existing-invitations', {status: 'pending'})
   const apiStore = state.api.apiStore
-  const pendingInvitations = apiStore[invitationsUrl] || {}
-  const pending = pendingInvitations.results
+  const {results: pending = []} = apiStore[invitationsUrl] || {}
 
   return {
     invitationsUrl,
