@@ -41,13 +41,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'white',
-    borderWidth: 9,
-    borderColor: '#E4E4E4',
-    maxHeight: 70
+    maxHeight: 50,
+    margin: 14,
+    borderWidth: 1,
+    borderColor: 'lightgray',
+    elevation: 2,
+    shadowOffset: {width: 2, height: 2},
+    shadowColor: 'lightgray',
+    shadowOpacity: 1
   },
   input: {
     flex: 1,
-    fontSize: 22
+    fontSize: 18
   }
 })
 

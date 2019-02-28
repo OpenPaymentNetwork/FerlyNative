@@ -2,10 +2,12 @@ import Avatar from 'ferly/components/Avatar'
 import PropTypes from 'prop-types'
 import React from 'react'
 import SearchBar from 'ferly/components/SearchBar'
+import Spinner from 'ferly/components/Spinner'
+import Theme from 'ferly/utils/theme'
 import {apiRequire} from 'ferly/store/api'
 import {connect} from 'react-redux'
 import {createUrl} from 'ferly/utils/fetch'
-import {View, ScrollView, TouchableOpacity, Text} from 'react-native'
+import {ScrollView, Text, TouchableOpacity, View} from 'react-native'
 
 class Recipient extends React.Component {
   static navigationOptions = {
@@ -40,7 +42,7 @@ class Recipient extends React.Component {
     this.setState({searchText: text})
   }
 
-  listUsers (users) {
+  renderUsers (users) {
     const {navigation} = this.props
     const design = navigation.state.params
 
@@ -56,14 +58,12 @@ class Recipient extends React.Component {
                 onPress={
                   () => navigation.navigate('Amount', {user, design})}>
                 <View marginVertical={10} style={{flexDirection: 'row'}}>
-                  <View style={{marginHorizontal: 10}}>
-                    <Avatar
-                      size={68}
-                      pictureUrl={user.picture}
-                      firstWord={firstName}
-                      secondWord={lastName} />
-                  </View>
-                  <View style={{justifyContent: 'center', flex: 1}}>
+                  <Avatar
+                    size={68}
+                    pictureUrl={user.picture}
+                    firstWord={firstName}
+                    secondWord={lastName} />
+                  <View style={{justifyContent: 'center', marginLeft: 10}}>
                     <Text style={{fontSize: 24}}>
                       {`${firstName} ${lastName}`}
                     </Text>
@@ -82,27 +82,45 @@ class Recipient extends React.Component {
 
   render () {
     const {recents} = this.props
-    const {searchResults} = this.state
+    const {searchResults, searchText} = this.state
     let body
     if (searchResults) {
       if (searchResults.length === 0) {
-        body = <Text>No users match your search.</Text>
+        body = (
+          <Text>
+            {
+              'We\'re sorry, we couldn\'t find anyone matching \'' +
+              searchText + '\'. Use invitations in the menu to invite ' +
+              'someone to Ferly.'
+            }
+          </Text>
+        )
       } else {
-        body = this.listUsers(searchResults)
+        body = this.renderUsers(searchResults)
       }
-    } else if (recents.length > 0) {
+    } else {
+      let display = <Spinner />
+      if (recents) {
+        if (recents.length === 0) {
+          display = (
+            <Text>
+              {
+                'First time sending a gift? Search for family and friends ' +
+                'above. Use invitations in the menu to invite someone you ' +
+                'can\'t find.'
+              }
+            </Text>
+          )
+        } else {
+          display = this.renderUsers(recents)
+        }
+      }
       body = (
         <View style={{flex: 1}}>
-          <View
-            style={{
-              marginHorizontal: 10,
-              paddingLeft: 10,
-              borderBottomWidth: 0.5,
-              borderColor: 'darkgray'
-            }}>
-            <Text style={{fontSize: 20}}>Recent</Text>
-          </View>
-          {this.listUsers(recents)}
+          <Text style={{fontSize: 18, color: Theme.lightBlue}}>
+            Most Recent Recipients
+          </Text>
+          {display}
         </View>
       )
     }
@@ -110,9 +128,11 @@ class Recipient extends React.Component {
     return (
       <View style={{flex: 1, backgroundColor: 'white'}}>
         <SearchBar
-          placeholder='Search all users'
+          placeholder='Search for family and friends'
           onChangeText={this.onChangeText.bind(this)} />
-        {body}
+        <View style={{flex: 1, marginHorizontal: 10}}>
+          {body}
+        </View>
       </View>
     )
   }
@@ -128,7 +148,7 @@ Recipient.propTypes = {
 function mapStateToProps (state) {
   const apiStore = state.api.apiStore
   const walletUrl = createUrl('wallet')
-  const {recents = []} = apiStore[walletUrl] || {}
+  const {recents = null} = apiStore[walletUrl] || {}
 
   return {
     walletUrl,
