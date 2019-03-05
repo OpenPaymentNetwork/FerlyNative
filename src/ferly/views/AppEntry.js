@@ -52,7 +52,7 @@ function mapStateToProps (state) {
   const auth = myWallet.is_user
 
   const errorString = JSON.stringify(myWallet)
-  const error = errorString === '{}' ? '' : errorString
+  const error = errorString === '{}' ? '' : 'Connection Error'
 
   return {
     auth,
