@@ -83,7 +83,7 @@ export class ManualAdd extends React.Component {
           title="Send Invitation"
           disabled={!fieldValue || submitting}
           color={Theme.lightBlue}
-          onPress={() => this.submit(fieldValue)}
+          onPress={() => this.submit(fieldValue.trim())}
         />
       </View>
     )
