@@ -6,6 +6,7 @@ import Spinner from 'ferly/components/Spinner'
 import Theme from 'ferly/utils/theme'
 import {apiRequire, apiExpire} from 'ferly/store/api'
 import {connect} from 'react-redux'
+import {Constants} from 'expo'
 import {createUrl, post} from 'ferly/utils/fetch'
 import {StackActions} from 'react-navigation'
 import {
@@ -143,14 +144,16 @@ export class Cart extends React.Component {
         </TouchableOpacity>
       )
       if (selectedSource === 'new') {
+        const {releaseChannel} = Constants.manifest
+        const publishableKey = releaseChannel === 'production'
+          ? 'pk_live_8U9wUmhgzP48MMlF8QS82TLb'
+          : 'pk_test_OYUrHqvNNjYfoorvryuKvSA1'
         const stripeJs = `
-          const stripe = Stripe('pk_test_OYUrHqvNNjYfoorvryuKvSA1');
+          const stripe = Stripe(${publishableKey});
           const elements = stripe.elements();
           const card = elements.create('card', {
             'style': {
-              'base': {
-                'fontSize': '16px'
-              }
+              'base': {'fontSize': '16px'}
             }
           });
           card.mount('#card-number');

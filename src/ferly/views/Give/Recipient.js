@@ -148,7 +148,7 @@ Recipient.propTypes = {
 function mapStateToProps (state) {
   const apiStore = state.api.apiStore
   const walletUrl = createUrl('wallet')
-  const {recents = null} = apiStore[walletUrl] || {}
+  const {recents} = apiStore[walletUrl] || {}
 
   return {
     walletUrl,

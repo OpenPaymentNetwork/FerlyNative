@@ -53,8 +53,9 @@ export class Settings extends React.Component {
 
   render () {
     const {navigation, updateDownloaded} = this.props
-    const devFlag = __DEV__ ? 'd' : 'p'
-    const version = `${Constants.manifest.version}/${devFlag}`
+    const {releaseChannel = 'default'} = Constants.manifest
+    const envId = __DEV__ ? 'l' : releaseChannel.charAt(0)
+    const version = `${Constants.manifest.version}/${envId}`
 
     let debugInfo = (
       <View>
