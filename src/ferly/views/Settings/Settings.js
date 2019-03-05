@@ -63,7 +63,7 @@ export class Settings extends React.Component {
           did: {Constants.deviceId}
         </Text>
         <Text style={{fontSize: 12, color: 'lightgray'}}>
-          et: {this.state.expoToken}
+          pt: {this.state.expoToken.substring(18, 40)}
         </Text>
       </View>
     )
