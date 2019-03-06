@@ -8,7 +8,7 @@ if (__DEV__) {
   // host = 'http://10.1.10.6:6543/' // Prod.ini
 } else if (releaseChannel === 'production') {
   host = 'https://www.ferly.com/'
-} else if (releaseChannel === 'staging') {
+} else {
   host = 'https://www.ferly.com/' // TODO update this to new staging endpoint
 }
 const prefix = 'api/'
