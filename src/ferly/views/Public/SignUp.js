@@ -1,3 +1,4 @@
+/* global __DEV__ */
 import PrimaryButton from 'ferly/components/PrimaryButton'
 import PropTypes from 'prop-types'
 import React from 'react'
@@ -136,10 +137,10 @@ export default class SignUp extends React.Component {
   renderRecoveryOption () {
     const {navigation} = this.props
     return (
-      <View style={{paddingTop: 10, width: '100%', justifyContent: 'flex-end', flexDirection: 'row'}}>
+      <View style={[styles.row, {paddingTop: 10}]}>
         <TouchableOpacity
           onPress={() => navigation.navigate('RecoveryChannel')}>
-          <Text style={{color: Theme.lightBlue, textDecorationLine: 'underline', fontSize: 16}}>Already have an account?</Text>
+          <Text style={styles.recoveryText}>Already have an account?</Text>
         </TouchableOpacity>
       </View>
     )
@@ -147,6 +148,8 @@ export default class SignUp extends React.Component {
 
   render () {
     const {firstName, lastName, username, submitting, invalid} = this.state
+    const {version, releaseChannel = 'default'} = Constants.manifest
+    const envId = __DEV__ ? 'l' : releaseChannel.charAt(0)
     return (
       <View style={{flex: 1}}>
         <View style={styles.container}>
@@ -198,6 +201,9 @@ export default class SignUp extends React.Component {
           {this.renderDebug()}
           {this.renderRecoveryOption()}
         </View>
+        <View style={[styles.row, {backgroundColor: Theme.darkBlue}]}>
+          <Text style={{color: '#16213d'}}>{`${version}/${envId}`}</Text>
+        </View>
         <PrimaryButton
           title="Sign Up"
           disabled={
@@ -230,7 +236,13 @@ const styles = StyleSheet.create({
     marginVertical: 6,
     width: '100%'
   },
-  logo: {width: 160, height: 156, marginVertical: 40}
+  logo: {width: 160, height: 156, marginVertical: 40},
+  recoveryText: {
+    color: Theme.lightBlue,
+    textDecorationLine: 'underline',
+    fontSize: 16
+  },
+  row: {width: '100%', flexDirection: 'row', justifyContent: 'flex-end'}
 })
 
 SignUp.propTypes = {

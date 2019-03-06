@@ -53,10 +53,8 @@ export class Settings extends React.Component {
 
   render () {
     const {navigation, updateDownloaded} = this.props
-    const {releaseChannel = 'default'} = Constants.manifest
+    const {version, releaseChannel = 'default'} = Constants.manifest
     const envId = __DEV__ ? 'l' : releaseChannel.charAt(0)
-    const version = `${Constants.manifest.version}/${envId}`
-
     let debugInfo = (
       <View>
         <Text style={{fontSize: 12, color: 'lightgray'}}>
@@ -104,7 +102,9 @@ export class Settings extends React.Component {
           <View style={styles.sectionContainer}>
             <View>
               <Text style={styles.title}>{'About'}</Text>
-              <Text style={styles.description}>{`Version ${version}`}</Text>
+              <Text style={styles.description}>
+                {`Version ${version}/${envId}`}
+              </Text>
             </View>
             {updateDownloaded ? updateIcon : null}
           </View>
