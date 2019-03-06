@@ -149,7 +149,7 @@ export class Cart extends React.Component {
           ? 'pk_live_8U9wUmhgzP48MMlF8QS82TLb'
           : 'pk_test_OYUrHqvNNjYfoorvryuKvSA1'
         const stripeJs = `
-          const stripe = Stripe(${publishableKey});
+          const stripe = Stripe('${publishableKey}');
           const elements = stripe.elements();
           const card = elements.create('card', {
             'style': {
