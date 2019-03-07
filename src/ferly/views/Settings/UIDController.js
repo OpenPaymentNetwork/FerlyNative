@@ -181,7 +181,7 @@ export class UIDController extends React.Component {
         <View>
           <Text style={styles.subtitle}>
             {`We sent a unique and temporary code to your ${type}. ` +
-             `Enter the ${codeLength}-digit code below`}
+             `Enter the ${codeLength}-digit code below.`}
           </Text>
           <View style={styles.line}>
             <View style={styles.inputContainer}>
