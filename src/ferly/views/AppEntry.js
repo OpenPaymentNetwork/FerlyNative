@@ -1,12 +1,13 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import {CreateAuthSwitch} from 'ferly/navigation'
+import Theme from 'ferly/utils/theme'
 import {apiRequire} from 'ferly/store/api'
 import {connect} from 'react-redux'
+import {Constants} from 'expo'
+import {CreateAuthSwitch} from 'ferly/navigation'
 import {createUrl} from 'ferly/utils/fetch'
-import Theme from 'ferly/utils/theme'
-import {View, Text, Image} from 'react-native'
 import {logoWhite} from 'ferly/images/index'
+import {View, Text, Image} from 'react-native'
 
 export class AppEntry extends React.Component {
   componentDidMount () {
@@ -46,7 +47,8 @@ AppEntry.propTypes = {
 }
 
 function mapStateToProps (state) {
-  const isUserUrl = createUrl('is-user')
+  const {releaseChannel = 'staging'} = Constants.manifest
+  const isUserUrl = createUrl('is-user', {'expected_env': releaseChannel})
   const apiStore = state.api.apiStore
   const myWallet = apiStore[isUserUrl] || {}
   const auth = myWallet.is_user
