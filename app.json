@@ -3,7 +3,7 @@
     "name": "Ferly",
     "icon": "./ferly-icon.png",
 
-    "version": "1.0.7",
+    "version": "1.1.0",
     "sdkVersion": "30.0.0",
     "slug":"ferly",
     "ios": {

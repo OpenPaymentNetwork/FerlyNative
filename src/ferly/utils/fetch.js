@@ -9,7 +9,7 @@ if (__DEV__) {
 } else if (releaseChannel === 'production') {
   host = 'https://www.ferly.com/'
 } else {
-  host = 'https://www.ferly.com/' // TODO update this to new staging endpoint
+  host = 'http://ferlystaging.us-east-2.elasticbeanstalk.com/'
 }
 const prefix = 'api/'
 const baseUrl = host + prefix
