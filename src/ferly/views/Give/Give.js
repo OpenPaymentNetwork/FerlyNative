@@ -7,7 +7,7 @@ import Spinner from 'ferly/components/Spinner'
 import Theme from 'ferly/utils/theme'
 import {apiExpire, apiRequire} from 'ferly/store/api'
 import {connect} from 'react-redux'
-import {createUrl, post} from 'ferly/utils/fetch'
+import {createUrl, post, urls} from 'ferly/utils/fetch'
 import {StackActions} from 'react-navigation'
 import {
   Alert,
@@ -54,7 +54,7 @@ export class Give extends React.Component {
       .then((response) => response.json())
       .then((json) => {
         if (Object.keys(json).length === 0) {
-          apiExpire(createUrl('history', {limit: 30}))
+          apiExpire(urls.history)
           apiExpire(createUrl('wallet'))
           const resetAction = StackActions.reset({
             index: 0,

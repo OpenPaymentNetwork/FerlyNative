@@ -5,7 +5,7 @@ import React from 'react'
 import {View, FlatList, Text} from 'react-native'
 import {apiRequire, apiInject} from 'ferly/store/api'
 import {connect} from 'react-redux'
-import {createUrl} from 'ferly/utils/fetch'
+import {urls} from 'ferly/utils/fetch'
 
 export class History extends React.Component {
   static navigationOptions = {
@@ -20,22 +20,22 @@ export class History extends React.Component {
   }
 
   componentDidMount () {
-    this.props.apiRequire(this.props.historyUrl)
+    this.props.apiRequire(urls.history)
   }
 
   loadMore () {
-    const {hasMore, limit, history, historyUrl} = this.props
+    const {hasMore, history} = this.props
     const {updating} = this.state
     this.setState({updating: true})
     if (!hasMore || updating) {
       return
     }
-    const nextUrl = createUrl('history', {limit: limit, offset: history.length})
+    const nextUrl = `${urls.history}&offset=${history.length}`
     fetch(nextUrl)
       .then((response) => response.json())
       .then((responseJson) => {
         const newHistory = history.concat(responseJson.history)
-        this.props.apiInject(historyUrl, {
+        this.props.apiInject(urls.history, {
           'history': newHistory,
           'has_more': responseJson.has_more
         })
@@ -75,23 +75,17 @@ History.propTypes = {
   apiRequire: PropTypes.func.isRequired,
   hasMore: PropTypes.bool,
   navigation: PropTypes.object.isRequired,
-  history: PropTypes.array,
-  historyUrl: PropTypes.string.isRequired,
-  limit: PropTypes.number.isRequired
+  history: PropTypes.array
 }
 
 function mapStateToProps (state) {
-  const limit = 30 // If you change this. change url in give/purchase also
-  const historyUrl = createUrl('history', {limit: limit})
   const apiStore = state.api.apiStore
-  const historyResponse = apiStore[historyUrl] || {}
+  const historyResponse = apiStore[urls.history] || {}
   const history = historyResponse.history
   const hasMore = historyResponse.has_more
   return {
     hasMore,
-    historyUrl,
-    history,
-    limit
+    history
   }
 }
 

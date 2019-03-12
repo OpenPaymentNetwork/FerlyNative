@@ -41,3 +41,7 @@ export function post (urlTail, params = {}) {
     body: JSON.stringify(params)
   })
 }
+
+export const urls = {
+  history: createUrl('history', {limit: 30})
+}

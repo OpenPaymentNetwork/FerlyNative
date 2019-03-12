@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import {apiRefresh} from 'ferly/store/api'
 import {connect} from 'react-redux'
-import {createUrl} from 'ferly/utils/fetch'
+import {createUrl, urls} from 'ferly/utils/fetch'
 import {Notifications, Updates, Constants} from 'expo'
 import {Platform} from 'react-native'
 import {updateDownloaded} from 'ferly/store/settings'
@@ -39,7 +39,7 @@ class EventListener extends React.Component {
   _handleNotification = (notification) => {
     if (notification.origin === 'received') {
       this.props.apiRefresh(createUrl('wallet'))
-      this.props.apiRefresh(createUrl('history'))
+      this.props.apiRefresh(urls.history)
     }
   };
 
