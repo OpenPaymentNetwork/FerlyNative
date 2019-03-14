@@ -4,9 +4,9 @@ import Theme from 'ferly/utils/theme'
 import Avatar from 'ferly/components/Avatar'
 import {apiRequire} from 'ferly/store/api'
 import {connect} from 'react-redux'
-import {createUrl} from 'ferly/utils/fetch'
 import {DrawerItems} from 'react-navigation'
 import {logoHorizontal} from 'ferly/images/index'
+import {urls} from 'ferly/utils/fetch'
 import {
   ScrollView,
   SafeAreaView,
@@ -63,15 +63,14 @@ DrawerContent.propTypes = {
 }
 
 function mapStateToProps (state) {
-  const walletUrl = createUrl('wallet')
   const apiStore = state.api.apiStore
-  const myWallet = apiStore[walletUrl] || {}
-  const {profileImage} = myWallet
-  const firstName = myWallet.first_name || ''
-  const lastName = myWallet.last_name || ''
+  const {
+    profileImage,
+    first_name: firstName = '',
+    last_name: lastName = ''
+  } = apiStore[urls.profile] || {}
 
   return {
-    walletUrl,
     firstName,
     lastName,
     profileImage

@@ -15,7 +15,7 @@ import {
 import {apiRequire} from 'ferly/store/api'
 import {checkedUidPrompt} from 'ferly/store/settings'
 import {connect} from 'react-redux'
-import {createUrl} from 'ferly/utils/fetch'
+import {urls} from 'ferly/utils/fetch'
 
 export class Wallet extends React.Component {
   static navigationOptions = {
@@ -23,17 +23,16 @@ export class Wallet extends React.Component {
   };
 
   componentDidMount () {
-    this.props.apiRequire(this.props.walletUrl)
+    this.props.apiRequire(urls.profile)
   }
 
   renderCard (design) {
     const {navigation} = this.props
-    const {amount, id, title} = design
-    const walletUrl = design.wallet_url
+    const {amount, id, title, wallet_url: walletImage} = design
     const formatted = accounting.formatMoney(parseFloat(amount))
 
-    const img = walletUrl
-      ? <Image source={{uri: walletUrl}} style={{height: 130, width: 130}} />
+    const img = walletImage
+      ? <Image source={{uri: walletImage}} style={{height: 130, width: 130}} />
       : <Text>{title}</Text>
 
     return (
@@ -189,22 +188,21 @@ Wallet.propTypes = {
   lastName: PropTypes.string,
   navigation: PropTypes.object.isRequired,
   profileImage: PropTypes.string,
-  uids: PropTypes.array,
-  walletUrl: PropTypes.string.isRequired
+  uids: PropTypes.array
 }
 
 function mapStateToProps (state) {
-  const walletUrl = createUrl('wallet')
   const apiStore = state.api.apiStore
   const {checkUidPrompt, updateDownloaded} = state.settings
-  const myWallet = apiStore[walletUrl] || {}
-  const {amounts, profileImage} = myWallet
-  const firstName = myWallet.first_name
-  const lastName = myWallet.last_name
-  const uids = myWallet.uids || []
+  const {
+    amounts,
+    profileImage,
+    first_name: firstName,
+    last_name: lastName,
+    uids = []
+  } = apiStore[urls.profile] || {}
 
   return {
-    walletUrl,
     amounts,
     firstName,
     lastName,

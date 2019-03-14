@@ -43,5 +43,6 @@ export function post (urlTail, params = {}) {
 }
 
 export const urls = {
-  history: createUrl('history', {limit: 30})
+  history: createUrl('history', {limit: 30}),
+  profile: createUrl('profile')
 }

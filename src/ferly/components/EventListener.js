@@ -38,7 +38,7 @@ class EventListener extends React.Component {
 
   _handleNotification = (notification) => {
     if (notification.origin === 'received') {
-      this.props.apiRefresh(createUrl('wallet'))
+      this.props.apiRefresh(urls.profile)
       this.props.apiRefresh(urls.history)
     }
   };

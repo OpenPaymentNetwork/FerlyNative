@@ -6,7 +6,7 @@ import Spinner from 'ferly/components/Spinner'
 import Theme from 'ferly/utils/theme'
 import {apiRequire} from 'ferly/store/api'
 import {connect} from 'react-redux'
-import {createUrl} from 'ferly/utils/fetch'
+import {createUrl, urls} from 'ferly/utils/fetch'
 import {ScrollView, Text, TouchableOpacity, View} from 'react-native'
 
 class Recipient extends React.Component {
@@ -23,7 +23,7 @@ class Recipient extends React.Component {
   }
 
   componentDidMount () {
-    this.props.apiRequire(this.props.walletUrl)
+    this.props.apiRequire(urls.profile)
   }
 
   onChangeText (text) {
@@ -141,17 +141,14 @@ class Recipient extends React.Component {
 Recipient.propTypes = {
   apiRequire: PropTypes.func.isRequired,
   navigation: PropTypes.object.isRequired,
-  recents: PropTypes.array,
-  walletUrl: PropTypes.string.isRequired
+  recents: PropTypes.array
 }
 
 function mapStateToProps (state) {
   const apiStore = state.api.apiStore
-  const walletUrl = createUrl('wallet')
-  const {recents} = apiStore[walletUrl] || {}
+  const {recents} = apiStore[urls.profile] || {}
 
   return {
-    walletUrl,
     recents
   }
 }

@@ -130,7 +130,7 @@ export default class RecoveryCode extends React.Component {
         <View style={{paddingHorizontal: 40, paddingVertical: 30}}>
           <Text style={{fontSize: 18}}>
             {`We sent a unique and temporary code to your ${channelType}. ` +
-             `Enter the ${codeLength}-digit code below`}
+             `Enter the ${codeLength}-digit code below.`}
           </Text>
           <View style={{borderBottomWidth: 1, borderColor: 'gray', paddingTop: 20}}>
             <TextInput

@@ -8,7 +8,7 @@ import Spinner from 'ferly/components/Spinner'
 import Theme from 'ferly/utils/theme'
 import {apiRequire, apiExpire} from 'ferly/store/api'
 import {connect} from 'react-redux'
-import {createUrl, post} from 'ferly/utils/fetch'
+import {createUrl, post, urls} from 'ferly/utils/fetch'
 import {StackActions} from 'react-navigation'
 import {
   View,
@@ -38,7 +38,7 @@ class Profile extends React.Component {
   }
 
   componentDidMount () {
-    this.props.apiRequire(this.props.walletUrl)
+    this.props.apiRequire(urls.profile)
   }
 
   updateProfileImage () {
@@ -74,7 +74,7 @@ class Profile extends React.Component {
 
   onSuccessfulEdit () {
     const {apiExpire, navigation} = this.props
-    apiExpire(createUrl('wallet'))
+    apiExpire(urls.profile)
     const resetAction = StackActions.reset({
       index: 0,
       actions: [StackActions.push({routeName: 'Profile'})]
@@ -343,20 +343,20 @@ Profile.propTypes = {
   lastName: PropTypes.string,
   navigation: PropTypes.object.isRequired,
   profileImage: PropTypes.string,
-  username: PropTypes.string,
-  walletUrl: PropTypes.string.isRequired
+  username: PropTypes.string
 }
 
 function mapStateToProps (state) {
-  const walletUrl = createUrl('wallet')
   const apiStore = state.api.apiStore
-  const myWallet = apiStore[walletUrl] || {}
-  const {amounts, username, profileImage} = myWallet
-  const firstName = myWallet.first_name
-  const lastName = myWallet.last_name
+  const {
+    amounts,
+    username,
+    profileImage,
+    first_name: firstName,
+    last_name: lastName
+  } = apiStore[urls.profile] || {}
 
   return {
-    walletUrl,
     amounts,
     firstName,
     lastName,

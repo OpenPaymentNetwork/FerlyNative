@@ -6,7 +6,7 @@ import SimpleCurrencyInput from 'ferly/components/SimpleCurrencyInput'
 import Spinner from 'ferly/components/Spinner'
 import {apiExpire, apiRequire} from 'ferly/store/api'
 import {connect} from 'react-redux'
-import {createUrl} from 'ferly/utils/fetch'
+import {urls} from 'ferly/utils/fetch'
 import {View, Text} from 'react-native'
 
 export class Purchase extends React.Component {
@@ -20,7 +20,7 @@ export class Purchase extends React.Component {
   }
 
   componentDidMount () {
-    this.props.apiRequire(this.props.walletUrl)
+    this.props.apiRequire(urls.profile)
   }
 
   onPurchase () {
@@ -75,18 +75,15 @@ Purchase.propTypes = {
   amounts: PropTypes.array,
   apiExpire: PropTypes.func.isRequired,
   apiRequire: PropTypes.func.isRequired,
-  navigation: PropTypes.object.isRequired,
-  walletUrl: PropTypes.string.isRequired
+  navigation: PropTypes.object.isRequired
 }
 
 function mapStateToProps (state) {
-  const walletUrl = createUrl('wallet')
   const apiStore = state.api.apiStore
-  const myWallet = apiStore[walletUrl] || {}
-  const {amounts} = myWallet
+  const {amounts} = apiStore[urls.profile] || {}
+
   return {
-    amounts,
-    walletUrl
+    amounts
   }
 }
 

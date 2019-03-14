@@ -15,10 +15,10 @@ export class AppEntry extends React.Component {
   }
 
   render () {
-    const auth = this.props.auth
+    const {auth, hasError} = this.props
     let errorMessage
-    if (this.props.error) {
-      errorMessage = <Text style={{color: 'red'}}>{this.props.error}</Text>
+    if (hasError) {
+      errorMessage = <Text style={{color: 'red'}}>Connection Error</Text>
     }
     if (auth === undefined) {
       return (
@@ -42,7 +42,7 @@ export class AppEntry extends React.Component {
 AppEntry.propTypes = {
   apiRequire: PropTypes.func.isRequired,
   auth: PropTypes.bool,
-  error: PropTypes.string,
+  hasError: PropTypes.bool,
   isUserUrl: PropTypes.string.isRequired
 }
 
@@ -50,15 +50,13 @@ function mapStateToProps (state) {
   const {releaseChannel = 'staging'} = Constants.manifest
   const isUserUrl = createUrl('is-user', {'expected_env': releaseChannel})
   const apiStore = state.api.apiStore
-  const myWallet = apiStore[isUserUrl] || {}
-  const auth = myWallet.is_user
-
-  const errorString = JSON.stringify(myWallet)
-  const error = errorString === '{}' ? '' : 'Connection Error'
+  const isUser = apiStore[isUserUrl] || {}
+  const {is_user: auth} = isUser
+  const hasError = JSON.stringify(isUser) !== '{}'
 
   return {
     auth,
-    error,
+    hasError,
     isUserUrl
   }
 }

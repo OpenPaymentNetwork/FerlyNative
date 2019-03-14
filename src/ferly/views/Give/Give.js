@@ -7,7 +7,7 @@ import Spinner from 'ferly/components/Spinner'
 import Theme from 'ferly/utils/theme'
 import {apiExpire, apiRequire} from 'ferly/store/api'
 import {connect} from 'react-redux'
-import {createUrl, post, urls} from 'ferly/utils/fetch'
+import {post, urls} from 'ferly/utils/fetch'
 import {StackActions} from 'react-navigation'
 import {
   Alert,
@@ -30,7 +30,7 @@ export class Give extends React.Component {
   }
 
   componentDidMount () {
-    this.props.apiRequire(this.props.walletUrl)
+    this.props.apiRequire(urls.profile)
   }
 
   send () {
@@ -55,7 +55,7 @@ export class Give extends React.Component {
       .then((json) => {
         if (Object.keys(json).length === 0) {
           apiExpire(urls.history)
-          apiExpire(createUrl('wallet'))
+          apiExpire(urls.profile)
           const resetAction = StackActions.reset({
             index: 0,
             actions: [StackActions.push({routeName: 'Home'})]
@@ -176,18 +176,15 @@ Give.propTypes = {
   amounts: PropTypes.array,
   apiExpire: PropTypes.func.isRequired,
   apiRequire: PropTypes.func.isRequired,
-  navigation: PropTypes.object.isRequired,
-  walletUrl: PropTypes.string.isRequired
+  navigation: PropTypes.object.isRequired
 }
 
 function mapStateToProps (state) {
-  const walletUrl = createUrl('wallet')
   const apiStore = state.api.apiStore
-  const myWallet = apiStore[walletUrl] || {}
-  const {amounts} = myWallet
+  const {amounts} = apiStore[urls.profile] || {}
+
   return {
-    amounts,
-    walletUrl
+    amounts
   }
 }
 

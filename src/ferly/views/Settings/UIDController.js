@@ -5,7 +5,7 @@ import Recaptcha from 'ferly/components/Recaptcha'
 import Theme from 'ferly/utils/theme'
 import {apiExpire} from 'ferly/store/api'
 import {connect} from 'react-redux'
-import {createUrl, post} from 'ferly/utils/fetch'
+import {urls, post} from 'ferly/utils/fetch'
 import {StackActions} from 'react-navigation'
 import {
   View,
@@ -139,7 +139,7 @@ export class UIDController extends React.Component {
           const message = `Thank you! Your ${lowerTitle} has been verified ` +
             `and can be used for account recovery in the future.`
           Alert.alert(`${title} Verified`, message)
-          this.props.apiExpire(createUrl('wallet'))
+          this.props.apiExpire(urls.profile)
 
           const resetAction = StackActions.reset({
             index: 1,

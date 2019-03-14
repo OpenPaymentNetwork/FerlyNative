@@ -64,7 +64,7 @@ export class Cart extends React.Component {
       .then((responseJson) => {
         if (this.validate(responseJson)) {
           this.props.apiExpire(urls.history)
-          this.props.apiExpire(createUrl('wallet'))
+          this.props.apiExpire(urls.profile)
           const resetAction = StackActions.reset({
             index: 0,
             actions: [StackActions.push({routeName: 'Home'})]

@@ -4,7 +4,7 @@ import Spinner from 'ferly/components/Spinner'
 import UIDController from 'ferly/views/Settings/UIDController'
 import {apiRequire} from 'ferly/store/api'
 import {connect} from 'react-redux'
-import {createUrl} from 'ferly/utils/fetch'
+import {urls} from 'ferly/utils/fetch'
 import {View, Text, ScrollView, KeyboardAvoidingView} from 'react-native'
 
 export class Recovery extends React.Component {
@@ -13,14 +13,14 @@ export class Recovery extends React.Component {
   };
 
   componentDidMount () {
-    this.props.apiRequire(this.props.walletUrl)
+    this.props.apiRequire(urls.profile)
   }
 
   render () {
-    const {email, phone, navigation, myWallet} = this.props
+    const {email, phone, navigation, myProfile} = this.props
 
     let form
-    if (Object.keys(myWallet).length === 0) {
+    if (Object.keys(myProfile).length === 0) {
       form = <Spinner />
     } else {
       form = (
@@ -61,17 +61,15 @@ export class Recovery extends React.Component {
 Recovery.propTypes = {
   apiRequire: PropTypes.func.isRequired,
   email: PropTypes.string,
-  myWallet: PropTypes.object,
+  myProfile: PropTypes.object,
   phone: PropTypes.string,
-  walletUrl: PropTypes.string.isRequired,
   navigation: PropTypes.object.isRequired
 }
 
 function mapStateToProps (state) {
-  const walletUrl = createUrl('wallet')
   const apiStore = state.api.apiStore
-  const myWallet = apiStore[walletUrl] || {}
-  const uids = myWallet.uids || []
+  const myProfile = apiStore[urls.profile] || {}
+  const {uids = []} = myProfile
   let emails = []
   let phones = []
   uids.forEach((uid) => {
@@ -84,10 +82,9 @@ function mapStateToProps (state) {
   })
 
   return {
+    myProfile,
     email: emails[0],
-    phone: phones[0],
-    myWallet,
-    walletUrl
+    phone: phones[0]
   }
 }
 
