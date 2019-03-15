@@ -1,10 +1,11 @@
 import accounting from 'ferly/utils/accounting'
+import Icon from 'react-native-vector-icons/FontAwesome'
 import PrimaryButton from 'ferly/components/PrimaryButton'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Spinner from 'ferly/components/Spinner'
 import Theme from 'ferly/utils/theme'
-import {apiRequire, apiExpire} from 'ferly/store/api'
+import {apiRequire, apiExpire, apiRefresh} from 'ferly/store/api'
 import {connect} from 'react-redux'
 import {Constants} from 'expo'
 import {createUrl, post, urls} from 'ferly/utils/fetch'
@@ -30,22 +31,13 @@ export class Cart extends React.Component {
     super(props)
     this.state = {
       invalid: '',
-      sources: null,
       selectedSource: null,
       cardLoaded: false
     }
   }
 
   componentDidMount () {
-    fetch(createUrl('list-stripe-sources'))
-      .then((response) => response.json())
-      .then((json) => {
-        const sources = json.sources.map((source) => {
-          const {id, brand, last_four: lastFour} = source
-          return {id, brand, lastFour}
-        })
-        this.setState({sources: sources})
-      })
+    this.props.apiRequire(this.props.sourcesUrl)
   }
 
   onSuccess (source) {
@@ -56,7 +48,7 @@ export class Cart extends React.Component {
     const purchaseParams = {
       amount: amount,
       design_id: design.id.toString(),
-      stripe_source: source
+      source_id: source
     }
 
     post('purchase', purchaseParams)
@@ -73,6 +65,7 @@ export class Cart extends React.Component {
           const formatted = accounting.formatMoney(parseFloat(amount))
           const desc = `You added ${formatted} ${design.title} to your wallet.`
           Alert.alert('Complete!', desc)
+          this.props.apiExpire(this.props.sourcesUrl)
         }
       })
   }
@@ -116,8 +109,28 @@ export class Cart extends React.Component {
     }
   }
 
+  handleRemoveClick (sourceId, card) {
+    Alert.alert(
+      'Confirm',
+      `Are you sure you'd like to remove ${card}?`,
+      [
+        {text: 'No', onPress: null},
+        {text: 'Yes', onPress: () => this.removeCard(sourceId)}
+      ]
+    )
+  }
+
+  removeCard (sourceId) {
+    fetch(createUrl('delete-stripe-source', {source_id: sourceId}))
+      .then((response) => response.json())
+      .then((json) => {
+        this.props.apiRefresh(this.props.sourcesUrl)
+      })
+  }
+
   renderBody () {
-    const {sources, selectedSource, cardLoaded} = this.state
+    const {selectedSource, cardLoaded} = this.state
+    const {sources} = this.props
     if (!sources) {
       return <Spinner />
     } else {
@@ -127,12 +140,22 @@ export class Cart extends React.Component {
         if (selectedSource === id) {
           sourceStyles.push(styles.selectedSource)
         }
+        const display = `${brand} ending in ${lastFour}`
         return (
           <TouchableOpacity
             key={id}
             style={sourceStyles}
             onPress={() => this.setState({selectedSource: id})}>
-            <Text>{`${brand} ending in ${lastFour}`}</Text>
+            <Text>{display}</Text>
+            <TouchableOpacity
+              style={styles.removeIconContainer}
+              onPress={() => this.handleRemoveClick(id, display)}>
+              <Icon
+                style={{alignSelf: 'flex-start'}}
+                name="times"
+                color="lightcoral"
+                size={18} />
+            </TouchableOpacity>
           </TouchableOpacity>
         )
       })
@@ -260,23 +283,48 @@ const styles = StyleSheet.create({
     shadowOffset: {width: 2, height: 2},
     shadowColor: 'lightgray',
     shadowOpacity: 1
+  },
+  removeIconContainer: {
+    alignSelf: 'flex-end',
+    position: 'absolute',
+    height: 90,
+    padding: 10
   }
 })
 
 Cart.propTypes = {
   amounts: PropTypes.array,
-  apiRequire: PropTypes.func.isRequired,
   apiExpire: PropTypes.func.isRequired,
-  navigation: PropTypes.object.isRequired
+  apiRefresh: PropTypes.func.isRequired,
+  apiRequire: PropTypes.func.isRequired,
+  navigation: PropTypes.object.isRequired,
+  sources: PropTypes.array,
+  sourcesUrl: PropTypes.string.isRequired
 }
 
 function mapStateToProps (state) {
-  return {}
+  const sourcesUrl = createUrl('list-stripe-sources')
+  const apiStore = state.api.apiStore
+  const sourcesResponse = apiStore[sourcesUrl] || {}
+  const {sources: sourcesList} = sourcesResponse
+  let sources
+  if (sourcesList) {
+    sources = sourcesList.map((source) => {
+      const {id, brand, last_four: lastFour} = source
+      return {id, brand, lastFour}
+    })
+  }
+
+  return {
+    sourcesUrl,
+    sources
+  }
 }
 
 const mapDispatchToProps = {
-  apiRequire,
-  apiExpire
+  apiExpire,
+  apiRefresh,
+  apiRequire
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cart)
