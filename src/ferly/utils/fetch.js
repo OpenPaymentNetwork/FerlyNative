@@ -46,3 +46,19 @@ export const urls = {
   history: createUrl('history', {limit: 30}),
   profile: createUrl('profile')
 }
+
+export const retryFetch = async (url, options, tries = 5, delay = 2000) => {
+  try {
+    return await fetch(url, options)
+  } catch (err) {
+    if (tries === 1) {
+      throw err
+    }
+    return new Promise(function (resolve, reject) {
+      setTimeout(function () {
+        const p = retryFetch(url, options, tries - 1, delay * 2)
+        p.then(resolve(p)).catch(() => reject(err))
+      }, delay)
+    })
+  }
+}

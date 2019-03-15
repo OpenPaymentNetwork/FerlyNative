@@ -1,6 +1,7 @@
 import {createStore, applyMiddleware} from 'redux'
 import {API_REQUIRE, API_REFRESH, apiInject, apiExpire} from 'ferly/store/api'
 import rootReducer from 'ferly/store/rootReducer'
+import {retryFetch} from 'ferly/utils/fetch'
 
 // Convert all API_REQUIRE types into API_INJECT types after
 // fetching the data they depend on
@@ -16,14 +17,12 @@ const apiMiddleware = (store) => (next) => (action) => {
       if (type === API_REFRESH) {
         next(apiExpire(action.url))
       }
-      fetch(action.url)
+      retryFetch(action.url)
         .then((response) => response.json())
         .then((responseJson) => {
-          // All responses return, only network errors are "caught"
           next(apiInject(action.url, responseJson))
         })
         .catch((error) => {
-          // network error
           console.error(error)
           next(apiInject(action.url, error.toString()))
         })
