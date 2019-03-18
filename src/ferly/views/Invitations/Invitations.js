@@ -21,11 +21,19 @@ export class Invitations extends React.Component {
     title: 'Invitations'
   }
 
+  constructor (props) {
+    super(props)
+    this.state = {
+      deleting: false
+    }
+  }
+
   componentDidMount () {
     this.props.apiRequire(this.props.invitationsUrl)
   }
 
   deleteInvite (invite) {
+    this.setState({deleting: true})
     post('delete-invitation', {invite_id: invite.id.toString()})
       .then((response) => response.json())
       .then((json) => {
@@ -38,6 +46,8 @@ export class Invitations extends React.Component {
           this.props.navigation.dispatch(resetAction)
           Alert.alert('Deleted',
             `Your invitation to ${invite.recipient} has been deleted.`)
+        } else {
+          this.setState({deleting: false})
         }
       })
   }
@@ -68,6 +78,7 @@ export class Invitations extends React.Component {
         <View style={{flex: 1}}>
           <TouchableOpacity
             style={styles.invitationActionButton}
+            disabled={this.state.deleting}
             onPress={() => this.deleteInvite(invite)}>
             <Text style={{fontSize: 20, color: Theme.lightBlue}}>DELETE</Text>
           </TouchableOpacity>
