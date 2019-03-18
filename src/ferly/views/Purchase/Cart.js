@@ -121,6 +121,9 @@ export class Cart extends React.Component {
   }
 
   removeCard (sourceId) {
+    if (this.state.selectedSource === sourceId) {
+      this.setState({selectedSource: null})
+    }
     fetch(createUrl('delete-stripe-source', {source_id: sourceId}))
       .then((response) => response.json())
       .then((json) => {
