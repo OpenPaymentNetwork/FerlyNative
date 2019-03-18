@@ -57,6 +57,7 @@ function throwOn504 (response) {
 }
 
 export const retryFetch = async (url, options, tries = 5, delay = 2000) => {
+  if (__DEV__) tries = 1
   try {
     return await fetch(url, options).then(throwOn504)
   } catch (err) {
