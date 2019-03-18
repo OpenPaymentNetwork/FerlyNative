@@ -52,7 +52,7 @@ function mapStateToProps (state) {
   const apiStore = state.api.apiStore
   const isUser = apiStore[isUserUrl] || {}
   const {is_user: auth} = isUser
-  const hasError = JSON.stringify(isUser) !== '{}'
+  const hasError = isUser === 'TypeError: Network request failed'
 
   return {
     auth,

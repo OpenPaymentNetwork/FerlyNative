@@ -47,9 +47,18 @@ export const urls = {
   profile: createUrl('profile')
 }
 
+function throwOn504 (response) {
+  // 504 occurs when the server is updating for a couple seconds
+  if (response.status === 504) {
+    throw Error
+  } else {
+    return response
+  }
+}
+
 export const retryFetch = async (url, options, tries = 5, delay = 2000) => {
   try {
-    return await fetch(url, options)
+    return await fetch(url, options).then(throwOn504)
   } catch (err) {
     if (tries === 1) {
       throw err
