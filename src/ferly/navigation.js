@@ -103,7 +103,8 @@ const AuthDrawer = createDrawerNavigator(
   {
     initialRouteName: 'Wallet',
     drawerPosition: 'right',
-    contentComponent: DrawerContent
+    contentComponent: DrawerContent,
+    contentOptions: {activeTintColor: Theme.lightBlue}
   }
 )
 
