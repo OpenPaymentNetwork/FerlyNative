@@ -42,7 +42,6 @@ export default class SignUp extends React.Component {
     // only ask if permissions have not already been determined, because
     // iOS won't necessarily prompt the user a second time.
     if (existingStatus !== 'granted') {
-      // console.log('asking for permission')
       // Android remote notification permissions are granted during the app
       // install, so this will only ask on iOS
       const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS)

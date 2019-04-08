@@ -1,8 +1,6 @@
-// import Icon from 'react-native-vector-icons/FontAwesome'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Avatar from 'ferly/components/Avatar'
-// import Spinner from 'ferly/components/Spinner'
 import Theme from 'ferly/utils/theme'
 import {apiRequire} from 'ferly/store/api'
 import {connect} from 'react-redux'
