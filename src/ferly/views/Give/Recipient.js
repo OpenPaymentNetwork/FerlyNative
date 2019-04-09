@@ -31,10 +31,10 @@ class Recipient extends React.Component {
     if (query === '') {
       this.setState({searchResults: null})
     } else {
-      fetch(createUrl('search-users', {query: query}))
+      fetch(createUrl('search-customers', {query: query}))
         .then((response) => response.json())
         .then((json) => {
-          if (this.state.searchText === text) { // The user is done typing.
+          if (this.state.searchText === text) { // The customer is done typing.
             this.setState({searchResults: json.results})
           }
         })
@@ -42,25 +42,25 @@ class Recipient extends React.Component {
     this.setState({searchText: text})
   }
 
-  renderUsers (users) {
+  renderCustomers (customers) {
     const {navigation} = this.props
     const design = navigation.state.params
 
     return (
       <ScrollView style={{flex: 1}}>
         {
-          users.map((user) => {
-            const firstName = user.first_name
-            const lastName = user.last_name
+          customers.map((customer) => {
+            const firstName = customer.first_name
+            const lastName = customer.last_name
             return (
               <TouchableOpacity
-                key={user.id}
+                key={customer.id}
                 onPress={
-                  () => navigation.navigate('Amount', {user, design})}>
+                  () => navigation.navigate('Amount', {customer, design})}>
                 <View marginVertical={10} style={{flexDirection: 'row'}}>
                   <Avatar
                     size={68}
-                    pictureUrl={user.picture}
+                    pictureUrl={customer.picture}
                     firstWord={firstName}
                     secondWord={lastName} />
                   <View style={{justifyContent: 'center', marginLeft: 10}}>
@@ -68,7 +68,7 @@ class Recipient extends React.Component {
                       {`${firstName} ${lastName}`}
                     </Text>
                     <Text style={{fontSize: 20, color: 'gray'}}>
-                      {'@' + user.username}
+                      {'@' + customer.username}
                     </Text>
                   </View>
                 </View>
@@ -96,7 +96,7 @@ class Recipient extends React.Component {
           </Text>
         )
       } else {
-        body = this.renderUsers(searchResults)
+        body = this.renderCustomers(searchResults)
       }
     } else {
       let display = <Spinner />
@@ -112,7 +112,7 @@ class Recipient extends React.Component {
             </Text>
           )
         } else {
-          display = this.renderUsers(recents)
+          display = this.renderCustomers(recents)
         }
       }
       body = (

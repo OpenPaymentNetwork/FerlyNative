@@ -11,7 +11,7 @@ import {View, Text, Image} from 'react-native'
 
 export class AppEntry extends React.Component {
   componentDidMount () {
-    this.props.apiRequire(this.props.isUserUrl)
+    this.props.apiRequire(this.props.isCustomerUrl)
   }
 
   render () {
@@ -43,21 +43,22 @@ AppEntry.propTypes = {
   apiRequire: PropTypes.func.isRequired,
   auth: PropTypes.bool,
   hasError: PropTypes.bool,
-  isUserUrl: PropTypes.string.isRequired
+  isCustomerUrl: PropTypes.string.isRequired
 }
 
 function mapStateToProps (state) {
   const {releaseChannel = 'staging'} = Constants.manifest
-  const isUserUrl = createUrl('is-user', {'expected_env': releaseChannel})
+  const isCustomerUrl =
+    createUrl('is-customer', {'expected_env': releaseChannel})
   const apiStore = state.api.apiStore
-  const isUser = apiStore[isUserUrl] || {}
-  const {is_user: auth} = isUser
-  const hasError = isUser === 'TypeError: Network request failed'
+  const isCustomer = apiStore[isCustomerUrl] || {}
+  const {is_customer: auth} = isCustomer
+  const hasError = isCustomer === 'TypeError: Network request failed'
 
   return {
     auth,
     hasError,
-    isUserUrl
+    isCustomerUrl
   }
 }
 

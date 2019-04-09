@@ -36,14 +36,14 @@ export class Give extends React.Component {
   send () {
     const {navigation, apiExpire} = this.props
     const params = navigation.state.params
-    const {design, user} = params
+    const {design, customer} = params
     const {title} = design
-    const {first_name: firstName, last_name: lastName} = user
+    const {first_name: firstName, last_name: lastName} = customer
     const {amount, message} = this.state
     const formatted = accounting.formatMoney(parseFloat(amount))
 
     const postParams = {
-      recipient_id: user.id.toString(),
+      recipient_id: customer.id.toString(),
       amount: amount,
       design_id: design.id.toString(),
       message: message
@@ -101,7 +101,7 @@ export class Give extends React.Component {
           <View style={styles.recipientRow}>
             <Text style={{fontSize: 20, fontWeight: 'bold'}}>Send</Text>
             <Text style={{fontSize: 20, fontWeight: 'bold', paddingLeft: 40}}>
-              {`${params.user.first_name} ${params.user.last_name}`}
+              {`${params.customer.first_name} ${params.customer.last_name}`}
             </Text>
           </View>
           <View style={styles.designRow}>
