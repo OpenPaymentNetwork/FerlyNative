@@ -28,7 +28,7 @@ export class Wallet extends React.Component {
 
   renderCard (design) {
     const {navigation} = this.props
-    const {amount, id, title, wallet_url: walletImage} = design
+    const {amount, id, title, wallet_image_url: walletImage} = design
     const formatted = accounting.formatMoney(parseFloat(amount))
 
     const img = walletImage
@@ -196,7 +196,7 @@ function mapStateToProps (state) {
   const {checkUidPrompt, updateDownloaded} = state.settings
   const {
     amounts,
-    profileImage,
+    profile_image_url: profileImage,
     first_name: firstName,
     last_name: lastName,
     uids = []

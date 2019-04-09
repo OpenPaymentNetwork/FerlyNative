@@ -60,7 +60,7 @@ class Recipient extends React.Component {
                 <View marginVertical={10} style={{flexDirection: 'row'}}>
                   <Avatar
                     size={68}
-                    pictureUrl={customer.picture}
+                    pictureUrl={customer.profile_image_url}
                     firstWord={firstName}
                     secondWord={lastName} />
                   <View style={{justifyContent: 'center', marginLeft: 10}}>

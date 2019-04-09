@@ -65,7 +65,7 @@ DrawerContent.propTypes = {
 function mapStateToProps (state) {
   const apiStore = state.api.apiStore
   const {
-    profileImage,
+    profile_image_url: profileImage,
     first_name: firstName = '',
     last_name: lastName = ''
   } = apiStore[urls.profile] || {}

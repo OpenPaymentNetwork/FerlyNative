@@ -19,12 +19,16 @@ export class Transfer extends React.Component {
 
   render () {
     const {transferDetails} = this.props
-    const {amount, message, timestamp} = transferDetails
-    const designTitle = transferDetails.design_title
-    const counterParty = transferDetails.counter_party
-    const counterPartyImageUrl = transferDetails.counter_party_image_url
-    const transferType = transferDetails.transfer_type
-    const designImageUrl = transferDetails.design_image_url
+    const {
+      amount,
+      message,
+      timestamp,
+      design_title: designTitle,
+      counter_party: counterParty,
+      counter_party_profile_image_url: counterPartyProfileImageUrl,
+      transfer_type: transferType,
+      design_logo_image_url: designLogoImageUrl
+    } = transferDetails
     const b = timestamp.split(/\D+/)
     const date = new Date(Date.UTC(b[0], --b[1], b[2], b[3], b[4], b[5]))
     // React Native doesn't fully support Date.toLocaleString() on Android
@@ -61,7 +65,7 @@ export class Transfer extends React.Component {
           <Avatar
             size={100}
             firstWord={counterParty}
-            pictureUrl={counterPartyImageUrl} />
+            pictureUrl={counterPartyProfileImageUrl} />
         </View>
       )
     }
@@ -142,7 +146,7 @@ export class Transfer extends React.Component {
           height: 110,
           justifyContent: 'center'
         }}>
-          <Avatar size={100} shade={true} pictureUrl={designImageUrl}/>
+          <Avatar size={100} shade={true} pictureUrl={designLogoImageUrl}/>
           {counterPartyAvatar}
         </View>
         <View style={{

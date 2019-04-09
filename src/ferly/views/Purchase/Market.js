@@ -47,7 +47,10 @@ export class Market extends React.Component {
                     justifyContent: 'space-between',
                     paddingHorizontal: 15
                   }}>
-                    <Avatar size={68} shade={true} pictureUrl={design.url}/>
+                    <Avatar
+                      size={68}
+                      shade={true}
+                      pictureUrl={design.logo_image_url}/>
                     <View style={{flex: 1, paddingHorizontal: 10}}>
                       <Text style={{fontSize: 18, fontWeight: 'bold'}}>
                         {design.title}

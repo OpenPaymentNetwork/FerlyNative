@@ -351,7 +351,7 @@ function mapStateToProps (state) {
   const {
     amounts,
     username,
-    profileImage,
+    profile_image_url: profileImage,
     first_name: firstName,
     last_name: lastName
   } = apiStore[urls.profile] || {}
