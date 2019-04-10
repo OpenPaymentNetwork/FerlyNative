@@ -8,11 +8,12 @@ import {
   View,
   TouchableOpacity,
   Text,
+  RefreshControl,
   ScrollView,
   Image,
   Alert
 } from 'react-native'
-import {apiRequire} from 'ferly/store/api'
+import {apiRequire, apiRefresh} from 'ferly/store/api'
 import {checkedUidPrompt} from 'ferly/store/settings'
 import {connect} from 'react-redux'
 import {urls} from 'ferly/utils/fetch'
@@ -100,7 +101,13 @@ export class Wallet extends React.Component {
       )
     } else {
       return (
-        <ScrollView>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={false}
+              onRefresh={() => this.props.apiRefresh(urls.profile)}
+            />
+          }>
           {amounts.map((cashRow) => this.renderCard(cashRow))}
           <View style={{height: 80}} />
         </ScrollView>
@@ -181,6 +188,7 @@ export class Wallet extends React.Component {
 
 Wallet.propTypes = {
   amounts: PropTypes.array,
+  apiRefresh: PropTypes.func.isRequired,
   apiRequire: PropTypes.func.isRequired,
   checkUidPrompt: PropTypes.bool,
   checkedUidPrompt: PropTypes.func.isRequired,
@@ -214,6 +222,7 @@ function mapStateToProps (state) {
 }
 
 const mapDispatchToProps = {
+  apiRefresh,
   apiRequire,
   checkedUidPrompt
 }

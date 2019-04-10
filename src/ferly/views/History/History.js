@@ -3,7 +3,7 @@ import Spinner from 'ferly/components/Spinner'
 import PropTypes from 'prop-types'
 import React from 'react'
 import {View, FlatList, Text} from 'react-native'
-import {apiRequire, apiInject} from 'ferly/store/api'
+import {apiRequire, apiInject, apiRefresh} from 'ferly/store/api'
 import {connect} from 'react-redux'
 import {urls} from 'ferly/utils/fetch'
 
@@ -53,6 +53,8 @@ export class History extends React.Component {
     return (
       <View>
         <FlatList
+          onRefresh={() => this.props.apiRefresh(urls.history)}
+          refreshing={false}
           ListEmptyComponent={<Text>You have no history</Text>}
           initialNumToRender={10}
           getItemLayout={(data, index) => (
@@ -72,6 +74,7 @@ export class History extends React.Component {
 
 History.propTypes = {
   apiInject: PropTypes.func.isRequired,
+  apiRefresh: PropTypes.func.isRequired,
   apiRequire: PropTypes.func.isRequired,
   hasMore: PropTypes.bool,
   navigation: PropTypes.object.isRequired,
@@ -91,7 +94,8 @@ function mapStateToProps (state) {
 
 const mapDispatchToProps = {
   apiInject,
-  apiRequire
+  apiRequire,
+  apiRefresh
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(History)
