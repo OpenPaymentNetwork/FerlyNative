@@ -47,18 +47,19 @@ export class FerlyCard extends React.Component {
     return sum % 10 === 0
   }
 
-  onChangePan = (newPan) => {
+  onChangePan = (value) => {
+    const withoutSpaces = value.replace(/\s/g, '')
     const {invalid} = this.state
-    if (newPan.length === 16) {
+    if (withoutSpaces.length === 16) {
       const newInvalid = Object.assign({}, invalid)
-      if (!this.validateCardNumber(newPan)) {
+      if (!this.validateCardNumber(withoutSpaces)) {
         newInvalid.pan = 'Invalid card number'
       } else {
         delete newInvalid.pan
       }
       this.setState({invalid: newInvalid})
     }
-    this.setState({pan: newPan})
+    this.setState({pan: withoutSpaces})
   }
 
   onChangePin = (newPin) => {
@@ -74,7 +75,9 @@ export class FerlyCard extends React.Component {
         this.setState({submitting: false})
         if (this.validate(json)) {
           this.props.apiRefresh(urls.profile)
-          Alert.alert('Success', 'Your card has been added!')
+          const alertText = 'Your card is ready to use. Remember to run ' +
+            'it as a debit card if asked.'
+          Alert.alert('Success', alertText)
         }
       })
   }
@@ -95,29 +98,41 @@ export class FerlyCard extends React.Component {
   renderForm () {
     const {pin, pan, invalid, submitting} = this.state
     const {pin: pinError, pan: panError} = invalid
+
+    const instructions = 'Enter the 16-digit number found on the back of ' +
+      'your Ferly Card and set a 4-digit PIN you\'ll remember later.'
     return (
       <View style={{flex: 1, backgroundColor: 'white'}}>
-        <View style={{flex: 1, padding: 10}}>
-          <Text style={{fontSize: 18}}>Add a Ferly Card and set your PIN</Text>
-          <TextInput
-            underlineColorAndroid='transparent'
-            keyboardType='numeric'
-            maxLength={16}
-            onChangeText={this.onChangePan}
-            value={pan}
-            placeholder={'Card Number'} />
-          <Text style={{color: 'red'}}>{panError}</Text>
-          <TextInput
-            underlineColorAndroid='transparent'
-            keyboardType='numeric'
-            maxLength={4}
-            onChangeText={this.onChangePin}
-            value={pin}
-            placeholder={'PIN'} />
-          <Text style={{color: 'red'}}>{pinError}</Text>
+        <View style={{flex: 1, paddingVertical: 20, paddingHorizontal: 40}}>
+          <View style={{paddingBottom: 10, alignItems: 'center'}}>
+            <Text style={styles.title}>Add Card Information</Text>
+            <Text style={styles.instructions}>{instructions}</Text>
+          </View>
+          <Text style={styles.labelText}>Card Number</Text>
+          <View style={styles.inputContainer}>
+            <TextInput
+              underlineColorAndroid='transparent'
+              keyboardType='numeric'
+              maxLength={19}
+              onChangeText={this.onChangePan}
+              autoFocus
+              value={pan.replace(/(.{4})/g, '$1 ').trim()} />
+          </View>
+          <Text style={styles.errorText}>{panError}</Text>
+          <View style={{height: 10}} />
+          <Text style={styles.labelText}>PIN</Text>
+          <View style={[styles.inputContainer, {maxWidth: 100}]}>
+            <TextInput
+              underlineColorAndroid='transparent'
+              keyboardType='numeric'
+              maxLength={4}
+              onChangeText={this.onChangePin}
+              value={pin} />
+          </View>
+          <Text style={styles.errorText}>{pinError}</Text>
         </View>
         <PrimaryButton
-          title="Add Card"
+          title="Add"
           disabled={
             submitting ||
             pan.length !== 16 ||
@@ -143,8 +158,10 @@ export class FerlyCard extends React.Component {
 
     return (
       <View style={styles.cardContainer}>
-        <ImageBackground style={{width: 300, height: 200}} source={ferlyCard}>
-          <Text style={styles.panText}>{card.pan_redacted}</Text>
+        <ImageBackground style={styles.cardBackground} source={ferlyCard}>
+          <Text style={styles.panText}>
+            **** {card.pan_redacted.substring(12, 16)}
+          </Text>
         </ImageBackground>
       </View>
     )
@@ -156,13 +173,20 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-around',
     flexDirection: 'row',
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    padding: 20
   },
-  panText: {
-    paddingLeft: 20,
-    paddingTop: 10,
-    fontSize: 22,
-    color: Theme.lightBlue
+  cardBackground: {width: 300, height: 200, flexDirection: 'row-reverse'},
+  panText: {fontSize: 20, padding: 20, color: 'white'},
+  inputContainer: {borderBottomWidth: 1, borderColor: 'gray'},
+  title: {fontSize: 22, fontWeight: 'bold', color: Theme.darkBlue},
+  errorText: {color: 'red'},
+  labelText: {color: 'gray'},
+  instructions: {
+    fontSize: 16,
+    paddingHorizontal: 6,
+    paddingVertical: 10,
+    color: Theme.darkBlue
   }
 })
 
