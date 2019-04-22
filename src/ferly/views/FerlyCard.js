@@ -114,6 +114,7 @@ export class FerlyCard extends React.Component {
               underlineColorAndroid='transparent'
               keyboardType='numeric'
               maxLength={19}
+              returnKeyType='done'
               onChangeText={this.onChangePan}
               autoFocus
               value={pan.replace(/(.{4})/g, '$1 ').trim()} />
@@ -126,6 +127,7 @@ export class FerlyCard extends React.Component {
               underlineColorAndroid='transparent'
               keyboardType='numeric'
               maxLength={4}
+              returnKeyType='done'
               onChangeText={this.onChangePin}
               value={pin} />
           </View>
