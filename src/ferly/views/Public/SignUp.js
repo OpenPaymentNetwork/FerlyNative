@@ -71,7 +71,7 @@ export default class SignUp extends React.Component {
       .then((responseJson) => {
         this.setState({submitting: false})
         if (this.validate(responseJson)) {
-          navigation.navigate('Wallet')
+          navigation.navigate('Tutorial')
         }
       })
   }

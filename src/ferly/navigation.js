@@ -19,6 +19,7 @@ import Cart from 'ferly/views/Purchase/Cart'
 import Purchase from 'ferly/views/Purchase/Purchase'
 import Market from 'ferly/views/Purchase/Market'
 import Recovery from 'ferly/views/Settings/Recovery'
+import Tutorial from 'ferly/views/Public/Tutorial'
 import {
   createDrawerNavigator,
   createStackNavigator,
@@ -117,21 +118,22 @@ const PubStack = createStackNavigator(
   {
     SignUp: {screen: SignUp, navigationOptions: {header: null}},
     RecoveryCode: {screen: RecoveryCode, navigationOptions: publicHeader},
-    RecoveryChannel: {screen: RecoveryChannel, navigationOptions: publicHeader}
+    RecoveryChannel: {screen: RecoveryChannel, navigationOptions: publicHeader},
+    Tutorial: {screen: Tutorial, navigationOptions: {header: null}}
   },
   {
     initialRouteName: 'SignUp'
   }
 )
 
-export const CreateAuthSwitch = (props) => {
+export const CreateAuthSwitch = (isUser) => {
   const AppLayout = createSwitchNavigator(
     {
       Pub: PubStack,
       Auth: AuthDrawer
     },
     {
-      initialRouteName: props ? 'Auth' : 'Pub'
+      initialRouteName: isUser ? 'Auth' : 'Pub'
     })
   return AppLayout
 }
