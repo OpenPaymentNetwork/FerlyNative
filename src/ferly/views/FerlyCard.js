@@ -382,7 +382,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 20
   },
-  cardBackground: {width: 300, height: 200, flexDirection: 'row-reverse'},
+  cardBackground: {height: 190, width: 300, flexDirection: 'row-reverse'},
   panText: {fontSize: 20, padding: 20, color: 'white'},
   inputContainer: {borderBottomWidth: 1, borderColor: 'gray'},
   title: {fontSize: 22, fontWeight: 'bold', color: Theme.darkBlue},
