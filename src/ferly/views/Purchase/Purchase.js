@@ -7,7 +7,7 @@ import Spinner from 'ferly/components/Spinner'
 import {apiExpire, apiRequire} from 'ferly/store/api'
 import {connect} from 'react-redux'
 import {urls} from 'ferly/utils/fetch'
-import {View, Text} from 'react-native'
+import {View, Text, StyleSheet, Button} from 'react-native'
 
 export class Purchase extends React.Component {
   static navigationOptions = {
@@ -36,9 +36,12 @@ export class Purchase extends React.Component {
   }
 
   render () {
-    const params = this.props.navigation.state.params
+    const {navigation} = this.props
+    const {params} = this.props.navigation.state
+    console.log('params', params)
     const {submitting, text} = this.state
-    const design = params.design || {}
+    const {design} = params
+    const {title, id: designId} = design
     const amounts = this.props.amounts || []
 
     const found = amounts.find((cashRow) => {
@@ -51,14 +54,17 @@ export class Purchase extends React.Component {
 
     return (
       <View style={{flex: 1, justifyContent: 'space-between'}}>
-        <View style={{flex: 1, flexDirection: 'column', backgroundColor: 'white'}}>
-          <View style={{flexShrink: 1, justifyContent: 'space-between', flexDirection: 'row', paddingHorizontal: 18}}>
+        <View style={styles.contentContainer}>
+          <View style={styles.topRow}>
             <View style={{flexShrink: 1, paddingVertical: 14}}>
-              <Text style={{flexShrink: 1, fontWeight: 'bold', flexWrap: 'wrap', fontSize: 22, paddingRight: 20}}>{design.title}</Text>
+              <Text style={styles.title}>{title}</Text>
               <Text style={{color: 'gray'}}>Balance: {formatted}</Text>
             </View>
             <SimpleCurrencyInput onChangeText={this.onChange.bind(this)} />
           </View>
+          <Button
+            title="Show locations"
+            onPress={() => navigation.navigate('Locations', {designId})} />
         </View>
         {submitting ? <Spinner /> : null}
         <PrimaryButton
@@ -70,6 +76,27 @@ export class Purchase extends React.Component {
     )
   }
 }
+
+const styles = StyleSheet.create({
+  contentContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    backgroundColor: 'white',
+    paddingHorizontal: 20
+  },
+  topRow: {
+    flexShrink: 1,
+    justifyContent: 'space-between',
+    flexDirection: 'row'
+  },
+  title: {
+    flexShrink: 1,
+    fontWeight: 'bold',
+    flexWrap: 'wrap',
+    fontSize: 22,
+    paddingRight: 20
+  }
+})
 
 Purchase.propTypes = {
   amounts: PropTypes.array,

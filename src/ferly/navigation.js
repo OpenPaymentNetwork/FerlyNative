@@ -15,6 +15,8 @@ import Settings from 'ferly/views/Settings/Settings'
 import SignUp from 'ferly/views/Public/SignUp'
 import Transfer from 'ferly/views/History/Transfer'
 import Home from 'ferly/views/Wallet/Home'
+import Value from 'ferly/views/Wallet/Value'
+import Locations from 'ferly/views/Wallet/Locations'
 import Cart from 'ferly/views/Purchase/Cart'
 import Purchase from 'ferly/views/Purchase/Purchase'
 import Market from 'ferly/views/Purchase/Market'
@@ -48,6 +50,8 @@ const ProfileStack = createStackNavigator({
 const WalletStack = createStackNavigator(
   {
     Home: {screen: Home, navigationOptions: drawerOptions},
+    Value: {screen: Value, navigationOptions: drawerOptions},
+    Locations: {screen: Locations, navigationOptions: drawerOptions},
     Give: {screen: Recipient, navigationOptions: drawerOptions},
     Amount: {screen: Give, navigationOptions: drawerOptions},
     Market: {screen: Market, navigationOptions: drawerOptions},

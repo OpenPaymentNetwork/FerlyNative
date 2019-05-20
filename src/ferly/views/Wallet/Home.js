@@ -11,7 +11,8 @@ import {
   RefreshControl,
   ScrollView,
   Image,
-  Alert
+  Alert,
+  StyleSheet
 } from 'react-native'
 import {apiRequire, apiRefresh} from 'ferly/store/api'
 import {checkedUidPrompt} from 'ferly/store/settings'
@@ -37,57 +38,30 @@ export class Wallet extends React.Component {
       : <Text>{title}</Text>
 
     return (
-      <View key={id} style={{
-        flex: 1,
-        flexDirection: 'row',
-        marginHorizontal: 20,
-        marginVertical: 10,
-        height: 130,
-        backgroundColor: 'white',
-        borderWidth: 1,
-        borderColor: 'lightgray',
-        elevation: 1.8,
-        shadowOffset: {width: 2, height: 2},
-        shadowColor: 'lightgray',
-        shadowOpacity: 1
-      }}>
-        <View style={{
-          width: 130,
-          height: 130,
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}>
-          {img}
-        </View>
-        <View style={{
-          justifyContent: 'space-between',
-          flex: 1,
-          flexDirection: 'column',
-          borderLeftWidth: 0.5,
-          borderColor: 'lightgray'
-        }}>
+      <TouchableOpacity
+        key={id}
+        onPress={() => navigation.navigate('Value', design)}
+        style={styles.cardContainer}>
+        <View style={styles.cardImage}>{img}</View>
+        <View style={styles.cardDetails}>
           <View style={{flex: 1, paddingTop: 6, paddingLeft: 6}}>
-            <Text style={{fontSize: 22}}>
-              {formatted}
-            </Text>
-            <Text style={{fontSize: 16, color: 'gray'}}>
-              {title}
-            </Text>
+            <Text style={{fontSize: 22}}>{formatted}</Text>
+            <Text style={{fontSize: 16, color: 'gray'}}>{title}</Text>
           </View>
-          <View style={{flexDirection: 'row', borderTopWidth: 1, borderColor: 'lightgray'}}>
+          <View style={styles.buttonRow}>
             <TouchableOpacity
-              style={{alignItems: 'center', justifyContent: 'center', height: 40, flex: 1, maxWidth: 100}}
+              style={styles.cashButton}
               onPress={() => navigation.navigate('Give', design)}>
               <Text style={{color: Theme.lightBlue}}>GIVE GIFT</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={{alignItems: 'center', justifyContent: 'center', height: 40, flex: 1, maxWidth: 100}}
+              style={styles.cashButton}
               onPress={() => navigation.navigate('Purchase', {design})}>
               <Text style={{color: Theme.lightBlue}}>BUY</Text>
             </TouchableOpacity>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     )
   }
 
@@ -158,33 +132,73 @@ export class Wallet extends React.Component {
       <View style={{flex: 1}}>
         {this.renderAmounts()}
         <TouchableOpacity
-          style={{
-            width: 60,
-            height: 60,
-            borderRadius: 30,
-            backgroundColor: Theme.lightBlue,
-            position: 'absolute',
-            bottom: 20,
-            right: 25,
-            justifyContent: 'center',
-            alignItems: 'center',
-            borderWidth: 1,
-            borderColor: 'lightgray',
-            elevation: 5,
-            shadowOffset: {width: 2, height: 2},
-            shadowColor: 'lightgray',
-            shadowOpacity: 1
-          }}
+          style={styles.fab}
           onPress={() => navigation.navigate('Market')}>
-          <Icon
-            name="plus"
-            color="white"
-            size={24} />
+          <Icon name="plus" color="white" size={24} />
         </TouchableOpacity>
       </View>
     )
   }
 }
+
+const styles = StyleSheet.create({
+  cardContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    marginHorizontal: 20,
+    marginVertical: 10,
+    height: 130,
+    backgroundColor: 'white',
+    borderWidth: 1,
+    borderColor: 'lightgray',
+    elevation: 1.8,
+    shadowOffset: {width: 2, height: 2},
+    shadowColor: 'lightgray',
+    shadowOpacity: 1
+  },
+  cardImage: {
+    width: 130,
+    height: 130,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  cardDetails: {
+    justifyContent: 'space-between',
+    flex: 1,
+    flexDirection: 'column',
+    borderLeftWidth: 0.5,
+    borderColor: 'lightgray'
+  },
+  fab: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: Theme.lightBlue,
+    position: 'absolute',
+    bottom: 20,
+    right: 25,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'lightgray',
+    elevation: 5,
+    shadowOffset: {width: 2, height: 2},
+    shadowColor: 'lightgray',
+    shadowOpacity: 1
+  },
+  cashButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 40,
+    flex: 1,
+    maxWidth: 100
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    borderTopWidth: 1,
+    borderColor: 'lightgray'
+  }
+})
 
 Wallet.propTypes = {
   amounts: PropTypes.array,
