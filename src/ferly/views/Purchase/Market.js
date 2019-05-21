@@ -1,5 +1,5 @@
 import Avatar from 'ferly/components/Avatar'
-// import SearchBar from 'ferly/components/SearchBar'
+import SearchBar from 'ferly/components/SearchBar'
 import PropTypes from 'prop-types'
 import React from 'react'
 import {apiRequire} from 'ferly/store/api'
@@ -15,7 +15,8 @@ export class Market extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      searchResults: null
+      searchResults: null,
+      searchText: ''
     }
   }
 
@@ -23,16 +24,29 @@ export class Market extends React.Component {
     this.props.apiRequire(this.props.designsUrl)
   }
 
-  onSearch (results) {
-    this.setState({searchResults: results})
+  onChangeText (text) {
+    if (text === '') {
+      this.setState({searchResults: null})
+    } else {
+      fetch(createUrl('search-market', {query: text}))
+        .then((response) => response.json())
+        .then((json) => {
+          if (this.state.searchText === text) { // The customer is done typing.
+            this.setState({searchResults: json.results})
+          }
+        })
+    }
+    this.setState({searchText: text})
   }
 
   render () {
     const {designs, navigation} = this.props
     const display = this.state.searchResults || designs
-    // <SearchBar url='search-market' onSearch={this.onSearch.bind(this)} />
     return (
       <View style={{flex: 1, backgroundColor: 'white'}}>
+        <SearchBar
+          placeholder='Search for gift value'
+          onChangeText={this.onChangeText.bind(this)} />
         <ScrollView style={{flex: 1}}>
           {
             display.map((design) => {

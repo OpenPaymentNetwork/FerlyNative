@@ -38,7 +38,6 @@ export class Purchase extends React.Component {
   render () {
     const {navigation} = this.props
     const {params} = this.props.navigation.state
-    console.log('params', params)
     const {submitting, text} = this.state
     const {design} = params
     const {title, id: designId} = design
