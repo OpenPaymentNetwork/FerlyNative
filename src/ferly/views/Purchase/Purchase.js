@@ -40,7 +40,7 @@ export class Purchase extends React.Component {
     const {params} = this.props.navigation.state
     const {submitting, text} = this.state
     const {design} = params
-    const {title, id: designId} = design
+    const {title} = design
     const amounts = this.props.amounts || []
 
     const found = amounts.find((cashRow) => {
@@ -63,7 +63,7 @@ export class Purchase extends React.Component {
           </View>
           <Button
             title="Show locations"
-            onPress={() => navigation.navigate('Locations', {designId})} />
+            onPress={() => navigation.navigate('Locations', {design})} />
         </View>
         {submitting ? <Spinner /> : null}
         <PrimaryButton

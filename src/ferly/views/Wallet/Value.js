@@ -10,8 +10,8 @@ export class Value extends React.Component {
 
   render () {
     const {navigation} = this.props
-    const {params} = this.props.navigation.state
-    const {amount, title, id: designId, expiring = []} = params
+    const {params: design} = this.props.navigation.state
+    const {amount, title, expiring = []} = design
 
     const expiringInfo = expiring.map((expiration, index) => {
       const b = expiration.expire_time.split(/\D+/)
@@ -36,7 +36,7 @@ export class Value extends React.Component {
         <Text>There are no fees associated with holding this gift value.</Text>
         <Button
           title="Show locations"
-          onPress={() => navigation.navigate('Locations', {designId})} />
+          onPress={() => navigation.navigate('Locations', {design})} />
       </View>
     )
   }
