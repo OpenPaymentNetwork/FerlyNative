@@ -5,7 +5,13 @@ import React from 'react'
 import {apiRequire} from 'ferly/store/api'
 import {connect} from 'react-redux'
 import {createUrl} from 'ferly/utils/fetch'
-import {View, TouchableOpacity, ScrollView, Text} from 'react-native'
+import {
+  View,
+  TouchableOpacity,
+  ScrollView,
+  Text,
+  StyleSheet
+} from 'react-native'
 
 export class Market extends React.Component {
   static navigationOptions = {
@@ -41,12 +47,17 @@ export class Market extends React.Component {
 
   render () {
     const {designs, navigation} = this.props
-    const display = this.state.searchResults || designs
-    return (
-      <View style={{flex: 1, backgroundColor: 'white'}}>
-        <SearchBar
-          placeholder='Search for gift value'
-          onChangeText={this.onChangeText.bind(this)} />
+    const {searchResults} = this.state
+    let body
+    if (searchResults && searchResults.length === 0){
+      body = (
+      <Text style={styles.noResults}>
+        We're sorry, no results found.
+      </Text>
+      )
+    } else {
+      display = searchResults || designs
+      body = (
         <ScrollView style={{flex: 1}}>
           {
             display.map((design) => {
@@ -54,13 +65,7 @@ export class Market extends React.Component {
                 <TouchableOpacity
                   key={design.id}
                   onPress={() => navigation.navigate('Purchase', {design})}>
-                  <View style={{
-                    flexDirection: 'row',
-                    height: 90,
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    paddingHorizontal: 15
-                  }}>
+                  <View style={styles.customer}>
                     <Avatar
                       size={68}
                       shade={true}
@@ -76,6 +81,15 @@ export class Market extends React.Component {
             })
           }
         </ScrollView>
+      )
+    }
+
+    return (
+      <View style={{flex: 1, backgroundColor: 'white'}}>
+        <SearchBar
+          placeholder='Search for gift value'
+          onChangeText={this.onChangeText.bind(this)} />
+        {body}
       </View>
     )
   }
@@ -87,6 +101,17 @@ Market.propTypes = {
   designsUrl: PropTypes.string.isRequired,
   navigation: PropTypes.object.isRequired
 }
+
+const styles = StyleSheet.create ({
+  noResults: {paddingHorizontal: 20},
+  customer: {
+    flexDirection: 'row',
+    height: 90,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 15
+  }
+})
 
 function mapStateToProps (state) {
   const designsUrl = createUrl('list-designs')
