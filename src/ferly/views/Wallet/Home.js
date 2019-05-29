@@ -14,6 +14,7 @@ import {
   Alert,
   StyleSheet
 } from 'react-native'
+import TestElement from 'ferly/components/TestElement'
 import {apiRequire, apiRefresh} from 'ferly/store/api'
 import {checkedUidPrompt} from 'ferly/store/settings'
 import {connect} from 'react-redux'
@@ -49,16 +50,20 @@ export class Wallet extends React.Component {
             <Text style={{fontSize: 16, color: 'gray'}}>{title}</Text>
           </View>
           <View style={styles.buttonRow}>
-            <TouchableOpacity
+            <TestElement
+              parent={TouchableOpacity}
+              label='test-id-give-button'
               style={styles.cashButton}
               onPress={() => navigation.navigate('Give', design)}>
               <Text style={{color: Theme.lightBlue}}>GIVE GIFT</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
+            </TestElement>
+            <TestElement
+              parent={TouchableOpacity}
+              label='test-id-buy-button'
               style={styles.cashButton}
               onPress={() => navigation.navigate('Purchase', {design})}>
               <Text style={{color: Theme.lightBlue}}>BUY</Text>
-            </TouchableOpacity>
+            </TestElement>
           </View>
         </View>
       </TouchableOpacity>
