@@ -41,6 +41,7 @@ export class Wallet extends React.Component {
     return (
       <TouchableOpacity
         key={id}
+        accessible={false}
         onPress={() => navigation.navigate('Value', design)}
         style={styles.cardContainer}>
         <View style={styles.cardImage}>{img}</View>
