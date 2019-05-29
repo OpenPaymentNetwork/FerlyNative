@@ -136,11 +136,13 @@ export class Wallet extends React.Component {
     return (
       <View style={{flex: 1}}>
         {this.renderAmounts()}
-        <TouchableOpacity
+        <TestElement
+          parent={TouchableOpacity}
+          label='test-id-fab'
           style={styles.fab}
           onPress={() => navigation.navigate('Market')}>
           <Icon name="plus" color="white" size={24} />
-        </TouchableOpacity>
+        </TestElement>
       </View>
     )
   }
