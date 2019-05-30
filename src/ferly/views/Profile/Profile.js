@@ -5,6 +5,7 @@ import ProfilePicturePicker from 'ferly/views/Profile/ProfilePicturePicker'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Spinner from 'ferly/components/Spinner'
+import TestElement from 'ferly/components/TestElement'
 import Theme from 'ferly/utils/theme'
 import {apiRequire, apiExpire} from 'ferly/store/api'
 import {connect} from 'react-redux'
@@ -285,14 +286,16 @@ class Profile extends React.Component {
     return (
       <View style={{flex: 1, backgroundColor: 'white', alignItems: 'center'}}>
         {this.renderPage()}
-        <TouchableOpacity
+        <TestElement
+          parent={TouchableOpacity}
+          label='test-id-profile-edit-toggle'
           style={{alignSelf: 'flex-end', position: 'absolute', padding: 20}}
           onPress={() => this.toggleEdit()}>
           <Icon
             name={editing ? 'times' : 'pencil'}
             color={Theme.lightBlue}
             size={24} />
-        </TouchableOpacity>
+        </TestElement>
       </View>
     )
   }

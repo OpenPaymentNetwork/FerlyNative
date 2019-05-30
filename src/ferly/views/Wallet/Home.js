@@ -39,7 +39,9 @@ export class Wallet extends React.Component {
       : <Text>{title}</Text>
 
     return (
-      <TouchableOpacity
+      <TestElement
+        parent={TouchableOpacity}
+        label='test-id-cash-card'
         key={id}
         accessible={false}
         onPress={() => navigation.navigate('Value', design)}
@@ -67,7 +69,7 @@ export class Wallet extends React.Component {
             </TestElement>
           </View>
         </View>
-      </TouchableOpacity>
+      </TestElement>
     )
   }
 

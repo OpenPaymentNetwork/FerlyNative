@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import SimpleCurrencyInput from 'ferly/components/SimpleCurrencyInput'
 import Spinner from 'ferly/components/Spinner'
+import TestElement from 'ferly/components/TestElement'
 import Theme from 'ferly/utils/theme'
 import {apiExpire, apiRequire} from 'ferly/store/api'
 import {connect} from 'react-redux'
@@ -109,7 +110,9 @@ export class Give extends React.Component {
               <Text style={styles.designTitle}>{design.title}</Text>
               <Text style={{color: 'gray'}}>Available: {formatted}</Text>
             </View>
-            <SimpleCurrencyInput
+            <TestElement
+              parent={SimpleCurrencyInput}
+              label='test-id-give-currency'
               onChangeText={this.onChange.bind(this)}
               error={error} />
           </View>

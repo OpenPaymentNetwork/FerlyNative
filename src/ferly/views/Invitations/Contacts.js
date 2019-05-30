@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import SearchBar from 'ferly/components/SearchBar'
 import Spinner from 'ferly/components/Spinner'
+import TestElement from 'ferly/components/TestElement'
 import {Permissions, Contacts as expoContacts} from 'expo'
 import {
   View,
@@ -176,10 +177,13 @@ export default class Contacts extends React.Component {
     }
 
     return (
-      <View style={{flex: 1, backgroundColor: 'white'}}>
+      <TestElement
+        parent={View}
+        label='test-id-recipient-contacts'
+        style={{flex: 1, backgroundColor: 'white'}}>
         {Platform.OS === 'ios' ? searchBar : null}
         {contactsList}
-      </View>
+      </TestElement>
     )
   }
 }

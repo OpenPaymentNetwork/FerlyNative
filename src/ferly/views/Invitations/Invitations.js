@@ -1,6 +1,7 @@
 import Icon from 'react-native-vector-icons/FontAwesome'
 import PropTypes from 'prop-types'
 import React from 'react'
+import TestElement from 'ferly/components/TestElement'
 import Theme from 'ferly/utils/theme'
 import {apiRequire, apiExpire} from 'ferly/store/api'
 import {connect} from 'react-redux'
@@ -63,7 +64,10 @@ export class Invitations extends React.Component {
         <View style={styles.invitationHeader}>
           <Text style={{fontSize: 22, color: Theme.darkBlue}}>Invited</Text>
         </View>
-        <View style={styles.invitationBody}>
+        <TestElement
+          parent={View}
+          label='test-id-invitations'
+          style={styles.invitationBody}>
           <View style={styles.invitationIconContainer}>
             <Icon
               name={invite.recipient.indexOf('@') > -1 ? 'envelope' : 'phone'}
@@ -74,7 +78,7 @@ export class Invitations extends React.Component {
             <Text style={styles.recipientText}>{invite.recipient}</Text>
             <Text style={{color: 'gray'}}>{dateDisplay}</Text>
           </View>
-        </View>
+        </TestElement>
         <View style={{flex: 1}}>
           <TouchableOpacity
             style={styles.invitationActionButton}

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import SearchBar from 'ferly/components/SearchBar'
 import Spinner from 'ferly/components/Spinner'
+import TestElement from 'ferly/components/TestElement'
 import Theme from 'ferly/utils/theme'
 import {apiRequire} from 'ferly/store/api'
 import {connect} from 'react-redux'
@@ -126,14 +127,17 @@ class Recipient extends React.Component {
     }
 
     return (
-      <View style={{flex: 1, backgroundColor: 'white'}}>
+      <TestElement
+        parent={View}
+        label='test-id-recipient-search'
+        style={{flex: 1, backgroundColor: 'white'}}>
         <SearchBar
           placeholder='Search for family and friends'
           onChangeText={this.onChangeText.bind(this)} />
         <View style={{flex: 1, marginHorizontal: 10}}>
           {body}
         </View>
-      </View>
+      </TestElement>
     )
   }
 }

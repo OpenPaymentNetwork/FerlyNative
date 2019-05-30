@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import Spinner from 'ferly/components/Spinner'
+import TestElement from 'ferly/components/TestElement'
 import UIDController from 'ferly/views/Settings/UIDController'
 import {apiRequire} from 'ferly/store/api'
 import {connect} from 'react-redux'
@@ -25,9 +26,17 @@ export class Recovery extends React.Component {
     } else {
       form = (
         <View>
-          <UIDController type="email" uid={email} navigation={navigation} />
+          <TestElement
+            parent={View}
+            label='test-id-recovery-email'>
+            <UIDController type="email" uid={email} navigation={navigation} />
+          </TestElement>
           <View style={{borderBottomColor: 'gray', borderBottomWidth: 0.5}}/>
-          <UIDController type="phone" uid={phone} navigation={navigation} />
+          <TestElement
+            parent={View}
+            label='test-id-recovery-email'>
+            <UIDController type="phone" uid={phone} navigation={navigation} />
+          </TestElement>
         </View>
       )
     }

@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 import React from 'react'
+import TestElement from 'ferly/components/TestElement'
 import Theme from 'ferly/utils/theme'
 import Avatar from 'ferly/components/Avatar'
 import {apiRequire} from 'ferly/store/api'
@@ -38,7 +39,11 @@ class DrawerContent extends React.Component {
               <Text style={styles.text}>{`${firstName} ${lastName}`}</Text>
             </TouchableOpacity>
           </View>
-          <DrawerItems items={filteredItems} {...otherProps} />
+          <TestElement
+            parent={DrawerItems}
+            label='test-id-drawer-items'
+            items={filteredItems}
+            {...otherProps} />
         </SafeAreaView>
       </ScrollView>
     )

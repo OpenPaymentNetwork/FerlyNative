@@ -2,6 +2,7 @@ import HistoryEntry from 'ferly/components/HistoryEntry'
 import Spinner from 'ferly/components/Spinner'
 import PropTypes from 'prop-types'
 import React from 'react'
+import TestElement from 'ferly/components/TestElement'
 import {View, FlatList, Text} from 'react-native'
 import {apiRequire, apiInject, apiRefresh} from 'ferly/store/api'
 import {connect} from 'react-redux'
@@ -52,7 +53,9 @@ export class History extends React.Component {
     }
     return (
       <View>
-        <FlatList
+        <TestElement
+          parent={FlatList}
+          label='test-id-history-list'
           onRefresh={() => this.props.apiRefresh(urls.history)}
           refreshing={false}
           ListEmptyComponent={<Text>You have no history</Text>}

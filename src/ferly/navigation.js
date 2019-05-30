@@ -13,6 +13,7 @@ import RecoveryChannel from 'ferly/views/Public/RecoveryChannel'
 import RecoveryCode from 'ferly/views/Public/RecoveryCode'
 import Settings from 'ferly/views/Settings/Settings'
 import SignUp from 'ferly/views/Public/SignUp'
+import TestElement from 'ferly/components/TestElement'
 import Transfer from 'ferly/views/History/Transfer'
 import Home from 'ferly/views/Wallet/Home'
 import Value from 'ferly/views/Wallet/Value'
@@ -32,7 +33,9 @@ import Theme from 'ferly/utils/theme'
 
 const drawerOptions = ({navigation}) => ({
   headerRight: (
-    <Icon
+    <TestElement
+      parent={Icon}
+      label='test-id-drawer-icon'
       name="bars"
       color="white"
       style={{padding: 12}}

@@ -2,6 +2,7 @@ import Avatar from 'ferly/components/Avatar'
 import SearchBar from 'ferly/components/SearchBar'
 import PropTypes from 'prop-types'
 import React from 'react'
+import TestElement from 'ferly/components/TestElement'
 import {apiRequire} from 'ferly/store/api'
 import {connect} from 'react-redux'
 import {createUrl} from 'ferly/utils/fetch'
@@ -85,12 +86,15 @@ export class Market extends React.Component {
     }
 
     return (
-      <View style={{flex: 1, backgroundColor: 'white'}}>
+      <TestElement
+        parent={View}
+        label='test-id-market-search'
+        style={{flex: 1, backgroundColor: 'white'}}>
         <SearchBar
           placeholder='Search for gift value'
           onChangeText={this.onChangeText.bind(this)} />
         {body}
-      </View>
+      </TestElement>
     )
   }
 }
