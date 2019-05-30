@@ -110,7 +110,9 @@ export default class Contacts extends React.Component {
     const {name, id, display} = contact
     const {firstName, lastName, uri} = display
     return (
-      <TouchableOpacity
+      <TestElement
+        parent={TouchableOpacity}
+        label='test-id-recipient-contacts'
         key={id}
         style={{
           paddingLeft: 12,
@@ -126,7 +128,7 @@ export default class Contacts extends React.Component {
           secondWord={lastName}
           pictureUrl={uri} />
         <Text style={{fontSize: 20, paddingLeft: 10}}>{name}</Text>
-      </TouchableOpacity>
+      </TestElement>
     )
   }
 
@@ -177,13 +179,11 @@ export default class Contacts extends React.Component {
     }
 
     return (
-      <TestElement
-        parent={View}
-        label='test-id-recipient-contacts'
+      <View
         style={{flex: 1, backgroundColor: 'white'}}>
         {Platform.OS === 'ios' ? searchBar : null}
         {contactsList}
-      </TestElement>
+      </View>
     )
   }
 }

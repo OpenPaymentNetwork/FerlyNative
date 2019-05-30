@@ -67,7 +67,7 @@ export class Value extends React.Component {
         {expiringInfo}
         <Text style={styles.header}>Fees</Text>
         <Text style={styles.paragraph}>
-          This value is not subject to dormancy inactivity, or service fees.
+          This value is not subject to dormancy, inactivity, or service fees.
         </Text>
         <Text style={styles.header}>Customer Support</Text>
         <Text style={styles.paragraph}>

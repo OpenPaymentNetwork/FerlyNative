@@ -34,7 +34,7 @@ export class Recovery extends React.Component {
           <View style={{borderBottomColor: 'gray', borderBottomWidth: 0.5}}/>
           <TestElement
             parent={View}
-            label='test-id-recovery-email'>
+            label='test-id-recovery-phone'>
             <UIDController type="phone" uid={phone} navigation={navigation} />
           </TestElement>
         </View>

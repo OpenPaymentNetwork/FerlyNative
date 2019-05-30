@@ -111,10 +111,12 @@ export class Give extends React.Component {
               <Text style={{color: 'gray'}}>Available: {formatted}</Text>
             </View>
             <TestElement
-              parent={SimpleCurrencyInput}
-              label='test-id-give-currency'
-              onChangeText={this.onChange.bind(this)}
-              error={error} />
+              parent={View}
+              label='test-id-give-currency'>
+              <SimpleCurrencyInput
+                onChangeText={this.onChange.bind(this)}
+                error={error} />
+            </TestElement>
           </View>
           <View style={{paddingHorizontal: 20}}>
             <Text style={styles.messageTitle}>

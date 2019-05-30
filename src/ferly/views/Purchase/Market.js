@@ -86,15 +86,14 @@ export class Market extends React.Component {
     }
 
     return (
-      <TestElement
-        parent={View}
-        label='test-id-market-search'
-        style={{flex: 1, backgroundColor: 'white'}}>
-        <SearchBar
+      <View style={{flex: 1, backgroundColor: 'white'}}>
+        <TestElement
+          parent={SearchBar}
+          label='test-id-market-search'
           placeholder='Search for gift value'
           onChangeText={this.onChangeText.bind(this)} />
         {body}
-      </TestElement>
+      </View>
     )
   }
 }

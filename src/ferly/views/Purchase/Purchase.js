@@ -67,9 +67,10 @@ export class Purchase extends React.Component {
               <Text style={{color: 'gray'}}>Balance: {formatted}</Text>
             </View>
             <TestElement
-              parent={SimpleCurrencyInput}
-              label='test-id-purchase-currency'
-              onChangeText={this.onChange.bind(this)} />
+              parent={View}
+              label='test-id-purchase-currency'>
+              <SimpleCurrencyInput onChangeText={this.onChange.bind(this)} />
+            </TestElement>
           </View>
           <Text style={styles.header}>Redemption Locations</Text>
           <Text style={styles.paragraph}>

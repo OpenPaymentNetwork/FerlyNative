@@ -53,9 +53,7 @@ export class History extends React.Component {
     }
     return (
       <View>
-        <TestElement
-          parent={FlatList}
-          label='test-id-history-list'
+        <FlatList
           onRefresh={() => this.props.apiRefresh(urls.history)}
           refreshing={false}
           ListEmptyComponent={<Text>You have no history</Text>}
@@ -68,7 +66,10 @@ export class History extends React.Component {
           data={history}
           renderItem={
             (entry) => (
-              <HistoryEntry navigation={navigation} entry={entry.item} />
+              <TestElement
+                parent={HistoryEntry}
+                label='test-id-history-list'
+                navigation={navigation} entry={entry.item} />
             )} />
       </View>
     )

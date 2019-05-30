@@ -60,14 +60,14 @@ export class Invitations extends React.Component {
     // use date-fns. Expect the JavaScriptCore to be updated in SDK 31.
     const dateDisplay = formatDate(date, 'MMM D, YYYY h:mm A')
     return (
-      <View key={invite.id} style={styles.invitationContainer}>
+      <TestElement
+        parent={View}
+        label='test-id-invitations'
+        key={invite.id} style={styles.invitationContainer}>
         <View style={styles.invitationHeader}>
           <Text style={{fontSize: 22, color: Theme.darkBlue}}>Invited</Text>
         </View>
-        <TestElement
-          parent={View}
-          label='test-id-invitations'
-          style={styles.invitationBody}>
+        <View style={styles.invitationBody}>
           <View style={styles.invitationIconContainer}>
             <Icon
               name={invite.recipient.indexOf('@') > -1 ? 'envelope' : 'phone'}
@@ -78,7 +78,7 @@ export class Invitations extends React.Component {
             <Text style={styles.recipientText}>{invite.recipient}</Text>
             <Text style={{color: 'gray'}}>{dateDisplay}</Text>
           </View>
-        </TestElement>
+        </View>
         <View style={{flex: 1}}>
           <TouchableOpacity
             style={styles.invitationActionButton}
@@ -87,7 +87,7 @@ export class Invitations extends React.Component {
             <Text style={{fontSize: 20, color: Theme.lightBlue}}>DELETE</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </TestElement>
     )
   }
 

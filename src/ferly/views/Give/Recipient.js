@@ -127,17 +127,16 @@ class Recipient extends React.Component {
     }
 
     return (
-      <TestElement
-        parent={View}
-        label='test-id-recipient-search'
-        style={{flex: 1, backgroundColor: 'white'}}>
-        <SearchBar
+      <View style={{flex: 1, backgroundColor: 'white'}}>
+        <TestElement
+          parent={SearchBar}
+          label='test-id-recipient-search'
           placeholder='Search for family and friends'
           onChangeText={this.onChangeText.bind(this)} />
         <View style={{flex: 1, marginHorizontal: 10}}>
           {body}
         </View>
-      </TestElement>
+      </View>
     )
   }
 }
