@@ -1,9 +1,9 @@
 /* global __DEV__ */
 import {Constants} from 'expo'
-const {releaseChannel = 'staging'} = Constants.manifest
+const {releaseChannel = 'staging', env} = Constants.manifest
 
 let host
-if (__DEV__) {
+if (__DEV__ && env.EXPO_LOCAL_SERVER === 'true') {
   host = 'http://10.1.10.6:44225/' // Dev.ini
   // host = 'http://10.1.10.6:6543/' // Prod.ini
 } else if (releaseChannel === 'production') {
