@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import accounting from 'ferly/utils/accounting'
 import PrimaryButton from 'ferly/components/PrimaryButton'
 import PropTypes from 'prop-types'
@@ -10,7 +11,7 @@ import {apiExpire, apiRequire} from 'ferly/store/api'
 import {connect} from 'react-redux'
 import {format as formatDate} from 'date-fns'
 import {urls} from 'ferly/utils/fetch'
-import {View, Text, StyleSheet, Button} from 'react-native'
+import {View, Text, StyleSheet, ScrollView, Button} from 'react-native'
 
 export class Purchase extends React.Component {
   static navigationOptions = {
@@ -60,7 +61,7 @@ export class Purchase extends React.Component {
 
     return (
       <View style={{flex: 1, justifyContent: 'space-between'}}>
-        <View style={styles.contentContainer}>
+        <ScrollView style={styles.contentContainer}>
           <View style={styles.topRow}>
             <View style={{flexShrink: 1, paddingVertical: 14}}>
               <Text style={styles.title}>{title}</Text>
@@ -95,7 +96,7 @@ export class Purchase extends React.Component {
             and App Agreement and Ferly's Privacy Policy and Refund Policy.
             Please contact us at (800) 651-2186 for any questions.
           </Text>
-        </View>
+        </ScrollView>
         {submitting ? <Spinner /> : null}
         <PrimaryButton
           title="Checkout"
@@ -135,7 +136,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 4
   },
-  paragraph: {fontSize: 16,marginBottom: 10}
+  paragraph: {fontSize: 16, marginBottom: 10}
 })
 
 Purchase.propTypes = {
