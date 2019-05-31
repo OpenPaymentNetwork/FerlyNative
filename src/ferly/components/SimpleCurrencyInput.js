@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 import React from 'react'
+import TestElement from 'ferly/components/TestElement'
 import {Text, View, StyleSheet, TextInput} from 'react-native'
 
 export default class SimpleCurrencyInput extends React.Component {
@@ -20,7 +21,9 @@ export default class SimpleCurrencyInput extends React.Component {
       <View>
         <View style={styles.inputContainer}>
           <Text style={styles.dollarSign}>$</Text>
-          <TextInput
+          <TestElement
+            parent={TextInput}
+            label='test-id-currency-input'
             style={styles.input}
             returnKeyType='done'
             keyboardType='numeric'

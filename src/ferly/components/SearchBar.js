@@ -1,6 +1,7 @@
 import Icon from 'react-native-vector-icons/FontAwesome'
 import PropTypes from 'prop-types'
 import React from 'react'
+import TestElement from 'ferly/components/TestElement'
 import {TextInput, View, StyleSheet} from 'react-native'
 
 export default class SearchBar extends React.Component {
@@ -24,7 +25,9 @@ export default class SearchBar extends React.Component {
           color="black"
           style={{paddingHorizontal: 12}}
           size={20} />
-        <TextInput
+        <TestElement
+          parent={TextInput}
+          label='test-id-search'
           underlineColorAndroid='transparent'
           style={styles.input}
           onChangeText={this.onChangeText.bind(this)}

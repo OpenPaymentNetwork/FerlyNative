@@ -2,7 +2,6 @@ import HistoryEntry from 'ferly/components/HistoryEntry'
 import Spinner from 'ferly/components/Spinner'
 import PropTypes from 'prop-types'
 import React from 'react'
-import TestElement from 'ferly/components/TestElement'
 import {View, FlatList, Text} from 'react-native'
 import {apiRequire, apiInject, apiRefresh} from 'ferly/store/api'
 import {connect} from 'react-redux'
@@ -66,10 +65,7 @@ export class History extends React.Component {
           data={history}
           renderItem={
             (entry) => (
-              <TestElement
-                parent={HistoryEntry}
-                label='test-id-history-list'
-                navigation={navigation} entry={entry.item} />
+              <HistoryEntry navigation={navigation} entry={entry.item} />
             )} />
       </View>
     )

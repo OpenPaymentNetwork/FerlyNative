@@ -1,6 +1,7 @@
 import Icon from 'react-native-vector-icons/FontAwesome'
 import PropTypes from 'prop-types'
 import React from 'react'
+import TestElement from 'ferly/components/TestElement'
 import Theme from 'ferly/utils/theme'
 import {giveBlue, addBlue, spendBlue, receiveBlue} from 'ferly/images/index'
 import {Text, View, Image, StyleSheet, TouchableOpacity} from 'react-native'
@@ -47,7 +48,9 @@ export default class HistoryEntry extends React.Component {
     }
 
     return (
-      <TouchableOpacity
+      <TestElement
+        parent={TouchableOpacity}
+        label='test-id-history-entry'
         style={styles.entry}
         onPress={
           () => navigation.navigate('Transfer', {...entry, title: titleVerb})}>
@@ -63,7 +66,7 @@ export default class HistoryEntry extends React.Component {
           </View>
         </View>
         {icon}
-      </TouchableOpacity>
+      </TestElement>
     )
   }
 }

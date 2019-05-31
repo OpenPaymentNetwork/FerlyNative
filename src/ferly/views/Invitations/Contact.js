@@ -11,8 +11,7 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
-  Alert,
-  Image
+  Alert
 } from 'react-native'
 
 export class Contact extends React.Component {

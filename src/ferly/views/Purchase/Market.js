@@ -1,8 +1,8 @@
+/* eslint-disable react/no-unescaped-entities */
 import Avatar from 'ferly/components/Avatar'
 import SearchBar from 'ferly/components/SearchBar'
 import PropTypes from 'prop-types'
 import React from 'react'
-import TestElement from 'ferly/components/TestElement'
 import {apiRequire} from 'ferly/store/api'
 import {connect} from 'react-redux'
 import {createUrl} from 'ferly/utils/fetch'
@@ -50,14 +50,14 @@ export class Market extends React.Component {
     const {designs, navigation} = this.props
     const {searchResults} = this.state
     let body
-    if (searchResults && searchResults.length === 0){
+    if (searchResults && searchResults.length === 0) {
       body = (
-      <Text style={styles.noResults}>
-        We're sorry, no results found.
-      </Text>
+        <Text style={styles.noResults}>
+          We're sorry, no results found.
+        </Text>
       )
     } else {
-      display = searchResults || designs
+      const display = searchResults || designs
       body = (
         <ScrollView style={{flex: 1}}>
           {
@@ -87,9 +87,7 @@ export class Market extends React.Component {
 
     return (
       <View style={{flex: 1, backgroundColor: 'white'}}>
-        <TestElement
-          parent={SearchBar}
-          label='test-id-market-search'
+        <SearchBar
           placeholder='Search for gift value'
           onChangeText={this.onChangeText.bind(this)} />
         {body}
@@ -105,7 +103,7 @@ Market.propTypes = {
   navigation: PropTypes.object.isRequired
 }
 
-const styles = StyleSheet.create ({
+const styles = StyleSheet.create({
   noResults: {paddingHorizontal: 20},
   customer: {
     flexDirection: 'row',
