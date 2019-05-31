@@ -1,3 +1,4 @@
+import accounting from 'ferly/utils/accounting'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Avatar from 'ferly/components/Avatar'
@@ -32,6 +33,7 @@ export class Transfer extends React.Component {
       cc_last4: lastFour = '****',
       cc_brand: lowerBrand = ''
     } = transferDetails
+    const total = parseFloat(amount) + parseFloat(convenienceFee)
     const brand = lowerBrand.charAt(0).toUpperCase() + lowerBrand.substring(1)
     const b = timestamp.split(/\D+/)
     const date = new Date(Date.UTC(b[0], --b[1], b[2], b[3], b[4], b[5]))
@@ -107,7 +109,7 @@ export class Transfer extends React.Component {
             <View style={styles.functionRow}>
               <Text style={styles.sectionText}>Convenience Fee</Text>
               <Text style={[styles.sectionText, {color: Theme.lightBlue}]}>
-                ${convenienceFee}
+                {accounting.formatMoney(convenienceFee)}
               </Text>
             </View>
             <View style={[
@@ -122,7 +124,7 @@ export class Transfer extends React.Component {
             <View style={styles.functionRow}>
               <Text style={styles.sectionText}>Total</Text>
               <Text style={[styles.sectionText, {color: Theme.lightBlue}]}>
-                ${parseFloat(amount) + parseFloat(convenienceFee)}
+                {accounting.formatMoney(total)}
               </Text>
             </View>
           </View>
