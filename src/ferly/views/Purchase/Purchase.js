@@ -44,7 +44,7 @@ export class Purchase extends React.Component {
     const {params} = this.props.navigation.state
     const {submitting, text} = this.state
     const {design} = params
-    const {title} = design
+    const {title, fee} = design
     const amounts = this.props.amounts || []
 
     const found = amounts.find((cashRow) => {
@@ -71,6 +71,7 @@ export class Purchase extends React.Component {
               parent={View}
               label='test-id-purchase-currency'>
               <SimpleCurrencyInput onChangeText={this.onChange.bind(this)} />
+              <Text>Convenience Fee: ${fee}</Text>
             </TestElement>
           </View>
           <Text style={styles.header}>Redemption Locations</Text>

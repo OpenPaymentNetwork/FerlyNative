@@ -27,7 +27,8 @@ export class Transfer extends React.Component {
       counter_party: counterParty,
       counter_party_profile_image_url: counterPartyProfileImageUrl,
       transfer_type: transferType,
-      design_logo_image_url: designLogoImageUrl
+      design_logo_image_url: designLogoImageUrl,
+      convenience_fee: convenienceFee = 0
     } = transferDetails
     const b = timestamp.split(/\D+/)
     const date = new Date(Date.UTC(b[0], --b[1], b[2], b[3], b[4], b[5]))
@@ -98,6 +99,12 @@ export class Transfer extends React.Component {
                 ${amount}
               </Text>
             </View>
+            <View style={styles.functionRow}>
+              <Text style={styles.sectionText}>Convenience Fee</Text>
+              <Text style={[styles.sectionText, {color: Theme.lightBlue}]}>
+                ${convenienceFee}
+              </Text>
+            </View>
             <View style={[
               styles.functionRow,
               {borderBottomWidth: 0.5, borderColor: 'darkgray'}
@@ -110,7 +117,7 @@ export class Transfer extends React.Component {
             <View style={styles.functionRow}>
               <Text style={styles.sectionText}>Total</Text>
               <Text style={[styles.sectionText, {color: Theme.lightBlue}]}>
-                ${amount}
+                ${parseFloat(amount) + parseFloat(convenienceFee)}
               </Text>
             </View>
           </View>

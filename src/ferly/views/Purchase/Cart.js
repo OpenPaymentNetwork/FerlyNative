@@ -47,6 +47,7 @@ export class Cart extends React.Component {
 
     const purchaseParams = {
       amount: amount,
+      fee: design.fee,
       design_id: design.id.toString(),
       source_id: source
     }
@@ -232,8 +233,10 @@ export class Cart extends React.Component {
 
   render () {
     const {params} = this.props.navigation.state
-    const {amount, design} = params
-    const formatted = accounting.formatMoney(parseFloat(amount))
+    const {amount: amountString, design} = params
+    const fee = parseFloat(design.fee)
+    const formatted = accounting.formatMoney(parseFloat(amountString))
+    const amount = accounting.parse(formatted)
     const {invalid, selectedSource, submitting} = this.state
     return (
       <View style={styles.page}>
@@ -241,6 +244,14 @@ export class Cart extends React.Component {
           <Text style={styles.designText}>{design.title}</Text>
           <View style={{flexGrow: 1, flexWrap: 'wrap'}}>
             <Text style={styles.amountText}>{formatted}</Text>
+            <Text style={
+              [styles.amountText, {textDecorationLine: 'underline'}]
+            }>
+              + {accounting.formatMoney(fee)}
+            </Text>
+            <Text style={[styles.amountText, {fontWeight: 'bold'}]}>
+              {accounting.formatMoney(amount + fee)}
+            </Text>
             <Text style={styles.invalidText}>{invalid}</Text>
           </View>
         </View>
@@ -255,7 +266,10 @@ export class Cart extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  amountText: {fontSize: 18, fontWeight: 'bold', textAlign: 'right'},
+  amountText: {fontSize: 18, textAlign: 'right'},
+  feeText: {
+    fontSize: 18, textAlign: 'right', textDecorationLine: 'underline'},
+  totalText: {fontSize: 18, fontWeight: 'bold', textAlign: 'right'},
   designContainer: {
     flexShrink: 1,
     backgroundColor: 'white',
