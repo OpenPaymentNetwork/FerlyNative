@@ -28,8 +28,11 @@ export class Transfer extends React.Component {
       counter_party_profile_image_url: counterPartyProfileImageUrl,
       transfer_type: transferType,
       design_logo_image_url: designLogoImageUrl,
-      convenience_fee: convenienceFee = 0
+      convenience_fee: convenienceFee = 0,
+      cc_last4: lastFour = '****',
+      cc_brand: lowerBrand = ''
     } = transferDetails
+    const brand = lowerBrand.charAt(0).toUpperCase() + lowerBrand.substring(1)
     const b = timestamp.split(/\D+/)
     const date = new Date(Date.UTC(b[0], --b[1], b[2], b[3], b[4], b[5]))
     // React Native doesn't fully support Date.toLocaleString() on Android
@@ -88,6 +91,8 @@ export class Transfer extends React.Component {
 
     let purchaseDetailsSection
     let termsSection
+    let paymentSection
+    let feesSection
     if (transferType === 'purchase') {
       purchaseDetailsSection = (
         <View style={styles.section}>
@@ -141,7 +146,43 @@ export class Transfer extends React.Component {
               If you need more information, please contact (801) 792-2358.
             </Text>
           </View>
-
+        </View>
+      )
+      paymentSection = (
+        <View style={styles.section}>
+          <Text style={styles.sectionHeader}>Payment Method</Text>
+          <View style={[styles.functionRow, {padding: 20}]}>
+            <Text style={styles.sectionText}>{brand} Card</Text>
+            <Text style={[styles.sectionText, {color: Theme.lightBlue}]}>
+              ************{lastFour}
+            </Text>
+          </View>
+        </View>
+      )
+      const d = new Date()
+      d.setDate(d.getDate() + 1825)
+      const expirationDate = formatDate(d, 'MMM D, YYYY')
+      feesSection = (
+        <View style={styles.section}>
+          <Text style={styles.sectionHeader}>Expiration & Fees</Text>
+          <View style={[styles.functionRow, {paddingLeft: 20}]}>
+            <Text style={styles.sectionText}>Expiration Date</Text>
+            <Text style={[styles.sectionText, {color: Theme.lightBlue}]}>
+              {expirationDate}
+            </Text>
+          </View>
+          <View style={[styles.functionRow, {paddingLeft: 20}]}>
+            <Text style={styles.sectionText}>Dormancy/Inactivity Fee</Text>
+            <Text style={[styles.sectionText, {color: Theme.lightBlue}]}>
+              None
+            </Text>
+          </View>
+          <View style={[styles.functionRow, {paddingLeft: 20}]}>
+            <Text style={styles.sectionText}>Service Fee</Text>
+            <Text style={[styles.sectionText, {color: Theme.lightBlue}]}>
+              None
+            </Text>
+          </View>
         </View>
       )
     }
@@ -177,6 +218,8 @@ export class Transfer extends React.Component {
         </View>
         {messageSection}
         {purchaseDetailsSection}
+        {paymentSection}
+        {feesSection}
         {termsSection}
       </ScrollView>
     )
