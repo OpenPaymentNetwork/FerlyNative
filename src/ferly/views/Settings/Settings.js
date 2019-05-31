@@ -1,8 +1,8 @@
-/* global __DEV__ */
 import Icon from 'react-native-vector-icons/FontAwesome'
 import PropTypes from 'prop-types'
 import React from 'react'
 import {connect} from 'react-redux'
+import {envId} from 'ferly/utils/fetch'
 import {Notifications, Permissions, Constants, Updates} from 'expo'
 import {View, Text, TouchableOpacity, StyleSheet, Alert} from 'react-native'
 
@@ -53,8 +53,7 @@ export class Settings extends React.Component {
 
   render () {
     const {navigation, updateDownloaded} = this.props
-    const {version, releaseChannel = 'default'} = Constants.manifest
-    const envId = __DEV__ ? 'l' : releaseChannel.charAt(0)
+    const {version} = Constants.manifest
     let debugInfo = (
       <View>
         <Text style={{fontSize: 12, color: 'lightgray'}}>

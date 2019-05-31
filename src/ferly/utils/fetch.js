@@ -2,9 +2,11 @@
 import {Constants} from 'expo'
 const {releaseChannel = 'staging', env} = Constants.manifest
 
+export let envId = releaseChannel.charAt(0)
 let host
 if (__DEV__ && env.EXPO_LOCAL_SERVER === 'true') {
   host = 'http://10.1.10.6:44225/' // Dev.ini
+  envId = 'l'
   // host = 'http://10.1.10.6:6543/' // Prod.ini
 } else if (releaseChannel === 'production') {
   host = 'https://www.ferly.com/'

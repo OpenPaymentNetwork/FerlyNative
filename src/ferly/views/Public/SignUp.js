@@ -1,10 +1,9 @@
-/* global __DEV__ */
 import PrimaryButton from 'ferly/components/PrimaryButton'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Theme from 'ferly/utils/theme'
 import {Notifications, Permissions, Constants} from 'expo'
-import {post} from 'ferly/utils/fetch'
+import {post, envId} from 'ferly/utils/fetch'
 import {logoWhite} from 'ferly/images/index'
 import {
   View,
@@ -147,8 +146,7 @@ export default class SignUp extends React.Component {
 
   render () {
     const {firstName, lastName, username, submitting, invalid} = this.state
-    const {version, releaseChannel = 'default'} = Constants.manifest
-    const envId = __DEV__ ? 'l' : releaseChannel.charAt(0)
+    const {version} = Constants.manifest
     return (
       <View style={{flex: 1}}>
         <View style={styles.container}>
