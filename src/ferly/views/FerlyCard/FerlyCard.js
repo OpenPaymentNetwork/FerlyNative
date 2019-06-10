@@ -1,4 +1,5 @@
-import PrimaryButton from 'ferly/components/PrimaryButton'
+import AddressForm from 'ferly/views/FerlyCard/AddressForm'
+import CardForm from 'ferly/views/FerlyCard/CardForm'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Spinner from 'ferly/components/Spinner'
@@ -28,13 +29,12 @@ export class FerlyCard extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      pan: '',
-      pin: '',
       invalid: {},
       submitting: false,
       assumedAbility: null,
       changingAbility: false,
-      showNewPinModal: false
+      showNewPinModal: false,
+      passed: false
     }
   }
 
@@ -47,120 +47,6 @@ export class FerlyCard extends React.Component {
     if (assumedAbility !== null) {
       this.props.apiRefresh(urls.profile)
     }
-  }
-
-  validateCardNumber (code) {
-    var len = code.length
-    var parity = len % 2
-    var sum = 0
-    for (var i = len - 1; i >= 0; i--) {
-      var d = parseInt(code.charAt(i))
-      if (i % 2 === parity) { d *= 2 }
-      if (d > 9) { d -= 9 }
-      sum += d
-    }
-    return sum % 10 === 0
-  }
-
-  onChangePan = (value) => {
-    const withoutSpaces = value.replace(/\s/g, '')
-    const {invalid} = this.state
-    if (withoutSpaces.length === 16) {
-      const newInvalid = Object.assign({}, invalid)
-      if (!this.validateCardNumber(withoutSpaces)) {
-        newInvalid.pan = 'Invalid card number'
-      } else {
-        delete newInvalid.pan
-      }
-      this.setState({invalid: newInvalid})
-    }
-    this.setState({pan: withoutSpaces})
-  }
-
-  onChangePin = (newPin) => {
-    this.setState({pin: newPin})
-  }
-
-  submitForm = () => {
-    const {pan, pin} = this.state
-    this.setState({submitting: true})
-    post('add-card', {pan, pin})
-      .then((response) => response.json())
-      .then((json) => {
-        this.setState({submitting: false, pan: '', pin: '', invalid: {}})
-        if (this.validateAddCard(json)) {
-          this.props.apiRefresh(urls.profile)
-          const alertText = 'Your card is ready to use. Remember to run ' +
-            'it as a debit card if asked.'
-          Alert.alert('Success', alertText)
-        }
-      })
-  }
-
-  validateAddCard (json) {
-    if (json.invalid) {
-      const newInvalid = json.invalid
-      if (newInvalid['']) {
-        newInvalid.pan = newInvalid['']
-      }
-      this.setState({invalid: newInvalid})
-      return false
-    } else {
-      return json.result
-    }
-  }
-
-  renderForm () {
-    const {pin, pan, invalid, submitting} = this.state
-    const {pin: pinError, pan: panError} = invalid
-
-    const instructions = 'Enter the 16-digit number found on the back of ' +
-      'your Ferly Card and set a 4-digit PIN you\'ll remember later.'
-    return (
-      <View style={{flex: 1, backgroundColor: 'white'}}>
-        <View style={{flex: 1, paddingVertical: 20, paddingHorizontal: 40}}>
-          <View style={{paddingBottom: 10, alignItems: 'center'}}>
-            <Text style={styles.title}>Add Card Information</Text>
-            <Text style={styles.instructions}>{instructions}</Text>
-          </View>
-          <Text style={styles.labelText}>Card Number</Text>
-          <View style={styles.inputContainer}>
-            <TextInput
-              underlineColorAndroid='transparent'
-              keyboardType='numeric'
-              maxLength={19}
-              returnKeyType='done'
-              onChangeText={this.onChangePan}
-              autoFocus
-              value={pan.replace(/(.{4})/g, '$1 ').trim()} />
-          </View>
-          <Text style={styles.errorText}>{panError}</Text>
-          <View style={{height: 10}} />
-          <Text style={styles.labelText}>PIN</Text>
-          <View style={[styles.inputContainer, {maxWidth: 100}]}>
-            <TextInput
-              underlineColorAndroid='transparent'
-              keyboardType='numeric'
-              maxLength={4}
-              returnKeyType='done'
-              onChangeText={this.onChangePin}
-              value={pin} />
-          </View>
-          <Text style={styles.errorText}>{pinError}</Text>
-        </View>
-        <PrimaryButton
-          title="Add"
-          disabled={
-            submitting ||
-            pan.length !== 16 ||
-            pin.length !== 4 ||
-            !this.validateCardNumber(pan)
-          }
-          color={Theme.lightBlue}
-          onPress={this.submitForm}
-        />
-      </View>
-    )
   }
 
   changeAbility = (requestedEnable) => {
@@ -258,7 +144,8 @@ export class FerlyCard extends React.Component {
       showNewPinModal,
       pin,
       invalid,
-      submitting
+      submitting,
+      passed
     } = this.state
     const {pin: pinError} = invalid
 
@@ -267,7 +154,9 @@ export class FerlyCard extends React.Component {
     }
 
     if (!card) {
-      return this.renderForm()
+      return passed
+        ? <CardForm />
+        : <AddressForm onPass={() => this.setState({passed: true})} />
     }
 
     const {suspended, expiration} = card
@@ -417,6 +306,7 @@ const styles = StyleSheet.create({
 })
 
 FerlyCard.propTypes = {
+  navigation: PropTypes.object,
   apiRefresh: PropTypes.func.isRequired,
   apiRequire: PropTypes.func.isRequired,
   card: PropTypes.object,

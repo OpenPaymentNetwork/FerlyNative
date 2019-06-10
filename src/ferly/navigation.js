@@ -1,6 +1,6 @@
 import Contact from 'ferly/views/Invitations/Contact'
 import Contacts from 'ferly/views/Invitations/Contacts'
-import FerlyCard from 'ferly/views/FerlyCard'
+import FerlyCard from 'ferly/views/FerlyCard/FerlyCard'
 import Give from 'ferly/views/Give/Give'
 import Recipient from 'ferly/views/Give/Recipient'
 import History from 'ferly/views/History/History'
