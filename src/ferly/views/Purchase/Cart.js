@@ -134,9 +134,9 @@ export class Cart extends React.Component {
   }
 
   renderBody () {
-    const {selectedSource, cardLoaded} = this.state
+    const {selectedSource, cardLoaded, submitting} = this.state
     const {sources} = this.props
-    if (!sources) {
+    if (!sources || submitting) {
       return <Spinner />
     } else {
       const existingSources = sources.map((source) => {
