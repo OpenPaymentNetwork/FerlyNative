@@ -53,6 +53,9 @@ export class Purchase extends React.Component {
     const foundAmount = found ? found.amount : 0
     const formatted = accounting.formatMoney(parseFloat(foundAmount))
     const fieldValue = accounting.formatMoney(parseFloat(text))
+    const precision = fee.includes('.00') ? 0 : 2
+
+    const formatedFee = accounting.formatMoney(parseFloat(fee), '', precision)
 
     const d = new Date()
     d.setDate(d.getDate() + 1825)
@@ -68,9 +71,13 @@ export class Purchase extends React.Component {
             </View>
             <View>
               <SimpleCurrencyInput onChangeText={this.onChange.bind(this)} />
-              <Text>Convenience Fee: ${fee}</Text>
             </View>
           </View>
+          <Text style={styles.header}>Online Fee</Text>
+          <Text style={styles.paragraph}>
+            The purchase of this gift value is subject to
+            a ${formatedFee} online fee.
+          </Text>
           <Text style={styles.header}>Redemption Locations</Text>
           <Text style={styles.paragraph}>
             Click the button below to view {title} locations where you can
@@ -128,13 +135,13 @@ const styles = StyleSheet.create({
     paddingRight: 20
   },
   header: {
-    color: Theme.lightBlue,
+    color: 'black',
     fontSize: 16,
     fontWeight: 'bold',
     marginTop: 10,
     marginBottom: 4
   },
-  paragraph: {fontSize: 16, marginBottom: 10}
+  paragraph: {fontSize: 16, marginBottom: 10, color: 'darkgray'}
 })
 
 Purchase.propTypes = {

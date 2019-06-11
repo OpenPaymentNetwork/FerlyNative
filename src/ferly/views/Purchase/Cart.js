@@ -1,4 +1,5 @@
 import accounting from 'ferly/utils/accounting'
+import Avatar from 'ferly/components/Avatar'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import PrimaryButton from 'ferly/components/PrimaryButton'
 import PropTypes from 'prop-types'
@@ -234,30 +235,67 @@ export class Cart extends React.Component {
   render () {
     const {params} = this.props.navigation.state
     const {amount: amountString, design} = params
-    const fee = parseFloat(design.fee)
-    const formatted = accounting.formatMoney(parseFloat(amountString))
-    const amount = accounting.parse(formatted)
-    const {invalid, selectedSource, submitting} = this.state
+    const convenienceFee = parseFloat(design.fee)
+    const amountNumber = parseFloat(amountString)
+    const total = amountNumber + convenienceFee
+    const {selectedSource, submitting} = this.state
+
     return (
       <View style={styles.page}>
-        <View style={styles.designContainer}>
-          <Text style={styles.designText}>{design.title}</Text>
-          <View style={{flexGrow: 1, flexWrap: 'wrap'}}>
-            <Text style={styles.amountText}>{formatted}</Text>
-            <Text style={
-              [styles.amountText, {textDecorationLine: 'underline'}]
-            }>
-              + {accounting.formatMoney(fee)}
-            </Text>
-            <Text style={[styles.amountText, {fontWeight: 'bold'}]}>
-              {accounting.formatMoney(amount + fee)}
-            </Text>
-            <Text style={styles.invalidText}>{invalid}</Text>
+        <View style={styles.header}>
+          <View style={{alignItems: 'center', padding: 5}}>
+            <Avatar
+              size={100} pictureUrl={design.logo_image_url}/>
+          </View>
+          <View style={styles.designContainer}>
+            <View style={{alignItems: 'center', padding: 5}}>
+              <Text style={styles.designText}>{design.title}</Text>
+            </View>
+            <View>
+              <View style={{flexGrow: 1, flexWrap: 'wrap'}}>
+                <View style={styles.section}>
+                  <Text style={styles.sectionHeader}>Purchase Summary</Text>
+                  <View>
+                    <View style={styles.functionRow}>
+                      <Text style={styles.sectionText}>Purchase Amount</Text>
+                      <Text style={[styles.sectionText, {color: Theme.lightBlue}]}>
+                        {accounting.formatMoney(amountNumber)}
+                      </Text>
+                    </View>
+                    <View style={styles.functionRow}>
+                      <Text style={styles.sectionText}>Online Fee</Text>
+                      <Text style={[styles.sectionText, {color: Theme.lightBlue}]}>
+                        {accounting.formatMoney(convenienceFee)}
+                      </Text>
+                    </View>
+                    <View style={[
+                      styles.functionRow,
+                      {borderBottomWidth: 0.5, borderColor: 'darkgray'}
+                    ]}>
+                      <Text style={styles.sectionText}>Tax</Text>
+                      <Text style={[styles.sectionText, {color: Theme.lightBlue}]}>
+                        $0.00
+                      </Text>
+                    </View>
+                    <View style={styles.functionRow}>
+                      <Text style={styles.totalText}>Total</Text>
+                      <Text style={[styles.sectionText,
+                        {
+                          color: Theme.lightBlue,
+                          fontWeight: 'bold',
+                          fontSize: 18}]}>
+                        {accounting.formatMoney(total)}
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              </View>
+            </View>
           </View>
         </View>
         {this.renderBody()}
         <PrimaryButton
-          title="Complete Purchase"
+          title="Confirm Purchase"
           disabled={!selectedSource || submitting}
           onPress={this.handleSubmitClick.bind(this)} />
       </View>
@@ -266,22 +304,16 @@ export class Cart extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  amountText: {fontSize: 18, textAlign: 'right'},
-  feeText: {
-    fontSize: 18, textAlign: 'right', textDecorationLine: 'underline'},
-  totalText: {fontSize: 18, fontWeight: 'bold', textAlign: 'right'},
-  designContainer: {
-    flexShrink: 1,
+  header: {
     backgroundColor: 'white',
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    padding: 18
+    justifyContent: 'center',
+    padding: 10
   },
   designText: {
     flexShrink: 1,
     fontWeight: 'bold',
     flexWrap: 'wrap',
-    fontSize: 18
+    fontSize: 20
   },
   invalidText: {fontSize: 14, color: 'red', textAlign: 'right'},
   page: {flex: 1, flexDirection: 'column'},
@@ -306,7 +338,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
     height: 90,
     padding: 10
-  }
+  },
+  functionRow: {flexDirection: 'row', justifyContent: 'space-between'},
+  section: {marginTop: 10, paddingHorizontal: 20},
+  sectionHeader: {fontSize: 18, fontWeight: 'bold', marginBottom: 7},
+  sectionText: {color: 'darkgray', fontSize: 16},
+  totalText: {fontSize: 18, fontWeight: 'bold'}
 })
 
 Cart.propTypes = {

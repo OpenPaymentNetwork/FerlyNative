@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 4
   },
-  paragraph: {fontSize: 16,marginBottom: 10},
+  paragraph: {fontSize: 16, marginBottom: 10},
   tableRow: {flexDirection: 'row', paddingLeft: 10},
   leftColumn: {width: 120}
 })

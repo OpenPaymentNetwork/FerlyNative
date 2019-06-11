@@ -47,7 +47,7 @@ export class Transfer extends React.Component {
     switch (transferType) {
       case 'purchase':
         verb = 'added'
-        cp = ' to your Wallet'
+        cp = ' to your account'
         break
       case 'send':
         verb = 'gifted'
@@ -98,7 +98,7 @@ export class Transfer extends React.Component {
     if (transferType === 'purchase') {
       purchaseDetailsSection = (
         <View style={styles.section}>
-          <Text style={styles.sectionHeader}>Purchase Details</Text>
+          <Text style={styles.sectionHeader}>Details</Text>
           <View style={{paddingLeft: 20}}>
             <View style={styles.functionRow}>
               <Text style={styles.sectionText}>Purchase Amount</Text>
@@ -140,12 +140,15 @@ export class Transfer extends React.Component {
             </Text>
             <View style={{height: 8}} />
             <Text style={styles.sectionText}>
-              {'The purchase of this gift value is subject to Ferly\'s ' +
-               'Privacy Policy, Refund Policy, and Cardholder Agreement.'}
+              {'The purchase of this gift value is subject to the Ferly ' +
+                'Cardholder and App Agreement and Ferly\'s ' +
+               'Privacy Policy and Refund Policy.'}
             </Text>
             <View style={{height: 8}} />
             <Text style={styles.sectionText}>
-              If you need more information, please contact (801) 792-2358.
+              {'Please call Ferly, Inc. at (800) 651-2186 Monday through ' +
+              'Friday from 9:00 am - 5:00 pm MST, or email ' +
+              'support@ferly.com.'}
             </Text>
           </View>
         </View>
@@ -153,7 +156,7 @@ export class Transfer extends React.Component {
       paymentSection = (
         <View style={styles.section}>
           <Text style={styles.sectionHeader}>Payment Method</Text>
-          <View style={[styles.functionRow, {padding: 20}]}>
+          <View style={[styles.functionRow, {paddingLeft: 20}]}>
             <Text style={styles.sectionText}>{brand} Card</Text>
             <Text style={[styles.sectionText, {color: Theme.lightBlue}]}>
               ************{lastFour}
