@@ -97,6 +97,7 @@ export class Locations extends React.Component {
     return (
       <View style={{flex: 1, flexDirection: 'column-reverse'}}>
         <MapView
+          maxZoomLevel={17}
           ref={ref => (this.mapview = ref)}
           style={{position: 'absolute', top: 0, left: 0, bottom: 0, right: 0}}
           onMapReady={this.fitToMarkers}>
