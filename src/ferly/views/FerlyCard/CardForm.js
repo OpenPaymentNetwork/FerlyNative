@@ -119,7 +119,6 @@ export class CardForm extends React.Component {
               maxLength={19}
               returnKeyType='done'
               onChangeText={this.onChangePan}
-              autoFocus
               value={pan.replace(/(.{4})/g, '$1 ').trim()} />
           </View>
           <Text style={styles.errorText}>{panError}</Text>

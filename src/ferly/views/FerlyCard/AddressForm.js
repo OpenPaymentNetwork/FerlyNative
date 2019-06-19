@@ -1,55 +1,53 @@
 import PrimaryButton from 'ferly/components/PrimaryButton'
 import PropTypes from 'prop-types'
 import React from 'react'
+import StatePicker from 'ferly/views/FerlyCard/StatePicker'
 import Theme from 'ferly/utils/theme'
-import {apiRequire, apiRefresh} from 'ferly/store/api'
-import {connect} from 'react-redux'
-import {urls, post} from 'ferly/utils/fetch'
+import {post} from 'ferly/utils/fetch'
+import {MaterialIcons} from '@expo/vector-icons'
 import {
   Alert,
   KeyboardAvoidingView,
   Text,
   TextInput,
+  Platform,
   TouchableOpacity,
   ScrollView,
   StyleSheet,
   View
 } from 'react-native'
 
-export class AddressForm extends React.Component {
+export default class AddressForm extends React.Component {
     static navigationOptions = {
       title: 'Ferly Card'
     }
 
     constructor (props) {
       super(props)
+      this.defaultState = 'UT'
       this.state = {
         submitting: false,
-        adding: false,
         assumedAbility: null,
         invalid: {},
         name: '',
         address: '',
         apt: '',
         city: '',
-        state: '',
-        zipCode: ''
-      }
-    }
-
-    componentDidMount () {
-      this.props.apiRequire(urls.profile)
-    }
-
-    componentWillUnmount () {
-      const {assumedAbility} = this.state
-      if (assumedAbility !== null) {
-        this.props.apiRefresh(urls.profile)
+        state: undefined,
+        zipCode: '',
+        st: ''
       }
     }
 
     submitForm = () => {
-      const {name, address, apt, city, state, zipCode} = this.state
+      const {
+        name,
+        address,
+        apt,
+        city,
+        state = this.defaultState,
+        zipCode
+      } = this.state
       this.setState({submitting: true})
       const params = {
         name: name,
@@ -65,10 +63,14 @@ export class AddressForm extends React.Component {
           this.setState({submitting: false})
           if (this.validateSendCard(json)) {
             this.props.onPass()
-            const alertText = 'You should receive your card in 7 to 10 days.'
-            Alert.alert('Success', alertText)
+            const alertText = 'Your card will arrive in 7 to 10 business days.'
+            Alert.alert('Done!', alertText)
           }
         })
+    }
+
+    onStateChange = (state) => {
+      this.setState({state: state})
     }
 
     validateSendCard (responseJson) {
@@ -78,7 +80,7 @@ export class AddressForm extends React.Component {
         })
         return false
       } else if (responseJson.error) {
-        Alert.alert('Error', responseJson.description)
+        Alert.alert('Oops!', responseJson.description)
         return false
       } else {
         return true
@@ -91,7 +93,6 @@ export class AddressForm extends React.Component {
         address,
         apt,
         city,
-        state,
         zipCode,
         invalid,
         submitting
@@ -104,118 +105,113 @@ export class AddressForm extends React.Component {
         zipCode: zipError
       } = invalid
       return (
-        <View style={{
-          flex: 1,
-          justifyContent: 'space-between'
-        }}>
+        <View style={styles.page}>
           <KeyboardAvoidingView style={styles.form}
-            behavior="padding"
-            keyboardVerticalOffset={100}>
+            behavior={'padding'}
+            keyboardVerticalOffset={64}>
             <ScrollView>
-              <View style={styles.inputContainer}>
-                <Text>Name</Text>
-                <TextInput
-                  underlineColorAndroid='transparent'
-                  name="name"
-                  label="Name"
-                  placeholder="Name"
-                  returnKeyType='done'
-                  value={name}
-                  maxLength={50}
-                  onBlur={() => this.setState({showNameError: true})}
-                  onChangeText={(text) => this.setState({name: text})} />
-                <Text style={styles.error}>{nameError}</Text>
+              <View>
+                <View style={styles.iconStyles}>
+                  <MaterialIcons
+                    style={{paddingRight: 10}}
+                    name={'person'}
+                    color={Theme.lightBlue}
+                    size={20} />
+                  <Text style={styles.labelText}>Name</Text>
+                </View>
+                <View style={styles.textBox}>
+                  <TextInput
+                    underlineColorAndroid='transparent'
+                    style={styles.textField}
+                    returnKeyType='done'
+                    value={name}
+                    maxLength={50}
+                    onChangeText={(text) => this.setState({name: text})} />
+                  <Text style={styles.error}>{nameError}</Text>
+                </View>
+              </View>
+              <View>
+                <View style={styles.iconStyles}>
+                  <MaterialIcons
+                    style={{paddingRight: 10}}
+                    name={'location-on'}
+                    color={Theme.lightBlue}
+                    size={20} />
+                  <Text style={styles.labelText}>Address</Text>
+                </View>
+                <View style={styles.textBox}>
+                  <TextInput
+                    underlineColorAndroid='transparent'
+                    style={styles.textField}
+                    returnKeyType='done'
+                    value={address}
+                    maxLength={50}
+                    onChangeText={(text) => this.setState({address: text})} />
+                  <Text style={styles.error}>{addressError}</Text>
+                </View>
               </View>
               <View style={styles.inputContainer}>
-                <Text>Address</Text>
+                <Text style={styles.labelText}>Apartment Number</Text>
                 <TextInput
                   underlineColorAndroid='transparent'
-                  name="address"
-                  label="Address"
-                  placeholder="Address"
-                  returnKeyType='done'
-                  value={address}
-                  maxLength={50}
-                  onBlur={() => this.setState({showAddressError: true})}
-                  onChangeText={(text) => this.setState({address: text})} />
-                <Text style={styles.error}>{addressError}</Text>
-              </View>
-              <View style={styles.inputContainer}>
-                <Text>Apt Number</Text>
-                <TextInput
-                  underlineColorAndroid='transparent'
-                  name="apt"
-                  label="Apt #"
-                  placeholder="Apt number"
+                  style={styles.textField}
                   returnKeyType='done'
                   value={apt}
                   onChangeText={(text) => this.setState({apt: text})}
                   maxLength={20} />
+                <Text></Text>
               </View>
               <View style={styles.inputContainer}>
-                <Text>City</Text>
+                <Text style={styles.labelText}>City</Text>
                 <TextInput
                   underlineColorAndroid='transparent'
-                  name="city"
-                  label="City"
-                  placeholder="City"
+                  style={styles.textField}
                   returnKeyType='done'
                   value={city}
                   maxLength={15}
-                  onBlur={() => this.setState({showCityError: true})}
                   onChangeText={(text) => this.setState({city: text})} />
                 <Text style={styles.error}>{cityError}</Text>
               </View>
-              <View style={styles.inputContainer}>
-                <Text>State</Text>
-                <TextInput
-                  underlineColorAndroid='transparent'
-                  name="state"
-                  label="State"
-                  placeholder="State"
-                  returnKeyType='done'
-                  value={state}
-                  maxLength={2}
-                  onBlur={() => this.setState({showStateError: true})}
-                  onChangeText={(text) => this.setState({state: text})} />
-                <Text style={styles.error}>{stateError}</Text>
+              <View style={styles.stateZip}>
+                <View>
+                  <View>
+                    <Text style={styles.labelText}>State</Text>
+                  </View>
+                  <View style={styles.iosPickerStyles}>
+                    <StatePicker
+                      defaultState={this.defaultState}
+                      onStateChange={this.onStateChange} />
+                    <Text style={styles.error}>{stateError}</Text>
+                  </View>
+                </View>
+                <View>
+                  <Text style={styles.labelText}>Zip Code</Text>
+                  <TextInput
+                    underlineColorAndroid='transparent'
+                    style={styles.zipField}
+                    keyboardType='numeric'
+                    returnKeyType='done'
+                    value={zipCode}
+                    maxLength={5}
+                    onChangeText={(text) => this.setState({zipCode: text})} />
+                  <Text style={styles.error}>{zipError}</Text>
+                </View>
               </View>
-              <View style={styles.inputContainer}>
-                <Text>Zip Code</Text>
-                <TextInput
-                  underlineColorAndroid='transparent'
-                  name="zipCode"
-                  label="Zip Code"
-                  placeholder="Zip Code"
-                  keyboardType='numeric'
-                  returnKeyType='done'
-                  value={zipCode}
-                  maxLength={5}
-                  onBlur={() => this.setState({showZipError: true})}
-                  onChangeText={(text) => this.setState({zipCode: text})} />
-                <Text style={styles.error}>{zipError}</Text>
+              <View style={styles.skipContainer}>
+                <TouchableOpacity onPress={() => this.props.onPass()}>
+                  <Text style={styles.enterCard}>
+                    I already have a Ferly Card
+                  </Text>
+                </TouchableOpacity>
               </View>
             </ScrollView>
           </KeyboardAvoidingView>
-          <View style={[{
-            width: 100,
-            height: 100,
-            margin: 10,
-            alignSelf: 'flex-end',
-            position: 'absolute',
-            bottom: 20,
-            right: 10}]}>
-            <TouchableOpacity onPress={() => this.props.onPass()}>
-              <Text style={styles.enterCard}>Have a FerlyCard</Text>
-            </TouchableOpacity>
-          </View>
           <PrimaryButton
             title="Submit"
             disabled={
               name === '' ||
               address === '' ||
               city === '' ||
-              state === '' ||
               zipCode === '' ||
               submitting
             }
@@ -228,44 +224,36 @@ export class AddressForm extends React.Component {
 }
 
 AddressForm.propTypes = {
-  apiRefresh: PropTypes.func.isRequired,
-  apiRequire: PropTypes.func.isRequired,
-  card: PropTypes.object,
   onPass: PropTypes.func.isRequired
 }
 
 const styles = StyleSheet.create({
-  inputContainer: {
-    borderBottomWidth: 1,
-    borderColor: 'gray'},
+  inputContainer: {paddingHorizontal: 10, paddingTop: 15, paddingLeft: 50},
   error: {color: 'red', width: '100%'},
-  form: {
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'center'
-  },
+  form: {flex: 1},
+  textField: {borderBottomWidth: 1, borderColor: 'gray'},
+  zipField: {borderBottomWidth: 1, borderColor: 'gray', width: 75},
+  labelText: {color: 'gray'},
+  textBox: {paddingHorizontal: 10, paddingLeft: 50},
+  iconStyles: {flexDirection: 'row', paddingTop: 15, paddingLeft: 20},
+  page: {flex: 1, justifyContent: 'space-between'},
+  skipContainer: {flexDirection: 'row-reverse', zIndex: -1},
   enterCard: {
-    backgroundColor: Theme.lightBlue,
-    color: Theme.white
+    color: Theme.lightBlue,
+    paddingRight: 10,
+    textDecorationLine: 'underline'
+  },
+  stateZip: {
+    flex: 1,
+    flexDirection: 'row',
+    paddingHorizontal: 10,
+    paddingTop: 15,
+    marginLeft: 40
+  },
+  iosPickerStyles: {
+    marginLeft: Platform.OS === 'ios' ? -25 : -5,
+    borderBottomWidth: Platform.OS === 'ios' ? null : 1,
+    borderColor: 'gray',
+    marginRight: Platform.OS === 'ios' ? null : 20
   }
 })
-
-function mapStateToProps (state) {
-  const apiStore = state.api.apiStore
-  const data = apiStore[urls.profile]
-  const {cards} = data || {}
-  let card
-  if (cards) {
-    card = cards[0]
-  }
-  return {
-    card
-  }
-}
-
-const mapDispatchToProps = {
-  apiRefresh,
-  apiRequire
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(AddressForm)
