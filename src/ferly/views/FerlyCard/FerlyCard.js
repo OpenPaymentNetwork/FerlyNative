@@ -87,6 +87,7 @@ export class FerlyCard extends React.Component {
       .then((response) => response.json())
       .then((json) => {
         this.props.apiRefresh(urls.profile)
+        this.setState({passed: false})
       })
   }
 
