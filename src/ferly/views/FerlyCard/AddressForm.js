@@ -2,6 +2,7 @@ import PrimaryButton from 'ferly/components/PrimaryButton'
 import PropTypes from 'prop-types'
 import React from 'react'
 import StatePicker from 'ferly/views/FerlyCard/StatePicker'
+import TestElement from 'ferly/components/TestElement'
 import Theme from 'ferly/utils/theme'
 import {post} from 'ferly/utils/fetch'
 import {MaterialIcons} from '@expo/vector-icons'
@@ -80,7 +81,8 @@ export default class AddressForm extends React.Component {
         })
         return false
       } else if (responseJson.error) {
-        Alert.alert('Oops!', responseJson.description)
+        Alert.alert('Oops!', 'We couldn\'t find that address. ' +
+        'Check to make sure it\'s accurate.')
         return false
       } else {
         return true
@@ -109,101 +111,107 @@ export default class AddressForm extends React.Component {
           <KeyboardAvoidingView style={styles.form}
             behavior={'padding'}
             keyboardVerticalOffset={64}>
-            <ScrollView>
-              <View>
-                <View style={styles.iconStyles}>
-                  <MaterialIcons
-                    style={{paddingRight: 10}}
-                    name={'person'}
-                    color={Theme.lightBlue}
-                    size={20} />
-                  <Text style={styles.labelText}>Name</Text>
-                </View>
-                <View style={styles.textBox}>
-                  <TextInput
-                    underlineColorAndroid='transparent'
-                    style={styles.textField}
-                    returnKeyType='done'
-                    value={name}
-                    maxLength={50}
-                    onChangeText={(text) => this.setState({name: text})} />
-                  <Text style={styles.error}>{nameError}</Text>
-                </View>
-              </View>
-              <View>
-                <View style={styles.iconStyles}>
-                  <MaterialIcons
-                    style={{paddingRight: 10}}
-                    name={'location-on'}
-                    color={Theme.lightBlue}
-                    size={20} />
-                  <Text style={styles.labelText}>Address</Text>
-                </View>
-                <View style={styles.textBox}>
-                  <TextInput
-                    underlineColorAndroid='transparent'
-                    style={styles.textField}
-                    returnKeyType='done'
-                    value={address}
-                    maxLength={50}
-                    onChangeText={(text) => this.setState({address: text})} />
-                  <Text style={styles.error}>{addressError}</Text>
-                </View>
-              </View>
-              <View style={styles.inputContainer}>
-                <Text style={styles.labelText}>Apartment Number</Text>
-                <TextInput
-                  underlineColorAndroid='transparent'
-                  style={styles.textField}
-                  returnKeyType='done'
-                  value={apt}
-                  onChangeText={(text) => this.setState({apt: text})}
-                  maxLength={20} />
-                <Text></Text>
-              </View>
-              <View style={styles.inputContainer}>
-                <Text style={styles.labelText}>City</Text>
-                <TextInput
-                  underlineColorAndroid='transparent'
-                  style={styles.textField}
-                  returnKeyType='done'
-                  value={city}
-                  maxLength={15}
-                  onChangeText={(text) => this.setState({city: text})} />
-                <Text style={styles.error}>{cityError}</Text>
-              </View>
-              <View style={styles.stateZip}>
+            <ScrollView keyboardShouldPersistTaps='handled'>
+              <TestElement parent={View} label='test-id-address-form'>
                 <View>
+                  <View style={styles.iconStyles}>
+                    <MaterialIcons
+                      style={{paddingRight: 10}}
+                      name={'person'}
+                      color={Theme.lightBlue}
+                      size={20} />
+                    <Text style={styles.labelText}>Name</Text>
+                  </View>
+                  <View style={styles.textBox}>
+                    <TextInput
+                      underlineColorAndroid='transparent'
+                      style={styles.textField}
+                      returnKeyType='done'
+                      value={name}
+                      maxLength={50}
+                      onChangeText={(text) => this.setState({name: text})} />
+                    <Text style={styles.error}>{nameError}</Text>
+                  </View>
+                </View>
+                <View>
+                  <View style={styles.iconStyles}>
+                    <MaterialIcons
+                      style={{paddingRight: 10}}
+                      name={'location-on'}
+                      color={Theme.lightBlue}
+                      size={20} />
+                    <Text style={styles.labelText}>Address</Text>
+                  </View>
+                  <View style={styles.textBox}>
+                    <TextInput
+                      underlineColorAndroid='transparent'
+                      style={styles.textField}
+                      returnKeyType='done'
+                      value={address}
+                      maxLength={50}
+                      onChangeText={
+                        (text) => this.setState({address: text})
+                      } />
+                    <Text style={styles.error}>{addressError}</Text>
+                  </View>
+                </View>
+                <View style={styles.inputContainer}>
+                  <Text style={styles.labelText}>Apartment Number</Text>
+                  <TextInput
+                    underlineColorAndroid='transparent'
+                    style={styles.textField}
+                    returnKeyType='done'
+                    value={apt}
+                    onChangeText={(text) => this.setState({apt: text})}
+                    maxLength={20} />
+                  <Text></Text>
+                </View>
+                <View style={styles.inputContainer}>
+                  <Text style={styles.labelText}>City</Text>
+                  <TextInput
+                    underlineColorAndroid='transparent'
+                    style={styles.textField}
+                    returnKeyType='done'
+                    value={city}
+                    maxLength={15}
+                    onChangeText={(text) => this.setState({city: text})} />
+                  <Text style={styles.error}>{cityError}</Text>
+                </View>
+                <View style={styles.stateZip}>
                   <View>
-                    <Text style={styles.labelText}>State</Text>
+                    <View>
+                      <Text style={styles.labelText}>State</Text>
+                    </View>
+                    <View style={styles.iosPickerStyles}>
+                      <StatePicker
+                        defaultState={this.defaultState}
+                        onStateChange={this.onStateChange} />
+                      <Text style={styles.error}>{stateError}</Text>
+                    </View>
                   </View>
-                  <View style={styles.iosPickerStyles}>
-                    <StatePicker
-                      defaultState={this.defaultState}
-                      onStateChange={this.onStateChange} />
-                    <Text style={styles.error}>{stateError}</Text>
+                  <View>
+                    <Text style={styles.labelText}>Zip Code</Text>
+                    <TextInput
+                      underlineColorAndroid='transparent'
+                      style={styles.zipField}
+                      keyboardType='numeric'
+                      returnKeyType='done'
+                      value={zipCode}
+                      maxLength={5}
+                      onChangeText={
+                        (text) => this.setState({zipCode: text})
+                      } />
+                    <Text style={styles.error}>{zipError}</Text>
                   </View>
                 </View>
-                <View>
-                  <Text style={styles.labelText}>Zip Code</Text>
-                  <TextInput
-                    underlineColorAndroid='transparent'
-                    style={styles.zipField}
-                    keyboardType='numeric'
-                    returnKeyType='done'
-                    value={zipCode}
-                    maxLength={5}
-                    onChangeText={(text) => this.setState({zipCode: text})} />
-                  <Text style={styles.error}>{zipError}</Text>
-                </View>
-              </View>
-              <View style={styles.skipContainer}>
-                <TouchableOpacity onPress={() => this.props.onPass()}>
-                  <Text style={styles.enterCard}>
+                <View style={styles.skipContainer}>
+                  <TouchableOpacity onPress={() => this.props.onPass()}>
+                    <Text style={styles.enterCard}>
                     I already have a Ferly Card
-                  </Text>
-                </TouchableOpacity>
-              </View>
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </TestElement>
             </ScrollView>
           </KeyboardAvoidingView>
           <PrimaryButton
@@ -212,7 +220,7 @@ export default class AddressForm extends React.Component {
               name === '' ||
               address === '' ||
               city === '' ||
-              zipCode === '' ||
+              zipCode.length !== 5 ||
               submitting
             }
             color={Theme.lightBlue}
@@ -236,7 +244,7 @@ const styles = StyleSheet.create({
   labelText: {color: 'gray'},
   textBox: {paddingHorizontal: 10, paddingLeft: 50},
   iconStyles: {flexDirection: 'row', paddingTop: 15, paddingLeft: 20},
-  page: {flex: 1, justifyContent: 'space-between'},
+  page: {flex: 1, justifyContent: 'space-between', backgroundColor: 'white'},
   skipContainer: {flexDirection: 'row-reverse', zIndex: -1},
   enterCard: {
     color: Theme.lightBlue,
