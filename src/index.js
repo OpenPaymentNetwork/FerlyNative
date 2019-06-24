@@ -1,4 +1,4 @@
-import Expo from 'expo'
+import * as Expo from 'expo'
 import App from './App'
 
 if (process.env.NODE_ENV === 'development') {
