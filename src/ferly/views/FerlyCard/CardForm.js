@@ -75,7 +75,7 @@ export class CardForm extends React.Component {
     post('add-card', {pan, pin})
       .then((response) => response.json())
       .then((json) => {
-        this.setState({submitting: false, pan: '', pin: '', invalid: {}})
+        this.setState({submitting: false, pin: '', invalid: {}})
         if (this.validateAddCard(json)) {
           this.props.apiRefresh(urls.profile)
           const alertText = 'Your card is ready to use. Remember to run ' +
