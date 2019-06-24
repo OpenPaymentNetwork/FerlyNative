@@ -238,7 +238,7 @@ export class FerlyCard extends React.Component {
                       autoFocus
                       editable={!submitting}
                       returnKeyType='done'
-                      onChangeText={this.onChangePin}
+                      onChangeText={(text) => this.setState({pin: text})}
                       value={pin} />
                   </View>
                   <Text style={styles.errorText}>{pinError}</Text>
