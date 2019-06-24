@@ -30,11 +30,7 @@ export class Cart extends React.Component {
 
   constructor (props) {
     super(props)
-    this.state = {
-      invalid: '',
-      selectedSource: null,
-      cardLoaded: false
-    }
+    this.state = {selectedSource: null, cardLoaded: false}
   }
 
   componentDidMount () {
@@ -74,10 +70,8 @@ export class Cart extends React.Component {
 
   validate (json) {
     if (json.invalid) {
-      this.setState({
-        invalid: json.invalid[Object.keys(json.invalid)[0]],
-        submitting: false
-      })
+      Alert.alert('Error', json.invalid[Object.keys(json.invalid)[0]])
+      this.setState({submitting: false})
       return false
     } else if (!json.result) {
       Alert.alert('Error', 'There was a problem processing your credit card.')
