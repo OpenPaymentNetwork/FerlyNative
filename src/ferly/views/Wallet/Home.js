@@ -159,7 +159,6 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     height: 130,
     backgroundColor: 'white',
-    borderWidth: 1,
     borderColor: 'lightgray',
     elevation: 1.8,
     shadowOffset: {width: 2, height: 2},
