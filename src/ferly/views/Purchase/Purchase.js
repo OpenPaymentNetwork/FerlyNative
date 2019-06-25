@@ -62,7 +62,7 @@ export class Purchase extends React.Component {
     const expirationDate = formatDate(d, 'M/D/YYYY')
 
     return (
-      <View style={{flex: 1, justifyContent: 'space-between'}}>
+      <View style={{flex: 1, justifyContent: 'space-between', backgroundColor: 'white'}}>
         <ScrollView style={styles.contentContainer}>
           <View style={styles.topRow}>
             <View style={{flexShrink: 1, paddingVertical: 14}}>

@@ -148,7 +148,7 @@ export default class SignUp extends React.Component {
     const {firstName, lastName, username, submitting, invalid} = this.state
     const {version} = Constants.manifest
     return (
-      <View style={{flex: 1}}>
+      <View style={{flex: 1, backgroundColor: Theme.darkBlue}}>
         <View style={styles.container}>
           <Image source={logoWhite} style={styles.logo} />
           <TextInput

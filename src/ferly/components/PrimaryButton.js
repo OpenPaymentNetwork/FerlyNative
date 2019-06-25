@@ -13,7 +13,10 @@ export default class PrimaryButton extends React.Component {
           backgroundColor: disabled ? 'lightgray' : Theme.lightBlue,
           flexDirection: 'row',
           height: 50,
-          justifyContent: 'center'
+          justifyContent: 'center',
+          borderRadius: 15,
+          marginHorizontal: 15,
+          marginBottom: 25
         }}
         disabled={disabled}
         onPress={() => onPress()}>
