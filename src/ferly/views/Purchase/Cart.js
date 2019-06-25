@@ -6,6 +6,7 @@ import PrimaryButton from 'ferly/components/PrimaryButton'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Spinner from 'ferly/components/Spinner'
+import TestElement from 'ferly/components/TestElement'
 import Theme from 'ferly/utils/theme'
 import {apiRequire, apiExpire, apiRefresh} from 'ferly/store/api'
 import {connect} from 'react-redux'
@@ -141,7 +142,9 @@ export class Cart extends React.Component {
         }
         const display = `${brand} ending in ${lastFour}`
         return (
-          <TouchableOpacity
+          <TestElement
+            parent={TouchableOpacity}
+            label='test-id-cart-card-box'
             key={id}
             style={sourceStyles}
             onPress={() => this.setState({selectedSource: id})}>
@@ -155,7 +158,7 @@ export class Cart extends React.Component {
                 color="lightcoral"
                 size={18} />
             </TouchableOpacity>
-          </TouchableOpacity>
+          </TestElement>
         )
       })
       let newCard = (
@@ -236,7 +239,10 @@ export class Cart extends React.Component {
 
     return (
       <View style={styles.page}>
-        <View style={styles.header}>
+        <TestElement
+          parent={View}
+          label='test-id-cart-header-box'
+          style={styles.header}>
           <View style={{alignItems: 'center', padding: 5}}>
             <Avatar
               size={100} pictureUrl={design.logo_image_url}/>
@@ -286,7 +292,7 @@ export class Cart extends React.Component {
               </View>
             </View>
           </View>
-        </View>
+        </TestElement>
         {this.renderBody()}
         <PrimaryButton
           title="Confirm Purchase"
