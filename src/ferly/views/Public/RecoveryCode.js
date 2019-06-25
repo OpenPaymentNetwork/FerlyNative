@@ -1,9 +1,10 @@
+import * as Permissions from 'expo-permissions'
 import PrimaryButton from 'ferly/components/PrimaryButton'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Recaptcha from 'ferly/components/Recaptcha'
 import Theme from 'ferly/utils/theme'
-import {Notifications, Permissions} from 'expo'
+import {Notifications} from 'expo'
 import {post} from 'ferly/utils/fetch'
 import {View, Text, TextInput, StyleSheet, Alert, Platform} from 'react-native'
 

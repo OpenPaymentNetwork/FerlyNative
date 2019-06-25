@@ -1,10 +1,11 @@
+import * as expoContacts from 'expo-contacts'
+import * as Permissions from 'expo-permissions'
 import Avatar from 'ferly/components/Avatar'
 import PropTypes from 'prop-types'
 import React from 'react'
 import SearchBar from 'ferly/components/SearchBar'
 import Spinner from 'ferly/components/Spinner'
 import TestElement from 'ferly/components/TestElement'
-import {Permissions, Contacts as expoContacts} from 'expo'
 import {
   View,
   Text,

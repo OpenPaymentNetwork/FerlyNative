@@ -1,10 +1,12 @@
+import * as Permissions from 'expo-permissions'
+import Constants from 'expo-constants'
 import PrimaryButton from 'ferly/components/PrimaryButton'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Theme from 'ferly/utils/theme'
-import {Notifications, Permissions, Constants} from 'expo'
-import {post, envId} from 'ferly/utils/fetch'
 import {logoWhite} from 'ferly/images/index'
+import {Notifications} from 'expo'
+import {post, envId} from 'ferly/utils/fetch'
 import {
   View,
   Text,

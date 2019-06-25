@@ -1,9 +1,10 @@
+import * as ImagePicker from 'expo-image-picker'
+import * as Permissions from 'expo-permissions'
 import Avatar from 'ferly/components/Avatar'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Theme from 'ferly/utils/theme'
-import {ImagePicker, Permissions} from 'expo'
 import {Platform, TouchableOpacity, Alert, View} from 'react-native'
 
 export default class ProfilePicturePicker extends React.Component {

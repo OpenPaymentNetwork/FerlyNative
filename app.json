@@ -4,7 +4,7 @@
     "icon": "./ferly-icon.png",
 
     "version": "1.2.9",
-    "sdkVersion": "32.0.0",
+    "sdkVersion": "33.0.0",
     "slug":"ferly",
     "ios": {
       "bundleIdentifier": "com.ferly.ferly"

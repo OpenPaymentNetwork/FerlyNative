@@ -1,9 +1,11 @@
+import * as Permissions from 'expo-permissions'
+import Constants from 'expo-constants'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import PropTypes from 'prop-types'
 import React from 'react'
 import {connect} from 'react-redux'
 import {envId} from 'ferly/utils/fetch'
-import {Notifications, Permissions, Constants, Updates} from 'expo'
+import {Notifications, Updates} from 'expo'
 import {View, Text, TouchableOpacity, StyleSheet, Alert} from 'react-native'
 
 export class Settings extends React.Component {

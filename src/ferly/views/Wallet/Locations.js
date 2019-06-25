@@ -1,3 +1,4 @@
+import MapView from 'react-native-maps'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Spinner from 'ferly/components/Spinner'
@@ -6,7 +7,6 @@ import {apiRequire} from 'ferly/store/api'
 import {connect} from 'react-redux'
 import {createUrl} from 'ferly/utils/fetch'
 import {MaterialIcons} from '@expo/vector-icons'
-import {MapView} from 'expo'
 import {
   View,
   Text,
