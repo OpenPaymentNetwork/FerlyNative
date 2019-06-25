@@ -21,6 +21,9 @@ export default class TestElement extends React.Component {
 
 TestElement.propTypes = {
   label: PropTypes.string.isRequired,
-  parent: PropTypes.func.isRequired,
+  parent: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.object
+  ]).isRequired,
   children: PropTypes.node
 }

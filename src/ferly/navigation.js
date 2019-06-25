@@ -42,7 +42,7 @@ const drawerOptions = ({navigation}) => ({
       size={26}
       onPress={() => navigation.toggleDrawer()} />
   ),
-  headerStyle: {paddingRight: 10, backgroundColor: Theme.darkBlue},
+  headerStyle: {backgroundColor: Theme.darkBlue},
   headerTintColor: 'white'
 })
 
