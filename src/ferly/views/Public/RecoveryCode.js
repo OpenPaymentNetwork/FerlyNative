@@ -127,7 +127,10 @@ export default class RecoveryCode extends React.Component {
       <Recaptcha onExecute={this.onExecute.bind(this)} action="recovery" />)
 
     return (
-      <View style={{flex: 1, justifyContent: 'space-between'}}>
+      <View style={{
+        flex: 1,
+        justifyContent: 'space-between',
+        backgroundColor: 'white'}}>
         <View style={{paddingHorizontal: 40, paddingVertical: 30}}>
           <Text style={{fontSize: 18}}>
             {`We sent a unique and temporary code to your ${channelType}. ` +

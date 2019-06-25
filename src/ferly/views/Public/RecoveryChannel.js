@@ -66,7 +66,10 @@ export default class RecoveryChannel extends React.Component {
     const {fieldValue, invalid, submitting} = this.state
 
     return (
-      <View style={{flex: 1, justifyContent: 'space-between'}}>
+      <View style={{
+        flex: 1,
+        justifyContent: 'space-between',
+        backgroundColor: 'white'}}>
         <View style={{paddingHorizontal: 40, paddingVertical: 30}}>
           <Text style={{fontSize: 18}}>
             Enter the phone number or email address associated with your account.
