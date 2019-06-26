@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'white',
     maxHeight: 50,
+    minHeight: 50,
     margin: 14,
     borderWidth: 1,
     borderColor: 'lightgray',
