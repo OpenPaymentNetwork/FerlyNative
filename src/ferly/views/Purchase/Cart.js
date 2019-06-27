@@ -15,14 +15,13 @@ import {StackActions} from 'react-navigation'
 import {
   Alert,
   KeyboardAvoidingView,
-  Platform,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
-  WebView
+  View
 } from 'react-native'
+import {WebView} from 'react-native-webview'
 
 export class Cart extends React.Component {
   static navigationOptions = {
@@ -50,6 +49,7 @@ export class Cart extends React.Component {
       source_id: source
     }
 
+    this.setState({submitting: true})
     post('purchase', purchaseParams)
       .then((response) => response.json())
       .then((responseJson) => {
@@ -85,7 +85,6 @@ export class Cart extends React.Component {
 
   handleSubmitClick () {
     const {selectedSource} = this.state
-    this.setState({submitting: true})
     if (selectedSource === 'new') {
       if (this.webview) {
         this.webview.injectJavaScript(
@@ -193,11 +192,33 @@ export class Cart extends React.Component {
             if (error) {
               const errorElement = document.getElementById('card-errors');
               errorElement.textContent = error.message;
-              window.postMessage('error')
+              window.ReactNativeWebView.postMessage('error')
             } else {
-              window.postMessage('paymenttoken:' + token.id);
+              window.ReactNativeWebView.postMessage(
+                'paymenttoken:' + token.id
+              );
             }
           });`
+        const stripeHTML = `
+          <head>
+            <meta charset="utf-8">
+            <style type="text/css">
+              .StripeElement {
+                padding: 8px;
+              }
+              </style>
+          </head>
+          <body>
+            <script src="https://js.stripe.com/v3/"></script>
+            <div class="form-row">
+              <div id="card-number">
+                <!-- A Stripe Element will be inserted here. -->
+              </div>
+              <!-- Used to display form errors. -->
+              <div id="card-errors" role="alert"></div>
+            </div>
+            <button style="visibility: hidden" id="submit-button">Submit</button>
+          </body>`
         const loadingSpinner = <View style={{height: 80}}><Spinner /></View>
         newCard = (
           <View style={[styles.source, styles.selectedSource]}>
@@ -206,8 +227,9 @@ export class Cart extends React.Component {
               <WebView
                 ref={ref => (this.webview = ref)}
                 onLoadEnd={() => this.setState({cardLoaded: true})}
-                scalesPageToFit={Platform.OS !== 'ios'}
-                source={require('./stripe.html')}
+                scalesPageToFit={false}
+                useWebKit={false}
+                source={{html: stripeHTML}}
                 injectedJavaScript={stripeJs}
                 onMessage={this.receiveMessage.bind(this)}
                 scrollEnabled={false} />

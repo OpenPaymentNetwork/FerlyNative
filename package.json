@@ -41,6 +41,7 @@
     "react-native-maps": "^0.24.2",
     "react-native-recaptcha-v3": "0.0.16",
     "react-native-vector-icons": "^4.6.0",
+    "react-native-webview": "^5.8.2",
     "react-navigation": "^2.0.0",
     "react-redux": "^5.0.7",
     "redux": "^4.0.0",
