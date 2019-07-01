@@ -197,7 +197,8 @@ export class Transfer extends React.Component {
           alignItems: 'center',
           flexDirection: 'row',
           height: 110,
-          justifyContent: 'center'
+          justifyContent: 'center',
+          paddingTop: 20
         }}>
           <Avatar size={100} shade={true} pictureUrl={designLogoImageUrl}/>
           {counterPartyAvatar}
@@ -233,7 +234,7 @@ export class Transfer extends React.Component {
 
 const styles = StyleSheet.create({
   functionRow: {flexDirection: 'row', justifyContent: 'space-between'},
-  section: {marginTop: 10, paddingHorizontal: 20},
+  section: {marginTop: 10, paddingHorizontal: 20, padding: 20},
   sectionHeader: {fontSize: 18},
   sectionText: {color: 'darkgray', fontSize: 16}
 })

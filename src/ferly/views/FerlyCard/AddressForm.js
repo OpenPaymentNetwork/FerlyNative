@@ -240,7 +240,7 @@ const styles = StyleSheet.create({
   error: {color: 'red', width: '100%'},
   form: {flex: 1},
   textField: {borderBottomWidth: 1, borderColor: 'gray'},
-  zipField: {borderBottomWidth: 1, borderColor: 'gray', width: 75},
+  zipField: {borderBottomWidth: 1, borderColor: 'gray', width: 75, marginTop: 12},
   labelText: {color: 'gray'},
   textBox: {paddingHorizontal: 10, paddingLeft: 50},
   iconStyles: {flexDirection: 'row', paddingTop: 15, paddingLeft: 20},
