@@ -71,7 +71,7 @@ export class Locations extends React.Component {
     if (selectedLocation != null) {
       const {title, address} = selectedLocation
       selectedDetails = (
-        <View>
+        <View style={styles.shadow}>
           <Image style={styles.logo} source={{uri: imageUrl}} />
           <View style={{flexDirection: 'row'}}>
             <View style={styles.selectionDetails}>
@@ -129,6 +129,13 @@ Locations.propTypes = {
 }
 
 const styles = StyleSheet.create({
+  shadow: {
+    elevation: 1,
+    shadowColor: 'gray',
+    shadowOffset: { width: 2, height: 1 },
+    shadowOpacity: 5,
+    shadowRadius: 10
+  },
   logo: {
     marginLeft: 20,
     zIndex: 1,
