@@ -4,7 +4,6 @@ import Avatar from 'ferly/components/Avatar'
 import PropTypes from 'prop-types'
 import React from 'react'
 import SearchBar from 'ferly/components/SearchBar'
-import Spinner from 'ferly/components/Spinner'
 import TestElement from 'ferly/components/TestElement'
 import {
   View,
@@ -135,15 +134,13 @@ export default class Contacts extends React.Component {
 
   render () {
     const {contacts, permission, searchResults} = this.state
-    if (permission === 'denied') {
+    if (permission !== 'granted') {
       return (
         <View
           style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
           <Text>Ferly needs permission to access your contacts.</Text>
         </View>
       )
-    } else if (permission !== 'granted') {
-      return <Spinner />
     } else if (contacts && contacts.length === 0) {
       return (
         <View
