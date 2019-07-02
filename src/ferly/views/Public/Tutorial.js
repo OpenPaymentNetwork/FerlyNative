@@ -1,3 +1,4 @@
+import PrimaryButton from 'ferly/components/PrimaryButton'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Theme from 'ferly/utils/theme'
@@ -32,48 +33,54 @@ export default class Tutorial extends React.Component {
       dots.push(
         <View
           key={i}
-          style={{
-            borderRadius: 8,
-            backgroundColor: i === page ? Theme.darkBlue : 'darkgray',
-            height: i === page ? 13 : 10,
-            width: i === page ? 13 : 10
-          }} />
+          style={[
+            styles.circle,
+            {backgroundColor: i === page ? 'white' : 'darkgray'}
+          ]} />
       )
     }
     return dots
   }
 
-  renderPageControls () {
-    let rightText = 'Next'
-    let leftText = 'Skip'
-    let onRightPress = this.nextPage
+  renderButtons () {
     const {page} = this.state
     if (page >= 5) {
-      rightText = 'Got It'
-      leftText = ''
-      onRightPress = this.exit
-    }
-    return (
-      <View style={{height: 50, flexDirection: 'row'}}>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={this.exit}>
-          <Text style={styles.buttonText}>
-            {leftText}
-          </Text>
-        </TouchableOpacity>
-        <View style={styles.dots}>
-          {this.renderDots()}
+      return (
+        <PrimaryButton
+          title="GET STARTED"
+          color={Theme.lightBlue}
+          onPress={this.exit} />
+      )
+    } else {
+      return (
+        <View style={{height: 50, flexDirection: 'row'}}>
+          <TouchableOpacity
+            style={{
+              alignItems: 'center',
+              backgroundColor: Theme.lightBlue,
+              flexDirection: 'row',
+              height: 50,
+              flex: 1,
+              justifyContent: 'center'
+            }}
+            onPress={this.exit}>
+            <Text style={{color: 'white', fontSize: 20}}>SKIP</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              alignItems: 'center',
+              backgroundColor: Theme.lightBlue,
+              flexDirection: 'row',
+              height: 50,
+              flex: 1,
+              justifyContent: 'center'
+            }}
+            onPress={this.nextPage}>
+            <Text style={{color: 'white', fontSize: 20}}>NEXT</Text>
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={onRightPress}>
-          <Text style={[styles.buttonText, {position: 'absolute', right: 20}]}>
-            {rightText}
-          </Text>
-        </TouchableOpacity>
-      </View>
-    )
+      )
+    }
   }
 
   render () {
@@ -89,7 +96,7 @@ export default class Tutorial extends React.Component {
     ]
 
     const titles = [
-      'Simplify the way you buy, give, and use gift cards.',
+      'Welcome to Ferly',
       'Buy Gift Value',
       'View & Manage Balances',
       'Activate the Ferly Card',
@@ -98,7 +105,7 @@ export default class Tutorial extends React.Component {
     ]
 
     const descriptions = [
-      '',
+      'Simplify the way you buy, give, and use gift cards.',
       'Purchase gift value anytime, anywhere from the in-app marketplace. ' +
       'Perfect for when stores are closed or for that last minute gift.',
       'Enjoy the convenience of managing your gift value balances in real ' +
@@ -114,23 +121,21 @@ export default class Tutorial extends React.Component {
     ]
 
     return (
-      <View style={{
-        flex: 1,
-        backgroundColor: 'white'}}>
+      <View style={styles.page}>
         <View style={styles.container}>
           <Image style={styles.image} source={images[page]} />
-          <Text style={[
-            styles.text, {
-              marginBottom: 30,
-              fontSize: 22,
-              fontWeight: 'bold'}]}>
+          <Text style={[styles.text, {fontSize: 26, fontWeight: 'bold'}]}>
             {titles[page]}
           </Text>
           <Text style={[styles.text, {fontSize: 18}]}>
             {descriptions[page]}
           </Text>
+          <View style={{flexGrow: 0.2}} />
+          <View style={styles.dots}>
+            {this.renderDots()}
+          </View>
         </View>
-        {this.renderPageControls()}
+        {this.renderButtons()}
       </View>
     )
   }
@@ -141,32 +146,21 @@ Tutorial.propTypes = {
 }
 
 const styles = StyleSheet.create({
+  page: {
+    flex: 1,
+    justifyContent: 'space-between',
+    backgroundColor: Theme.darkBlue
+  },
   container: {
     flex: 1,
     alignItems: 'center',
-    backgroundColor: 'white',
+    backgroundColor: Theme.darkBlue,
+    paddingVertical: 40,
     paddingHorizontal: 20,
-    justifyContent: 'center'
+    justifyContent: 'space-around'
   },
-  dots: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: 120,
-    alignItems: 'center'
-  },
-  button: {
-    alignItems: 'center',
-    backgroundColor: 'white',
-    flexDirection: 'row',
-    height: 50,
-    flex: 1,
-    paddingHorizontal: 20
-  },
-  buttonText: {
-    color: Theme.darkBlue,
-    fontSize: 20,
-    fontWeight: 'bold'
-  },
-  image: {marginBottom: 65, height: 220, resizeMode: 'contain'},
-  text: {textAlign: 'center', color: Theme.darkBlue}
+  image: {height: 220, resizeMode: 'contain'},
+  text: {textAlign: 'center', color: 'white'},
+  dots: {flexDirection: 'row', justifyContent: 'space-between', width: 120},
+  circle: {width: 12, height: 12, borderRadius: 6}
 })
