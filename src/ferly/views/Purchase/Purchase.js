@@ -5,12 +5,20 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import SimpleCurrencyInput from 'ferly/components/SimpleCurrencyInput'
 import Spinner from 'ferly/components/Spinner'
-import Theme from 'ferly/utils/theme'
+import {viewLocations} from 'ferly/images/index'
 import {apiExpire, apiRequire} from 'ferly/store/api'
 import {connect} from 'react-redux'
 import {format as formatDate} from 'date-fns'
 import {urls} from 'ferly/utils/fetch'
-import {View, Text, StyleSheet, ScrollView, Button} from 'react-native'
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  Image,
+  Linking
+} from 'react-native'
 
 export class Purchase extends React.Component {
   static navigationOptions = {
@@ -81,14 +89,14 @@ export class Purchase extends React.Component {
           <Text style={styles.header}>Redemption Locations</Text>
           <Text style={styles.paragraph}>
             Click the button below to view {title} locations where you can
-            redeem this gift value for goods and services.
+            use your Ferly Card.
           </Text>
-          <View style={{maxWidth: 220, marginVertical: 4}}>
-            <Button
-              color={Theme.lightBlue}
-              title="Show locations"
-              onPress={() => navigation.navigate('Locations', {design})} />
-          </View>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Locations', {design})}>
+            <Image
+              source={viewLocations}
+              style={styles.image}/>
+          </TouchableOpacity>
           <Text style={styles.header}>Expiration and Fees</Text>
           <Text style={styles.paragraph}>
             Gift value expires {expirationDate}, five years after the date of
@@ -96,10 +104,16 @@ export class Purchase extends React.Component {
             purchased gift value.
           </Text>
           <Text style={styles.header}>Terms</Text>
-          <Text style={styles.paragraph}>
-            The purchase of this gift value is subject to the Ferly Cardholder
-            and App Agreement and Ferly's Privacy Policy and Refund Policy.
-            Please contact us at (800) 651-2186 for any questions.
+          <Text>
+            <Text style={styles.paragraph}>
+              The purchase of this gift value is subject to the Ferly Cardholder
+              and App Agreement and Ferly's Privacy Policy and Refund Policy.
+              Please contact us at </Text>
+            <Text
+              onPress={() => { Linking.openURL('tel://8006512186') }}
+              style={[styles.paragraph, {textDecorationLine: 'underline'}]}>
+              (800) 651-2186 </Text>
+            <Text style={styles.paragraph}>for any questions.</Text>
           </Text>
         </ScrollView>
         {submitting ? <Spinner /> : null}
@@ -141,6 +155,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 4
   },
+  image: {flex: 1, resizeMode: 'cover', width: undefined, borderRadius: 10},
   paragraph: {fontSize: 16, marginBottom: 10, color: 'darkgray'}
 })
 

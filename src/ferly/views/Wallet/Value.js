@@ -2,8 +2,17 @@ import Avatar from 'ferly/components/Avatar'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Theme from 'ferly/utils/theme'
+import {viewLocations} from 'ferly/images/index'
 import {format as formatDate} from 'date-fns'
-import {View, ScrollView, Text, Button, StyleSheet} from 'react-native'
+import {
+  View,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  Image,
+  StyleSheet,
+  Linking
+} from 'react-native'
 
 export class Value extends React.Component {
   static navigationOptions = {
@@ -52,29 +61,42 @@ export class Value extends React.Component {
           Click the button below to view {title} locations where you can
           redeem this gift value for goods and services.
         </Text>
-        <View style={{maxWidth: 220, marginVertical: 4}}>
-          <Button
-            color={Theme.lightBlue}
-            title="Show locations"
-            onPress={() => navigation.navigate('Locations', {design})} />
-        </View>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Locations', {design})}>
+          <Image
+            source={viewLocations}
+            style={styles.image}/>
+        </TouchableOpacity>
         <Text style={styles.header}>Expiration</Text>
         <Text style={styles.paragraph}>
-          This value is subject to the following expiration dates. Expiration
-          dates are inherited by those you send value to.
+          This value is subject to the following expiration dates:
         </Text>
         {expiringInfo.length > 0 ? tableHeader : null}
         {expiringInfo}
+        <Text style={[styles.paragraph, {marginTop: 10}]}>
+          Expiration dates are inherited by those you send value to.
+        </Text>
         <Text style={styles.header}>Fees</Text>
         <Text style={styles.paragraph}>
           This value is not subject to dormancy, inactivity, or service fees.
         </Text>
         <Text style={styles.header}>Customer Support</Text>
-        <Text style={styles.paragraph}>
-          Please call Ferly, Inc. at (800) 651-2186 Monday through Friday
-          from 9:00 am - 5:00 pm MST, or email support@ferly.com.
+        <Text>
+          <Text style={styles.supportParagraph}>Please call Ferly, Inc. at </Text>
+          <Text style={[
+            styles.supportParagraph,
+            {textDecorationLine: 'underline'}]}
+          onPress={() => { Linking.openURL('tel://8006512186') }}>(800) 651-2186 </Text>
+          <Text style={styles.supportParagraph}>
+            Monday through Friday from 9:00 am - 5:00 pm MST, or email </Text>
+          <Text style={[
+            styles.supportParagraph,
+            {textDecorationLine: 'underline'}]}
+          onPress={() => { Linking.openURL('mailto:support@ferly.com') }}>
+            support@ferly.com.
+          </Text>
         </Text>
-        <View style={{height: 20}} />
+        <Text style={{paddingTop: 20}} />
       </ScrollView>
     )
   }
@@ -88,13 +110,15 @@ const styles = StyleSheet.create({
   },
   amount: {color: Theme.lightBlue, fontSize: 22, marginBottom: 12},
   header: {
-    color: Theme.lightBlue,
+    color: 'black',
     fontSize: 16,
     fontWeight: 'bold',
     marginTop: 10,
-    marginBottom: 4
+    marginBottom: 10
   },
-  paragraph: {fontSize: 16, marginBottom: 10},
+  image: {flex: 1, resizeMode: 'cover', width: undefined, borderRadius: 10},
+  paragraph: {fontSize: 16, marginBottom: 10, color: 'gray'},
+  supportParagraph: {fontSize: 16, color: 'gray'},
   tableRow: {flexDirection: 'row', paddingLeft: 10},
   leftColumn: {width: 120}
 })
