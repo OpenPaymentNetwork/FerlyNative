@@ -111,9 +111,8 @@ export default class Tutorial extends React.Component {
       'Enjoy the convenience of managing your gift value balances in real ' +
       'time using a mobile app. Always know what brands you hold gift value ' +
       'for and how much.',
-      'Pick up a Ferly Card at the many participating brands and activate ' +
-      'it in your account from the Ferly Card menu option. Activation ' +
-      'is simple and takes only a few minutes.',
+      'Use the Ferly Card option in the menu and let us know where to mail ' +
+      'your card. Activate your card when it arrives and create a PIN.',
       'Use your activated Ferly Card for any brand you hold gift value for, ' +
       'either in stores or online just like you would a regular debit card.',
       'Make their day special! Send the gift of their favorite brand ' +
@@ -124,13 +123,13 @@ export default class Tutorial extends React.Component {
       <View style={styles.page}>
         <View style={styles.container}>
           <Image style={styles.image} source={images[page]} />
-          <Text style={[styles.text, {fontSize: 26, fontWeight: 'bold'}]}>
+          <Text style={[styles.text, {fontSize: 24, fontWeight: 'bold'}]}>
             {titles[page]}
           </Text>
-          <Text style={[styles.text, {fontSize: 18}]}>
+          <Text style={[styles.description, {fontSize: 18}]}>
             {descriptions[page]}
           </Text>
-          <View style={{flexGrow: 0.2}} />
+          <View style={{flexGrow: 0.1}} />
           <View style={styles.dots}>
             {this.renderDots()}
           </View>
@@ -160,6 +159,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around'
   },
   image: {height: 220, resizeMode: 'contain'},
+  description: {textAlign: 'center', color: 'lightgray'},
   text: {textAlign: 'center', color: 'white'},
   dots: {flexDirection: 'row', justifyContent: 'space-between', width: 120},
   circle: {width: 12, height: 12, borderRadius: 6}

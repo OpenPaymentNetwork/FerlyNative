@@ -69,11 +69,10 @@ export class FerlyCard extends React.Component {
   handleExpirationClick () {
     Alert.alert('Card Expiration',
       'This is your card\'s expiration date. A free replacement card can be ' +
-      'obtained from select brand locations after expiration. The ' +
-      'underlying gift value held in your account does not expire unless ' +
-      'permitted by applicable federal or state regulations. See a gift ' +
-      'value page to view expiration dates, if any, for the gift value you ' +
-      'hold.'
+      'requested after expiration. The underlying gift value held in your ' +
+      'account does not expire unless permitted by applicable federal ' +
+      'or state regulations. See a gift value page to view expiration ' +
+      'dates, if any, for the gift value you hold.'
     )
   }
 

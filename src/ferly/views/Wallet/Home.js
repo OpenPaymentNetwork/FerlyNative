@@ -106,7 +106,7 @@ export class Wallet extends React.Component {
     const message = (
       'If you replace your phone or uninstall the app you\'ll need to ' +
       'recover your account using a verified email address or phone number. ' +
-      'You may lose your gift cards if account recovery is not set up prior ' +
+      'You may lose your gift value if account recovery is not set up prior ' +
       'to replacing your phone or uninstalling the app.'
     )
     const buttons = [

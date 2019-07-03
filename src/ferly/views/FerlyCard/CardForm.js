@@ -78,8 +78,8 @@ export class CardForm extends React.Component {
         this.setState({submitting: false, pin: '', invalid: {}})
         if (this.validateAddCard(json)) {
           this.props.apiRefresh(urls.profile)
-          const alertText = 'Your card is ready to use. Remember to run ' +
-            'it as a debit card if asked.'
+          const alertText = 'Your card is ready to use. Remember to select ' +
+            'debit when using your card.'
           Alert.alert('Success', alertText)
         }
       })
