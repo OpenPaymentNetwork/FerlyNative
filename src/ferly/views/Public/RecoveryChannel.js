@@ -75,7 +75,10 @@ export default class RecoveryChannel extends React.Component {
             Enter the phone number or email address associated with your account.
             We will send a text or email with a recovery code.
           </Text>
-          <View style={{borderBottomWidth: 1, borderColor: 'gray', paddingTop: 20}}>
+          <View style={{
+            borderBottomWidth: 1,
+            borderColor: 'gray',
+            paddingTop: 20}}>
             <TextInput
               style={{fontSize: 18}}
               onChangeText={(text) => this.setState({fieldValue: text})}

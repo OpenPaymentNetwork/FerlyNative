@@ -136,7 +136,10 @@ export default class RecoveryCode extends React.Component {
             {`We sent a unique and temporary code to your ${channelType}. ` +
              `Enter the ${codeLength}-digit code below.`}
           </Text>
-          <View style={{borderBottomWidth: 1, borderColor: 'gray', paddingTop: 20}}>
+          <View style={{
+            borderBottomWidth: 1,
+            borderColor: 'gray',
+            paddingTop: 20}}>
             <TextInput
               style={{fontSize: 18}}
               onChangeText={(text) => this.setState({fieldValue: text})}

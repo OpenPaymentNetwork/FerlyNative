@@ -280,13 +280,15 @@ export class Cart extends React.Component {
                   <View>
                     <View style={styles.functionRow}>
                       <Text style={styles.sectionText}>Purchase Amount</Text>
-                      <Text style={[styles.sectionText, {color: Theme.lightBlue}]}>
+                      <Text style={[styles.sectionText,
+                        {color: Theme.lightBlue}]}>
                         {accounting.formatMoney(amountNumber)}
                       </Text>
                     </View>
                     <View style={styles.functionRow}>
                       <Text style={styles.sectionText}>Online Fee</Text>
-                      <Text style={[styles.sectionText, {color: Theme.lightBlue}]}>
+                      <Text style={[styles.sectionText,
+                        {color: Theme.lightBlue}]}>
                         {accounting.formatMoney(convenienceFee)}
                       </Text>
                     </View>
@@ -295,7 +297,8 @@ export class Cart extends React.Component {
                       {borderBottomWidth: 0.5, borderColor: 'darkgray'}
                     ]}>
                       <Text style={styles.sectionText}>Tax</Text>
-                      <Text style={[styles.sectionText, {color: Theme.lightBlue}]}>
+                      <Text style={[styles.sectionText,
+                        {color: Theme.lightBlue}]}>
                         $0.00
                       </Text>
                     </View>

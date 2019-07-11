@@ -82,11 +82,13 @@ export class Value extends React.Component {
         </Text>
         <Text style={styles.header}>Customer Support</Text>
         <Text>
-          <Text style={styles.supportParagraph}>Please call Ferly, Inc. at </Text>
+          <Text style={styles.supportParagraph}>
+            Please call Ferly, Inc. at </Text>
           <Text style={[
             styles.supportParagraph,
             {textDecorationLine: 'underline'}]}
-          onPress={() => { Linking.openURL('tel://8006512186') }}>(800) 651-2186 </Text>
+          onPress={() => { Linking.openURL('tel://8006512186') }}>
+            (800) 651-2186 </Text>
           <Text style={styles.supportParagraph}>
             Monday through Friday from 9:00 am - 5:00 pm MST, or email </Text>
           <Text style={[
@@ -116,7 +118,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10
   },
-  image: {flex: 1, resizeMode: 'cover', width: undefined, borderRadius: 10},
+  image: {resizeMode: 'stretch', width: undefined},
   paragraph: {fontSize: 16, marginBottom: 10, color: 'gray'},
   supportParagraph: {fontSize: 16, color: 'gray'},
   tableRow: {flexDirection: 'row', paddingLeft: 10},
