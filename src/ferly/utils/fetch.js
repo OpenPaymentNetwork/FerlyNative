@@ -9,7 +9,7 @@ if (__DEV__ && env.EXPO_LOCAL_SERVER === 'true') {
   envId = 'l'
   // host = 'http://10.1.10.6:6543/' // Prod.ini
 } else if (releaseChannel === 'production') {
-  host = 'https://www.ferly.com/'
+  host = 'https://ferlyapi.com/'
 } else {
   host = 'http://ferlystaging.us-east-2.elasticbeanstalk.com/'
 }

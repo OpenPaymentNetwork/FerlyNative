@@ -38,7 +38,7 @@ export class Recaptcha extends React.Component {
         // On some iOS versions, this opens the url in the browser. Broken.
         // react-native-recaptcha-v3/index.js line 85. version 0.0.16
         // the slash at the end prevents this
-        url="http://ferly.com/"
+        url="http://ferlyapi.com/"
         siteKey={sitekey}
         onExecute={(response) => this.onExecute(response)}
       />
