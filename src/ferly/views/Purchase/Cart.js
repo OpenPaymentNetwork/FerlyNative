@@ -168,57 +168,9 @@ export class Cart extends React.Component {
         </TouchableOpacity>
       )
       if (selectedSource === 'new') {
+        const productionURI = 'https://ferlyapi.com/stripeform/production.html'
+        const stagingURI = 'https://ferlyapi.com/stripeform/staging.html'
         const {releaseChannel} = Constants.manifest
-        const publishableKey = releaseChannel === 'production'
-          ? 'pk_live_8U9wUmhgzP48MMlF8QS82TLb'
-          : 'pk_test_OYUrHqvNNjYfoorvryuKvSA1'
-        const stripeJs = `
-          const stripe = Stripe('${publishableKey}');
-          const elements = stripe.elements();
-          const card = elements.create('card', {
-            'style': {
-              'base': {'fontSize': '16px'}
-            }
-          });
-          card.mount('#card-number');
-          card.addEventListener('change', ({error}) => {
-            const displayError = document.getElementById('card-errors');
-            displayError.textContent = error ? error.message : '';
-          });
-          const form = document.getElementById('submit-button');
-          form.addEventListener('click', async (event) => {
-            event.preventDefault();
-            const {token, error} = await stripe.createToken(card);
-            if (error) {
-              const errorElement = document.getElementById('card-errors');
-              errorElement.textContent = error.message;
-              window.ReactNativeWebView.postMessage('error')
-            } else {
-              window.ReactNativeWebView.postMessage(
-                'paymenttoken:' + token.id
-              );
-            }
-          });`
-        const stripeHTML = `
-          <head>
-            <meta charset="utf-8">
-            <style type="text/css">
-              .StripeElement {
-                padding: 8px;
-              }
-              </style>
-          </head>
-          <body>
-            <script src="https://js.stripe.com/v3/"></script>
-            <div class="form-row">
-              <div id="card-number">
-                <!-- A Stripe Element will be inserted here. -->
-              </div>
-              <!-- Used to display form errors. -->
-              <div id="card-errors" role="alert"></div>
-            </div>
-            <button style="visibility: hidden" id="submit-button">Submit</button>
-          </body>`
         const loadingSpinner = <View style={{height: 80}}><Spinner /></View>
         newCard = (
           <View style={[styles.source, styles.selectedSource]}>
@@ -229,8 +181,8 @@ export class Cart extends React.Component {
                 onLoadEnd={() => this.setState({cardLoaded: true})}
                 scalesPageToFit={false}
                 useWebKit={false}
-                source={{html: stripeHTML}}
-                injectedJavaScript={stripeJs}
+                source={{uri: releaseChannel === 'production'
+                  ? productionURI : stagingURI}}
                 onMessage={this.receiveMessage.bind(this)}
                 scrollEnabled={false} />
             </View>
