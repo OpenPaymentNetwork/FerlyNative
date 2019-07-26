@@ -128,6 +128,7 @@ export default class AddressForm extends React.Component {
                       style={styles.textField}
                       returnKeyType='done'
                       value={name}
+                      autoFocus={true}
                       maxLength={50}
                       onChangeText={(text) => this.setState({name: text})} />
                     <Text style={styles.error}>{nameError}</Text>
@@ -240,7 +241,6 @@ const styles = StyleSheet.create({
   error: {color: 'red', width: '100%'},
   form: {flex: 1},
   textField: {borderBottomWidth: 1, borderColor: 'gray'},
-  zipField: {borderBottomWidth: 1, borderColor: 'gray', width: 75, marginTop: 12},
   labelText: {color: 'gray'},
   textBox: {paddingHorizontal: 10, paddingLeft: 50},
   iconStyles: {flexDirection: 'row', paddingTop: 15, paddingLeft: 20},
@@ -250,6 +250,12 @@ const styles = StyleSheet.create({
     color: Theme.lightBlue,
     paddingRight: 10,
     textDecorationLine: 'underline'
+  },
+  zipField: {
+    borderBottomWidth: 1,
+    borderColor: 'gray',
+    width: 75,
+    marginTop: 12
   },
   stateZip: {
     flex: 1,
