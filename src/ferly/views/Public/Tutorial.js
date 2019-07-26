@@ -89,34 +89,34 @@ export default class Tutorial extends React.Component {
     const images = [
       tutorialOne,
       tutorialTwo,
+      tutorialSix,
       tutorialThree,
       tutorialFour,
-      tutorialFive,
-      tutorialSix
+      tutorialFive
     ]
 
     const titles = [
       'Welcome to Ferly',
       'Buy Gift Value',
+      'Send Gifts to Others',
       'View & Manage Balances',
       'Activate the Ferly Card',
-      'Use Your Ferly Card',
-      'Send Gifts to Family & Friends'
+      'Use Your Ferly Card'
     ]
 
     const descriptions = [
       'Simplify the way you buy, give, and use gift cards.',
       'Purchase gift value anytime, anywhere from the in-app marketplace. ' +
       'Perfect for when stores are closed or for that last minute gift.',
+      'Make their day special! Send the gift of their favorite brand ' +
+      'along with a personalized message.',
       'Enjoy the convenience of managing your gift value balances in real ' +
       'time using a mobile app. Always know what brands you hold gift value ' +
       'for and how much.',
       'Use the Ferly Card option in the menu and let us know where to mail ' +
       'your card. Activate your card when it arrives and create a PIN.',
       'Use your activated Ferly Card for any brand you hold gift value for, ' +
-      'either in stores or online just like you would a regular debit card.',
-      'Make their day special! Send the gift of their favorite brand ' +
-      'along with a personalized message.'
+      'just like you would a regular debit card.'
     ]
 
     return (
