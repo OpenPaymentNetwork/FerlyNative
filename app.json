@@ -5,8 +5,11 @@
 
     "version": "1.3.0",
     "sdkVersion": "33.0.0",
+    "privacy": "public",
     "slug":"ferly",
     "ios": {
+      "supportsTablet": true,
+      "isTabletOnly": false,
       "bundleIdentifier": "com.ferly.ferly"
     },
     "android": {
