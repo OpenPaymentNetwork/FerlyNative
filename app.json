@@ -13,6 +13,7 @@
       "bundleIdentifier": "com.ferly.ferly"
     },
     "android": {
+      "versionCode": 2,
       "package": "com.ferly.ferly",
       "config": {
         "googleMaps": {
