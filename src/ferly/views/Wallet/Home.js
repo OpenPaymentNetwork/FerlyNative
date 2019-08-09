@@ -4,21 +4,20 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import Spinner from 'ferly/components/Spinner'
 import Theme from 'ferly/utils/theme'
+import TestElement from 'ferly/components/TestElement'
+import {apiRequire, apiRefresh} from 'ferly/store/api'
+import {checkedUidPrompt} from 'ferly/store/settings'
+import {connect} from 'react-redux'
+import {urls} from 'ferly/utils/fetch'
 import {
   View,
   TouchableOpacity,
   Text,
   RefreshControl,
   ScrollView,
-  Image,
   Alert,
   StyleSheet
 } from 'react-native'
-import TestElement from 'ferly/components/TestElement'
-import {apiRequire, apiRefresh} from 'ferly/store/api'
-import {checkedUidPrompt} from 'ferly/store/settings'
-import {connect} from 'react-redux'
-import {urls} from 'ferly/utils/fetch'
 
 export class Wallet extends React.Component {
   static navigationOptions = {
@@ -31,12 +30,8 @@ export class Wallet extends React.Component {
 
   renderCard (design) {
     const {navigation} = this.props
-    const {amount, id, title, wallet_image_url: walletImage} = design
+    const {amount, id, title, field_color: fieldColor} = design
     const formatted = accounting.formatMoney(parseFloat(amount))
-
-    const img = walletImage
-      ? <Image source={{uri: walletImage}} style={{height: 130, width: 130}} />
-      : <Text>{title}</Text>
 
     return (
       <TestElement
@@ -45,12 +40,18 @@ export class Wallet extends React.Component {
         key={id}
         accessible={false}
         onPress={() => navigation.navigate('Value', design)}
-        style={styles.cardContainer}>
-        <View style={styles.cardImage}>{img}</View>
+        style={[styles.cardContainer, {backgroundColor: `#${fieldColor}`}]}>
         <View style={styles.cardDetails}>
-          <View style={{flex: 1, paddingTop: 6, paddingLeft: 6}}>
-            <Text style={{fontSize: 22}}>{formatted}</Text>
-            <Text style={{fontSize: 16, color: 'gray'}}>{title}</Text>
+          <View style={{
+            flex: 1,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            paddingTop: 15,
+            paddingHorizontal: 20}}>
+            <Text style={{maxWidth: '55%', fontSize: 22, color: 'white'}}>
+              {title}
+            </Text>
+            <Text style={{fontSize: 24, color: 'white'}}>{formatted}</Text>
           </View>
           <View style={styles.buttonRow}>
             <TestElement
@@ -58,14 +59,28 @@ export class Wallet extends React.Component {
               label='test-id-give-button'
               style={styles.cashButton}
               onPress={() => navigation.navigate('Give', design)}>
-              <Text style={{color: Theme.lightBlue}}>GIVE GIFT</Text>
+              <View style={{flexDirection: 'row', paddingBottom: 15}}>
+                <Icon
+                  style={{paddingRight: 8}}
+                  name="gift"
+                  color="white"
+                  size={20} />
+                <Text style={{fontSize: 18, color: 'white'}}>Give Gift</Text>
+              </View>
             </TestElement>
             <TestElement
               parent={TouchableOpacity}
               label='test-id-buy-button'
               style={styles.cashButton}
               onPress={() => navigation.navigate('Purchase', {design})}>
-              <Text style={{color: Theme.lightBlue}}>BUY</Text>
+              <View style={{flexDirection: 'row', paddingBottom: 15}}>
+                <Icon
+                  style={{paddingRight: 8}}
+                  name="credit-card"
+                  color="white"
+                  size={18} />
+                <Text style={{fontSize: 18, color: 'white'}}>Buy More</Text>
+              </View>
             </TestElement>
           </View>
         </View>
@@ -158,12 +173,12 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginVertical: 10,
     height: 130,
-    backgroundColor: 'white',
     borderColor: 'lightgray',
     elevation: 1.8,
     shadowOffset: {width: 2, height: 2},
     shadowColor: 'lightgray',
-    shadowOpacity: 1
+    shadowOpacity: 1,
+    borderRadius: 15
   },
   cardImage: {
     width: 130,
@@ -189,23 +204,24 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: 'lightgray',
+    borderColor: 'gray',
     elevation: 5,
     shadowOffset: {width: 2, height: 2},
-    shadowColor: 'lightgray',
+    shadowColor: 'gray',
     shadowOpacity: 1
   },
   cashButton: {
-    alignItems: 'center',
+    alignItems: 'flex-end',
     justifyContent: 'center',
-    height: 40,
+    height: 42,
     flex: 1,
-    maxWidth: 100
+    maxWidth: 150
   },
   buttonRow: {
     flexDirection: 'row',
-    borderTopWidth: 1,
-    borderColor: 'lightgray'
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
+    paddingHorizontal: 20
   }
 })
 
