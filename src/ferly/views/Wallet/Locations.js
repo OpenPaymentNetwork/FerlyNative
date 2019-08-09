@@ -2,6 +2,7 @@ import MapView from 'react-native-maps'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Spinner from 'ferly/components/Spinner'
+import StoreAvatar from 'ferly/components/StoreAvatar'
 import Theme from 'ferly/utils/theme'
 import {apiRequire} from 'ferly/store/api'
 import {connect} from 'react-redux'
@@ -11,7 +12,6 @@ import {
   View,
   Text,
   TouchableOpacity,
-  Image,
   StyleSheet,
   Platform,
   Linking
@@ -54,7 +54,7 @@ export class Locations extends React.Component {
   }
 
   render () {
-    const {locations, loaded, imageUrl} = this.props
+    const {locations, loaded} = this.props
     const {selectedLocation} = this.state
 
     if (!loaded) {
@@ -69,13 +69,20 @@ export class Locations extends React.Component {
 
     let selectedDetails
     if (selectedLocation != null) {
+      const {params} = this.props.navigation.state
+      const {design} = params
+      const {field_color: fieldColor} = design
       const {title, address} = selectedLocation
       selectedDetails = (
         <View style={styles.shadow}>
-          <Image style={styles.logo} source={{uri: imageUrl}} />
+          <View style={[styles.logo, {backgroundColor: `#${fieldColor}`}]} >
+            <StoreAvatar size={55} title={title} />
+          </View>
           <View style={{flexDirection: 'row'}}>
             <View style={styles.selectionDetails}>
-              <Text style={styles.selectionTitle}>{title}</Text>
+              <Text style={styles.selectionTitle}>
+                {title.replace(/ *\([^)]*\) */g, '')}
+              </Text>
               <View style={styles.selectionOptions}>
                 <Text style={styles.selectionAddress}>{address}</Text>
                 <TouchableOpacity

@@ -2,6 +2,7 @@ import accounting from 'ferly/utils/accounting'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Avatar from 'ferly/components/Avatar'
+import StoreAvatar from 'ferly/components/StoreAvatar'
 import Theme from 'ferly/utils/theme'
 import {apiRequire} from 'ferly/store/api'
 import {connect} from 'react-redux'
@@ -24,11 +25,11 @@ export class Transfer extends React.Component {
       amount,
       message,
       timestamp,
+      design,
       design_title: designTitle,
       counter_party: counterParty,
       counter_party_profile_image_url: counterPartyProfileImageUrl,
       transfer_type: transferType,
-      design_logo_image_url: designLogoImageUrl,
       convenience_fee: convenienceFee = 0,
       cc_last4: lastFour = '****',
       cc_brand: lowerBrand = ''
@@ -69,7 +70,7 @@ export class Transfer extends React.Component {
       counterPartyAvatar = (
         <View style={{marginLeft: -20, zIndex: -1}}>
           <Avatar
-            size={100}
+            size={90}
             firstWord={counterParty}
             pictureUrl={counterPartyProfileImageUrl} />
         </View>
@@ -200,7 +201,9 @@ export class Transfer extends React.Component {
           justifyContent: 'center',
           paddingTop: 20
         }}>
-          <Avatar size={100} shade={true} pictureUrl={designLogoImageUrl}/>
+          <View style={{backgroundColor: `#${design.field_color}`, borderRadius: 45}} >
+            <StoreAvatar size={90} shade={true} title={`${designTitle}`}/>
+          </View>
           {counterPartyAvatar}
         </View>
         <View style={{
@@ -242,7 +245,8 @@ const styles = StyleSheet.create({
 Transfer.propTypes = {
   apiRequire: PropTypes.func.isRequired,
   transferDetails: PropTypes.object.isRequired,
-  transferUrl: PropTypes.string.isRequired
+  transferUrl: PropTypes.string.isRequired,
+  navigation: PropTypes.object.isRequired
 }
 
 function mapStateToProps (state, ownProps) {

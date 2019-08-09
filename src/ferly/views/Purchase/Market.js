@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
-import Avatar from 'ferly/components/Avatar'
+import StoreAvatar from 'ferly/components/StoreAvatar'
 import SearchBar from 'ferly/components/SearchBar'
 import PropTypes from 'prop-types'
 import React from 'react'
@@ -62,18 +62,23 @@ export class Market extends React.Component {
         <ScrollView style={{flex: 1}}>
           {
             display.map((design) => {
+              const {title, field_color: fieldColor} = design
               return (
                 <TouchableOpacity
                   key={design.id}
                   onPress={() => navigation.navigate('Purchase', {design})}>
                   <View style={styles.customer}>
-                    <Avatar
-                      size={68}
-                      shade={true}
-                      pictureUrl={design.logo_image_url}/>
+                    <View style={{
+                      backgroundColor: `#${fieldColor}`,
+                      borderRadius: 34}}>
+                      <StoreAvatar
+                        size={68}
+                        shade={true}
+                        title={`${title}`} />
+                    </View>
                     <View style={{flex: 1, paddingHorizontal: 10}}>
                       <Text style={{fontSize: 18, fontWeight: 'bold'}}>
-                        {design.title}
+                        {title}
                       </Text>
                     </View>
                   </View>

@@ -1,5 +1,5 @@
 import accounting from 'ferly/utils/accounting'
-import Avatar from 'ferly/components/Avatar'
+import StoreAvatar from 'ferly/components/StoreAvatar'
 import Constants from 'expo-constants'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import PrimaryButton from 'ferly/components/PrimaryButton'
@@ -210,20 +210,21 @@ export class Cart extends React.Component {
     const amountNumber = parseFloat(amountString)
     const total = amountNumber + convenienceFee
     const {selectedSource, submitting} = this.state
-
+    const {title, field_color: fieldColor} = design
     return (
       <View style={styles.page}>
         <TestElement
           parent={View}
           label='test-id-cart-header-box'
           style={styles.header}>
-          <View style={{alignItems: 'center', padding: 5}}>
-            <Avatar
-              size={100} pictureUrl={design.logo_image_url}/>
+          <View style={{alignItems: 'center'}} >
+            <View style={{backgroundColor: `#${fieldColor}`, borderRadius: 50}} >
+              <StoreAvatar size={100} shade={true} title={`${title}`} />
+            </View>
           </View>
           <View style={styles.designContainer}>
             <View style={{alignItems: 'center', padding: 5}}>
-              <Text style={styles.designText}>{design.title}</Text>
+              <Text style={styles.designText}>{title}</Text>
             </View>
             <View>
               <View style={{flexGrow: 1, flexWrap: 'wrap'}}>

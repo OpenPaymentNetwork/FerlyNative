@@ -1,4 +1,4 @@
-import Avatar from 'ferly/components/Avatar'
+import StoreAvatar from 'ferly/components/StoreAvatar'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Theme from 'ferly/utils/theme'
@@ -31,8 +31,7 @@ export class Value extends React.Component {
   render () {
     const {navigation} = this.props
     const {params: design} = this.props.navigation.state
-    const {amount, title, expiring = [], logo_image_url: logoImageUrl} = design
-
+    const {amount, title, expiring = [], field_color: fieldColor} = design
     const tableHeader = (
       <View style={styles.tableRow}>
         <Text style={[styles.leftColumn, {fontWeight: 'bold'}]}>Amount</Text>
@@ -52,7 +51,9 @@ export class Value extends React.Component {
     return (
       <ScrollView style={{flex: 1, padding: 20, backgroundColor: 'white'}}>
         <View style={styles.headerContainer}>
-          <Avatar pictureUrl={logoImageUrl} size={100} />
+          <View style={{backgroundColor: `#${fieldColor}`, borderRadius: 50}} >
+            <StoreAvatar shade={true} title={`${design.title}`} size={100} />
+          </View>
           <Text style={{fontSize: 24, marginVertical: 8}}>{title}</Text>
           <Text style={styles.amount}>${amount}</Text>
         </View>
