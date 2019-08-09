@@ -59,9 +59,9 @@ export class Wallet extends React.Component {
               label='test-id-give-button'
               style={styles.cashButton}
               onPress={() => navigation.navigate('Give', design)}>
-              <View style={{flexDirection: 'row', paddingBottom: 15}}>
+              <View style={{flexDirection: 'row', paddingBottom: 10}}>
                 <Icon
-                  style={{paddingRight: 8}}
+                  style={{paddingRight: 8, paddingTop: 1.5}}
                   name="gift"
                   color="white"
                   size={20} />
@@ -73,9 +73,9 @@ export class Wallet extends React.Component {
               label='test-id-buy-button'
               style={styles.cashButton}
               onPress={() => navigation.navigate('Purchase', {design})}>
-              <View style={{flexDirection: 'row', paddingBottom: 15}}>
+              <View style={{flexDirection: 'row', paddingBottom: 10}}>
                 <Icon
-                  style={{paddingRight: 8}}
+                  style={{paddingRight: 8, paddingTop: 3}}
                   name="credit-card"
                   color="white"
                   size={18} />
@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: 'gray',
+    borderColor: Theme.lightBlue,
     elevation: 5,
     shadowOffset: {width: 2, height: 2},
     shadowColor: 'gray',
