@@ -3,6 +3,7 @@ import StoreAvatar from 'ferly/components/StoreAvatar'
 import SearchBar from 'ferly/components/SearchBar'
 import PropTypes from 'prop-types'
 import React from 'react'
+import TestElement from 'ferly/components/TestElement'
 import {apiRequire} from 'ferly/store/api'
 import {connect} from 'react-redux'
 import {createUrl} from 'ferly/utils/fetch'
@@ -64,7 +65,9 @@ export class Market extends React.Component {
             display.map((design) => {
               const {title, field_color: fieldColor} = design
               return (
-                <TouchableOpacity
+                <TestElement
+                  parent={TouchableOpacity}
+                  label='test-id-market-merchant'
                   key={design.id}
                   onPress={() => navigation.navigate('Purchase', {design})}>
                   <View style={styles.customer}>
@@ -82,7 +85,7 @@ export class Market extends React.Component {
                       </Text>
                     </View>
                   </View>
-                </TouchableOpacity>
+                </TestElement>
               )
             })
           }
