@@ -4,26 +4,29 @@ import PrimaryButton from 'ferly/components/PrimaryButton'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Theme from 'ferly/utils/theme'
-import {logoWhite} from 'ferly/images/index'
 import {Notifications} from 'expo'
 import {post, envId} from 'ferly/utils/fetch'
 import {
   View,
   Text,
   TextInput,
-  Image,
   StyleSheet,
   TouchableOpacity,
   Platform
 } from 'react-native'
 
 export default class SignUp extends React.Component {
+  static navigationOptions = {
+    title: 'Sign Up for Ferly'
+  };
+
   constructor (props) {
     super(props)
     this.state = {
       firstName: '',
       lastName: '',
       username: '',
+      fieldValue: '',
       showUsernameError: false,
       invalid: {},
       expoToken: '',
@@ -56,13 +59,14 @@ export default class SignUp extends React.Component {
   }
 
   handleSubmit () {
-    const {firstName, lastName, username, expoToken} = this.state
+    const {firstName, lastName, username, fieldValue, expoToken} = this.state
     const {navigation} = this.props
     this.setState({submitting: true})
     const params = {
       first_name: firstName,
       last_name: lastName,
       username: username,
+      login: fieldValue,
       expo_token: expoToken,
       os: `${Platform.OS}:${Platform.Version}`
     }
@@ -72,7 +76,7 @@ export default class SignUp extends React.Component {
       .then((responseJson) => {
         this.setState({submitting: false})
         if (this.validate(responseJson)) {
-          navigation.navigate('Tutorial')
+          navigation.navigate('SignUpCode')
         }
       })
   }
@@ -137,24 +141,24 @@ export default class SignUp extends React.Component {
   renderRecoveryOption () {
     const {navigation} = this.props
     return (
-      <View style={[styles.row, {paddingTop: 10}]}>
+      <View style={[styles.row, {marginBottom: 30}]}>
+        <Text style={{fontSize: 16}}>Already have an account?</Text>
         <TouchableOpacity
           onPress={() => navigation.navigate('RecoveryChannel')}>
-          <Text style={styles.recoveryText}>Already have an account?</Text>
+          <Text style={[styles.recoveryText, {paddingLeft: 5}]}>Sign In</Text>
         </TouchableOpacity>
       </View>
     )
   }
 
   render () {
-    const {firstName, lastName, username, submitting, invalid} = this.state
+    const {firstName, lastName, username, submitting, fieldValue, invalid} = this.state
     const {version} = Constants.manifest
     return (
-      <View style={{flex: 1, backgroundColor: Theme.darkBlue}}>
+      <View style={{flex: 1, backgroundColor: 'white'}}>
         <View style={styles.container}>
-          <Image source={logoWhite} style={styles.logo} />
           <TextInput
-            style={styles.field}
+            style={[styles.field, {marginTop: 40}]}
             underlineColorAndroid={'transparent'}
             placeholderTextColor={'gray'}
             placeholder='First Name'
@@ -197,14 +201,25 @@ export default class SignUp extends React.Component {
               ? (<Text style={styles.error}>{invalid.username}</Text>)
               : null
           }
+          <TextInput
+            style={styles.field}
+            underlineColorAndroid={'transparent'}
+            placeholderTextColor={'gray'}
+            placeholder='Email Address or Phone Number'
+            onChangeText={(text) => this.setState({fieldValue: text})}
+            value={fieldValue} />
+          {
+            invalid.last_name
+              ? (<Text style={styles.error}>{invalid.fieldValue}</Text>)
+              : null
+          }
           {this.renderDebug()}
-          {this.renderRecoveryOption()}
         </View>
-        <View style={[styles.row, {backgroundColor: Theme.darkBlue}]}>
+        <View style={[styles.row, {justifyContent: 'flex-end'}]}>
           <Text style={{color: '#16213d'}}>{`${version}/${envId}`}</Text>
         </View>
         <PrimaryButton
-          title="Sign Up"
+          title="Next"
           disabled={
             firstName === '' ||
             lastName === '' ||
@@ -214,6 +229,7 @@ export default class SignUp extends React.Component {
           }
           color={Theme.lightBlue}
           onPress={this.handleSubmit.bind(this)} />
+        {this.renderRecoveryOption()}
       </View>
     )
   }
@@ -222,17 +238,15 @@ export default class SignUp extends React.Component {
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    backgroundColor: Theme.darkBlue,
     flex: 1,
     paddingHorizontal: 40
   },
   error: {color: 'red', width: '100%'},
   field: {
     borderBottomWidth: 1,
-    borderColor: 'gray',
-    color: 'white',
+    // color: 'white',
     fontSize: 18,
-    marginVertical: 6,
+    marginVertical: 25,
     width: '100%'
   },
   logo: {width: 160, height: 156, marginVertical: 40},
@@ -241,7 +255,7 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
     fontSize: 16
   },
-  row: {width: '100%', flexDirection: 'row', justifyContent: 'flex-end'}
+  row: {width: '100%', flexDirection: 'row', justifyContent: 'center'}
 })
 
 SignUp.propTypes = {

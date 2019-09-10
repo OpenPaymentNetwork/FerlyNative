@@ -15,7 +15,7 @@ import {
 
 export class CardForm extends React.Component {
     static navigationOptions = {
-      title: 'Ferly Card'
+      title: 'Activate Ferly Card'
     }
 
     constructor (props) {

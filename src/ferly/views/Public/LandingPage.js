@@ -4,15 +4,12 @@ import React from 'react'
 import Theme from 'ferly/utils/theme'
 import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native'
 import {
-  tutorialFour,
-  tutorialFive
+  tutorialTwo,
+  tutorialThree,
+  tutorialSix
 } from 'ferly/images/index'
 
 export default class LandingPage extends React.Component {
-  static navigationOptions = {
-    title: 'Ferly Card'
-  };
-
   constructor (props) {
     super(props)
     this.state = {page: 0}
@@ -20,20 +17,20 @@ export default class LandingPage extends React.Component {
 
   nextPage = () => {
     setTimeout(() => {
-      this.setState({page: this.state.page === 0 ? +1 : 0})
+      this.setState({page: this.state.page === 0 ? +1 : +2})
     }, 5000)
   }
 
   renderDots = () => {
     const {page} = this.state
     let dots = []
-    for (let i = 0; i < 2; i++) {
+    for (let i = 0; i < 3; i++) {
       dots.push(
         <View
           key={i}
           style={[
             styles.circle,
-            {backgroundColor: i === page ? Theme.lightBlue : 'gray'}
+            {backgroundColor: i === page ? Theme.lightBlue : 'white'}
           ]} />
       )
     }
@@ -45,13 +42,15 @@ export default class LandingPage extends React.Component {
     const {page} = this.state
 
     const images = [
-      tutorialFour,
-      tutorialFive
+      tutorialTwo,
+      tutorialSix,
+      tutorialThree
     ]
 
     const descriptions = [
-      'Use the Ferly Card to spend the gift value in your wallet. ',
-      'Select "Debit" when using your card and enter your personal PIN.'
+      'Buy gift value anytime, anywhere, perfect for that last minute gift.',
+      'Easily send gifts to friends and family, even those far away.',
+      'Have real time access to gift card balances.'
     ]
 
     return (
@@ -66,25 +65,20 @@ export default class LandingPage extends React.Component {
             {this.renderDots()}
           </View>
         </View>
-        <View style={{paddingVertical: 20, backgroundColor: 'white'}}>
+        <View style={{paddingVertical: 20}}>
           <PrimaryButton
-            title="Get a Ferly Card"
+            title="Sign Up"
             color={Theme.lightBlue}
-            onPress={() => navigation.navigate('AddressForm')} />
+            onPress={() => navigation.navigate('SignUp')} />
           <View style={{flexDirection: 'row', justifyContent: 'center'}}>
             <Text style={[styles.text, {paddingBottom: 30, fontSize: 18}]}>
               Already have an account?
             </Text>
-            <TouchableOpacity onPress={() => navigation.navigate('CardForm')}>
+            <TouchableOpacity onPress={() => navigation.navigate('RecoveryChannel')}>
               <Text style={{color: Theme.lightBlue, fontSize: 18, paddingLeft: 10}}>
-                Activate
+                Sign In
               </Text>
             </TouchableOpacity>
-            {/* <TouchableOpacity onPress={() => navigation.navigate('Wallet')}>
-              <Text style={{color: Theme.lightBlue, fontSize: 18, paddingLeft: 10}}>
-                Skip
-              </Text>
-            </TouchableOpacity> */}
           </View>
         </View>
       </View>
@@ -99,14 +93,13 @@ LandingPage.propTypes = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
     alignItems: 'center',
     paddingTop: 40,
     paddingHorizontal: 20,
     justifyContent: 'space-around'
   },
   image: {height: 220, resizeMode: 'contain'},
-  text: {textAlign: 'center'},
-  dots: {flexDirection: 'row', justifyContent: 'space-around', width: 120},
+  text: {textAlign: 'center', color: 'white'},
+  dots: {flexDirection: 'row', justifyContent: 'space-between', width: 120},
   circle: {width: 12, height: 12, borderRadius: 6}
 })

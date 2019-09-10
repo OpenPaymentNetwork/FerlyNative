@@ -1,3 +1,5 @@
+import AddressForm from 'ferly/views/FerlyCard/AddressForm'
+import CardForm from 'ferly/views/FerlyCard/CardForm'
 import Contact from 'ferly/views/Invitations/Contact'
 import Contacts from 'ferly/views/Invitations/Contacts'
 import FerlyCard from 'ferly/views/FerlyCard/FerlyCard'
@@ -13,10 +15,12 @@ import RecoveryChannel from 'ferly/views/Public/RecoveryChannel'
 import RecoveryCode from 'ferly/views/Public/RecoveryCode'
 import Settings from 'ferly/views/Settings/Settings'
 import SignUp from 'ferly/views/Public/SignUp'
+import SignUpCode from 'ferly/views/Public/SignUpCode'
 import TestElement from 'ferly/components/TestElement'
 import Transfer from 'ferly/views/History/Transfer'
 import Home from 'ferly/views/Wallet/Home'
 import Value from 'ferly/views/Wallet/Value'
+import LandingPage from 'ferly/views/Public/LandingPage'
 import Locations from 'ferly/views/Wallet/Locations'
 import Cart from 'ferly/views/Purchase/Cart'
 import Purchase from 'ferly/views/Purchase/Purchase'
@@ -98,12 +102,22 @@ const HistoryStack = createStackNavigator(
   }
 )
 
+const CardStack = createStackNavigator(
+  {
+    AddressForm: {screen: AddressForm, navigationOptions: drawerOptions},
+    CardForm: {screen: CardForm, navigationOptions: drawerOptions},
+    FerlyCard: {screen: FerlyCard, navigationOptions: drawerOptions}
+  },
+  {
+    initialRouteName: 'History'
+  }
+)
+
 const AuthDrawer = createDrawerNavigator(
   {
     Wallet: WalletStack,
     Profile: ProfileStack,
-    'Ferly Card': createStackNavigator(
-      {Card: {screen: FerlyCard, navigationOptions: drawerOptions}}),
+    FerlyCard: CardStack,
     History: HistoryStack,
     Invitations: InvitationsStack,
     Settings: SettingsStack
@@ -121,15 +135,29 @@ const publicHeader = {
   headerTintColor: 'white'
 }
 
-const PubStack = createStackNavigator(
+const OnboardingStack = createStackNavigator(
   {
-    SignUp: {screen: SignUp, navigationOptions: {header: null}},
-    RecoveryCode: {screen: RecoveryCode, navigationOptions: publicHeader},
-    RecoveryChannel: {screen: RecoveryChannel, navigationOptions: publicHeader},
-    Tutorial: {screen: Tutorial, navigationOptions: {header: null}}
+    Tutorial: {screen: Tutorial, navigationOptions: {header: null}},
+    AddressForm: {screen: AddressForm, navigationOptions: publicHeader},
+    CardForm: {screen: CardForm, navigationOptions: publicHeader},
+    FerlyCard: {screen: FerlyCard, navigationOptions: drawerOptions}
   },
   {
-    initialRouteName: 'SignUp'
+    initialRouteName: 'Tutorial'
+  }
+)
+
+const PubStack = createStackNavigator(
+  {
+    LandingPage: {screen: LandingPage, navigationOptions: {header: null}},
+    SignUp: {screen: SignUp, navigationOptions: publicHeader},
+    SignUpCode: {screen: SignUpCode, navigationOptions: publicHeader},
+    RecoveryCode: {screen: RecoveryCode, navigationOptions: publicHeader},
+    RecoveryChannel: {screen: RecoveryChannel, navigationOptions: publicHeader},
+    Onboarding: OnboardingStack
+  },
+  {
+    initialRouteName: 'LandingPage'
   }
 )
 

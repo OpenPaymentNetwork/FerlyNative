@@ -20,7 +20,7 @@ import {
 
 export default class AddressForm extends React.Component {
     static navigationOptions = {
-      title: 'Ferly Card'
+      title: 'Get a Ferly Card'
     }
 
     constructor (props) {
@@ -41,6 +41,7 @@ export default class AddressForm extends React.Component {
     }
 
     submitForm = () => {
+      const {navigation} = this.props
       const {
         name,
         address,
@@ -63,7 +64,7 @@ export default class AddressForm extends React.Component {
         .then((json) => {
           this.setState({submitting: false})
           if (this.validateSendCard(json)) {
-            this.props.onPass()
+            navigation.navigate('CardForm')
             const alertText = 'Your card will arrive in 7 to 10 business days.'
             Alert.alert('Done!', alertText)
           }
@@ -90,6 +91,7 @@ export default class AddressForm extends React.Component {
     }
 
     render () {
+      const {navigation} = this.props
       const {
         name,
         address,
@@ -206,7 +208,7 @@ export default class AddressForm extends React.Component {
                   </View>
                 </View>
                 <View style={styles.skipContainer}>
-                  <TouchableOpacity onPress={() => this.props.onPass()}>
+                  <TouchableOpacity onPress={() => navigation.navigate('CardForm')}>
                     <Text style={styles.enterCard}>
                     I already have a Ferly Card
                     </Text>
@@ -233,7 +235,7 @@ export default class AddressForm extends React.Component {
 }
 
 AddressForm.propTypes = {
-  onPass: PropTypes.func.isRequired
+  navigation: PropTypes.object.isRequired
 }
 
 const styles = StyleSheet.create({
