@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import Theme from 'ferly/utils/theme'
 import {Notifications} from 'expo'
-import {post, envId} from 'ferly/utils/fetch'
+import {post} from 'ferly/utils/fetch'
 import {
   View,
   Text,
@@ -153,12 +153,11 @@ export default class SignUp extends React.Component {
 
   render () {
     const {firstName, lastName, username, submitting, fieldValue, invalid} = this.state
-    const {version} = Constants.manifest
     return (
       <View style={{flex: 1, backgroundColor: 'white'}}>
-        <View style={styles.container}>
+        <View style={{flexDirection: 'row', paddingHorizontal: 15}} >
           <TextInput
-            style={[styles.field, {marginTop: 40}]}
+            style={styles.firstField}
             underlineColorAndroid={'transparent'}
             placeholderTextColor={'gray'}
             placeholder='First Name'
@@ -170,7 +169,7 @@ export default class SignUp extends React.Component {
               : null
           }
           <TextInput
-            style={styles.field}
+            style={styles.firstField}
             underlineColorAndroid={'transparent'}
             placeholderTextColor={'gray'}
             placeholder='Last Name'
@@ -181,55 +180,58 @@ export default class SignUp extends React.Component {
               ? (<Text style={styles.error}>{invalid.last_name}</Text>)
               : null
           }
-          <TextInput
-            style={styles.field}
-            underlineColorAndroid={'transparent'}
-            placeholderTextColor={'gray'}
-            placeholder='Username'
-            onBlur={() => {
-              this.validateUsername(username)
-              this.setState({showUsernameError: true})
-            }}
-            onChangeText={
-              (text) => {
-                this.validateUsername(text); this.setState({username: text})
+        </View>
+        <View>
+          <View style={{paddingHorizontal: 15}} >
+            <TextInput
+              style={styles.field}
+              underlineColorAndroid={'transparent'}
+              placeholderTextColor={'gray'}
+              placeholder='Username'
+              onBlur={() => {
+                this.validateUsername(username)
+                this.setState({showUsernameError: true})
+              }}
+              onChangeText={
+                (text) => {
+                  this.validateUsername(text); this.setState({username: text})
+                }
               }
+              value={username} />
+            {
+              invalid.username && this.state.showUsernameError
+                ? (<Text style={styles.error}>{invalid.username}</Text>)
+                : null
             }
-            value={username} />
-          {
-            invalid.username && this.state.showUsernameError
-              ? (<Text style={styles.error}>{invalid.username}</Text>)
-              : null
-          }
-          <TextInput
-            style={styles.field}
-            underlineColorAndroid={'transparent'}
-            placeholderTextColor={'gray'}
-            placeholder='Email Address or Phone Number'
-            onChangeText={(text) => this.setState({fieldValue: text})}
-            value={fieldValue} />
-          {
-            invalid.last_name
-              ? (<Text style={styles.error}>{invalid.fieldValue}</Text>)
-              : null
-          }
-          {this.renderDebug()}
+            <TextInput
+              style={[styles.field, {marginBottom: 45}]}
+              underlineColorAndroid={'transparent'}
+              placeholderTextColor={'gray'}
+              placeholder='Email Address or Phone Number'
+              onChangeText={(text) => this.setState({fieldValue: text})}
+              value={fieldValue} />
+            {
+              invalid.last_name
+                ? (<Text style={styles.error}>{invalid.fieldValue}</Text>)
+                : null
+            }
+            {this.renderDebug()}
+          </View>
+          <View style={{width: '100%'}} >
+            <PrimaryButton
+              title="Next"
+              disabled={
+                firstName === '' ||
+                lastName === '' ||
+                submitting ||
+                !!invalid.username ||
+                !username
+              }
+              color={Theme.lightBlue}
+              onPress={this.handleSubmit.bind(this)} />
+          </View>
+          {this.renderRecoveryOption()}
         </View>
-        <View style={[styles.row, {justifyContent: 'flex-end'}]}>
-          <Text style={{color: '#16213d'}}>{`${version}/${envId}`}</Text>
-        </View>
-        <PrimaryButton
-          title="Next"
-          disabled={
-            firstName === '' ||
-            lastName === '' ||
-            submitting ||
-            !!invalid.username ||
-            !username
-          }
-          color={Theme.lightBlue}
-          onPress={this.handleSubmit.bind(this)} />
-        {this.renderRecoveryOption()}
       </View>
     )
   }
@@ -239,15 +241,28 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     flex: 1,
-    paddingHorizontal: 40
+    paddingHorizontal: 5
   },
   error: {color: 'red', width: '100%'},
   field: {
-    borderBottomWidth: 1,
-    // color: 'white',
+    borderWidth: 1,
+    borderRadius: 5,
     fontSize: 18,
-    marginVertical: 25,
-    width: '100%'
+    marginVertical: 15,
+    width: '100%',
+    height: 35,
+    paddingLeft: 10
+  },
+  firstField: {
+    borderWidth: 1,
+    borderRadius: 5,
+    fontSize: 18,
+    marginBottom: 15,
+    marginTop: 40,
+    width: '50%',
+    height: 35,
+    paddingLeft: 10,
+    justifyContent: 'space-between'
   },
   logo: {width: 160, height: 156, marginVertical: 40},
   recoveryText: {
@@ -259,5 +274,7 @@ const styles = StyleSheet.create({
 })
 
 SignUp.propTypes = {
-  navigation: PropTypes.object.isRequired
+  navigation: PropTypes.object.isRequired,
+  onFocus: PropTypes.object,
+  onBlur: PropTypes.object
 }

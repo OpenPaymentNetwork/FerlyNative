@@ -1,17 +1,14 @@
 import PrimaryButton from 'ferly/components/PrimaryButton'
 import PropTypes from 'prop-types'
 import React from 'react'
-import StatePicker from 'ferly/views/FerlyCard/StatePicker'
 import TestElement from 'ferly/components/TestElement'
 import Theme from 'ferly/utils/theme'
 import {post} from 'ferly/utils/fetch'
-import {MaterialIcons} from '@expo/vector-icons'
 import {
   Alert,
   KeyboardAvoidingView,
   Text,
   TextInput,
-  Platform,
   TouchableOpacity,
   ScrollView,
   StyleSheet,
@@ -34,7 +31,7 @@ export default class AddressForm extends React.Component {
         address: '',
         apt: '',
         city: '',
-        state: undefined,
+        state: '',
         zipCode: '',
         st: ''
       }
@@ -47,7 +44,7 @@ export default class AddressForm extends React.Component {
         address,
         apt,
         city,
-        state = this.defaultState,
+        state,
         zipCode
       } = this.state
       this.setState({submitting: true})
@@ -90,13 +87,34 @@ export default class AddressForm extends React.Component {
       }
     }
 
-    render () {
+    renderRecoveryOption () {
       const {navigation} = this.props
+      return (
+        <View style={{
+          width: '100%',
+          flexDirection: 'row',
+          justifyContent: 'center',
+          marginBottom: 30}}>
+          <Text style={{fontSize: 16}}>Already have a Ferly Card?</Text>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('SignUp')}>
+            <Text style={{
+              color: Theme.lightBlue,
+              textDecorationLine: 'underline',
+              fontSize: 16,
+              paddingLeft: 5}}>Activate it</Text>
+          </TouchableOpacity>
+        </View>
+      )
+    }
+
+    render () {
       const {
         name,
         address,
         apt,
         city,
+        state,
         zipCode,
         invalid,
         submitting
@@ -116,16 +134,9 @@ export default class AddressForm extends React.Component {
             <ScrollView keyboardShouldPersistTaps='handled'>
               <TestElement parent={View} label='test-id-address-form'>
                 <View>
-                  <View style={styles.iconStyles}>
-                    <MaterialIcons
-                      style={{paddingRight: 10}}
-                      name={'person'}
-                      color={Theme.lightBlue}
-                      size={20} />
-                    <Text style={styles.labelText}>Name</Text>
-                  </View>
                   <View style={styles.textBox}>
                     <TextInput
+                      placeholder="Name"
                       underlineColorAndroid='transparent'
                       style={styles.textField}
                       returnKeyType='done'
@@ -137,16 +148,9 @@ export default class AddressForm extends React.Component {
                   </View>
                 </View>
                 <View>
-                  <View style={styles.iconStyles}>
-                    <MaterialIcons
-                      style={{paddingRight: 10}}
-                      name={'location-on'}
-                      color={Theme.lightBlue}
-                      size={20} />
-                    <Text style={styles.labelText}>Address</Text>
-                  </View>
                   <View style={styles.textBox}>
                     <TextInput
+                      placeholder="Address"
                       underlineColorAndroid='transparent'
                       style={styles.textField}
                       returnKeyType='done'
@@ -158,9 +162,9 @@ export default class AddressForm extends React.Component {
                     <Text style={styles.error}>{addressError}</Text>
                   </View>
                 </View>
-                <View style={styles.inputContainer}>
-                  <Text style={styles.labelText}>Apartment Number</Text>
+                <View style={styles.textBox}>
                   <TextInput
+                    placeholder="Apartment Number"
                     underlineColorAndroid='transparent'
                     style={styles.textField}
                     returnKeyType='done'
@@ -169,9 +173,9 @@ export default class AddressForm extends React.Component {
                     maxLength={20} />
                   <Text></Text>
                 </View>
-                <View style={styles.inputContainer}>
-                  <Text style={styles.labelText}>City</Text>
+                <View style={styles.textBox}>
                   <TextInput
+                    placeholder="City"
                     underlineColorAndroid='transparent'
                     style={styles.textField}
                     returnKeyType='done'
@@ -180,21 +184,21 @@ export default class AddressForm extends React.Component {
                     onChangeText={(text) => this.setState({city: text})} />
                   <Text style={styles.error}>{cityError}</Text>
                 </View>
-                <View style={styles.stateZip}>
-                  <View>
-                    <View>
-                      <Text style={styles.labelText}>State</Text>
-                    </View>
-                    <View style={styles.iosPickerStyles}>
-                      <StatePicker
-                        defaultState={this.defaultState}
-                        onStateChange={this.onStateChange} />
-                      <Text style={styles.error}>{stateError}</Text>
-                    </View>
-                  </View>
-                  <View>
-                    <Text style={styles.labelText}>Zip Code</Text>
+                <View style={{flexDirection: 'row', marginBottom: 10}} >
+                  <View style={styles.textBox}>
                     <TextInput
+                      placeholder="St"
+                      underlineColorAndroid='transparent'
+                      style={styles.zipField}
+                      returnKeyType='done'
+                      value={state}
+                      maxLength={15}
+                      onChangeText={(text) => this.setState({state: text})} />
+                    <Text style={styles.error}>{stateError}</Text>
+                  </View>
+                  <View style={styles.textBox}>
+                    <TextInput
+                      placeholder="Zip"
                       underlineColorAndroid='transparent'
                       style={styles.zipField}
                       keyboardType='numeric'
@@ -207,28 +211,22 @@ export default class AddressForm extends React.Component {
                     <Text style={styles.error}>{zipError}</Text>
                   </View>
                 </View>
-                <View style={styles.skipContainer}>
-                  <TouchableOpacity onPress={() => navigation.navigate('CardForm')}>
-                    <Text style={styles.enterCard}>
-                    I already have a Ferly Card
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              </TestElement>
-            </ScrollView>
-          </KeyboardAvoidingView>
-          <PrimaryButton
-            title="Submit"
-            disabled={
-              name === '' ||
+                <PrimaryButton
+                  title="Mail Card"
+                  disabled={
+                    name === '' ||
               address === '' ||
               city === '' ||
               zipCode.length !== 5 ||
               submitting
-            }
-            color={Theme.lightBlue}
-            onPress={this.submitForm}
-          />
+                  }
+                  color={Theme.lightBlue}
+                  onPress={this.submitForm}
+                />
+                {this.renderRecoveryOption()}
+              </TestElement>
+            </ScrollView>
+          </KeyboardAvoidingView>
         </View>
       )
     }
@@ -239,37 +237,19 @@ AddressForm.propTypes = {
 }
 
 const styles = StyleSheet.create({
-  inputContainer: {paddingHorizontal: 10, paddingTop: 15, paddingLeft: 50},
   error: {color: 'red', width: '100%'},
   form: {flex: 1},
-  textField: {borderBottomWidth: 1, borderColor: 'gray'},
+  textField: {borderWidth: 1, height: 35, borderRadius: 5, paddingLeft: 10},
   labelText: {color: 'gray'},
-  textBox: {paddingHorizontal: 10, paddingLeft: 50},
+  textBox: {paddingHorizontal: 10, paddingLeft: 20, paddingTop: 25},
   iconStyles: {flexDirection: 'row', paddingTop: 15, paddingLeft: 20},
   page: {flex: 1, justifyContent: 'space-between', backgroundColor: 'white'},
-  skipContainer: {flexDirection: 'row-reverse', zIndex: -1},
-  enterCard: {
-    color: Theme.lightBlue,
-    paddingRight: 10,
-    textDecorationLine: 'underline'
-  },
   zipField: {
-    borderBottomWidth: 1,
-    borderColor: 'gray',
+    borderWidth: 1,
     width: 75,
-    marginTop: 12
-  },
-  stateZip: {
-    flex: 1,
-    flexDirection: 'row',
-    paddingHorizontal: 10,
-    paddingTop: 15,
-    marginLeft: 40
-  },
-  iosPickerStyles: {
-    marginLeft: Platform.OS === 'ios' ? -25 : -5,
-    borderBottomWidth: Platform.OS === 'ios' ? null : 1,
-    borderColor: 'gray',
-    marginRight: Platform.OS === 'ios' ? null : 20
+    marginTop: 12,
+    height: 35,
+    borderRadius: 5,
+    paddingLeft: 10
   }
 })

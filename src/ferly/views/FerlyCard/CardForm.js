@@ -106,46 +106,51 @@ export class CardForm extends React.Component {
       'your Ferly Card and set a 4-digit PIN you\'ll remember later.'
     return (
       <View style={{flex: 1, backgroundColor: 'white'}}>
-        <View style={{flex: 1, paddingVertical: 20, paddingHorizontal: 40}}>
-          <View style={{paddingBottom: 10, alignItems: 'center'}}>
+        <View style={{flex: 1, paddingVertical: 20}}>
+          <View style={{paddingBottom: 10, alignItems: 'center', paddingHorizontal: 10}}>
             <Text style={styles.title}>Add Card Information</Text>
             <Text style={styles.instructions}>{instructions}</Text>
           </View>
-          <Text style={styles.labelText}>Card Number</Text>
-          <View style={styles.inputContainer}>
-            <TextInput
-              underlineColorAndroid='transparent'
-              keyboardType='numeric'
-              maxLength={19}
-              returnKeyType='done'
-              onChangeText={this.onChangePan}
-              value={pan.replace(/(.{4})/g, '$1 ').trim()} />
+          <View style={{paddingHorizontal: 15}} >
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={{fontSize: 18}}
+                placeholder="Card Number"
+                underlineColorAndroid='transparent'
+                keyboardType='numeric'
+                maxLength={19}
+                returnKeyType='done'
+                onChangeText={this.onChangePan}
+                value={pan.replace(/(.{4})/g, '$1 ').trim()} />
+            </View>
+            <Text style={styles.errorText}>{panError}</Text>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={{fontSize: 18}}
+                placeholder="Pin"
+                underlineColorAndroid='transparent'
+                keyboardType='numeric'
+                maxLength={4}
+                returnKeyType='done'
+                onChangeText={this.onChangePin}
+                value={pin} />
+            </View>
           </View>
-          <Text style={styles.errorText}>{panError}</Text>
-          <View style={{height: 10}} />
-          <Text style={styles.labelText}>PIN</Text>
-          <View style={[styles.inputContainer, {maxWidth: 100}]}>
-            <TextInput
-              underlineColorAndroid='transparent'
-              keyboardType='numeric'
-              maxLength={4}
-              returnKeyType='done'
-              onChangeText={this.onChangePin}
-              value={pin} />
-          </View>
-          <Text style={styles.errorText}>{pinError}</Text>
-        </View>
-        <PrimaryButton
-          title="Add"
-          disabled={
-            submitting ||
+          <View style={{width: '100%'}} >
+            <Text style={styles.errorText}>{pinError}</Text>
+            <PrimaryButton
+              title="Add"
+              disabled={
+                submitting ||
             pan.length !== 16 ||
             pin.length !== 4 ||
             !this.validateCardNumber(pan)
-          }
-          color={Theme.lightBlue}
-          onPress={this.submitForm}
-        />
+              }
+              color={Theme.lightBlue}
+              onPress={this.submitForm}
+            />
+          </View>
+        </View>
       </View>
     )
   }
@@ -159,7 +164,13 @@ const styles = StyleSheet.create({
   },
   cardBackground: {height: 190, width: 300, flexDirection: 'row-reverse'},
   panText: {fontSize: 20, padding: 20, color: 'white'},
-  inputContainer: {borderBottomWidth: 1, borderColor: 'gray'},
+  inputContainer: {
+    borderWidth: 1,
+    height: 35,
+    paddingLeft: 10,
+    marginVertical: 15,
+    justifyContent: 'center'
+  },
   title: {fontSize: 22, fontWeight: 'bold', color: Theme.darkBlue},
   errorText: {color: 'red'},
   labelText: {color: 'gray'},
