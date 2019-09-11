@@ -46,7 +46,13 @@ const drawerOptions = ({navigation}) => ({
       size={26}
       onPress={() => navigation.toggleDrawer()} />
   ),
-  headerStyle: {backgroundColor: Theme.darkBlue},
+  headerStyle: {
+    backgroundColor: Theme.darkBlue,
+    elevation: 1,
+    shadowColor: 'gray',
+    shadowOffset: { width: 2, height: 1 },
+    shadowOpacity: 5,
+    shadowRadius: 10},
   headerTintColor: 'white'
 })
 
@@ -131,7 +137,13 @@ const AuthDrawer = createDrawerNavigator(
 )
 
 const publicHeader = {
-  headerStyle: {backgroundColor: Theme.darkBlue},
+  headerStyle: {
+    backgroundColor: Theme.darkBlue,
+    elevation: 5,
+    shadowColor: 'gray',
+    shadowOffset: { width: 2, height: 1 },
+    shadowOpacity: 5,
+    shadowRadius: 10},
   headerTintColor: 'white'
 }
 
