@@ -60,7 +60,6 @@ export default class SignUp extends React.Component {
 
   handleSubmit () {
     const {firstName, lastName, username, fieldValue, expoToken} = this.state
-    const {navigation} = this.props
     this.setState({submitting: true})
     const params = {
       first_name: firstName,
@@ -76,7 +75,11 @@ export default class SignUp extends React.Component {
       .then((responseJson) => {
         this.setState({submitting: false})
         if (this.validate(responseJson)) {
-          navigation.navigate('SignUpCode')
+          this.props.navigation.navigate('SignUpCode', {}, {
+            type: 'Navigate',
+            routeName: 'SignUpCode',
+            params: {param: 'param'}
+          })
         }
       })
   }

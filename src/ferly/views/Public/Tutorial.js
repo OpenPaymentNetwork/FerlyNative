@@ -33,7 +33,7 @@ export default class LandingPage extends React.Component {
           key={i}
           style={[
             styles.circle,
-            {backgroundColor: i === page ? Theme.lightBlue : 'gray'}
+            {backgroundColor: i === page ? Theme.darkBlue : 'gray'}
           ]} />
       )
     }
@@ -55,10 +55,10 @@ export default class LandingPage extends React.Component {
     ]
 
     return (
-      <View style={{flex: 1, justifyContent: 'space-between', backgroundColor: Theme.darkBlue}}>
+      <View style={{flex: 1, justifyContent: 'space-between'}}>
         <View style={styles.container}>
           {this.nextPage()}
-          <Text style={[styles.text, {fontSize: 18}]}>
+          <Text style={[styles.text, {fontSize: 22}]}>
             {descriptions[page]}
           </Text>
           <Image style={styles.image} source={images[page]} />
@@ -66,18 +66,18 @@ export default class LandingPage extends React.Component {
             {this.renderDots()}
           </View>
         </View>
-        <View style={{paddingVertical: 20, backgroundColor: 'white'}}>
+        <View style={{paddingVertical: 20, backgroundColor: Theme.yellow}}>
           <PrimaryButton
             title="Get a Ferly Card"
             color={Theme.lightBlue}
             onPress={() => navigation.navigate('AddressForm')} />
           <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-            <Text style={[styles.text, {paddingBottom: 30, fontSize: 18}]}>
-              Already have an account?
+            <Text style={[styles.text, {paddingBottom: 30, fontSize: 20}]}>
+              Already have a Ferly Card?
             </Text>
-            <TouchableOpacity onPress={() => navigation.navigate('CardForm')}>
-              <Text style={{color: Theme.lightBlue, fontSize: 18, paddingLeft: 10}}>
-                Activate
+            <TouchableOpacity onPress={() => navigation.navigate('NewCardForm')}>
+              <Text style={{color: Theme.darkBlue, fontSize: 18, paddingLeft: 10}}>
+                Activate It
               </Text>
             </TouchableOpacity>
             {/* <TouchableOpacity onPress={() => navigation.navigate('Wallet')}>
@@ -99,7 +99,7 @@ LandingPage.propTypes = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: Theme.yellow,
     alignItems: 'center',
     paddingTop: 40,
     paddingHorizontal: 20,

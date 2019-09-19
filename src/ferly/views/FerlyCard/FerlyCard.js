@@ -1,5 +1,5 @@
-import AddressForm from 'ferly/views/FerlyCard/AddressForm'
-import CardForm from 'ferly/views/FerlyCard/CardForm'
+// import AddressForm from 'ferly/views/FerlyCard/AddressForm'
+import AwaitingCard from 'ferly/views/FerlyCard/AwaitingCard'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Spinner from 'ferly/components/Spinner'
@@ -20,6 +20,7 @@ import {
   Switch,
   Modal
 } from 'react-native'
+import CardForm from 'ferly/views/FerlyCard/CardForm'
 
 export class FerlyCard extends React.Component {
   static navigationOptions = {
@@ -81,12 +82,14 @@ export class FerlyCard extends React.Component {
   }
 
   removeCard = () => {
+    // const {navigation} = this.props
     const {card_id: cardId} = this.props.card
     post('delete-card', {card_id: cardId})
       .then((response) => response.json())
       .then((json) => {
         this.props.apiRefresh(urls.profile)
         this.setState({passed: false})
+        // navigation.navigate('')
       })
   }
 
@@ -156,7 +159,7 @@ export class FerlyCard extends React.Component {
     if (!card) {
       return passed
         ? <CardForm />
-        : <AddressForm onPass={() => this.setState({passed: true})} />
+        : <AwaitingCard onPass={() => this.setState({passed: true})} />
     }
 
     const {suspended, expiration} = card

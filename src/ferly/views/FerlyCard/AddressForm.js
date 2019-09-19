@@ -1,3 +1,4 @@
+// import AwaitingCard from 'ferly/views/FerlyCard/AwaitingCard'
 import PrimaryButton from 'ferly/components/PrimaryButton'
 import PropTypes from 'prop-types'
 import React from 'react'
@@ -22,8 +23,8 @@ export default class AddressForm extends React.Component {
 
     constructor (props) {
       super(props)
-      this.defaultState = 'UT'
       this.state = {
+        passed: false,
         submitting: false,
         assumedAbility: null,
         invalid: {},
@@ -31,7 +32,7 @@ export default class AddressForm extends React.Component {
         address: '',
         apt: '',
         city: '',
-        state: '',
+        state: undefined,
         zipCode: '',
         st: ''
       }
@@ -44,7 +45,7 @@ export default class AddressForm extends React.Component {
         address,
         apt,
         city,
-        state,
+        state = this.defaultState,
         zipCode
       } = this.state
       this.setState({submitting: true})
@@ -61,7 +62,7 @@ export default class AddressForm extends React.Component {
         .then((json) => {
           this.setState({submitting: false})
           if (this.validateSendCard(json)) {
-            navigation.navigate('CardForm')
+            navigation.navigate('SignUpWaiting')
             const alertText = 'Your card will arrive in 7 to 10 business days.'
             Alert.alert('Done!', alertText)
           }
@@ -87,29 +88,10 @@ export default class AddressForm extends React.Component {
       }
     }
 
-    renderRecoveryOption () {
-      const {navigation} = this.props
-      return (
-        <View style={{
-          width: '100%',
-          flexDirection: 'row',
-          justifyContent: 'center',
-          marginBottom: 30}}>
-          <Text style={{fontSize: 16}}>Already have a Ferly Card?</Text>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('SignUp')}>
-            <Text style={{
-              color: Theme.lightBlue,
-              textDecorationLine: 'underline',
-              fontSize: 16,
-              paddingLeft: 5}}>Activate it</Text>
-          </TouchableOpacity>
-        </View>
-      )
-    }
-
     render () {
+      const {navigation} = this.props
       const {
+        // passed,
         name,
         address,
         apt,
@@ -126,6 +108,13 @@ export default class AddressForm extends React.Component {
         state: stateError,
         zipCode: zipError
       } = invalid
+
+      // if (!address) {
+      //   return passed
+      //     ? <AwaitingCard />
+      //     : <AddressForm onPass={() => this.setState({passed: true})} />
+      // }
+
       return (
         <View style={styles.page}>
           <KeyboardAvoidingView style={styles.form}
@@ -212,18 +201,31 @@ export default class AddressForm extends React.Component {
                   </View>
                 </View>
                 <PrimaryButton
-                  title="Mail Card"
+                  title="Submit"
                   disabled={
                     name === '' ||
-              address === '' ||
-              city === '' ||
-              zipCode.length !== 5 ||
-              submitting
+                    address === '' ||
+                    city === '' ||
+                    zipCode.length !== 5 ||
+                    submitting
                   }
                   color={Theme.lightBlue}
                   onPress={this.submitForm}
                 />
-                {this.renderRecoveryOption()}
+                <View style={{
+                  width: '100%',
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  marginBottom: 30}}>
+                  <Text style={{fontSize: 16}}>Already have a Ferly Card?</Text>
+                  <TouchableOpacity onPress={() => navigation.navigate('CardForm')}>
+                    <Text style={{
+                      color: Theme.lightBlue,
+                      textDecorationLine: 'underline',
+                      fontSize: 16,
+                      paddingLeft: 5}}>Activate It</Text>
+                  </TouchableOpacity>
+                </View>
               </TestElement>
             </ScrollView>
           </KeyboardAvoidingView>
@@ -233,7 +235,7 @@ export default class AddressForm extends React.Component {
 }
 
 AddressForm.propTypes = {
-  navigation: PropTypes.object.isRequired
+  navigation: PropTypes.object
 }
 
 const styles = StyleSheet.create({

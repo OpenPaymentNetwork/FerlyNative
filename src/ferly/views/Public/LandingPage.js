@@ -12,13 +12,30 @@ import {
 export default class LandingPage extends React.Component {
   constructor (props) {
     super(props)
-    this.state = {page: 0}
+    this.state = {
+      page: 0,
+      isMounted: false,
+      dataSource: [
+        {
+          title: 1
+        }, {
+          title: 2
+        }
+      ]
+    }
   }
 
-  nextPage = () => {
-    setTimeout(() => {
-      this.setState({page: this.state.page === 0 ? +1 : +2})
+  componentDidMount () {
+    this.interval = setInterval(() => {
+      this.setState({
+        page: this.state.page === this.state.dataSource.length ? 0 : this.state.page + 1
+      })
     }, 5000)
+  }
+
+  componentWillUnmount () {
+    this.interval && clearInterval(this.interval)
+    this.interval = false
   }
 
   renderDots = () => {
@@ -56,7 +73,6 @@ export default class LandingPage extends React.Component {
     return (
       <View style={{flex: 1, justifyContent: 'space-between', backgroundColor: Theme.darkBlue}}>
         <View style={styles.container}>
-          {this.nextPage()}
           <Text style={[styles.text, {fontSize: 18}]}>
             {descriptions[page]}
           </Text>

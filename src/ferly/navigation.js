@@ -1,5 +1,4 @@
 import AddressForm from 'ferly/views/FerlyCard/AddressForm'
-import CardForm from 'ferly/views/FerlyCard/CardForm'
 import Contact from 'ferly/views/Invitations/Contact'
 import Contacts from 'ferly/views/Invitations/Contacts'
 import FerlyCard from 'ferly/views/FerlyCard/FerlyCard'
@@ -9,6 +8,7 @@ import History from 'ferly/views/History/History'
 import Invitations from 'ferly/views/Invitations/Invitations'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import ManualAdd from 'ferly/views/Invitations/ManualAdd'
+import NewCardForm from 'ferly/views/FerlyCard/NewCardForm'
 import Profile from 'ferly/views/Profile/Profile'
 import React from 'react'
 import RecoveryChannel from 'ferly/views/Public/RecoveryChannel'
@@ -16,6 +16,7 @@ import RecoveryCode from 'ferly/views/Public/RecoveryCode'
 import Settings from 'ferly/views/Settings/Settings'
 import SignUp from 'ferly/views/Public/SignUp'
 import SignUpCode from 'ferly/views/Public/SignUpCode'
+import SignUpWaiting from 'ferly/views/FerlyCard/SignUpWaiting'
 import TestElement from 'ferly/components/TestElement'
 import Transfer from 'ferly/views/History/Transfer'
 import Home from 'ferly/views/Wallet/Home'
@@ -108,31 +109,13 @@ const HistoryStack = createStackNavigator(
   }
 )
 
-const CardStack = createStackNavigator(
+const WaitingStack = createStackNavigator(
   {
-    AddressForm: {screen: AddressForm, navigationOptions: drawerOptions},
-    CardForm: {screen: CardForm, navigationOptions: drawerOptions},
-    FerlyCard: {screen: FerlyCard, navigationOptions: drawerOptions}
+    'Ferly Card': createStackNavigator(
+      {Card: {screen: FerlyCard, navigationOptions: drawerOptions}})
   },
   {
-    initialRouteName: 'History'
-  }
-)
-
-const AuthDrawer = createDrawerNavigator(
-  {
-    Wallet: WalletStack,
-    Profile: ProfileStack,
-    FerlyCard: CardStack,
-    History: HistoryStack,
-    Invitations: InvitationsStack,
-    Settings: SettingsStack
-  },
-  {
-    initialRouteName: 'Wallet',
-    drawerPosition: 'right',
-    contentComponent: DrawerContent,
-    contentOptions: {activeTintColor: Theme.lightBlue}
+    initialRouteName: 'Ferly Card'
   }
 )
 
@@ -147,15 +130,20 @@ const publicHeader = {
   headerTintColor: 'white'
 }
 
-const OnboardingStack = createStackNavigator(
+const AuthDrawer = createDrawerNavigator(
   {
-    Tutorial: {screen: Tutorial, navigationOptions: {header: null}},
-    AddressForm: {screen: AddressForm, navigationOptions: publicHeader},
-    CardForm: {screen: CardForm, navigationOptions: publicHeader},
-    FerlyCard: {screen: FerlyCard, navigationOptions: drawerOptions}
+    Wallet: WalletStack,
+    Profile: ProfileStack,
+    'Ferly Card': WaitingStack,
+    History: HistoryStack,
+    Invitations: InvitationsStack,
+    Settings: SettingsStack
   },
   {
-    initialRouteName: 'Tutorial'
+    initialRouteName: 'Wallet',
+    drawerPosition: 'right',
+    contentComponent: DrawerContent,
+    contentOptions: {activeTintColor: Theme.lightBlue}
   }
 )
 
@@ -166,7 +154,10 @@ const PubStack = createStackNavigator(
     SignUpCode: {screen: SignUpCode, navigationOptions: publicHeader},
     RecoveryCode: {screen: RecoveryCode, navigationOptions: publicHeader},
     RecoveryChannel: {screen: RecoveryChannel, navigationOptions: publicHeader},
-    Onboarding: OnboardingStack
+    Tutorial: {screen: Tutorial, navigationOptions: {header: null}},
+    AddressForm: {screen: AddressForm, navigationOptions: publicHeader},
+    SignUpWaiting: {screen: SignUpWaiting, navigationOptions: publicHeader},
+    NewCardForm: {screen: NewCardForm, navigationOptions: publicHeader}
   },
   {
     initialRouteName: 'LandingPage'
