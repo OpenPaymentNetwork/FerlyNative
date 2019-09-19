@@ -32,13 +32,14 @@ export function createUrl (urlTail, params = {}) {
 }
 
 export function post (urlTail, params = {}) {
-  Object.assign(params, {device_id: Constants.deviceId})
+  // Object.assign(params, {device_id: Constants.deviceId})
   const url = baseUrl + urlTail
   return fetch(url, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer' + Constants.deviceId
     },
     body: JSON.stringify(params)
   })
