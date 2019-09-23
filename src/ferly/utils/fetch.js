@@ -62,7 +62,7 @@ export const retryFetch = async (url, tries = 5, delay = 2000) => {
     const response = await fetch(url, {
       headers: {
         Accept: 'application/json',
-        XAuthorization: 'Bearer ' + Constants.deviceId
+        Authorization: 'Bearer ' + Constants.deviceId
       }
     })
 
