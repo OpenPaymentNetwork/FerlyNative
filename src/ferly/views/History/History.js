@@ -1,3 +1,4 @@
+import Constants from 'expo-constants'
 import HistoryEntry from 'ferly/components/HistoryEntry'
 import Spinner from 'ferly/components/Spinner'
 import PropTypes from 'prop-types'
@@ -31,7 +32,10 @@ export class History extends React.Component {
       return
     }
     const nextUrl = `${urls.history}&offset=${history.length}`
-    fetch(nextUrl)
+    fetch(nextUrl, {
+      headers: {
+        Authorization: 'Bearer ' + Constants.deviceId
+      }})
       .then((response) => response.json())
       .then((responseJson) => {
         const newHistory = history.concat(responseJson.history)

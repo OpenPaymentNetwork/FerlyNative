@@ -1,4 +1,5 @@
 import Avatar from 'ferly/components/Avatar'
+import Constants from 'expo-constants'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import PrimaryButton from 'ferly/components/PrimaryButton'
 import ProfilePicturePicker from 'ferly/views/Profile/ProfilePicturePicker'
@@ -57,7 +58,8 @@ class Profile extends React.Component {
       body: formData,
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'multipart/form-data'
+        'Content-Type': 'multipart/form-data',
+        Authorization: 'Bearer ' + Constants.deviceId
       }
     }
     return fetch(createUrl('upload-profile-image'), options)

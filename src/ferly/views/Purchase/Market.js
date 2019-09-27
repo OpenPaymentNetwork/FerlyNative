@@ -1,4 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
+import Constants from 'expo-constants'
 import StoreAvatar from 'ferly/components/StoreAvatar'
 import SearchBar from 'ferly/components/SearchBar'
 import PropTypes from 'prop-types'
@@ -36,7 +37,10 @@ export class Market extends React.Component {
     if (text === '') {
       this.setState({searchResults: null})
     } else {
-      fetch(createUrl('search-market', {query: text}))
+      fetch(createUrl('search-market', {query: text}), {
+        headers: {
+          Authorization: 'Bearer ' + Constants.deviceId
+        }})
         .then((response) => response.json())
         .then((json) => {
           if (this.state.searchText === text) { // The customer is done typing.
