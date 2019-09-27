@@ -4,8 +4,15 @@ const {releaseChannel = 'staging', env} = Constants.manifest
 
 export let envId = releaseChannel.charAt(0)
 let host
-if (__DEV__ && env.EXPO_LOCAL_SERVER === 'true') {
-  host = 'http://10.1.10.6:44225/' // Dev.ini
+if (__DEV__ && env.EXPO_LOCAL_SERVER) {
+  // To use a local Ferly API server, start expo with this shell command:
+  // EXPO_LOCAL_SERVER=http://LOCALIP:6543/ expo start
+  // Replace LOCALIP with the LAN IP address of your machine.
+  // (You don't usually want to use a WAN or localhost IP address.)
+  host = env.EXPO_LOCAL_SERVER
+  if (!host.endsWith('/')) {
+    host = host + '/'
+  }
   envId = 'l'
   // host = 'http://10.1.10.6:6543/' // Prod.ini
 } else if (releaseChannel === 'production') {
@@ -26,19 +33,19 @@ export function createUrl (urlTail, params = {}) {
     const encodedValue = encodeURIComponent(params[key])
     queries.push(encodedKey + '=' + encodedValue)
   }
-  queries.push(`device_id=${Constants.deviceId}`)
   const queryString = queries.join('&')
   return [url, queryString].join('?')
 }
 
 export function post (urlTail, params = {}) {
-  Object.assign(params, {device_id: Constants.deviceId})
+  // Object.assign(params, {device_id: Constants.deviceId})
   const url = baseUrl + urlTail
   return fetch(url, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + Constants.deviceId
     },
     body: JSON.stringify(params)
   })
@@ -49,26 +56,31 @@ export const urls = {
   profile: createUrl('profile')
 }
 
-function throwOn504 (response) {
-  // 504 occurs when the server is updating for a couple seconds
-  if (response.status === 504) {
-    throw Error
-  } else {
-    return response
-  }
-}
-
-export const retryFetch = async (url, options, tries = 5, delay = 2000) => {
+export const retryFetch = async (url, tries = 5, delay = 2000) => {
   if (__DEV__) tries = 1
   try {
-    return await fetch(url, options).then(throwOn504)
+    const response = await fetch(url, {
+      headers: {
+        Accept: 'application/json',
+        Authorization: 'Bearer ' + Constants.deviceId
+      }
+    })
+
+    if (response.status >= 400) {
+      if (__DEV__) {
+        window.alert('Failed response to ' + url + ': ' + response.status)
+      }
+      throw Error
+    }
+
+    return response
   } catch (err) {
-    if (tries === 1) {
+    if (__DEV__ && tries === 1) {
       throw err
     }
     return new Promise(function (resolve, reject) {
       setTimeout(function () {
-        const p = retryFetch(url, options, tries - 1, delay * 2)
+        const p = retryFetch(url, tries - 1, delay * 2)
         p.then(resolve(p)).catch(() => reject(err))
       }, delay)
     })
