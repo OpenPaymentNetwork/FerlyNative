@@ -1,4 +1,5 @@
 import Avatar from 'ferly/components/Avatar'
+import Constants from 'expo-constants'
 import PropTypes from 'prop-types'
 import React from 'react'
 import SearchBar from 'ferly/components/SearchBar'
@@ -31,7 +32,10 @@ class Recipient extends React.Component {
     if (query === '') {
       this.setState({searchResults: null})
     } else {
-      fetch(createUrl('search-customers', {query: query}))
+      fetch(createUrl('search-customers', {query: query}), {
+        headers: {
+          Authorization: 'Bearer ' + Constants.deviceId
+        }})
         .then((response) => response.json())
         .then((json) => {
           if (this.state.searchText === text) { // The customer is done typing.

@@ -38,7 +38,6 @@ export function createUrl (urlTail, params = {}) {
 }
 
 export function post (urlTail, params = {}) {
-  // Object.assign(params, {device_id: Constants.deviceId})
   const url = baseUrl + urlTail
   return fetch(url, {
     method: 'POST',
