@@ -1,5 +1,7 @@
-// import AddressForm from 'ferly/views/FerlyCard/AddressForm'
+import NewAddressForm from 'ferly/views/FerlyCard/NewAddressForm'
 import AwaitingCard from 'ferly/views/FerlyCard/AwaitingCard'
+import CardForm from 'ferly/views/FerlyCard/CardForm'
+import Constants from 'expo-constants'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Spinner from 'ferly/components/Spinner'
@@ -8,7 +10,7 @@ import {apiRequire, apiRefresh} from 'ferly/store/api'
 import {connect} from 'react-redux'
 import {ferlyCard} from 'ferly/images/index'
 import {Ionicons} from '@expo/vector-icons'
-import {urls, post} from 'ferly/utils/fetch'
+import {urls, post, createUrl} from 'ferly/utils/fetch'
 import {
   View,
   ImageBackground,
@@ -20,7 +22,6 @@ import {
   Switch,
   Modal
 } from 'react-native'
-import CardForm from 'ferly/views/FerlyCard/CardForm'
 
 export class FerlyCard extends React.Component {
   static navigationOptions = {
@@ -35,12 +36,28 @@ export class FerlyCard extends React.Component {
       assumedAbility: null,
       changingAbility: false,
       showNewPinModal: false,
-      passed: false
+      passed: '',
+      address: {}
     }
   }
 
   componentDidMount () {
     this.props.apiRequire(urls.profile)
+    fetch(createUrl('verify-address'), {
+      headers: {
+        Authorization: 'Bearer ' + Constants.deviceId
+      }})
+      .then((response) => response.json())
+      .then((json) => {
+        this.setState({address: json})
+        if (json['verified'] === 'yes') {
+          this.setState({passed: 'true'})
+        } else if (json['verified'] === 'no') {
+          this.setState({passed: ''})
+        } else {
+          this.setState({passed: ''})
+        }
+      })
   }
 
   componentWillUnmount () {
@@ -82,15 +99,51 @@ export class FerlyCard extends React.Component {
   }
 
   removeCard = () => {
-    // const {navigation} = this.props
+    const {address} = this.state
     const {card_id: cardId} = this.props.card
     post('delete-card', {card_id: cardId})
       .then((response) => response.json())
       .then((json) => {
         this.props.apiRefresh(urls.profile)
-        this.setState({passed: false})
-        // navigation.navigate('')
+        this.setState({passed: ''})
+        if (this.state.passed === '') {
+          let addressLine2 = address['address_line2'] === '' ? '' : address['address_line2'] + '\n'
+          Alert.alert(
+            'Correct Address?',
+            address['address_line1'] + '\n' +
+            addressLine2 +
+            address['city'] + ' ' +
+            address['state'] + ' ' +
+            address['zip'],
+            [
+              {text: 'Yes',
+                onPress: () => {
+                  address['verified'] = 'yes'
+                  post('request-card', this.modifyAddress(address))
+                    .then((response) => response.json())
+                    .then((json) => {
+                      this.setState({passed: 'true'})
+                    })
+                }},
+              {text: 'No',
+                onPress: () => {
+                  address['verified'] = 'no'
+                  post('request-card', this.modifyAddress(address))
+                    .then((response) => response.json())
+                    .then((json) => {
+                      this.setState({passed: ''})
+                    })
+                }}
+            ]
+          )
+        }
       })
+  }
+
+  modifyAddress = function (address) {
+    address['line1'] = address['address_line1']
+    address['zip_code'] = address['zip'].slice(0, 5)
+    return address
   }
 
   submitNewPin = () => {
@@ -157,9 +210,13 @@ export class FerlyCard extends React.Component {
     }
 
     if (!card) {
-      return passed
-        ? <CardForm />
-        : <AwaitingCard onPass={() => this.setState({passed: true})} />
+      if (passed === 'false') {
+        return <CardForm onPass={() => this.setState({passed: ''})} />
+      } else if (passed === 'true') {
+        return <AwaitingCard onPass={() => this.setState({passed: 'false'})} />
+      } else {
+        return <NewAddressForm onPass={() => this.setState({passed: 'true'})} />
+      }
     }
 
     const {suspended, expiration} = card
@@ -309,7 +366,7 @@ const styles = StyleSheet.create({
 })
 
 FerlyCard.propTypes = {
-  navigation: PropTypes.object,
+  onPass: PropTypes.func,
   apiRefresh: PropTypes.func.isRequired,
   apiRequire: PropTypes.func.isRequired,
   card: PropTypes.object,

@@ -1,4 +1,3 @@
-// import AwaitingCard from 'ferly/views/FerlyCard/AwaitingCard'
 import PrimaryButton from 'ferly/components/PrimaryButton'
 import PropTypes from 'prop-types'
 import React from 'react'
@@ -16,9 +15,9 @@ import {
   View
 } from 'react-native'
 
-export default class AddressForm extends React.Component {
+export default class NewAddressForm extends React.Component {
     static navigationOptions = {
-      title: 'Get a Ferly Card'
+      title: 'Ferly Card'
     }
 
     constructor (props) {
@@ -39,7 +38,6 @@ export default class AddressForm extends React.Component {
     }
 
     submitForm = () => {
-      const {navigation} = this.props
       const {
         name,
         address,
@@ -55,14 +53,15 @@ export default class AddressForm extends React.Component {
         line2: apt,
         city: city,
         state: state,
-        zip_code: zipCode
+        zip_code: zipCode,
+        verified: 'yes'
       }
       post('request-card', params)
         .then((response) => response.json())
         .then((json) => {
           this.setState({submitting: false})
           if (this.validateSendCard(json)) {
-            navigation.navigate('SignUpWaiting')
+            this.props.onPass()
             const alertText = 'Your card will arrive in 7 to 10 business days.'
             Alert.alert('Done!', alertText)
           }
@@ -89,7 +88,6 @@ export default class AddressForm extends React.Component {
     }
 
     render () {
-      const {navigation} = this.props
       const {
         name,
         address,
@@ -211,7 +209,7 @@ export default class AddressForm extends React.Component {
                   justifyContent: 'center',
                   marginBottom: 30}}>
                   <Text style={{fontSize: 16}}>Already have a Ferly Card?</Text>
-                  <TouchableOpacity onPress={() => navigation.navigate('CardForm')}>
+                  <TouchableOpacity onPress={() => this.props.onPass()}>
                     <Text style={{
                       color: Theme.lightBlue,
                       textDecorationLine: 'underline',
@@ -227,8 +225,8 @@ export default class AddressForm extends React.Component {
     }
 }
 
-AddressForm.propTypes = {
-  navigation: PropTypes.object
+NewAddressForm.propTypes = {
+  onPass: PropTypes.func
 }
 
 const styles = StyleSheet.create({

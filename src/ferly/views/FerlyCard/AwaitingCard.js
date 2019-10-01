@@ -11,12 +11,12 @@ export default class AwaitingCard extends React.Component {
   };
 
   activate = () => {
-    // const {navigation} = this.props
-    this.setState({submitting: true})
     this.props.onPass()
   }
 
   render () {
+    const {navigation} = this.props
+
     return (
       <View style={{flex: 1}}>
         <View style={{paddingVertical: 20, paddingTop: 30}} >
@@ -29,6 +29,7 @@ export default class AwaitingCard extends React.Component {
         </View>
         <View style={{paddingVertical: 50}}>
           <PrimaryButton
+            navigation={navigation}
             title="Activate Card"
             color={Theme.lightBlue}
             onPress={this.activate} />
@@ -39,5 +40,6 @@ export default class AwaitingCard extends React.Component {
 }
 
 AwaitingCard.propTypes = {
-  onPass: PropTypes.func
+  onPass: PropTypes.func,
+  navigation: PropTypes.object
 }

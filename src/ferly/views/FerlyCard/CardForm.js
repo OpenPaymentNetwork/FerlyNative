@@ -203,9 +203,7 @@ const styles = StyleSheet.create({
 })
 
 CardForm.propTypes = {
-  navigation: PropTypes.object,
-  apiRefresh: PropTypes.func.isRequired,
-  card: PropTypes.object
+  apiRefresh: PropTypes.func.isRequired
 }
 
 function mapStateToProps (state) {
