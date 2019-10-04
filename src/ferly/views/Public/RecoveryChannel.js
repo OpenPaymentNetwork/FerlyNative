@@ -26,15 +26,9 @@ export class RecoveryChannel extends React.Component {
 
     this.setState({'submitting': true, invalid: ''})
 
-    const postParams = {
-      'login': fieldValue
-    }
-    console.log('fieldvalue', postParams)
-
     post('recover', this.props.deviceId, {'login': fieldValue})
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log('login', responseJson)
         if (this.validate(responseJson)) {
           this.setState({submitting: false})
           const codeLength = responseJson.code_length
@@ -57,7 +51,6 @@ export class RecoveryChannel extends React.Component {
 
   validate (json) {
     if (json.invalid) {
-      console.log('valid', json.invalid)
       this.setState({'invalid': json.invalid, submitting: false})
       return false
     } else if (json.error) {

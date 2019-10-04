@@ -71,7 +71,6 @@ export class SignUp extends React.Component {
       .then((response) => response.json())
       .then((responseJson) => {
         this.setState({submitting: false})
-        console.log('signup', responseJson)
         const navParams = {
           firstName: firstName,
           lastName: lastName,
@@ -98,7 +97,6 @@ export class SignUp extends React.Component {
       this.setState({invalid: {username: 'Username already taken'}})
       return false
     } else if (responseJson.error) {
-      console.log('errorhere')
       this.setState({invalid: {fieldValue: 'Email already registered! Please Sign In.'}})
       return false
     } else {

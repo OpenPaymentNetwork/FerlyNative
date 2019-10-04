@@ -21,7 +21,6 @@ export class AppEntry extends React.Component {
       try {
         this.props.dispatch(setDeviceId(device2))
       } catch (error) {
-        console.error('dispatcherror', error)
       }
     }, device2 === 'aaa')
   }
@@ -34,7 +33,6 @@ export class AppEntry extends React.Component {
       }
       return device2
     } catch (error) {
-      console.log('app entry error', error)
     }
   }
 

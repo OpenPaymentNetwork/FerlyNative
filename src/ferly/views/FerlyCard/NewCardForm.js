@@ -89,7 +89,6 @@ export class CardForm extends React.Component {
 
   validateAddCard = (json) => {
     if (json.invalid) {
-      console.log('card', json.invalid)
       const newInvalid = json.invalid
       if (newInvalid['']) {
         newInvalid.pan = newInvalid['']
