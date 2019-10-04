@@ -4,26 +4,30 @@ import PrimaryButton from 'ferly/components/PrimaryButton'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Theme from 'ferly/utils/theme'
-import {logoWhite} from 'ferly/images/index'
+import {connect} from 'react-redux'
 import {Notifications} from 'expo'
-import {post, envId} from 'ferly/utils/fetch'
+import {post} from 'ferly/utils/fetch'
 import {
   View,
   Text,
   TextInput,
-  Image,
   StyleSheet,
   TouchableOpacity,
   Platform
 } from 'react-native'
 
-export default class SignUp extends React.Component {
+export class SignUp extends React.Component {
+  static navigationOptions = {
+    title: 'Sign Up for Ferly'
+  };
+
   constructor (props) {
     super(props)
     this.state = {
       firstName: '',
       lastName: '',
       username: '',
+      fieldValue: '',
       showUsernameError: false,
       invalid: {},
       expoToken: '',
@@ -56,23 +60,29 @@ export default class SignUp extends React.Component {
   }
 
   handleSubmit () {
-    const {firstName, lastName, username, expoToken} = this.state
-    const {navigation} = this.props
+    const {firstName, lastName, username, fieldValue, expoToken} = this.state
     this.setState({submitting: true})
-    const params = {
-      first_name: firstName,
-      last_name: lastName,
-      username: username,
-      expo_token: expoToken,
-      os: `${Platform.OS}:${Platform.Version}`
+    const login = {
+      login: fieldValue,
+      username: username
     }
 
-    post('signup', params)
+    post('signup', this.props.deviceId, login)
       .then((response) => response.json())
       .then((responseJson) => {
         this.setState({submitting: false})
+        const navParams = {
+          firstName: firstName,
+          lastName: lastName,
+          username: username,
+          expoToken: expoToken,
+          secret: responseJson.secret,
+          attemptPath: responseJson.attempt_path,
+          factorId: responseJson.factor_id,
+          os: `${Platform.OS}:${Platform.Version}`
+        }
         if (this.validate(responseJson)) {
-          navigation.navigate('Tutorial')
+          this.props.navigation.navigate('SignUpCode', navParams)
         }
       })
   }
@@ -85,6 +95,9 @@ export default class SignUp extends React.Component {
       return false
     } else if (responseJson.error === 'existing_username') {
       this.setState({invalid: {username: 'Username already taken'}})
+      return false
+    } else if (responseJson.error) {
+      this.setState({invalid: {fieldValue: 'Email already registered! Please Sign In.'}})
       return false
     } else {
       return true
@@ -137,24 +150,23 @@ export default class SignUp extends React.Component {
   renderRecoveryOption () {
     const {navigation} = this.props
     return (
-      <View style={[styles.row, {paddingTop: 10}]}>
+      <View style={[styles.row, {marginBottom: 30}]}>
+        <Text style={{fontSize: 16}}>Already have an account?</Text>
         <TouchableOpacity
           onPress={() => navigation.navigate('RecoveryChannel')}>
-          <Text style={styles.recoveryText}>Already have an account?</Text>
+          <Text style={[styles.recoveryText, {paddingLeft: 5}]}>Sign In</Text>
         </TouchableOpacity>
       </View>
     )
   }
 
   render () {
-    const {firstName, lastName, username, submitting, invalid} = this.state
-    const {version} = Constants.manifest
+    const {firstName, lastName, username, submitting, fieldValue, invalid} = this.state
     return (
-      <View style={{flex: 1, backgroundColor: Theme.darkBlue}}>
-        <View style={styles.container}>
-          <Image source={logoWhite} style={styles.logo} />
+      <View style={{flex: 1, backgroundColor: 'white'}}>
+        <View style={{flexDirection: 'row', paddingHorizontal: 15}} >
           <TextInput
-            style={styles.field}
+            style={styles.firstField}
             underlineColorAndroid={'transparent'}
             placeholderTextColor={'gray'}
             placeholder='First Name'
@@ -166,7 +178,7 @@ export default class SignUp extends React.Component {
               : null
           }
           <TextInput
-            style={styles.field}
+            style={styles.firstField}
             underlineColorAndroid={'transparent'}
             placeholderTextColor={'gray'}
             placeholder='Last Name'
@@ -177,43 +189,58 @@ export default class SignUp extends React.Component {
               ? (<Text style={styles.error}>{invalid.last_name}</Text>)
               : null
           }
-          <TextInput
-            style={styles.field}
-            underlineColorAndroid={'transparent'}
-            placeholderTextColor={'gray'}
-            placeholder='Username'
-            onBlur={() => {
-              this.validateUsername(username)
-              this.setState({showUsernameError: true})
-            }}
-            onChangeText={
-              (text) => {
-                this.validateUsername(text); this.setState({username: text})
+        </View>
+        <View>
+          <View style={{paddingHorizontal: 15}} >
+            <TextInput
+              style={styles.field}
+              underlineColorAndroid={'transparent'}
+              placeholderTextColor={'gray'}
+              placeholder='Username'
+              onBlur={() => {
+                this.validateUsername(username)
+                this.setState({showUsernameError: true})
+              }}
+              onChangeText={
+                (text) => {
+                  this.validateUsername(text); this.setState({username: text})
+                }
               }
+              value={username} />
+            {
+              invalid.username && this.state.showUsernameError
+                ? (<Text style={styles.error}>{invalid.username}</Text>)
+                : null
             }
-            value={username} />
-          {
-            invalid.username && this.state.showUsernameError
-              ? (<Text style={styles.error}>{invalid.username}</Text>)
-              : null
-          }
-          {this.renderDebug()}
+            <TextInput
+              style={[styles.field, {marginBottom: 45}]}
+              underlineColorAndroid={'transparent'}
+              placeholderTextColor={'gray'}
+              placeholder='Email Address or Phone Number'
+              onChangeText={(text) => this.setState({fieldValue: text})}
+              value={fieldValue} />
+            {
+              invalid.last_name
+                ? (<Text style={styles.error}>{invalid.fieldValue}</Text>)
+                : null
+            }
+            {this.renderDebug()}
+          </View>
+          <View style={{width: '100%'}} >
+            <PrimaryButton
+              title="Next"
+              disabled={
+                firstName === '' ||
+                lastName === '' ||
+                submitting ||
+                !!invalid.username ||
+                !username
+              }
+              color={Theme.lightBlue}
+              onPress={this.handleSubmit.bind(this)} />
+          </View>
           {this.renderRecoveryOption()}
         </View>
-        <View style={[styles.row, {backgroundColor: Theme.darkBlue}]}>
-          <Text style={{color: '#16213d'}}>{`${version}/${envId}`}</Text>
-        </View>
-        <PrimaryButton
-          title="Sign Up"
-          disabled={
-            firstName === '' ||
-            lastName === '' ||
-            submitting ||
-            !!invalid.username ||
-            !username
-          }
-          color={Theme.lightBlue}
-          onPress={this.handleSubmit.bind(this)} />
       </View>
     )
   }
@@ -222,18 +249,29 @@ export default class SignUp extends React.Component {
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    backgroundColor: Theme.darkBlue,
     flex: 1,
-    paddingHorizontal: 40
+    paddingHorizontal: 5
   },
   error: {color: 'red', width: '100%'},
   field: {
-    borderBottomWidth: 1,
-    borderColor: 'gray',
-    color: 'white',
+    borderWidth: 1,
+    borderRadius: 5,
     fontSize: 18,
-    marginVertical: 6,
-    width: '100%'
+    marginVertical: 15,
+    width: '100%',
+    height: 35,
+    paddingLeft: 10
+  },
+  firstField: {
+    borderWidth: 1,
+    borderRadius: 5,
+    fontSize: 18,
+    marginBottom: 15,
+    marginTop: 40,
+    width: '50%',
+    height: 35,
+    paddingLeft: 10,
+    justifyContent: 'space-between'
   },
   logo: {width: 160, height: 156, marginVertical: 40},
   recoveryText: {
@@ -241,9 +279,21 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
     fontSize: 16
   },
-  row: {width: '100%', flexDirection: 'row', justifyContent: 'flex-end'}
+  row: {width: '100%', flexDirection: 'row', justifyContent: 'center'}
 })
 
 SignUp.propTypes = {
-  navigation: PropTypes.object.isRequired
+  navigation: PropTypes.object.isRequired,
+  onFocus: PropTypes.object,
+  onBlur: PropTypes.object,
+  deviceId: PropTypes.string.isRequired
 }
+
+function mapStateToProps (state) {
+  const {deviceId} = state.settings
+  return {
+    deviceId
+  }
+}
+
+export default connect(mapStateToProps)(SignUp)

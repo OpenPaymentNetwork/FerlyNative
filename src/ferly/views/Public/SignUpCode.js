@@ -7,11 +7,11 @@ import Theme from 'ferly/utils/theme'
 import {connect} from 'react-redux'
 import {Notifications} from 'expo'
 import {post} from 'ferly/utils/fetch'
-import {View, Text, TextInput, StyleSheet, Alert, Platform} from 'react-native'
+import {View, Text, TextInput, StyleSheet, Alert} from 'react-native'
 
-export class RecoveryCode extends React.Component {
+export class SignUpCode extends React.Component {
   static navigationOptions = {
-    title: 'Recover Account'
+    title: 'Verify Email/Phone Number'
   };
 
   constructor (props) {
@@ -59,27 +59,83 @@ export class RecoveryCode extends React.Component {
   }
 
   handleSubmit () {
+    let dontLogin = true
     const {navigation} = this.props
     const params = navigation.state.params
-    const {attemptPath, secret, factorId} = params
-    const {fieldValue, recaptchaResponse, expoToken} = this.state
+    let {attemptPath, secret, factorId, firstName, lastName, expoToken, username, os} = params
+    const {fieldValue, recaptchaResponse} = this.state
     this.setState({'submitting': true, invalid: '', resubmit: false})
-
-    const postParams = {
-      attempt_path: attemptPath,
+    attemptPath = attemptPath.substr(1)
+    const setParams = {
+      first_name: firstName,
+      last_name: lastName,
       secret: secret,
+      attempt_path: attemptPath
+    }
+    const agreedParam = {
+      agreed: true,
+      secret: secret,
+      attempt_path: attemptPath
+    }
+    const postParams = {
+      secret: secret,
+      attempt_path: attemptPath,
       factor_id: factorId,
       code: fieldValue.replace(/-/g, ''),
-      recaptcha_response: recaptchaResponse,
-      expo_token: expoToken,
-      os: `${Platform.OS}:${Platform.Version}`
+      recaptcha_response: recaptchaResponse
     }
-
-    post('recover-code', this.props.deviceId, postParams)
+    post('auth-uid', this.props.deviceId, postParams)
       .then((response) => response.json())
       .then((responseJson) => {
         if (this.validate(responseJson)) {
-          navigation.navigate('Wallet')
+          if (responseJson.profile_id) {
+            const loginParams = {
+              profile_id: responseJson.profile_id,
+              os: responseJson.os,
+              expo_token: responseJson.expo_token
+            }
+            post('login', this.props.deviceId, loginParams)
+              .then((response) => response.json())
+              .then((responseJson) => {
+                if (!responseJson.error) {
+                  navigation.navigate('Wallet')
+                  dontLogin = false
+                }
+              })
+          } else if (dontLogin) {
+            post('set-signup-data', this.props.deviceId, setParams)
+              .then((response) => response.json())
+              .then((responseJson) => {
+                if (this.validate(responseJson)) {
+                  post('signup-finish', this.props.deviceId, agreedParam)
+                    .then((response) => response.json())
+                    .then((responseJson) => {
+                      if (this.validate(responseJson)) {
+                        const finalParams = {
+                          first_name: firstName,
+                          last_name: lastName,
+                          username: username,
+                          profile_id: responseJson.profile_id,
+                          attempt_path: attemptPath,
+                          secret: secret,
+                          expo_token: expoToken,
+                          os: os,
+                          factor_id: factorId,
+                          code: fieldValue.replace(/-/g, ''),
+                          recaptcha_response: recaptchaResponse
+                        }
+                        post('register', this.props.deviceId, finalParams)
+                          .then((response) => response.json())
+                          .then((responseJson) => {
+                            if (this.validate(responseJson)) {
+                              navigation.navigate('Tutorial')
+                            }
+                          })
+                      }
+                    })
+                }
+              })
+          }
         }
       })
   }
@@ -125,7 +181,7 @@ export class RecoveryCode extends React.Component {
     }
 
     const recaptchaComponent = (
-      <Recaptcha onExecute={this.onExecute.bind(this)} action="recovery" />)
+      <Recaptcha onExecute={this.onExecute.bind(this)} action="uid" />)
 
     return (
       <View style={{
@@ -154,7 +210,7 @@ export class RecoveryCode extends React.Component {
           {invalid ? (<Text style={styles.error}>{invalid}</Text>) : null}
         </View>
         <PrimaryButton
-          title="Recover Account"
+          title="Verify Email/Phone"
           disabled={fieldValue === '' || submitting}
           color={Theme.lightBlue}
           onPress={this.handleSubmit.bind(this)} />
@@ -163,7 +219,7 @@ export class RecoveryCode extends React.Component {
   }
 }
 
-RecoveryCode.propTypes = {
+SignUpCode.propTypes = {
   navigation: PropTypes.object.isRequired,
   deviceId: PropTypes.string.isRequired
 }
@@ -182,4 +238,4 @@ function mapStateToProps (state) {
   }
 }
 
-export default connect(mapStateToProps)(RecoveryCode)
+export default connect(mapStateToProps)(SignUpCode)

@@ -19,9 +19,10 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
+  WebView
 } from 'react-native'
-import {WebView} from 'react-native-webview'
+// import {WebView} from 'react-native-webview'
 
 export class Cart extends React.Component {
   static navigationOptions = {
@@ -50,7 +51,7 @@ export class Cart extends React.Component {
     }
 
     this.setState({submitting: true})
-    post('purchase', purchaseParams)
+    post('purchase', this.props.deviceId, purchaseParams)
       .then((response) => response.json())
       .then((responseJson) => {
         if (this.validate(responseJson)) {
@@ -122,7 +123,7 @@ export class Cart extends React.Component {
     }
     fetch(createUrl('delete-stripe-source', {source_id: sourceId}), {
       headers: {
-        Authorization: 'Bearer ' + Constants.deviceId
+        Authorization: 'Bearer ' + this.props.deviceId
       }})
       .then((response) => response.json())
       .then((json) => {
@@ -172,7 +173,7 @@ export class Cart extends React.Component {
       )
       if (selectedSource === 'new') {
         const productionURI = 'https://ferlyapi.com/stripeform/production.html'
-        const stagingURI = 'https://ferlyapi.com/stripeform/staging.html'
+        const stagingURI = 'http://ferlystaging.us-east-2.elasticbeanstalk.com/stripeform/staging.html'
         const {releaseChannel} = Constants.manifest
         const loadingSpinner = <View style={{height: 80}}><Spinner /></View>
         newCard = (
@@ -182,8 +183,7 @@ export class Cart extends React.Component {
               <WebView
                 ref={ref => (this.webview = ref)}
                 onLoadEnd={() => this.setState({cardLoaded: true})}
-                scalesPageToFit={false}
-                useWebKit={false}
+                useWebKit={true}
                 source={{uri: releaseChannel === 'production'
                   ? productionURI : stagingURI}}
                 onMessage={this.receiveMessage.bind(this)}
@@ -334,10 +334,12 @@ Cart.propTypes = {
   apiRequire: PropTypes.func.isRequired,
   navigation: PropTypes.object.isRequired,
   sources: PropTypes.array,
-  sourcesUrl: PropTypes.string.isRequired
+  sourcesUrl: PropTypes.string.isRequired,
+  deviceId: PropTypes.string.isRequired
 }
 
 function mapStateToProps (state) {
+  const {deviceId} = state.settings
   const sourcesUrl = createUrl('list-stripe-sources')
   const apiStore = state.api.apiStore
   const sourcesResponse = apiStore[sourcesUrl] || {}
@@ -352,7 +354,8 @@ function mapStateToProps (state) {
 
   return {
     sourcesUrl,
-    sources
+    sources,
+    deviceId
   }
 }
 

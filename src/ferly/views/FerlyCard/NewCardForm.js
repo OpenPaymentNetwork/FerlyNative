@@ -70,6 +70,7 @@ export class CardForm extends React.Component {
   }
 
   submitForm = () => {
+    const {navigation} = this.props
     const {pan, pin} = this.state
     this.setState({submitting: true})
     post('add-card', this.props.deviceId, {pan, pin})
@@ -78,6 +79,7 @@ export class CardForm extends React.Component {
         this.setState({submitting: false, pin: '', invalid: {}})
         if (this.validateAddCard(json)) {
           this.props.apiRefresh(urls.profile)
+          navigation.navigate('Wallet')
           const alertText = 'Your card is ready to use. Remember to select ' +
             'debit when using your card.'
           Alert.alert('Success', alertText)
@@ -203,7 +205,9 @@ const styles = StyleSheet.create({
 })
 
 CardForm.propTypes = {
+  navigation: PropTypes.object,
   apiRefresh: PropTypes.func.isRequired,
+  card: PropTypes.object,
   deviceId: PropTypes.string.isRequired
 }
 

@@ -1,5 +1,4 @@
 /* eslint-disable react/no-unescaped-entities */
-import Constants from 'expo-constants'
 import StoreAvatar from 'ferly/components/StoreAvatar'
 import SearchBar from 'ferly/components/SearchBar'
 import PropTypes from 'prop-types'
@@ -39,7 +38,7 @@ export class Market extends React.Component {
     } else {
       fetch(createUrl('search-market', {query: text}), {
         headers: {
-          Authorization: 'Bearer ' + Constants.deviceId
+          Authorization: 'Bearer ' + this.props.deviceId
         }})
         .then((response) => response.json())
         .then((json) => {
@@ -112,7 +111,8 @@ Market.propTypes = {
   apiRequire: PropTypes.func.isRequired,
   designs: PropTypes.array.isRequired,
   designsUrl: PropTypes.string.isRequired,
-  navigation: PropTypes.object.isRequired
+  navigation: PropTypes.object.isRequired,
+  deviceId: PropTypes.string.isRequired
 }
 
 const styles = StyleSheet.create({
@@ -127,13 +127,15 @@ const styles = StyleSheet.create({
 })
 
 function mapStateToProps (state) {
+  const {deviceId} = state.settings
   const designsUrl = createUrl('list-designs')
   const apiStore = state.api.apiStore
   const designs = apiStore[designsUrl] || []
 
   return {
     designsUrl,
-    designs
+    designs,
+    deviceId
   }
 }
 

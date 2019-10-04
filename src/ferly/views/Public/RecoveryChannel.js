@@ -2,10 +2,11 @@ import PrimaryButton from 'ferly/components/PrimaryButton'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Theme from 'ferly/utils/theme'
+import {connect} from 'react-redux'
 import {post} from 'ferly/utils/fetch'
-import {View, Text, TextInput, StyleSheet} from 'react-native'
+import {View, Text, TextInput, StyleSheet, TouchableOpacity} from 'react-native'
 
-export default class RecoveryChannel extends React.Component {
+export class RecoveryChannel extends React.Component {
   static navigationOptions = {
     title: 'Recover Account'
   };
@@ -25,11 +26,7 @@ export default class RecoveryChannel extends React.Component {
 
     this.setState({'submitting': true, invalid: ''})
 
-    const postParams = {
-      'login': fieldValue
-    }
-
-    post('recover', postParams)
+    post('recover', this.props.deviceId, {'login': fieldValue})
       .then((response) => response.json())
       .then((responseJson) => {
         if (this.validate(responseJson)) {
@@ -62,6 +59,27 @@ export default class RecoveryChannel extends React.Component {
     return true
   }
 
+  renderRecoveryOption () {
+    const {navigation} = this.props
+    return (
+      <View style={{
+        width: '100%',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginBottom: 30}}>
+        <Text style={{fontSize: 16}}>{`Don't have an account?`}</Text>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('SignUp')}>
+          <Text style={{
+            color: Theme.lightBlue,
+            textDecorationLine: 'underline',
+            fontSize: 16,
+            paddingLeft: 5}}>Sign Up</Text>
+        </TouchableOpacity>
+      </View>
+    )
+  }
+
   render () {
     const {fieldValue, invalid, submitting} = this.state
 
@@ -70,41 +88,46 @@ export default class RecoveryChannel extends React.Component {
         flex: 1,
         justifyContent: 'space-between',
         backgroundColor: 'white'}}>
-        <View style={{paddingHorizontal: 40, paddingVertical: 30}}>
-          <Text style={{fontSize: 18}}>
-            Enter the phone number or email address associated with your account.
-            We will send a text or email with a recovery code.
-          </Text>
-          <View style={{
-            borderBottomWidth: 1,
-            borderColor: 'gray',
-            paddingTop: 20}}>
+        <View style={{paddingVertical: 30}}>
+          <View style={{paddingHorizontal: 15}} >
             <TextInput
-              style={{fontSize: 18}}
+              style={{
+                fontSize: 18,
+                borderWidth: 1,
+                borderRadius: 5,
+                marginVertical: 15,
+                width: '100%',
+                height: 35,
+                paddingLeft: 10,
+                marginBottom: 35}}
               onChangeText={(text) => this.setState({fieldValue: text})}
               autoFocus
               placeholder="Phone Number or Email"
               keyboardType="email-address"
               value={fieldValue} />
+            {
+              invalid.login
+                ? (<Text style={styles.error}>{invalid.login}</Text>)
+                : null
+            }
           </View>
-          {
-            invalid.login
-              ? (<Text style={styles.error}>{invalid.login}</Text>)
-              : null
-          }
+          <View style={{width: '100%'}} >
+            <PrimaryButton
+              title="Next"
+              disabled={fieldValue === '' || submitting}
+              color={Theme.lightBlue}
+              onPress={this.handleSubmit.bind(this)} />
+          </View>
+          {this.renderRecoveryOption()}
         </View>
-        <PrimaryButton
-          title="Next"
-          disabled={fieldValue === '' || submitting}
-          color={Theme.lightBlue}
-          onPress={this.handleSubmit.bind(this)} />
       </View>
     )
   }
 }
 
 RecoveryChannel.propTypes = {
-  navigation: PropTypes.object.isRequired
+  navigation: PropTypes.object.isRequired,
+  deviceId: PropTypes.string.isRequired
 }
 
 const styles = StyleSheet.create({
@@ -113,3 +136,12 @@ const styles = StyleSheet.create({
     color: 'red'
   }
 })
+
+function mapStateToProps (state) {
+  const {deviceId} = state.settings
+  return {
+    deviceId
+  }
+}
+
+export default connect(mapStateToProps)(RecoveryChannel)
