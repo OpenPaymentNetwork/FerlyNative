@@ -34,11 +34,10 @@ export default class LandingPage extends React.Component {
   }
 
   componentWillUnmount () {
-    this.interval && clearInterval(this.interval)
-    this.interval = false
+    clearInterval(this.interval)
   }
 
-  renderDots = () => {
+  renderDots () {
     const {page} = this.state
     let dots = []
     for (let i = 0; i < 3; i++) {
@@ -54,7 +53,7 @@ export default class LandingPage extends React.Component {
     return dots
   }
 
-  render = () => {
+  render () {
     const {navigation} = this.props
     const {page} = this.state
 

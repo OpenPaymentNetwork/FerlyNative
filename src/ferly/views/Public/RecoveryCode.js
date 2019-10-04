@@ -4,11 +4,12 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import Recaptcha from 'ferly/components/Recaptcha'
 import Theme from 'ferly/utils/theme'
+import {connect} from 'react-redux'
 import {Notifications} from 'expo'
 import {post} from 'ferly/utils/fetch'
 import {View, Text, TextInput, StyleSheet, Alert, Platform} from 'react-native'
 
-export default class RecoveryCode extends React.Component {
+export class RecoveryCode extends React.Component {
   static navigationOptions = {
     title: 'Recover Account'
   };
@@ -74,7 +75,7 @@ export default class RecoveryCode extends React.Component {
       os: `${Platform.OS}:${Platform.Version}`
     }
 
-    post('recover-code', postParams)
+    post('recover-code', this.props.deviceId, postParams)
       .then((response) => response.json())
       .then((responseJson) => {
         if (this.validate(responseJson)) {
@@ -163,7 +164,8 @@ export default class RecoveryCode extends React.Component {
 }
 
 RecoveryCode.propTypes = {
-  navigation: PropTypes.object.isRequired
+  navigation: PropTypes.object.isRequired,
+  deviceId: PropTypes.string.isRequired
 }
 
 const styles = StyleSheet.create({
@@ -172,3 +174,12 @@ const styles = StyleSheet.create({
     color: 'red'
   }
 })
+
+function mapStateToProps (state) {
+  const {deviceId} = state.settings
+  return {
+    deviceId
+  }
+}
+
+export default connect(mapStateToProps)(RecoveryCode)

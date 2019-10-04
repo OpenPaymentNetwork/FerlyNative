@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import TestElement from 'ferly/components/TestElement'
 import Theme from 'ferly/utils/theme'
+import {connect} from 'react-redux'
 import {post} from 'ferly/utils/fetch'
 import {
   Alert,
@@ -16,7 +17,7 @@ import {
   View
 } from 'react-native'
 
-export default class AddressForm extends React.Component {
+export class AddressForm extends React.Component {
     static navigationOptions = {
       title: 'Get a Ferly Card'
     }
@@ -57,7 +58,7 @@ export default class AddressForm extends React.Component {
         state: state,
         zip_code: zipCode
       }
-      post('request-card', params)
+      post('request-card', this.props.deviceId, params)
         .then((response) => response.json())
         .then((json) => {
           this.setState({submitting: false})
@@ -211,7 +212,7 @@ export default class AddressForm extends React.Component {
                   justifyContent: 'center',
                   marginBottom: 30}}>
                   <Text style={{fontSize: 16}}>Already have a Ferly Card?</Text>
-                  <TouchableOpacity onPress={() => navigation.navigate('CardForm')}>
+                  <TouchableOpacity onPress={() => navigation.navigate('NewCardForm')}>
                     <Text style={{
                       color: Theme.lightBlue,
                       textDecorationLine: 'underline',
@@ -228,7 +229,8 @@ export default class AddressForm extends React.Component {
 }
 
 AddressForm.propTypes = {
-  navigation: PropTypes.object
+  navigation: PropTypes.object,
+  deviceId: PropTypes.string.isRequired
 }
 
 const styles = StyleSheet.create({
@@ -248,3 +250,12 @@ const styles = StyleSheet.create({
     paddingLeft: 10
   }
 })
+
+function mapStateToProps (state) {
+  const {deviceId} = state.settings
+  return {
+    deviceId
+  }
+}
+
+export default connect(mapStateToProps)(AddressForm)

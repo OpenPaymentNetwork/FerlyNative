@@ -1,7 +1,6 @@
 import NewAddressForm from 'ferly/views/FerlyCard/NewAddressForm'
 import AwaitingCard from 'ferly/views/FerlyCard/AwaitingCard'
 import CardForm from 'ferly/views/FerlyCard/CardForm'
-import Constants from 'expo-constants'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Spinner from 'ferly/components/Spinner'
@@ -45,7 +44,7 @@ export class FerlyCard extends React.Component {
     this.props.apiRequire(urls.profile)
     fetch(createUrl('verify-address'), {
       headers: {
-        Authorization: 'Bearer ' + Constants.deviceId
+        Authorization: 'Bearer ' + this.props.deviceId
       }})
       .then((response) => response.json())
       .then((json) => {
@@ -77,7 +76,7 @@ export class FerlyCard extends React.Component {
       'used to spend your gift value and its activity may appear fraudulent.'
     this.setState({assumedAbility: requestedEnable, changingAbility: true})
     Alert.alert(alertTitle, requestedEnable ? enabledMessage : disabledMessage)
-    post(urlTail, {card_id: cardId})
+    post(urlTail, this.props.deviceId, {card_id: cardId})
       .then((response) => response.json())
       .then((json) => {
         this.setState({changingAbility: false})
@@ -101,7 +100,7 @@ export class FerlyCard extends React.Component {
   removeCard = () => {
     const {address} = this.state
     const {card_id: cardId} = this.props.card
-    post('delete-card', {card_id: cardId})
+    post('delete-card', this.props.deviceId, {card_id: cardId})
       .then((response) => response.json())
       .then((json) => {
         this.props.apiRefresh(urls.profile)
@@ -128,7 +127,7 @@ export class FerlyCard extends React.Component {
               {text: 'No',
                 onPress: () => {
                   address['verified'] = 'no'
-                  post('request-card', this.modifyAddress(address))
+                  post('request-card', this.props.deviceId, this.modifyAddress(address))
                     .then((response) => response.json())
                     .then((json) => {
                       this.setState({passed: ''})
@@ -150,7 +149,7 @@ export class FerlyCard extends React.Component {
     const {card_id: cardId} = this.props.card
     const {pin} = this.state
     this.setState({submitting: true})
-    post('change-pin', {card_id: cardId, pin: pin})
+    post('change-pin', this.props.deviceId, {card_id: cardId, pin: pin})
       .then((response) => response.json())
       .then((json) => {
         if (this.validateNewPin(json)) {
@@ -366,6 +365,7 @@ const styles = StyleSheet.create({
 })
 
 FerlyCard.propTypes = {
+  deviceId: PropTypes.string,
   onPass: PropTypes.func,
   apiRefresh: PropTypes.func.isRequired,
   apiRequire: PropTypes.func.isRequired,
@@ -375,6 +375,7 @@ FerlyCard.propTypes = {
 
 function mapStateToProps (state) {
   const apiStore = state.api.apiStore
+  const {deviceId} = state.settings
   const data = apiStore[urls.profile]
   const {cards} = data || {}
   let card
@@ -383,7 +384,8 @@ function mapStateToProps (state) {
   }
   return {
     loaded: !!data,
-    card
+    card,
+    deviceId
   }
 }
 

@@ -1,4 +1,3 @@
-import Constants from 'expo-constants'
 import HistoryEntry from 'ferly/components/HistoryEntry'
 import Spinner from 'ferly/components/Spinner'
 import PropTypes from 'prop-types'
@@ -34,7 +33,7 @@ export class History extends React.Component {
     const nextUrl = `${urls.history}&offset=${history.length}`
     fetch(nextUrl, {
       headers: {
-        Authorization: 'Bearer ' + Constants.deviceId
+        Authorization: 'Bearer ' + this.props.deviceId
       }})
       .then((response) => response.json())
       .then((responseJson) => {
@@ -82,17 +81,20 @@ History.propTypes = {
   apiRequire: PropTypes.func.isRequired,
   hasMore: PropTypes.bool,
   navigation: PropTypes.object.isRequired,
-  history: PropTypes.array
+  history: PropTypes.array,
+  deviceId: PropTypes.string.isRequired
 }
 
 function mapStateToProps (state) {
+  const {deviceId} = state.settings
   const apiStore = state.api.apiStore
   const historyResponse = apiStore[urls.history] || {}
   const history = historyResponse.history
   const hasMore = historyResponse.has_more
   return {
     hasMore,
-    history
+    history,
+    deviceId
   }
 }
 

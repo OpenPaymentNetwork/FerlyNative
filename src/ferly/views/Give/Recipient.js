@@ -1,5 +1,4 @@
 import Avatar from 'ferly/components/Avatar'
-import Constants from 'expo-constants'
 import PropTypes from 'prop-types'
 import React from 'react'
 import SearchBar from 'ferly/components/SearchBar'
@@ -34,7 +33,7 @@ class Recipient extends React.Component {
     } else {
       fetch(createUrl('search-customers', {query: query}), {
         headers: {
-          Authorization: 'Bearer ' + Constants.deviceId
+          Authorization: 'Bearer ' + this.props.deviceId
         }})
         .then((response) => response.json())
         .then((json) => {
@@ -145,15 +144,18 @@ class Recipient extends React.Component {
 Recipient.propTypes = {
   apiRequire: PropTypes.func.isRequired,
   navigation: PropTypes.object.isRequired,
-  recents: PropTypes.array
+  recents: PropTypes.array,
+  deviceId: PropTypes.string.isRequired
 }
 
 function mapStateToProps (state) {
+  const {deviceId} = state.settings
   const apiStore = state.api.apiStore
   const {recents} = apiStore[urls.profile] || {}
 
   return {
-    recents
+    recents,
+    deviceId
   }
 }
 

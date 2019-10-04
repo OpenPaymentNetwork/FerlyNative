@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import TestElement from 'ferly/components/TestElement'
 import Theme from 'ferly/utils/theme'
+import {connect} from 'react-redux'
 import {post} from 'ferly/utils/fetch'
 import {
   Alert,
@@ -15,7 +16,7 @@ import {
   View
 } from 'react-native'
 
-export default class NewAddressForm extends React.Component {
+export class NewAddressForm extends React.Component {
     static navigationOptions = {
       title: 'Ferly Card'
     }
@@ -56,7 +57,7 @@ export default class NewAddressForm extends React.Component {
         zip_code: zipCode,
         verified: 'yes'
       }
-      post('request-card', params)
+      post('request-card', this.props.deviceId, params)
         .then((response) => response.json())
         .then((json) => {
           this.setState({submitting: false})
@@ -226,7 +227,8 @@ export default class NewAddressForm extends React.Component {
 }
 
 NewAddressForm.propTypes = {
-  onPass: PropTypes.func
+  onPass: PropTypes.func,
+  deviceId: PropTypes.string.isRequired
 }
 
 const styles = StyleSheet.create({
@@ -246,3 +248,12 @@ const styles = StyleSheet.create({
     paddingLeft: 10
   }
 })
+
+function mapStateToProps (state) {
+  const {deviceId} = state.settings
+  return {
+    deviceId
+  }
+}
+
+export default connect(mapStateToProps)(NewAddressForm)

@@ -72,7 +72,7 @@ export class CardForm extends React.Component {
   submitForm = () => {
     const {pan, pin} = this.state
     this.setState({submitting: true})
-    post('add-card', {pan, pin})
+    post('add-card', this.props.deviceId, {pan, pin})
       .then((response) => response.json())
       .then((json) => {
         this.setState({submitting: false, pin: '', invalid: {}})
@@ -203,10 +203,12 @@ const styles = StyleSheet.create({
 })
 
 CardForm.propTypes = {
-  apiRefresh: PropTypes.func.isRequired
+  apiRefresh: PropTypes.func.isRequired,
+  deviceId: PropTypes.string.isRequired
 }
 
 function mapStateToProps (state) {
+  const {deviceId} = state.settings
   const apiStore = state.api.apiStore
   const data = apiStore[urls.profile]
   const {cards} = data || {}
@@ -216,7 +218,8 @@ function mapStateToProps (state) {
   }
   return {
     loaded: !!data,
-    card
+    card,
+    deviceId
   }
 }
 

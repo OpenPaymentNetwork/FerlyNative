@@ -1,5 +1,4 @@
 import Avatar from 'ferly/components/Avatar'
-import Constants from 'expo-constants'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import PrimaryButton from 'ferly/components/PrimaryButton'
 import ProfilePicturePicker from 'ferly/views/Profile/ProfilePicturePicker'
@@ -59,7 +58,7 @@ class Profile extends React.Component {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'multipart/form-data',
-        Authorization: 'Bearer ' + Constants.deviceId
+        Authorization: 'Bearer ' + this.props.deviceId
       }
     }
     return fetch(createUrl('upload-profile-image'), options)
@@ -72,7 +71,7 @@ class Profile extends React.Component {
       last_name: form.lastName,
       username: form.username
     }
-    return post('edit-profile', postParams)
+    return post('edit-profile', this.props.deviceId, postParams)
   }
 
   onSuccessfulEdit () {
@@ -348,10 +347,12 @@ Profile.propTypes = {
   lastName: PropTypes.string,
   navigation: PropTypes.object.isRequired,
   profileImage: PropTypes.string,
-  username: PropTypes.string
+  username: PropTypes.string,
+  deviceId: PropTypes.string.isRequired
 }
 
 function mapStateToProps (state) {
+  const {deviceId} = state.settings
   const apiStore = state.api.apiStore
   const {
     amounts,
@@ -366,7 +367,8 @@ function mapStateToProps (state) {
     firstName,
     lastName,
     username,
-    profileImage
+    profileImage,
+    deviceId
   }
 }
 

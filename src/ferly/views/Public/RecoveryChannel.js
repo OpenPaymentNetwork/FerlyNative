@@ -2,10 +2,11 @@ import PrimaryButton from 'ferly/components/PrimaryButton'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Theme from 'ferly/utils/theme'
+import {connect} from 'react-redux'
 import {post} from 'ferly/utils/fetch'
 import {View, Text, TextInput, StyleSheet, TouchableOpacity} from 'react-native'
 
-export default class RecoveryChannel extends React.Component {
+export class RecoveryChannel extends React.Component {
   static navigationOptions = {
     title: 'Recover Account'
   };
@@ -28,10 +29,12 @@ export default class RecoveryChannel extends React.Component {
     const postParams = {
       'login': fieldValue
     }
+    console.log('fieldvalue', postParams)
 
-    post('recover', postParams)
+    post('recover', this.props.deviceId, {'login': fieldValue})
       .then((response) => response.json())
       .then((responseJson) => {
+        console.log('login', responseJson)
         if (this.validate(responseJson)) {
           this.setState({submitting: false})
           const codeLength = responseJson.code_length
@@ -54,6 +57,7 @@ export default class RecoveryChannel extends React.Component {
 
   validate (json) {
     if (json.invalid) {
+      console.log('valid', json.invalid)
       this.setState({'invalid': json.invalid, submitting: false})
       return false
     } else if (json.error) {
@@ -129,7 +133,8 @@ export default class RecoveryChannel extends React.Component {
 }
 
 RecoveryChannel.propTypes = {
-  navigation: PropTypes.object.isRequired
+  navigation: PropTypes.object.isRequired,
+  deviceId: PropTypes.string.isRequired
 }
 
 const styles = StyleSheet.create({
@@ -138,3 +143,12 @@ const styles = StyleSheet.create({
     color: 'red'
   }
 })
+
+function mapStateToProps (state) {
+  const {deviceId} = state.settings
+  return {
+    deviceId
+  }
+}
+
+export default connect(mapStateToProps)(RecoveryChannel)

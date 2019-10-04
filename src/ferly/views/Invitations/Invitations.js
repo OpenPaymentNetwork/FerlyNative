@@ -35,7 +35,7 @@ export class Invitations extends React.Component {
 
   deleteInvite (invite) {
     this.setState({deleting: true})
-    post('delete-invitation', {invite_id: invite.id.toString()})
+    post('delete-invitation', this.props.deviceId, {invite_id: invite.id.toString()})
       .then((response) => response.json())
       .then((json) => {
         if (Object.keys(json).length === 0) {
@@ -201,17 +201,20 @@ Invitations.propTypes = {
   apiRequire: PropTypes.func.isRequired,
   invitationsUrl: PropTypes.string.isRequired,
   navigation: PropTypes.object.isRequired,
-  pending: PropTypes.array
+  pending: PropTypes.array,
+  deviceId: PropTypes.string.isRequired
 }
 
 function mapStateToProps (state) {
+  const {deviceId} = state.settings
   const invitationsUrl = createUrl('existing-invitations', {status: 'pending'})
   const apiStore = state.api.apiStore
   const {results: pending = []} = apiStore[invitationsUrl] || {}
 
   return {
     invitationsUrl,
-    pending
+    pending,
+    deviceId
   }
 }
 

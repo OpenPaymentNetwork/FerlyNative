@@ -4,6 +4,7 @@ import PrimaryButton from 'ferly/components/PrimaryButton'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Theme from 'ferly/utils/theme'
+import {connect} from 'react-redux'
 import {Notifications} from 'expo'
 import {post} from 'ferly/utils/fetch'
 import {
@@ -15,7 +16,7 @@ import {
   Platform
 } from 'react-native'
 
-export default class SignUp extends React.Component {
+export class SignUp extends React.Component {
   static navigationOptions = {
     title: 'Sign Up for Ferly'
   };
@@ -61,25 +62,28 @@ export default class SignUp extends React.Component {
   handleSubmit () {
     const {firstName, lastName, username, fieldValue, expoToken} = this.state
     this.setState({submitting: true})
-    const params = {
-      first_name: firstName,
-      last_name: lastName,
-      username: username,
+    const login = {
       login: fieldValue,
-      expo_token: expoToken,
-      os: `${Platform.OS}:${Platform.Version}`
+      username: username
     }
 
-    post('signup', params)
+    post('signup', this.props.deviceId, login)
       .then((response) => response.json())
       .then((responseJson) => {
         this.setState({submitting: false})
+        console.log('signup', responseJson)
+        const navParams = {
+          firstName: firstName,
+          lastName: lastName,
+          username: username,
+          expoToken: expoToken,
+          secret: responseJson.secret,
+          attemptPath: responseJson.attempt_path,
+          factorId: responseJson.factor_id,
+          os: `${Platform.OS}:${Platform.Version}`
+        }
         if (this.validate(responseJson)) {
-          this.props.navigation.navigate('SignUpCode', {}, {
-            type: 'Navigate',
-            routeName: 'SignUpCode',
-            params: {param: 'param'}
-          })
+          this.props.navigation.navigate('SignUpCode', navParams)
         }
       })
   }
@@ -92,6 +96,10 @@ export default class SignUp extends React.Component {
       return false
     } else if (responseJson.error === 'existing_username') {
       this.setState({invalid: {username: 'Username already taken'}})
+      return false
+    } else if (responseJson.error) {
+      console.log('errorhere')
+      this.setState({invalid: {fieldValue: 'Email already registered! Please Sign In.'}})
       return false
     } else {
       return true
@@ -279,5 +287,15 @@ const styles = StyleSheet.create({
 SignUp.propTypes = {
   navigation: PropTypes.object.isRequired,
   onFocus: PropTypes.object,
-  onBlur: PropTypes.object
+  onBlur: PropTypes.object,
+  deviceId: PropTypes.string.isRequired
 }
+
+function mapStateToProps (state) {
+  const {deviceId} = state.settings
+  return {
+    deviceId
+  }
+}
+
+export default connect(mapStateToProps)(SignUp)
