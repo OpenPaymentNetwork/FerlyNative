@@ -56,7 +56,8 @@ export class AddressForm extends React.Component {
         line2: apt,
         city: city,
         state: state,
-        zip_code: zipCode
+        zip_code: zipCode,
+        verified: 'yes'
       }
       post('request-card', this.props.deviceId, params)
         .then((response) => response.json())

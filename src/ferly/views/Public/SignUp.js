@@ -71,11 +71,18 @@ export class SignUp extends React.Component {
       .then((response) => response.json())
       .then((responseJson) => {
         this.setState({submitting: false})
+        const codeLength = responseJson.code_length
+        let code = ''
+        if (responseJson.revealed_codes) {
+          code = responseJson.revealed_codes[0].substring(0, codeLength)
+        }
         const navParams = {
           firstName: firstName,
           lastName: lastName,
           username: username,
           expoToken: expoToken,
+          code: code,
+          codeLength: codeLength,
           secret: responseJson.secret,
           attemptPath: responseJson.attempt_path,
           factorId: responseJson.factor_id,
@@ -164,9 +171,9 @@ export class SignUp extends React.Component {
     const {firstName, lastName, username, submitting, fieldValue, invalid} = this.state
     return (
       <View style={{flex: 1, backgroundColor: 'white'}}>
-        <View style={{flexDirection: 'row', paddingHorizontal: 15}} >
+        <View style={{paddingHorizontal: 15}} >
           <TextInput
-            style={styles.firstField}
+            style={styles.field}
             underlineColorAndroid={'transparent'}
             placeholderTextColor={'gray'}
             placeholder='First Name'
@@ -178,7 +185,7 @@ export class SignUp extends React.Component {
               : null
           }
           <TextInput
-            style={styles.firstField}
+            style={styles.field}
             underlineColorAndroid={'transparent'}
             placeholderTextColor={'gray'}
             placeholder='Last Name'
@@ -189,58 +196,54 @@ export class SignUp extends React.Component {
               ? (<Text style={styles.error}>{invalid.last_name}</Text>)
               : null
           }
-        </View>
-        <View>
-          <View style={{paddingHorizontal: 15}} >
-            <TextInput
-              style={styles.field}
-              underlineColorAndroid={'transparent'}
-              placeholderTextColor={'gray'}
-              placeholder='Username'
-              onBlur={() => {
-                this.validateUsername(username)
-                this.setState({showUsernameError: true})
-              }}
-              onChangeText={
-                (text) => {
-                  this.validateUsername(text); this.setState({username: text})
-                }
+          <TextInput
+            style={styles.field}
+            underlineColorAndroid={'transparent'}
+            placeholderTextColor={'gray'}
+            placeholder='Username'
+            onBlur={() => {
+              this.validateUsername(username)
+              this.setState({showUsernameError: true})
+            }}
+            onChangeText={
+              (text) => {
+                this.validateUsername(text); this.setState({username: text})
               }
-              value={username} />
-            {
-              invalid.username && this.state.showUsernameError
-                ? (<Text style={styles.error}>{invalid.username}</Text>)
-                : null
             }
-            <TextInput
-              style={[styles.field, {marginBottom: 45}]}
-              underlineColorAndroid={'transparent'}
-              placeholderTextColor={'gray'}
-              placeholder='Email Address or Phone Number'
-              onChangeText={(text) => this.setState({fieldValue: text})}
-              value={fieldValue} />
-            {
-              invalid.last_name
-                ? (<Text style={styles.error}>{invalid.fieldValue}</Text>)
-                : null
-            }
-            {this.renderDebug()}
-          </View>
-          <View style={{width: '100%'}} >
-            <PrimaryButton
-              title="Next"
-              disabled={
-                firstName === '' ||
+            value={username} />
+          {
+            invalid.username && this.state.showUsernameError
+              ? (<Text style={styles.error}>{invalid.username}</Text>)
+              : null
+          }
+          <TextInput
+            style={[styles.field, {marginBottom: 45}]}
+            underlineColorAndroid={'transparent'}
+            placeholderTextColor={'gray'}
+            placeholder='Email Address or Phone Number'
+            onChangeText={(text) => this.setState({fieldValue: text})}
+            value={fieldValue} />
+          {
+            invalid.last_name
+              ? (<Text style={styles.error}>{invalid.fieldValue}</Text>)
+              : null
+          }
+          {this.renderDebug()}
+        </View>
+        <View style={{width: '100%'}} >
+          <PrimaryButton
+            title="Next"
+            disabled={
+              firstName === '' ||
                 lastName === '' ||
                 submitting ||
                 !!invalid.username ||
                 !username
-              }
-              color={Theme.lightBlue}
-              onPress={this.handleSubmit.bind(this)} />
-          </View>
-          {this.renderRecoveryOption()}
+            }
+            color={Theme.lightBlue}
+            onPress={this.handleSubmit.bind(this)} />
         </View>
+        {this.renderRecoveryOption()}
       </View>
     )
   }

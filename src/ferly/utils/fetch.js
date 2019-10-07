@@ -65,7 +65,7 @@ export const retryFetch = async (url, deviceId, tries = 5, delay = 2000) => {
       }
     })
 
-    if (response.status >= 400) {
+    if (response.status >= 401) {
       if (__DEV__) {
         window.alert('Failed response to ' + url + ': ' + response.status)
       }

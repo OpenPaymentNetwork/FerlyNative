@@ -106,35 +106,44 @@ export class FerlyCard extends React.Component {
         this.props.apiRefresh(urls.profile)
         this.setState({passed: ''})
         if (this.state.passed === '') {
-          let addressLine2 = address['address_line2'] === '' ? '' : address['address_line2'] + '\n'
-          Alert.alert(
-            'Correct Address?',
-            address['address_line1'] + '\n' +
+          if (!address['address_line1']) {
+            address['verified'] = 'no'
+            post('request-card', this.props.deviceId, this.modifyAddress(address))
+              .then((response) => response.json())
+              .then((json) => {
+                this.setState({passed: ''})
+              })
+          } else {
+            let addressLine2 = address['address_line2'] === '' ? '' : address['address_line2'] + '\n'
+            Alert.alert(
+              'Correct Address?',
+              address['address_line1'] + '\n' +
             addressLine2 +
             address['city'] + ' ' +
             address['state'] + ' ' +
             address['zip'],
-            [
-              {text: 'Yes',
-                onPress: () => {
-                  address['verified'] = 'yes'
-                  post('request-card', this.modifyAddress(address))
-                    .then((response) => response.json())
-                    .then((json) => {
-                      this.setState({passed: 'true'})
-                    })
-                }},
-              {text: 'No',
-                onPress: () => {
-                  address['verified'] = 'no'
-                  post('request-card', this.props.deviceId, this.modifyAddress(address))
-                    .then((response) => response.json())
-                    .then((json) => {
-                      this.setState({passed: ''})
-                    })
-                }}
-            ]
-          )
+              [
+                {text: 'Yes',
+                  onPress: () => {
+                    address['verified'] = 'yes'
+                    post('request-card', this.modifyAddress(address))
+                      .then((response) => response.json())
+                      .then((json) => {
+                        this.setState({passed: 'true'})
+                      })
+                  }},
+                {text: 'No',
+                  onPress: () => {
+                    address['verified'] = 'no'
+                    post('request-card', this.props.deviceId, this.modifyAddress(address))
+                      .then((response) => response.json())
+                      .then((json) => {
+                        this.setState({passed: ''})
+                      })
+                  }}
+              ]
+            )
+          }
         }
       })
   }
