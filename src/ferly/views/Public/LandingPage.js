@@ -1,8 +1,10 @@
+import Constants from 'expo-constants'
 import PrimaryButton from 'ferly/components/PrimaryButton'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Theme from 'ferly/utils/theme'
 import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native'
+import {envId} from 'ferly/utils/fetch'
 import {
   tutorialTwo,
   tutorialThree,
@@ -55,6 +57,7 @@ export default class LandingPage extends React.Component {
 
   render () {
     const {navigation} = this.props
+    const {version} = Constants.manifest
     const {page} = this.state
 
     const images = [
@@ -95,6 +98,9 @@ export default class LandingPage extends React.Component {
               </Text>
             </TouchableOpacity>
           </View>
+          <Text style={{alignSelf: 'flex-end'}}>
+            {`${version}/${envId}`}
+          </Text>
         </View>
       </View>
     )
