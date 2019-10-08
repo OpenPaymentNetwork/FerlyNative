@@ -22,7 +22,7 @@ export class AppEntry extends React.Component {
         this.props.dispatch(setDeviceId(device2))
       } catch (error) {
       }
-    }, device2 === 'aaa')
+    })
   }
 
   retrieveData = async () => {
@@ -37,8 +37,8 @@ export class AppEntry extends React.Component {
   }
 
   render () {
-    const {auth, hasError} = this.props
     let errorMessage
+    const {auth, hasError} = this.props
     if (hasError) {
       errorMessage = <Text style={{color: 'red'}}>Connection Error</Text>
     }
@@ -62,8 +62,6 @@ export class AppEntry extends React.Component {
 }
 
 var device2 = ''
-export {device2}
-
 let device = makeid(32)
 function makeid (length) {
   var result = ''

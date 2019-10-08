@@ -24,7 +24,7 @@ const initialState = {
 const actionHandlers = {
   // Add data to store associated with the url
   [API_INJECT]: (state, {url, data}) => {
-    return {apiStore: Object.assign(state.apiStore, {[url]: data})}
+    return {apiStore: Object.assign({}, state.apiStore || {}, {[url]: data})}
   },
   // Delete saved data associated with the url
   [API_EXPIRE]: (state, {url}) => {
