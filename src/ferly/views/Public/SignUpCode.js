@@ -25,10 +25,6 @@ export class SignUpCode extends React.Component {
     }
   }
 
-  componentDidMount () {
-    this.getToken()
-  }
-
   componentDidUpdate (prevProps, prevState) {
     const {resubmit, recaptchaResponse} = this.state
     if (resubmit && recaptchaResponse) {
