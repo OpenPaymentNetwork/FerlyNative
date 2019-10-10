@@ -1,8 +1,10 @@
+import * as Permissions from 'expo-permissions'
 import Constants from 'expo-constants'
 import PrimaryButton from 'ferly/components/PrimaryButton'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Theme from 'ferly/utils/theme'
+import {Notifications} from 'expo'
 import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native'
 import {envId} from 'ferly/utils/fetch'
 import {
@@ -28,6 +30,7 @@ export default class LandingPage extends React.Component {
   }
 
   componentDidMount () {
+    this.getToken()
     this.interval = setInterval(() => {
       this.setState({
         page: this.state.page === this.state.dataSource.length ? 0 : this.state.page + 1
@@ -53,6 +56,26 @@ export default class LandingPage extends React.Component {
       )
     }
     return dots
+  }
+
+  async getToken () {
+    const { status: existingStatus } = await Permissions.getAsync(
+      Permissions.NOTIFICATIONS
+    )
+    let finalStatus = existingStatus
+    // only ask if permissions have not already been determined, because
+    // iOS won't necessarily prompt a second time.
+    if (existingStatus !== 'granted') {
+      // Android remote notification permissions are granted during the app
+      // install, so this will only ask on iOS
+      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS)
+      finalStatus = status
+    }
+
+    if (finalStatus === 'granted') {
+      let token = await Notifications.getExpoPushTokenAsync()
+      this.setState({expoToken: token})
+    }
   }
 
   render () {

@@ -16,7 +16,7 @@ export default class SignUpWaiting extends React.Component {
     let imageHeight = height / 2
     let imageWidth = width / 2
     return (
-      <View style={{flex: 1, justifyContent: 'space-between'}}>
+      <View style={{flex: 1, justifyContent: 'space-between', backgroundColor: 'white'}}>
         <View style={{paddingVertical: 20, paddingTop: 30}} >
           <Text style={{
             paddingHorizontal: 15,

@@ -21,6 +21,7 @@ import {
   Switch,
   Modal
 } from 'react-native'
+import { setHaveCard } from '../../store/settings'
 
 export class FerlyCard extends React.Component {
   static navigationOptions = {
@@ -36,12 +37,14 @@ export class FerlyCard extends React.Component {
       changingAbility: false,
       showNewPinModal: false,
       passed: '',
-      address: {}
+      address: {},
+      haveCard: false
     }
   }
 
   componentDidMount () {
-    this.props.apiRequire(urls.profile)
+    const {haveCard} = this.state
+    this.props.dispatch(apiRequire(urls.profile))
     fetch(createUrl('verify-address'), {
       headers: {
         Authorization: 'Bearer ' + this.props.deviceId
@@ -53,6 +56,8 @@ export class FerlyCard extends React.Component {
           this.setState({passed: 'true'})
         } else if (json['verified'] === 'no') {
           this.setState({passed: ''})
+        } else if (json['error'] === 'No address on file' && haveCard) {
+          this.setState({passed: 'false'})
         } else {
           this.setState({passed: ''})
         }
@@ -62,7 +67,7 @@ export class FerlyCard extends React.Component {
   componentWillUnmount () {
     const {assumedAbility} = this.state
     if (assumedAbility !== null) {
-      this.props.apiRefresh(urls.profile)
+      this.props.dispatch(apiRefresh(urls.profile))
     }
   }
 
@@ -103,7 +108,7 @@ export class FerlyCard extends React.Component {
     post('delete-card', this.props.deviceId, {card_id: cardId})
       .then((response) => response.json())
       .then((json) => {
-        this.props.apiRefresh(urls.profile)
+        this.props.dispatch(apiRefresh(urls.profile))
         this.setState({passed: ''})
         if (this.state.passed === '') {
           if (!address['address_line1']) {
@@ -135,6 +140,7 @@ export class FerlyCard extends React.Component {
                 {text: 'No',
                   onPress: () => {
                     address['verified'] = 'no'
+                    this.props.dispatch(setHaveCard(true))
                     post('request-card', this.props.deviceId, this.modifyAddress(address))
                       .then((response) => response.json())
                       .then((json) => {
@@ -376,9 +382,8 @@ const styles = StyleSheet.create({
 FerlyCard.propTypes = {
   deviceId: PropTypes.string,
   onPass: PropTypes.func,
-  apiRefresh: PropTypes.func.isRequired,
-  apiRequire: PropTypes.func.isRequired,
   card: PropTypes.object,
+  dispatch: PropTypes.func.isRequired,
   loaded: PropTypes.bool.isRequired
 }
 
@@ -398,9 +403,4 @@ function mapStateToProps (state) {
   }
 }
 
-const mapDispatchToProps = {
-  apiRefresh,
-  apiRequire
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(FerlyCard)
+export default connect(mapStateToProps)(FerlyCard)

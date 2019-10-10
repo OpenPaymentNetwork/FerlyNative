@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import TestElement from 'ferly/components/TestElement'
 import Theme from 'ferly/utils/theme'
+import {setHaveCard} from 'ferly/store/settings'
 import {connect} from 'react-redux'
 import {post} from 'ferly/utils/fetch'
 import {
@@ -60,6 +61,7 @@ export class NewAddressForm extends React.Component {
       post('request-card', this.props.deviceId, params)
         .then((response) => response.json())
         .then((json) => {
+          this.props.dispatch(setHaveCard(false))
           this.setState({submitting: false})
           if (this.validateSendCard(json)) {
             this.props.onPass()
@@ -228,7 +230,9 @@ export class NewAddressForm extends React.Component {
 
 NewAddressForm.propTypes = {
   onPass: PropTypes.func,
-  deviceId: PropTypes.string.isRequired
+  navigation: PropTypes.object,
+  deviceId: PropTypes.string.isRequired,
+  dispatch: PropTypes.func.isRequired
 }
 
 const styles = StyleSheet.create({
@@ -241,8 +245,7 @@ const styles = StyleSheet.create({
   page: {flex: 1, justifyContent: 'space-between', backgroundColor: 'white'},
   zipField: {
     borderWidth: 1,
-    width: 75,
-    marginTop: 12,
+    width: 150,
     height: 35,
     borderRadius: 5,
     paddingLeft: 10

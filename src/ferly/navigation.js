@@ -9,7 +9,6 @@ import Invitations from 'ferly/views/Invitations/Invitations'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import ManualAdd from 'ferly/views/Invitations/ManualAdd'
 import NewCardForm from 'ferly/views/FerlyCard/NewCardForm'
-import AwaitingCard from 'ferly/views/FerlyCard/AwaitingCard'
 import Profile from 'ferly/views/Profile/Profile'
 import React from 'react'
 import RecoveryChannel from 'ferly/views/Public/RecoveryChannel'
@@ -110,16 +109,6 @@ const HistoryStack = createStackNavigator(
   }
 )
 
-const WaitingStack = createStackNavigator(
-  {
-    AwaitingCard: {screen: AwaitingCard, navigationOptions: drawerOptions},
-    'Ferly Card': {screen: FerlyCard, navigationOptions: drawerOptions}
-  },
-  {
-    initialRouteName: 'Ferly Card'
-  }
-)
-
 const publicHeader = {
   headerStyle: {
     backgroundColor: Theme.darkBlue,
@@ -135,7 +124,8 @@ const AuthDrawer = createDrawerNavigator(
   {
     Wallet: WalletStack,
     Profile: ProfileStack,
-    'Ferly Card': WaitingStack,
+    'Ferly Card': createStackNavigator(
+      {Card: {screen: FerlyCard, navigationOptions: drawerOptions}}),
     History: HistoryStack,
     Invitations: InvitationsStack,
     Settings: SettingsStack

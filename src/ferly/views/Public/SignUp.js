@@ -1,11 +1,9 @@
-import * as Permissions from 'expo-permissions'
 import Constants from 'expo-constants'
 import PrimaryButton from 'ferly/components/PrimaryButton'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Theme from 'ferly/utils/theme'
 import {connect} from 'react-redux'
-import {Notifications} from 'expo'
 import {post} from 'ferly/utils/fetch'
 import {
   View,
@@ -29,33 +27,11 @@ export class SignUp extends React.Component {
       username: '',
       fieldValue: '',
       showUsernameError: false,
+      showFirstNameError: false,
+      showLastNameError: false,
       invalid: {},
       expoToken: '',
       submitting: false
-    }
-  }
-
-  componentDidMount () {
-    this.getToken()
-  }
-
-  async getToken () {
-    const { status: existingStatus } = await Permissions.getAsync(
-      Permissions.NOTIFICATIONS
-    )
-    let finalStatus = existingStatus
-    // only ask if permissions have not already been determined, because
-    // iOS won't necessarily prompt a second time.
-    if (existingStatus !== 'granted') {
-      // Android remote notification permissions are granted during the app
-      // install, so this will only ask on iOS
-      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS)
-      finalStatus = status
-    }
-
-    if (finalStatus === 'granted') {
-      let token = await Notifications.getExpoPushTokenAsync()
-      this.setState({expoToken: token})
     }
   }
 
@@ -138,6 +114,56 @@ export class SignUp extends React.Component {
     }
   }
 
+  invalidFirstNameMessage (firstName) {
+    let msg
+    if (firstName.length < 1 || firstName.length > 20) {
+      msg = 'Must be 1-20 characters long'
+    } else if (!firstName.match('^[a-zA-Z]+$')) {
+      msg = 'Must contain letters only'
+    }
+    return msg
+  }
+
+  validateFirstName (firstName) {
+    let msg = this.invalidFirstNameMessage(firstName)
+    if (msg) {
+      const nextState = {first_name: firstName, invalid: {first_name: msg}}
+      if (firstName.length < 1) {
+        nextState.showFirstNameError = true
+      }
+      this.setState(nextState)
+    } else {
+      const newInvalid = Object.assign({}, this.state.invalid)
+      delete newInvalid.firstName
+      this.setState({invalid: newInvalid})
+    }
+  }
+
+  invalidLastNameMessage (lastName) {
+    let msg
+    if (lastName.length < 1 || lastName.length > 20) {
+      msg = 'Must be 1-20 characters long'
+    } else if (!lastName.match('^[a-zA-Z]+$')) {
+      msg = 'Must contain letters only'
+    }
+    return msg
+  }
+
+  validateLastName (lastName) {
+    let msg = this.invalidLastNameMessage(lastName)
+    if (msg) {
+      const nextState = {last_name: lastName, invalid: {last_name: msg}}
+      if (lastName.length > 3) {
+        nextState.showLastNameError = true
+      }
+      this.setState(nextState)
+    } else {
+      const newInvalid = Object.assign({}, this.state.invalid)
+      delete newInvalid.lastName
+      this.setState({invalid: newInvalid})
+    }
+  }
+
   renderDebug () {
     const debug = false
     if (debug) {
@@ -177,10 +203,18 @@ export class SignUp extends React.Component {
             underlineColorAndroid={'transparent'}
             placeholderTextColor={'gray'}
             placeholder='First Name'
-            onChangeText={(text) => this.setState({firstName: text})}
+            onBlur={() => {
+              this.validateFirstName(firstName)
+              this.setState({showFirstNameError: true})
+            }}
+            onChangeText={
+              (text) => {
+                this.validateFirstName(text); this.setState({firstName: text})
+              }
+            }
             value={firstName} />
           {
-            invalid.first_name
+            invalid.first_name && this.state.showFirstNameError
               ? (<Text style={styles.error}>{invalid.first_name}</Text>)
               : null
           }
@@ -189,10 +223,18 @@ export class SignUp extends React.Component {
             underlineColorAndroid={'transparent'}
             placeholderTextColor={'gray'}
             placeholder='Last Name'
-            onChangeText={(text) => this.setState({lastName: text})}
+            onBlur={() => {
+              this.validateLastName(lastName)
+              this.setState({showLastNameError: true})
+            }}
+            onChangeText={
+              (text) => {
+                this.validateLastName(text); this.setState({lastName: text})
+              }
+            }
             value={lastName} />
           {
-            invalid.last_name
+            invalid.last_name && this.state.showLastNameError
               ? (<Text style={styles.error}>{invalid.last_name}</Text>)
               : null
           }
@@ -224,8 +266,8 @@ export class SignUp extends React.Component {
             onChangeText={(text) => this.setState({fieldValue: text})}
             value={fieldValue} />
           {
-            invalid.last_name
-              ? (<Text style={styles.error}>{invalid.fieldValue}</Text>)
+            invalid.login
+              ? (<Text style={styles.error}>{invalid.login}</Text>)
               : null
           }
           {this.renderDebug()}

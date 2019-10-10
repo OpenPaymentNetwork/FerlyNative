@@ -1,11 +1,9 @@
-import * as Permissions from 'expo-permissions'
 import PrimaryButton from 'ferly/components/PrimaryButton'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Recaptcha from 'ferly/components/Recaptcha'
 import Theme from 'ferly/utils/theme'
 import {connect} from 'react-redux'
-import {Notifications} from 'expo'
 import {post} from 'ferly/utils/fetch'
 import {View, Text, TextInput, StyleSheet, Alert} from 'react-native'
 
@@ -35,26 +33,6 @@ export class SignUpCode extends React.Component {
     const {resubmit, recaptchaResponse} = this.state
     if (resubmit && recaptchaResponse) {
       this.handleSubmit()
-    }
-  }
-
-  async getToken () {
-    const { status: existingStatus } = await Permissions.getAsync(
-      Permissions.NOTIFICATIONS
-    )
-    let finalStatus = existingStatus
-    // only ask if permissions have not already been determined, because
-    // iOS won't necessarily prompt a second time.
-    if (existingStatus !== 'granted') {
-      // Android remote notification permissions are granted during the app
-      // install, so this will only ask on iOS
-      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS)
-      finalStatus = status
-    }
-
-    if (finalStatus === 'granted') {
-      let token = await Notifications.getExpoPushTokenAsync()
-      this.setState({expoToken: token})
     }
   }
 

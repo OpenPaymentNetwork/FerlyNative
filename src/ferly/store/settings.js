@@ -4,17 +4,20 @@ import createReducer from 'ferly/store/createReducer'
 export const CHECKED_UID_PROMPT = 'CHECKED_UID_PROMPT'
 export const UPDATE_DOWNLOADED = 'UPDATE_DOWNLOADED'
 export const SET_DEVICE_ID = 'SET_DEVICE_ID'
+export const SET_HAVE_CARD = 'SET_HAVE_CARD'
 
 // Actions to dispatch
 export const checkedUidPrompt = () => ({type: CHECKED_UID_PROMPT})
 export const updateDownloaded = () => ({type: UPDATE_DOWNLOADED})
 export const setDeviceId = (id) => ({type: SET_DEVICE_ID, id: id})
+export const setHaveCard = (input) => ({type: SET_HAVE_CARD, input: input})
 
 // App initial state
 const initialState = {
   checkUidPrompt: true,
   updateDownloaded: false,
-  deviceId: ''
+  deviceId: '',
+  haveCard: true
 }
 
 // Reducer functions
@@ -28,6 +31,9 @@ const actionHandlers = {
   },
   [SET_DEVICE_ID]: (state, dictionary) => {
     return {deviceId: dictionary.id}
+  },
+  [SET_HAVE_CARD]: (state, dictionary) => {
+    return {haveCard: dictionary.input}
   }
 }
 
