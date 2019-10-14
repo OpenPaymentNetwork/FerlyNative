@@ -1,16 +1,16 @@
-import PropTypes from 'prop-types'
-import React from 'react'
-import {Text, View, Image, StyleSheet} from 'react-native'
+import PropTypes from 'prop-types';
+import React from 'react';
+import {Text, View, Image, StyleSheet} from 'react-native';
 
 export default class Avatar extends React.Component {
   render () {
-    const {firstWord, secondWord, pictureUrl, size, shade} = this.props
+    const {firstWord, secondWord, pictureUrl, size, shade} = this.props;
 
     const sizeStyle = {
       height: size,
       width: size,
       borderRadius: size / 2
-    }
+    };
 
     if (pictureUrl) {
       return (
@@ -20,10 +20,10 @@ export default class Avatar extends React.Component {
             style={[sizeStyle, shade && styles.imageShade]}
             source={{uri: pictureUrl}} />
         </View>
-      )
+      );
     } else {
-      const firstInitial = firstWord ? firstWord.charAt(0) : ''
-      const lastInitial = secondWord ? secondWord.charAt(0) : ''
+      const firstInitial = firstWord ? firstWord.charAt(0) : '';
+      const lastInitial = secondWord ? secondWord.charAt(0) : '';
       return (
         <View
           style={[sizeStyle, styles.initialsContainer, shade && styles.shade]}>
@@ -31,7 +31,7 @@ export default class Avatar extends React.Component {
             {firstInitial + lastInitial}
           </Text>
         </View>
-      )
+      );
     }
   }
 }
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'lightgray'
   }
-})
+});
 
 Avatar.propTypes = {
   firstWord: PropTypes.string,
@@ -63,4 +63,4 @@ Avatar.propTypes = {
   pictureUrl: PropTypes.string,
   secondWord: PropTypes.string,
   size: PropTypes.number.isRequired // Preferrably a number divisible by 2.
-}
+};

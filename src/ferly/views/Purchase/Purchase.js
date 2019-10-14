@@ -1,15 +1,15 @@
 /* eslint-disable react/no-unescaped-entities */
-import accounting from 'ferly/utils/accounting'
-import PrimaryButton from 'ferly/components/PrimaryButton'
-import PropTypes from 'prop-types'
-import React from 'react'
-import SimpleCurrencyInput from 'ferly/components/SimpleCurrencyInput'
-import Spinner from 'ferly/components/Spinner'
-import {viewLocations} from 'ferly/images/index'
-import {apiExpire, apiRequire} from 'ferly/store/api'
-import {connect} from 'react-redux'
-import {format as formatDate} from 'date-fns'
-import {urls} from 'ferly/utils/fetch'
+import accounting from 'ferly/utils/accounting';
+import PrimaryButton from 'ferly/components/PrimaryButton';
+import PropTypes from 'prop-types';
+import React from 'react';
+import SimpleCurrencyInput from 'ferly/components/SimpleCurrencyInput';
+import Spinner from 'ferly/components/Spinner';
+import {viewLocations} from 'ferly/images/index';
+import {apiExpire, apiRequire} from 'ferly/store/api';
+import {connect} from 'react-redux';
+import {format as formatDate} from 'date-fns';
+import {urls} from 'ferly/utils/fetch';
 import {
   View,
   Text,
@@ -18,7 +18,7 @@ import {
   TouchableOpacity,
   Image,
   Linking
-} from 'react-native'
+} from 'react-native';
 
 export class Purchase extends React.Component {
   static navigationOptions = {
@@ -26,48 +26,48 @@ export class Purchase extends React.Component {
   };
 
   constructor (props) {
-    super(props)
-    this.state = {amount: 0, submitting: false, text: ''}
+    super(props);
+    this.state = {amount: 0, submitting: false, text: ''};
   }
 
   componentDidMount () {
-    this.props.apiRequire(urls.profile)
+    this.props.apiRequire(urls.profile);
   }
 
   onPurchase () {
-    const {navigation} = this.props
-    const params = navigation.state.params
-    const {design} = params
-    const amount = this.state.text
-    navigation.navigate('Cart', {amount, design})
+    const {navigation} = this.props;
+    const params = navigation.state.params;
+    const {design} = params;
+    const amount = this.state.text;
+    navigation.navigate('Cart', {amount, design});
   }
 
   onChange (newAmount) {
-    this.setState({text: newAmount})
+    this.setState({text: newAmount});
   }
 
   render () {
-    const {navigation} = this.props
-    const {params} = this.props.navigation.state
-    const {submitting, text} = this.state
-    const {design} = params
-    const {title, fee} = design
-    const amounts = this.props.amounts || []
+    const {navigation} = this.props;
+    const {params} = this.props.navigation.state;
+    const {submitting, text} = this.state;
+    const {design} = params;
+    const {title, fee} = design;
+    const amounts = this.props.amounts || [];
 
     const found = amounts.find((cashRow) => {
-      return cashRow.id === design.id
-    })
+      return cashRow.id === design.id;
+    });
 
-    const foundAmount = found ? found.amount : 0
-    const formatted = accounting.formatMoney(parseFloat(foundAmount))
-    const fieldValue = accounting.formatMoney(parseFloat(text))
-    const precision = fee.includes('.00') ? 0 : 2
+    const foundAmount = found ? found.amount : 0;
+    const formatted = accounting.formatMoney(parseFloat(foundAmount));
+    const fieldValue = accounting.formatMoney(parseFloat(text));
+    const precision = fee.includes('.00') ? 0 : 2;
 
-    const formatedFee = accounting.formatMoney(parseFloat(fee), '', precision)
+    const formatedFee = accounting.formatMoney(parseFloat(fee), '', precision);
 
-    const d = new Date()
-    d.setDate(d.getDate() + 1825)
-    const expirationDate = formatDate(d, 'M/D/YYYY')
+    const d = new Date();
+    d.setDate(d.getDate() + 1825);
+    const expirationDate = formatDate(d, 'M/D/YYYY');
 
     return (
       <View style={{
@@ -113,7 +113,7 @@ export class Purchase extends React.Component {
               and App Agreement and Ferly's Privacy Policy and Refund Policy.
               Please contact us at </Text>
             <Text
-              onPress={() => { Linking.openURL('tel://8006512186') }}
+              onPress={() => { Linking.openURL('tel://8006512186'); }}
               style={[styles.paragraph, {textDecorationLine: 'underline'}]}>
               (800) 651-2186 </Text>
             <Text style={styles.paragraph}>for any questions.</Text>
@@ -126,7 +126,7 @@ export class Purchase extends React.Component {
           onPress={this.onPurchase.bind(this)}
         />
       </View>
-    )
+    );
   }
 }
 
@@ -160,27 +160,27 @@ const styles = StyleSheet.create({
   },
   image: {resizeMode: 'stretch', width: undefined},
   paragraph: {fontSize: 16, marginBottom: 10, color: 'darkgray'}
-})
+});
 
 Purchase.propTypes = {
   amounts: PropTypes.array,
   apiExpire: PropTypes.func.isRequired,
   apiRequire: PropTypes.func.isRequired,
   navigation: PropTypes.object.isRequired
-}
+};
 
 function mapStateToProps (state) {
-  const apiStore = state.api.apiStore
-  const {amounts} = apiStore[urls.profile] || {}
+  const apiStore = state.api.apiStore;
+  const {amounts} = apiStore[urls.profile] || {};
 
   return {
     amounts
-  }
+  };
 }
 
 const mapDispatchToProps = {
   apiExpire,
   apiRequire
-}
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(Purchase)
+export default connect(mapStateToProps, mapDispatchToProps)(Purchase);

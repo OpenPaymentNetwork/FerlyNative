@@ -1,19 +1,19 @@
-import PropTypes from 'prop-types'
-import React from 'react'
-import TestElement from 'ferly/components/TestElement'
-import {Text, View, StyleSheet, TextInput} from 'react-native'
+import PropTypes from 'prop-types';
+import React from 'react';
+import TestElement from 'ferly/components/TestElement';
+import {Text, View, StyleSheet, TextInput} from 'react-native';
 
 export default class SimpleCurrencyInput extends React.Component {
   constructor (props) {
-    super(props)
+    super(props);
     this.state = {
       text: ''
-    }
+    };
   }
 
   onChange (newText) {
-    this.props.onChangeText(newText)
-    this.setState({text: newText})
+    this.props.onChangeText(newText);
+    this.setState({text: newText});
   }
 
   render () {
@@ -37,7 +37,7 @@ export default class SimpleCurrencyInput extends React.Component {
           {this.props.error}
         </Text>
       </View>
-    )
+    );
   }
 }
 
@@ -68,9 +68,9 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     width: '100%'
   }
-})
+});
 
 SimpleCurrencyInput.propTypes = {
   error: PropTypes.string,
   onChangeText: PropTypes.func.isRequired
-}
+};

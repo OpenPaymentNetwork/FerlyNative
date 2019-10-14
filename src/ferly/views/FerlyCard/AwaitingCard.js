@@ -1,11 +1,11 @@
-import React from 'react'
-import CardForm from 'ferly/views/FerlyCard/CardForm'
-import PrimaryButton from 'ferly/components/PrimaryButton'
-import Theme from 'ferly/utils/theme'
-import PropTypes from 'prop-types'
-import {connect} from 'react-redux'
-import {View, Text, Image, Dimensions} from 'react-native'
-import {mailCard} from 'ferly/images/index'
+import React from 'react';
+import CardForm from 'ferly/views/FerlyCard/CardForm';
+import PrimaryButton from 'ferly/components/PrimaryButton';
+import Theme from 'ferly/utils/theme';
+import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import {View, Text, Image, Dimensions} from 'react-native';
+import {mailCard} from 'ferly/images/index';
 
 export class AwaitingCard extends React.Component {
   static navigationOptions = {
@@ -13,13 +13,13 @@ export class AwaitingCard extends React.Component {
   };
 
   render () {
-    const {navigation} = this.props
-    const {width, height} = Dimensions.get('window')
-    let imageHeight = height / 2
-    let imageWidth = width / 2
-    const {haveCard} = this.props
+    const {navigation} = this.props;
+    const {width, height} = Dimensions.get('window');
+    let imageHeight = height / 2;
+    let imageWidth = width / 2;
+    const {haveCard} = this.props;
     if (haveCard) {
-      return <CardForm onPass={() => this.setState({passed: ''})} />
+      return <CardForm onPass={() => this.setState({passed: ''})} />;
     }
 
     return (
@@ -52,21 +52,21 @@ export class AwaitingCard extends React.Component {
             onPress={() => this.props.onPass()} />
         </View>
       </View>
-    )
+    );
   }
 }
 
 AwaitingCard.propTypes = {
   haveCard: PropTypes.bool,
-  onPass: PropTypes.func,
+  onPass: PropTypes.func.isRequired,
   navigation: PropTypes.object
-}
+};
 
 function mapStateToProps (state) {
-  const {haveCard} = state.settings
+  const {haveCard} = state.settings;
   return {
     haveCard
-  }
+  };
 }
 
-export default connect(mapStateToProps)(AwaitingCard)
+export default connect(mapStateToProps)(AwaitingCard);

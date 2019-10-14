@@ -1,12 +1,12 @@
-import Icon from 'react-native-vector-icons/FontAwesome'
-import PropTypes from 'prop-types'
-import React from 'react'
-import Recaptcha from 'ferly/components/Recaptcha'
-import Theme from 'ferly/utils/theme'
-import {apiExpire} from 'ferly/store/api'
-import {connect} from 'react-redux'
-import {urls, post} from 'ferly/utils/fetch'
-import {StackActions} from 'react-navigation'
+import Icon from 'react-native-vector-icons/FontAwesome';
+import PropTypes from 'prop-types';
+import React from 'react';
+import Recaptcha from 'ferly/components/Recaptcha';
+import Theme from 'ferly/utils/theme';
+import {apiExpire} from 'ferly/store/api';
+import {connect} from 'react-redux';
+import {urls, post} from 'ferly/utils/fetch';
+import {StackActions} from 'react-navigation';
 import {
   View,
   Text,
@@ -15,11 +15,11 @@ import {
   TouchableOpacity,
   Alert,
   StyleSheet
-} from 'react-native'
+} from 'react-native';
 
 export class UIDController extends React.Component {
   constructor (props) {
-    super(props)
+    super(props);
     this.state = {
       showForm: false,
       formValue: '',
@@ -33,39 +33,39 @@ export class UIDController extends React.Component {
       recaptchaResponse: '',
       showRecaptcha: false,
       resubmit: false
-    }
+    };
   }
 
   componentDidUpdate (prevProps, prevState) {
-    const {resubmit, recaptchaResponse} = this.state
+    const {resubmit, recaptchaResponse} = this.state;
     if (resubmit && recaptchaResponse) {
-      this.handleCodeSubmit()
+      this.handleCodeSubmit();
     }
   }
 
   onExecute (response) {
-    this.setState({recaptchaResponse: response})
+    this.setState({recaptchaResponse: response});
   }
 
   handleUIDRequest () {
-    const {formValue} = this.state
-    const {type} = this.props
+    const {formValue} = this.state;
+    const {type} = this.props;
     const postParams = {
       login: formValue,
       uid_type: type
-    }
+    };
 
-    this.setState({submitting: true})
+    this.setState({submitting: true});
     post('add-uid', this.props.deviceId, postParams)
       .then((response) => response.json())
       .then((json) => {
         if (this.validate(json)) {
-          const attemptId = json.attempt_id
-          const codeLength = json.code_length
-          const {secret} = json
-          let code = ''
+          const attemptId = json.attempt_id;
+          const codeLength = json.code_length;
+          const {secret} = json;
+          let code = '';
           if (json.revealed_codes) {
-            code = json.revealed_codes[0].substring(0, codeLength)
+            code = json.revealed_codes[0].substring(0, codeLength);
           }
           this.setState({
             showCode: true,
@@ -75,20 +75,20 @@ export class UIDController extends React.Component {
             secret: secret,
             attemptId: attemptId,
             submitting: false
-          })
+          });
         }
-      })
+      });
   }
 
   validate (json) {
     if (json.invalid) {
       this.setState({
         invalid: json.invalid[Object.keys(json.invalid)[0]],
-        submitting: false})
-      return false
+        submitting: false});
+      return false;
     } else if (json.error === 'code_expired') {
       Alert.alert(
-        'Sorry', 'This code has expired. Please try again with a new code.')
+        'Sorry', 'This code has expired. Please try again with a new code.');
       this.setState({
         invalid: '',
         showCode: false,
@@ -98,48 +98,48 @@ export class UIDController extends React.Component {
         code: '',
         formValue: '',
         showForm: false
-      })
-      return false
+      });
+      return false;
     } else if (json.error === 'recaptcha_required') {
-      this.setState({showRecaptcha: true, resubmit: true})
-      return false
+      this.setState({showRecaptcha: true, resubmit: true});
+      return false;
     } else if (json.error) {
       Alert.alert(
-        'Error', 'Please try again with a new code.')
-      return false
+        'Error', 'Please try again with a new code.');
+      return false;
     } else {
-      return true
+      return true;
     }
   }
 
   handleCodeSubmit () {
-    const {type, uid, navigation} = this.props
-    const {secret, attemptId, code, recaptchaResponse} = this.state
+    const {type, uid, navigation} = this.props;
+    const {secret, attemptId, code, recaptchaResponse} = this.state;
     const postParams = {
       secret: secret,
       attempt_id: attemptId,
       code: code.replace(/-/g, ''),
       recaptcha_response: recaptchaResponse
-    }
+    };
     if (uid) {
-      postParams['replace_uid'] = `${type}:${uid}`
+      postParams['replace_uid'] = `${type}:${uid}`;
     }
-    this.setState({submitting: true, resubmit: false})
+    this.setState({submitting: true, resubmit: false});
     post('confirm-uid', this.props.deviceId, postParams)
       .then((response) => response.json())
       .then((json) => {
         if (this.validate(json)) {
-          let title
+          let title;
           if (type === 'email') {
-            title = 'Email Address'
+            title = 'Email Address';
           } else if (type === 'phone') {
-            title = 'Phone Number'
+            title = 'Phone Number';
           }
-          const lowerTitle = title.toLowerCase()
+          const lowerTitle = title.toLowerCase();
           const message = `Thank you! Your ${lowerTitle} has been verified ` +
-            `and can be used for account recovery in the future.`
-          Alert.alert(`${title} Verified`, message)
-          this.props.apiExpire(urls.profile)
+            `and can be used for account recovery in the future.`;
+          Alert.alert(`${title} Verified`, message);
+          this.props.apiExpire(urls.profile);
 
           const resetAction = StackActions.reset({
             index: 1,
@@ -147,14 +147,14 @@ export class UIDController extends React.Component {
               StackActions.push({routeName: 'Settings'}),
               StackActions.push({routeName: 'Recovery'})
             ]
-          })
-          navigation.dispatch(resetAction)
+          });
+          navigation.dispatch(resetAction);
         }
-      })
+      });
   }
 
   render () {
-    const {uid, type} = this.props
+    const {uid, type} = this.props;
     const {
       showForm,
       formValue,
@@ -164,19 +164,19 @@ export class UIDController extends React.Component {
       invalid,
       submitting,
       showRecaptcha
-    } = this.state
+    } = this.state;
 
-    let title
+    let title;
     if (type === 'email') {
-      title = 'Email Address'
+      title = 'Email Address';
     } else if (type === 'phone') {
-      title = 'Phone Number'
+      title = 'Phone Number';
     }
 
-    let body
+    let body;
     if (showCode) {
       const recaptchaComponent = (
-        <Recaptcha onExecute={this.onExecute.bind(this)} action="uid" />)
+        <Recaptcha onExecute={this.onExecute.bind(this)} action="uid" />);
       body = (
         <View>
           <Text style={styles.subtitle}>
@@ -202,18 +202,18 @@ export class UIDController extends React.Component {
           </View>
           {showRecaptcha ? recaptchaComponent : null}
         </View>
-      )
+      );
     } else if (showForm) {
-      let message
-      let keyboardType
+      let message;
+      let keyboardType;
       if (type === 'email') {
-        keyboardType = 'email-address'
+        keyboardType = 'email-address';
         message = 'Enter an email address to use for account recovery. ' +
-          'We\'ll send a code for you to verify your address.'
+          'We\'ll send a code for you to verify your address.';
       } else if (type === 'phone') {
-        keyboardType = 'numeric'
+        keyboardType = 'numeric';
         message = 'Enter a phone number to use for account recovery. ' +
-          'We\'ll send a code for you to verify your phone number.'
+          'We\'ll send a code for you to verify your phone number.';
       }
 
       body = (
@@ -238,7 +238,7 @@ export class UIDController extends React.Component {
               onPress={this.handleUIDRequest.bind(this)} />
           </View>
         </View>
-      )
+      );
     } else if (uid) {
       body = (
         <View style={styles.line}>
@@ -249,7 +249,7 @@ export class UIDController extends React.Component {
             disabled={submitting}
             onPress={() => this.setState({showForm: true})} />
         </View>
-      )
+      );
     } else {
       body = (
         <TouchableOpacity
@@ -260,12 +260,12 @@ export class UIDController extends React.Component {
             color={Theme.lightBlue}
             size={18} />
         </TouchableOpacity>
-      )
+      );
     }
 
-    let error
+    let error;
     if (invalid) {
-      error = <Text style={{color: 'red'}}>{invalid}</Text>
+      error = <Text style={{color: 'red'}}>{invalid}</Text>;
     }
 
     return (
@@ -274,7 +274,7 @@ export class UIDController extends React.Component {
         {body}
         {error}
       </View>
-    )
+    );
   }
 }
 
@@ -306,7 +306,7 @@ const styles = StyleSheet.create({
     flexShrink: 1,
     marginRight: 20
   }
-})
+});
 
 UIDController.propTypes = {
   apiExpire: PropTypes.func.isRequired,
@@ -314,17 +314,17 @@ UIDController.propTypes = {
   type: PropTypes.string,
   uid: PropTypes.string,
   deviceId: PropTypes.string.isRequired
-}
+};
 
 function mapStateToProps (state) {
-  const {deviceId} = state.settings
+  const {deviceId} = state.settings;
   return {
     deviceId
-  }
+  };
 }
 
 const mapDispatchToProps = {
   apiExpire
-}
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(UIDController)
+export default connect(mapStateToProps, mapDispatchToProps)(UIDController);

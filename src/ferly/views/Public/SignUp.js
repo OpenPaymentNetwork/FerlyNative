@@ -1,10 +1,10 @@
-import Constants from 'expo-constants'
-import PrimaryButton from 'ferly/components/PrimaryButton'
-import PropTypes from 'prop-types'
-import React from 'react'
-import Theme from 'ferly/utils/theme'
-import {connect} from 'react-redux'
-import {post} from 'ferly/utils/fetch'
+// import Constants from 'expo-constants';
+import PrimaryButton from 'ferly/components/PrimaryButton';
+import PropTypes from 'prop-types';
+import React from 'react';
+import Theme from 'ferly/utils/theme';
+import {connect} from 'react-redux';
+import {post} from 'ferly/utils/fetch';
 import {
   View,
   Text,
@@ -12,7 +12,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Platform
-} from 'react-native'
+} from 'react-native';
 
 export class SignUp extends React.Component {
   static navigationOptions = {
@@ -20,7 +20,7 @@ export class SignUp extends React.Component {
   };
 
   constructor (props) {
-    super(props)
+    super(props);
     this.state = {
       firstName: '',
       lastName: '',
@@ -32,25 +32,25 @@ export class SignUp extends React.Component {
       invalid: {},
       expoToken: '',
       submitting: false
-    }
+    };
   }
 
   handleSubmit () {
-    const {firstName, lastName, username, fieldValue, expoToken} = this.state
-    this.setState({submitting: true})
+    const {firstName, lastName, username, fieldValue, expoToken} = this.state;
+    this.setState({submitting: true});
     const login = {
       login: fieldValue,
       username: username
-    }
+    };
 
     post('signup', this.props.deviceId, login)
       .then((response) => response.json())
       .then((responseJson) => {
-        this.setState({submitting: false})
-        const codeLength = responseJson.code_length
-        let code = ''
+        this.setState({submitting: false});
+        const codeLength = responseJson.code_length;
+        let code = '';
         if (responseJson.revealed_codes) {
-          code = responseJson.revealed_codes[0].substring(0, codeLength)
+          code = responseJson.revealed_codes[0].substring(0, codeLength);
         }
         const navParams = {
           firstName: firstName,
@@ -63,125 +63,104 @@ export class SignUp extends React.Component {
           attemptPath: responseJson.attempt_path,
           factorId: responseJson.factor_id,
           os: `${Platform.OS}:${Platform.Version}`
-        }
+        };
         if (this.validate(responseJson)) {
-          this.props.navigation.navigate('SignUpCode', navParams)
+          this.props.navigation.navigate('SignUpCode', navParams);
         }
-      })
+      });
   }
 
   validate (responseJson) {
     if (responseJson.invalid) {
       this.setState({
         invalid: responseJson.invalid
-      })
-      return false
+      });
+      return false;
     } else if (responseJson.error === 'existing_username') {
-      this.setState({invalid: {username: 'Username already taken'}})
-      return false
+      this.setState({invalid: {username: 'Username already taken'}});
+      return false;
     } else if (responseJson.error) {
-      this.setState({invalid: {fieldValue: 'Email already registered! Please Sign In.'}})
-      return false
+      this.setState({invalid: {fieldValue: 'Email already registered! Please Sign In.'}});
+      return false;
     } else {
-      return true
+      return true;
     }
   }
 
   invalidUsernameMessage (username) {
-    let msg
+    let msg;
     if (username.length < 4 || username.length > 20) {
-      msg = 'Must be 4-20 characters long'
+      msg = 'Must be 4-20 characters long';
     } else if (!username.charAt(0).match('^[a-zA-Z]$')) {
-      msg = 'Must start with a letter'
+      msg = 'Must start with a letter';
     } else if (!username.match('^[0-9a-zA-Z.]+$')) {
-      msg = 'Must contain only letters, numbers, and periods'
+      msg = 'Must contain only letters, numbers, and periods';
     }
-    return msg
+    return msg;
   }
 
   validateUsername (username) {
-    let msg = this.invalidUsernameMessage(username)
+    let msg = this.invalidUsernameMessage(username);
     if (msg) {
-      const nextState = {username: username, invalid: {username: msg}}
-      if (username.length > 3) {
-        nextState.showUsernameError = true
-      }
-      this.setState(nextState)
+      const nextState = {username: username, invalid: {username: msg}};
+      this.setState(nextState);
     } else {
-      const newInvalid = Object.assign({}, this.state.invalid)
-      delete newInvalid.username
-      this.setState({invalid: newInvalid})
+      const newInvalid = Object.assign({}, this.state.invalid);
+      delete newInvalid.username;
+      this.setState({invalid: newInvalid});
     }
   }
 
   invalidFirstNameMessage (firstName) {
-    let msg
-    if (firstName.length < 1 || firstName.length > 20) {
-      msg = 'Must be 1-20 characters long'
+    let msg;
+    if (firstName.length < 2 || firstName.length > 20) {
+      msg = 'Must be 2-20 characters long';
     } else if (!firstName.match('^[a-zA-Z._ ]+$')) {
-      msg = 'Must contain only letters, periods, and spaces.'
+      msg = 'Must contain only letters, periods, and spaces.';
+    } else if (!firstName.charAt(0).match('^[a-zA-Z]$')) {
+      msg = 'Must start with a letter';
     }
-    return msg
+    return msg;
   }
 
   validateFirstName (firstName) {
-    let msg = this.invalidFirstNameMessage(firstName)
+    let msg = this.invalidFirstNameMessage(firstName);
     if (msg) {
-      const nextState = {first_name: firstName, invalid: {first_name: msg}}
-      if (firstName.length < 1) {
-        nextState.showFirstNameError = true
-      }
-      this.setState(nextState)
+      const nextState = {first_name: firstName, invalid: {first_name: msg}};
+      this.setState(nextState);
     } else {
-      const newInvalid = Object.assign({}, this.state.invalid)
-      delete newInvalid.firstName
-      this.setState({invalid: newInvalid})
+      const newInvalid = Object.assign({}, this.state.invalid);
+      delete newInvalid.first_name;
+      this.setState({invalid: newInvalid});
     }
   }
 
   invalidLastNameMessage (lastName) {
-    let msg
-    if (lastName.length < 1 || lastName.length > 20) {
-      msg = 'Must be 1-20 characters long'
+    let msg;
+    if (lastName.length < 2 || lastName.length > 20) {
+      msg = 'Must be 2-20 characters long';
     } else if (!lastName.match('^[-a-zA-Z _.,s]+$')) {
-      msg = 'Must contain only letters, periods, dashes, and spaces'
+      msg = 'Must contain only letters, periods, dashes, and spaces';
+    } else if (!lastName.charAt(0).match('^[a-zA-Z]$')) {
+      msg = 'Must start with a letter';
     }
-    return msg
+    return msg;
   }
 
   validateLastName (lastName) {
-    let msg = this.invalidLastNameMessage(lastName)
+    let msg = this.invalidLastNameMessage(lastName);
     if (msg) {
-      const nextState = {last_name: lastName, invalid: {last_name: msg}}
-      if (lastName.length > 3) {
-        nextState.showLastNameError = true
-      }
-      this.setState(nextState)
+      const nextState = {last_name: lastName, invalid: {last_name: msg}};
+      this.setState(nextState);
     } else {
-      const newInvalid = Object.assign({}, this.state.invalid)
-      delete newInvalid.lastName
-      this.setState({invalid: newInvalid})
-    }
-  }
-
-  renderDebug () {
-    const debug = false
-    if (debug) {
-      return (
-        <View>
-          <Text>
-            device id: {Constants.deviceId}
-          </Text>
-          <Text>
-            token: {this.state.expoToken}
-          </Text>
-        </View>
-      )
+      const newInvalid = Object.assign({}, this.state.invalid);
+      delete newInvalid.last_name;
+      this.setState({invalid: newInvalid});
     }
   }
 
   renderRecoveryOption () {
-    const {navigation} = this.props
+    const {navigation} = this.props;
     return (
       <View style={[styles.row, {marginBottom: 30}]}>
         <Text style={{fontSize: 16}}>Already have an account?</Text>
@@ -190,11 +169,11 @@ export class SignUp extends React.Component {
           <Text style={[styles.recoveryText, {paddingLeft: 5}]}>Sign In</Text>
         </TouchableOpacity>
       </View>
-    )
+    );
   }
 
   render () {
-    const {firstName, lastName, username, submitting, fieldValue, invalid} = this.state
+    const {firstName, lastName, username, submitting, fieldValue, invalid} = this.state;
     return (
       <View style={{flex: 1, backgroundColor: 'white'}}>
         <View style={{paddingHorizontal: 15}} >
@@ -204,17 +183,17 @@ export class SignUp extends React.Component {
             placeholderTextColor={'gray'}
             placeholder='First Name'
             onBlur={() => {
-              this.validateFirstName(firstName)
-              this.setState({showFirstNameError: true})
+              this.validateFirstName(firstName);
+              this.setState({showFirstNameError: true});
             }}
             onChangeText={
               (text) => {
-                this.validateFirstName(text); this.setState({firstName: text})
+                this.validateFirstName(text); this.setState({firstName: text});
               }
             }
             value={firstName} />
           {
-            invalid.first_name && this.state.showFirstNameError
+            invalid.first_name || this.state.showFirstNameError
               ? (<Text style={styles.error}>{invalid.first_name}</Text>)
               : null
           }
@@ -224,17 +203,17 @@ export class SignUp extends React.Component {
             placeholderTextColor={'gray'}
             placeholder='Last Name'
             onBlur={() => {
-              this.validateLastName(lastName)
-              this.setState({showLastNameError: true})
+              this.validateLastName(lastName);
+              this.setState({showLastNameError: false});
             }}
             onChangeText={
               (text) => {
-                this.validateLastName(text); this.setState({lastName: text})
+                this.validateLastName(text); this.setState({lastName: text});
               }
             }
             value={lastName} />
           {
-            invalid.last_name && this.state.showLastNameError
+            invalid.last_name || this.state.showLastNameError
               ? (<Text style={styles.error}>{invalid.last_name}</Text>)
               : null
           }
@@ -244,22 +223,22 @@ export class SignUp extends React.Component {
             placeholderTextColor={'gray'}
             placeholder='Username'
             onBlur={() => {
-              this.validateUsername(username)
-              this.setState({showUsernameError: true})
+              this.validateUsername(username);
+              this.setState({showUsernameError: true});
             }}
             onChangeText={
               (text) => {
-                this.validateUsername(text); this.setState({username: text})
+                this.validateUsername(text); this.setState({username: text});
               }
             }
             value={username} />
           {
-            invalid.username && this.state.showUsernameError
+            invalid.username || this.state.showUsernameError
               ? (<Text style={styles.error}>{invalid.username}</Text>)
               : null
           }
           <TextInput
-            style={[styles.field, {marginBottom: 45}]}
+            style={[styles.field]}
             underlineColorAndroid={'transparent'}
             placeholderTextColor={'gray'}
             placeholder='Email Address or Phone Number'
@@ -270,9 +249,8 @@ export class SignUp extends React.Component {
               ? (<Text style={styles.error}>{invalid.login}</Text>)
               : null
           }
-          {this.renderDebug()}
         </View>
-        <View style={{width: '100%'}} >
+        <View style={{width: '100%', marginVertical: 20}} >
           <PrimaryButton
             title="Next"
             disabled={
@@ -280,15 +258,19 @@ export class SignUp extends React.Component {
                 lastName === '' ||
                 submitting ||
                 !!invalid.username ||
+                !!invalid.first_name ||
+                !!invalid.last_name ||
                 !username ||
-                !fieldValue
+                !fieldValue ||
+                !firstName ||
+                !lastName
             }
             color={Theme.lightBlue}
             onPress={this.handleSubmit.bind(this)} />
         </View>
         {this.renderRecoveryOption()}
       </View>
-    )
+    );
   }
 }
 
@@ -326,20 +308,20 @@ const styles = StyleSheet.create({
     fontSize: 16
   },
   row: {width: '100%', flexDirection: 'row', justifyContent: 'center'}
-})
+});
 
 SignUp.propTypes = {
   navigation: PropTypes.object.isRequired,
   onFocus: PropTypes.object,
   onBlur: PropTypes.object,
   deviceId: PropTypes.string.isRequired
-}
+};
 
 function mapStateToProps (state) {
-  const {deviceId} = state.settings
+  const {deviceId} = state.settings;
   return {
     deviceId
-  }
+  };
 }
 
-export default connect(mapStateToProps)(SignUp)
+export default connect(mapStateToProps)(SignUp);

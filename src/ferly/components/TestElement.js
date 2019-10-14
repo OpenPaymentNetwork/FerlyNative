@@ -1,21 +1,21 @@
-import PropTypes from 'prop-types'
-import React from 'react'
-import {Platform} from 'react-native'
+import PropTypes from 'prop-types';
+import React from 'react';
+import {Platform} from 'react-native';
 
 export default class TestElement extends React.Component {
   render () {
-    const {parent: Parent, label, children, ...otherProps} = this.props
-    let labelProp
+    const {parent: Parent, label, children, ...otherProps} = this.props;
+    let labelProp;
     if (Platform.OS === 'ios') {
-      labelProp = {testID: label}
+      labelProp = {testID: label};
     } else {
-      labelProp = {accessibilityLabel: label}
+      labelProp = {accessibilityLabel: label};
     }
     return (
       <Parent {...labelProp} {...otherProps}>
         {children}
       </Parent>
-    )
+    );
   }
 }
 
@@ -26,4 +26,4 @@ TestElement.propTypes = {
     PropTypes.object
   ]).isRequired,
   children: PropTypes.node
-}
+};

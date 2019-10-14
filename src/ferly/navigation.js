@@ -1,40 +1,40 @@
-import AddressForm from 'ferly/views/FerlyCard/AddressForm'
-import Contact from 'ferly/views/Invitations/Contact'
-import Contacts from 'ferly/views/Invitations/Contacts'
-import FerlyCard from 'ferly/views/FerlyCard/FerlyCard'
-import Give from 'ferly/views/Give/Give'
-import Recipient from 'ferly/views/Give/Recipient'
-import History from 'ferly/views/History/History'
-import Invitations from 'ferly/views/Invitations/Invitations'
-import Icon from 'react-native-vector-icons/FontAwesome'
-import ManualAdd from 'ferly/views/Invitations/ManualAdd'
-import NewCardForm from 'ferly/views/FerlyCard/NewCardForm'
-import Profile from 'ferly/views/Profile/Profile'
-import React from 'react'
-import RecoveryChannel from 'ferly/views/Public/RecoveryChannel'
-import RecoveryCode from 'ferly/views/Public/RecoveryCode'
-import Settings from 'ferly/views/Settings/Settings'
-import SignUp from 'ferly/views/Public/SignUp'
-import SignUpCode from 'ferly/views/Public/SignUpCode'
-import SignUpWaiting from 'ferly/views/FerlyCard/SignUpWaiting'
-import TestElement from 'ferly/components/TestElement'
-import Transfer from 'ferly/views/History/Transfer'
-import Home from 'ferly/views/Wallet/Home'
-import Value from 'ferly/views/Wallet/Value'
-import LandingPage from 'ferly/views/Public/LandingPage'
-import Locations from 'ferly/views/Wallet/Locations'
-import Cart from 'ferly/views/Purchase/Cart'
-import Purchase from 'ferly/views/Purchase/Purchase'
-import Market from 'ferly/views/Purchase/Market'
-import Recovery from 'ferly/views/Settings/Recovery'
-import Tutorial from 'ferly/views/Public/Tutorial'
+import AddressForm from 'ferly/views/FerlyCard/AddressForm';
+import Contact from 'ferly/views/Invitations/Contact';
+import Contacts from 'ferly/views/Invitations/Contacts';
+import FerlyCard from 'ferly/views/FerlyCard/FerlyCard';
+import Give from 'ferly/views/Give/Give';
+import Recipient from 'ferly/views/Give/Recipient';
+import History from 'ferly/views/History/History';
+import Invitations from 'ferly/views/Invitations/Invitations';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import ManualAdd from 'ferly/views/Invitations/ManualAdd';
+import NewCardForm from 'ferly/views/FerlyCard/NewCardForm';
+import Profile from 'ferly/views/Profile/Profile';
+import React from 'react';
+import RecoveryChannel from 'ferly/views/Public/RecoveryChannel';
+import RecoveryCode from 'ferly/views/Public/RecoveryCode';
+import Settings from 'ferly/views/Settings/Settings';
+import SignUp from 'ferly/views/Public/SignUp';
+import SignUpCode from 'ferly/views/Public/SignUpCode';
+import SignUpWaiting from 'ferly/views/FerlyCard/SignUpWaiting';
+import TestElement from 'ferly/components/TestElement';
+import Transfer from 'ferly/views/History/Transfer';
+import Home from 'ferly/views/Wallet/Home';
+import Value from 'ferly/views/Wallet/Value';
+import LandingPage from 'ferly/views/Public/LandingPage';
+import Locations from 'ferly/views/Wallet/Locations';
+import Cart from 'ferly/views/Purchase/Cart';
+import Purchase from 'ferly/views/Purchase/Purchase';
+import Market from 'ferly/views/Purchase/Market';
+import Recovery from 'ferly/views/Settings/Recovery';
+import Tutorial from 'ferly/views/Public/Tutorial';
 import {
   createDrawerNavigator,
   createStackNavigator,
   createSwitchNavigator
-} from 'react-navigation'
-import DrawerContent from 'ferly/components/Drawer'
-import Theme from 'ferly/utils/theme'
+} from 'react-navigation';
+import DrawerContent from 'ferly/components/Drawer';
+import Theme from 'ferly/utils/theme';
 
 const drawerOptions = ({navigation}) => ({
   headerRight: (
@@ -55,11 +55,11 @@ const drawerOptions = ({navigation}) => ({
     shadowOpacity: 5,
     shadowRadius: 10},
   headerTintColor: 'white'
-})
+});
 
 const ProfileStack = createStackNavigator({
   Profile: {screen: Profile, navigationOptions: drawerOptions}
-})
+});
 
 const WalletStack = createStackNavigator(
   {
@@ -75,7 +75,7 @@ const WalletStack = createStackNavigator(
   {
     initialRouteName: 'Home'
   }
-)
+);
 
 const SettingsStack = createStackNavigator(
   {
@@ -85,7 +85,7 @@ const SettingsStack = createStackNavigator(
   {
     initialRouteName: 'Settings'
   }
-)
+);
 
 const InvitationsStack = createStackNavigator(
   {
@@ -97,7 +97,7 @@ const InvitationsStack = createStackNavigator(
   {
     initialRouteName: 'Invitations'
   }
-)
+);
 
 const HistoryStack = createStackNavigator(
   {
@@ -107,7 +107,7 @@ const HistoryStack = createStackNavigator(
   {
     initialRouteName: 'History'
   }
-)
+);
 
 const publicHeader = {
   headerStyle: {
@@ -118,7 +118,7 @@ const publicHeader = {
     shadowOpacity: 5,
     shadowRadius: 10},
   headerTintColor: 'white'
-}
+};
 
 const AuthDrawer = createDrawerNavigator(
   {
@@ -136,7 +136,7 @@ const AuthDrawer = createDrawerNavigator(
     contentComponent: DrawerContent,
     contentOptions: {activeTintColor: Theme.lightBlue}
   }
-)
+);
 
 const PubStack = createStackNavigator(
   {
@@ -153,7 +153,7 @@ const PubStack = createStackNavigator(
   {
     initialRouteName: 'LandingPage'
   }
-)
+);
 
 export const CreateAuthSwitch = (isUser) => {
   const AppLayout = createSwitchNavigator(
@@ -163,8 +163,8 @@ export const CreateAuthSwitch = (isUser) => {
     },
     {
       initialRouteName: isUser ? 'Auth' : 'Pub'
-    })
-  return AppLayout
-}
+    });
+  return AppLayout;
+};
 
-export default CreateAuthSwitch
+export default CreateAuthSwitch;

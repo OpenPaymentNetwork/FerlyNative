@@ -1,11 +1,11 @@
-import PrimaryButton from 'ferly/components/PrimaryButton'
-import PropTypes from 'prop-types'
-import React from 'react'
-import TestElement from 'ferly/components/TestElement'
-import Theme from 'ferly/utils/theme'
-import {setHaveCard} from 'ferly/store/settings'
-import {connect} from 'react-redux'
-import {post} from 'ferly/utils/fetch'
+import PrimaryButton from 'ferly/components/PrimaryButton';
+import PropTypes from 'prop-types';
+import React from 'react';
+import TestElement from 'ferly/components/TestElement';
+import Theme from 'ferly/utils/theme';
+import {setHaveCard} from 'ferly/store/settings';
+import {connect} from 'react-redux';
+import {post} from 'ferly/utils/fetch';
 import {
   Alert,
   KeyboardAvoidingView,
@@ -15,7 +15,7 @@ import {
   ScrollView,
   StyleSheet,
   View
-} from 'react-native'
+} from 'react-native';
 
 export class NewAddressForm extends React.Component {
     static navigationOptions = {
@@ -23,7 +23,7 @@ export class NewAddressForm extends React.Component {
     }
 
     constructor (props) {
-      super(props)
+      super(props);
       this.state = {
         passed: false,
         submitting: false,
@@ -36,7 +36,7 @@ export class NewAddressForm extends React.Component {
         state: undefined,
         zipCode: '',
         st: ''
-      }
+      };
     }
 
     submitForm = () => {
@@ -47,8 +47,8 @@ export class NewAddressForm extends React.Component {
         city,
         state = this.defaultState,
         zipCode
-      } = this.state
-      this.setState({submitting: true})
+      } = this.state;
+      this.setState({submitting: true});
       const params = {
         name: name,
         line1: address,
@@ -57,36 +57,36 @@ export class NewAddressForm extends React.Component {
         state: state,
         zip_code: zipCode,
         verified: 'yes'
-      }
+      };
       post('request-card', this.props.deviceId, params)
         .then((response) => response.json())
         .then((json) => {
-          this.props.dispatch(setHaveCard(false))
-          this.setState({submitting: false})
+          this.props.dispatch(setHaveCard(false));
+          this.setState({submitting: false});
           if (this.validateSendCard(json)) {
-            this.props.onPass()
-            const alertText = 'Your card will arrive in 7 to 10 business days.'
-            Alert.alert('Done!', alertText)
+            this.props.onPass();
+            const alertText = 'Your card will arrive in 7 to 10 business days.';
+            Alert.alert('Done!', alertText);
           }
-        })
+        });
     }
 
     onStateChange = (state) => {
-      this.setState({state: state})
+      this.setState({state: state});
     }
 
     validateSendCard (responseJson) {
       if (responseJson.invalid) {
         this.setState({
           invalid: responseJson.invalid
-        })
-        return false
+        });
+        return false;
       } else if (responseJson.error) {
         Alert.alert('Oops!', 'We couldn\'t find that address. ' +
-        'Check to make sure it\'s accurate.')
-        return false
+        'Check to make sure it\'s accurate.');
+        return false;
       } else {
-        return true
+        return true;
       }
     }
 
@@ -100,14 +100,14 @@ export class NewAddressForm extends React.Component {
         zipCode,
         invalid,
         submitting
-      } = this.state
+      } = this.state;
       const {
         name: nameError,
         line1: addressError,
         city: cityError,
         state: stateError,
         zipCode: zipError
-      } = invalid
+      } = invalid;
 
       return (
         <View style={styles.page}>
@@ -224,7 +224,7 @@ export class NewAddressForm extends React.Component {
             </ScrollView>
           </KeyboardAvoidingView>
         </View>
-      )
+      );
     }
 }
 
@@ -233,7 +233,7 @@ NewAddressForm.propTypes = {
   navigation: PropTypes.object,
   deviceId: PropTypes.string.isRequired,
   dispatch: PropTypes.func.isRequired
-}
+};
 
 const styles = StyleSheet.create({
   error: {color: 'red', width: '100%'},
@@ -250,13 +250,13 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingLeft: 10
   }
-})
+});
 
 function mapStateToProps (state) {
-  const {deviceId} = state.settings
+  const {deviceId} = state.settings;
   return {
     deviceId
-  }
+  };
 }
 
-export default connect(mapStateToProps)(NewAddressForm)
+export default connect(mapStateToProps)(NewAddressForm);

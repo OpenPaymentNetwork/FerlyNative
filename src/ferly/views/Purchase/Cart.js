@@ -1,17 +1,17 @@
-import accounting from 'ferly/utils/accounting'
-import StoreAvatar from 'ferly/components/StoreAvatar'
-import Constants from 'expo-constants'
-import Icon from 'react-native-vector-icons/FontAwesome'
-import PrimaryButton from 'ferly/components/PrimaryButton'
-import PropTypes from 'prop-types'
-import React from 'react'
-import Spinner from 'ferly/components/Spinner'
-import TestElement from 'ferly/components/TestElement'
-import Theme from 'ferly/utils/theme'
-import {apiRequire, apiExpire, apiRefresh} from 'ferly/store/api'
-import {connect} from 'react-redux'
-import {createUrl, post, urls} from 'ferly/utils/fetch'
-import {StackActions} from 'react-navigation'
+import accounting from 'ferly/utils/accounting';
+import StoreAvatar from 'ferly/components/StoreAvatar';
+import Constants from 'expo-constants';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import PrimaryButton from 'ferly/components/PrimaryButton';
+import PropTypes from 'prop-types';
+import React from 'react';
+import Spinner from 'ferly/components/Spinner';
+import TestElement from 'ferly/components/TestElement';
+import Theme from 'ferly/utils/theme';
+import {apiRequire, apiExpire, apiRefresh} from 'ferly/store/api';
+import {connect} from 'react-redux';
+import {createUrl, post, urls} from 'ferly/utils/fetch';
+import {StackActions} from 'react-navigation';
 import {
   Alert,
   KeyboardAvoidingView,
@@ -21,7 +21,7 @@ import {
   TouchableOpacity,
   View,
   WebView
-} from 'react-native'
+} from 'react-native';
 // import {WebView} from 'react-native-webview'
 
 export class Cart extends React.Component {
@@ -30,79 +30,79 @@ export class Cart extends React.Component {
   };
 
   constructor (props) {
-    super(props)
-    this.state = {selectedSource: null, cardLoaded: false}
+    super(props);
+    this.state = {selectedSource: null, cardLoaded: false};
   }
 
   componentDidMount () {
-    this.props.apiRequire(this.props.sourcesUrl)
+    this.props.apiRequire(this.props.sourcesUrl);
   }
 
   onSuccess (source) {
-    const {navigation} = this.props
-    const params = navigation.state.params
-    const {design, amount} = params
+    const {navigation} = this.props;
+    const params = navigation.state.params;
+    const {design, amount} = params;
 
     const purchaseParams = {
       amount: amount,
       fee: design.fee,
       design_id: design.id.toString(),
       source_id: source
-    }
+    };
 
-    this.setState({submitting: true})
+    this.setState({submitting: true});
     post('purchase', this.props.deviceId, purchaseParams)
       .then((response) => response.json())
       .then((responseJson) => {
         if (this.validate(responseJson)) {
-          this.props.apiExpire(urls.history)
-          this.props.apiExpire(urls.profile)
+          this.props.apiExpire(urls.history);
+          this.props.apiExpire(urls.profile);
           const resetAction = StackActions.reset({
             index: 0,
             actions: [StackActions.push({routeName: 'Home'})]
-          })
-          navigation.dispatch(resetAction)
-          const formatted = accounting.formatMoney(parseFloat(amount))
-          const desc = `You added ${formatted} ${design.title} to your wallet.`
-          Alert.alert('Complete!', desc)
-          this.props.apiExpire(this.props.sourcesUrl)
+          });
+          navigation.dispatch(resetAction);
+          const formatted = accounting.formatMoney(parseFloat(amount));
+          const desc = `You added ${formatted} ${design.title} to your wallet.`;
+          Alert.alert('Complete!', desc);
+          this.props.apiExpire(this.props.sourcesUrl);
         }
-      })
+      });
   }
 
   validate (json) {
     if (json.invalid) {
-      Alert.alert('Error', json.invalid[Object.keys(json.invalid)[0]])
-      this.setState({submitting: false})
-      return false
+      Alert.alert('Error', json.invalid[Object.keys(json.invalid)[0]]);
+      this.setState({submitting: false});
+      return false;
     } else if (!json.result) {
-      Alert.alert('Error', 'There was a problem processing your credit card.')
-      this.setState({submitting: false})
-      return false
+      Alert.alert('Error', 'There was a problem processing your credit card.');
+      this.setState({submitting: false});
+      return false;
     } else {
-      return true
+      return true;
     }
   }
 
   handleSubmitClick () {
-    const {selectedSource} = this.state
+    const {selectedSource} = this.state;
     if (selectedSource === 'new') {
       if (this.webview) {
         this.webview.injectJavaScript(
-          "document.getElementById('submit-button').click()")
+          "document.getElementById('submit-button').click()");
       }
     } else {
-      this.onSuccess(selectedSource)
+      this.onSuccess(selectedSource);
     }
   }
 
   receiveMessage (event) {
-    const data = event.nativeEvent.data
+    const data = event.nativeEvent.data;
     if (data.startsWith('paymenttoken:')) {
-      const token = data.substring(data.indexOf(':') + 1)
-      this.onSuccess(token)
+      const token = data.substring(data.indexOf(':') + 1);
+      this.onSuccess(token);
     } else if (data === 'error') {
-      this.setState({submitting: false})
+      this.setState({submitting: false});
     }
   }
 
@@ -114,12 +114,12 @@ export class Cart extends React.Component {
         {text: 'No', onPress: null},
         {text: 'Yes', onPress: () => this.removeCard(sourceId)}
       ]
-    )
+    );
   }
 
   removeCard (sourceId) {
     if (this.state.selectedSource === sourceId) {
-      this.setState({selectedSource: null})
+      this.setState({selectedSource: null});
     }
     fetch(createUrl('delete-stripe-source', {source_id: sourceId}), {
       headers: {
@@ -127,23 +127,23 @@ export class Cart extends React.Component {
       }})
       .then((response) => response.json())
       .then((json) => {
-        this.props.apiRefresh(this.props.sourcesUrl)
-      })
+        this.props.apiRefresh(this.props.sourcesUrl);
+      });
   }
 
   renderBody () {
-    const {selectedSource, cardLoaded, submitting} = this.state
-    const {sources} = this.props
+    const {selectedSource, cardLoaded, submitting} = this.state;
+    const {sources} = this.props;
     if (!sources || submitting) {
-      return <Spinner />
+      return <Spinner />;
     } else {
       const existingSources = sources.map((source) => {
-        const {id, brand, lastFour} = source
-        const sourceStyles = [styles.source]
+        const {id, brand, lastFour} = source;
+        const sourceStyles = [styles.source];
         if (selectedSource === id) {
-          sourceStyles.push(styles.selectedSource)
+          sourceStyles.push(styles.selectedSource);
         }
-        const display = `${brand} ending in ${lastFour}`
+        const display = `${brand} ending in ${lastFour}`;
         return (
           <TestElement
             parent={TouchableOpacity}
@@ -162,20 +162,20 @@ export class Cart extends React.Component {
                 size={18} />
             </TouchableOpacity>
           </TestElement>
-        )
-      })
+        );
+      });
       let newCard = (
         <TouchableOpacity
           style={styles.source}
           onPress={() => this.setState({selectedSource: 'new'})}>
           <Text>Pay with a new card</Text>
         </TouchableOpacity>
-      )
+      );
       if (selectedSource === 'new') {
-        const productionURI = 'https://ferlyapi.com/stripeform/production.html'
-        const stagingURI = 'http://ferlystaging.us-east-2.elasticbeanstalk.com/stripeform/staging.html'
-        const {releaseChannel} = Constants.manifest
-        const loadingSpinner = <View style={{height: 80}}><Spinner /></View>
+        const productionURI = 'https://ferlyapi.com/stripeform/production.html';
+        const stagingURI = 'http://ferlystaging.us-east-2.elasticbeanstalk.com/stripeform/staging.html';
+        const {releaseChannel} = Constants.manifest;
+        const loadingSpinner = <View style={{height: 80}}><Spinner /></View>;
         newCard = (
           <View style={[styles.source, styles.selectedSource]}>
             <View style={{width: '100%', height: 80}}>
@@ -190,7 +190,7 @@ export class Cart extends React.Component {
                 scrollEnabled={false} />
             </View>
           </View>
-        )
+        );
       }
       return (
         <KeyboardAvoidingView
@@ -202,18 +202,18 @@ export class Cart extends React.Component {
             {newCard}
           </ScrollView>
         </KeyboardAvoidingView>
-      )
+      );
     }
   }
 
   render () {
-    const {params} = this.props.navigation.state
-    const {amount: amountString, design} = params
-    const convenienceFee = parseFloat(design.fee)
-    const amountNumber = parseFloat(amountString)
-    const total = amountNumber + convenienceFee
-    const {selectedSource, submitting} = this.state
-    const {title, field_color: fieldColor} = design
+    const {params} = this.props.navigation.state;
+    const {amount: amountString, design} = params;
+    const convenienceFee = parseFloat(design.fee);
+    const amountNumber = parseFloat(amountString);
+    const total = amountNumber + convenienceFee;
+    const {selectedSource, submitting} = this.state;
+    const {title, field_color: fieldColor} = design;
     return (
       <View style={styles.page}>
         <TestElement
@@ -280,7 +280,7 @@ export class Cart extends React.Component {
           disabled={!selectedSource || submitting}
           onPress={this.handleSubmitClick.bind(this)} />
       </View>
-    )
+    );
   }
 }
 
@@ -325,7 +325,7 @@ const styles = StyleSheet.create({
   sectionHeader: {fontSize: 18, fontWeight: 'bold', marginBottom: 7},
   sectionText: {color: 'darkgray', fontSize: 16},
   totalText: {fontSize: 18, fontWeight: 'bold'}
-})
+});
 
 Cart.propTypes = {
   amounts: PropTypes.array,
@@ -336,33 +336,33 @@ Cart.propTypes = {
   sources: PropTypes.array,
   sourcesUrl: PropTypes.string.isRequired,
   deviceId: PropTypes.string.isRequired
-}
+};
 
 function mapStateToProps (state) {
-  const {deviceId} = state.settings
-  const sourcesUrl = createUrl('list-stripe-sources')
-  const apiStore = state.api.apiStore
-  const sourcesResponse = apiStore[sourcesUrl] || {}
-  const {sources: sourcesList} = sourcesResponse
-  let sources
+  const {deviceId} = state.settings;
+  const sourcesUrl = createUrl('list-stripe-sources');
+  const apiStore = state.api.apiStore;
+  const sourcesResponse = apiStore[sourcesUrl] || {};
+  const {sources: sourcesList} = sourcesResponse;
+  let sources;
   if (sourcesList) {
     sources = sourcesList.map((source) => {
-      const {id, brand, last_four: lastFour} = source
-      return {id, brand, lastFour}
-    })
+      const {id, brand, last_four: lastFour} = source;
+      return {id, brand, lastFour};
+    });
   }
 
   return {
     sourcesUrl,
     sources,
     deviceId
-  }
+  };
 }
 
 const mapDispatchToProps = {
   apiExpire,
   apiRefresh,
   apiRequire
-}
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(Cart)
+export default connect(mapStateToProps, mapDispatchToProps)(Cart);

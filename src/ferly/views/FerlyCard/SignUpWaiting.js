@@ -1,9 +1,9 @@
-import React from 'react'
-import {View, Text, Image, Dimensions} from 'react-native'
-import {mailCard} from 'ferly/images/index'
-import PrimaryButton from 'ferly/components/PrimaryButton'
-import Theme from 'ferly/utils/theme'
-import PropTypes from 'prop-types'
+import React from 'react';
+import {View, Text, Image, Dimensions} from 'react-native';
+import {mailCard} from 'ferly/images/index';
+import PrimaryButton from 'ferly/components/PrimaryButton';
+import Theme from 'ferly/utils/theme';
+import PropTypes from 'prop-types';
 
 export default class SignUpWaiting extends React.Component {
   static navigationOptions = {
@@ -11,10 +11,10 @@ export default class SignUpWaiting extends React.Component {
   };
 
   render () {
-    const {navigation} = this.props
-    const {width, height} = Dimensions.get('window')
-    let imageHeight = height / 2
-    let imageWidth = width / 2
+    const {navigation} = this.props;
+    const {width, height} = Dimensions.get('window');
+    let imageHeight = height / 2;
+    let imageWidth = width / 2;
     return (
       <View style={{flex: 1, justifyContent: 'space-between', backgroundColor: 'white'}}>
         <View style={{paddingVertical: 20, paddingTop: 30}} >
@@ -44,10 +44,10 @@ export default class SignUpWaiting extends React.Component {
             onPress={() => navigation.navigate('Wallet')} />
         </View>
       </View>
-    )
+    );
   }
 }
 
 SignUpWaiting.propTypes = {
   navigation: PropTypes.object.isRequired
-}
+};

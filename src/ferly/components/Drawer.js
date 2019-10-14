@@ -1,13 +1,13 @@
-import PropTypes from 'prop-types'
-import React from 'react'
-import TestElement from 'ferly/components/TestElement'
-import Theme from 'ferly/utils/theme'
-import Avatar from 'ferly/components/Avatar'
-import {apiRequire} from 'ferly/store/api'
-import {connect} from 'react-redux'
-import {DrawerItems} from 'react-navigation'
-import {logoHorizontal} from 'ferly/images/index'
-import {urls} from 'ferly/utils/fetch'
+import PropTypes from 'prop-types';
+import React from 'react';
+import TestElement from 'ferly/components/TestElement';
+import Theme from 'ferly/utils/theme';
+import Avatar from 'ferly/components/Avatar';
+import {apiRequire} from 'ferly/store/api';
+import {connect} from 'react-redux';
+import {DrawerItems} from 'react-navigation';
+import {logoHorizontal} from 'ferly/images/index';
+import {urls} from 'ferly/utils/fetch';
 import {
   ScrollView,
   SafeAreaView,
@@ -16,13 +16,13 @@ import {
   Image,
   Text,
   View
-} from 'react-native'
+} from 'react-native';
 
 class DrawerContent extends React.Component {
   render () {
-    const {items, ...otherProps} = this.props
-    const {navigation, firstName, lastName, profileImage} = this.props
-    const filteredItems = items.filter(item => item.key !== 'Profile')
+    const {items, ...otherProps} = this.props;
+    const {navigation, firstName, lastName, profileImage} = this.props;
+    const filteredItems = items.filter(item => item.key !== 'Profile');
     return (
       <ScrollView>
         <SafeAreaView
@@ -46,7 +46,7 @@ class DrawerContent extends React.Component {
             {...otherProps} />
         </SafeAreaView>
       </ScrollView>
-    )
+    );
   }
 }
 
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   image: {width: 90, height: 32, marginTop: 40, marginBottom: 18},
   text: {color: 'white', fontSize: 24, paddingVertical: 18},
   innerContainer: {backgroundColor: Theme.darkBlue, paddingHorizontal: 18}
-})
+});
 
 DrawerContent.propTypes = {
   firstName: PropTypes.string,
@@ -65,25 +65,25 @@ DrawerContent.propTypes = {
   lastName: PropTypes.string,
   navigation: PropTypes.object.isRequired,
   profileImage: PropTypes.string
-}
+};
 
 function mapStateToProps (state) {
-  const apiStore = state.api.apiStore
+  const apiStore = state.api.apiStore;
   const {
     profile_image_url: profileImage,
     first_name: firstName = '',
     last_name: lastName = ''
-  } = apiStore[urls.profile] || {}
+  } = apiStore[urls.profile] || {};
 
   return {
     firstName,
     lastName,
     profileImage
-  }
+  };
 }
 
 const mapDispatchToProps = {
   apiRequire
-}
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(DrawerContent)
+export default connect(mapStateToProps, mapDispatchToProps)(DrawerContent);

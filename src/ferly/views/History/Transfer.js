@@ -1,14 +1,14 @@
-import accounting from 'ferly/utils/accounting'
-import PropTypes from 'prop-types'
-import React from 'react'
-import Avatar from 'ferly/components/Avatar'
-import StoreAvatar from 'ferly/components/StoreAvatar'
-import Theme from 'ferly/utils/theme'
-import {apiRequire} from 'ferly/store/api'
-import {connect} from 'react-redux'
-import {createUrl} from 'ferly/utils/fetch'
-import {View, Text, ScrollView, StyleSheet} from 'react-native'
-import {format as formatDate} from 'date-fns'
+import accounting from 'ferly/utils/accounting';
+import PropTypes from 'prop-types';
+import React from 'react';
+import Avatar from 'ferly/components/Avatar';
+import StoreAvatar from 'ferly/components/StoreAvatar';
+import Theme from 'ferly/utils/theme';
+import {apiRequire} from 'ferly/store/api';
+import {connect} from 'react-redux';
+import {createUrl} from 'ferly/utils/fetch';
+import {View, Text, ScrollView, StyleSheet} from 'react-native';
+import {format as formatDate} from 'date-fns';
 
 export class Transfer extends React.Component {
   static navigationOptions = ({navigation}) => ({
@@ -16,11 +16,11 @@ export class Transfer extends React.Component {
   });
 
   componentDidMount () {
-    this.props.apiRequire(this.props.transferUrl)
+    this.props.apiRequire(this.props.transferUrl);
   }
 
   render () {
-    const {transferDetails} = this.props
+    const {transferDetails} = this.props;
     const {
       amount,
       message,
@@ -33,39 +33,39 @@ export class Transfer extends React.Component {
       convenience_fee: convenienceFee = 0,
       cc_last4: lastFour = '****',
       cc_brand: lowerBrand = ''
-    } = transferDetails
-    const total = parseFloat(amount) + parseFloat(convenienceFee)
-    const brand = lowerBrand.charAt(0).toUpperCase() + lowerBrand.substring(1)
-    const b = timestamp.split(/\D+/)
-    const date = new Date(Date.UTC(b[0], --b[1], b[2], b[3], b[4], b[5]))
+    } = transferDetails;
+    const total = parseFloat(amount) + parseFloat(convenienceFee);
+    const brand = lowerBrand.charAt(0).toUpperCase() + lowerBrand.substring(1);
+    const b = timestamp.split(/\D+/);
+    const date = new Date(Date.UTC(b[0], --b[1], b[2], b[3], b[4], b[5]));
     // React Native doesn't fully support Date.toLocaleString() on Android
     // use date-fns. Expect the JavaScriptCore to be updated in SDK 31.
-    const dateDisplay = formatDate(date, 'MMM D, YYYY h:mm A')
+    const dateDisplay = formatDate(date, 'MMM D, YYYY h:mm A');
 
-    let verb = ''
-    let cp = ''
-    let messageTitle = ''
+    let verb = '';
+    let cp = '';
+    let messageTitle = '';
     switch (transferType) {
       case 'purchase':
-        verb = 'added'
-        cp = ' to your account'
-        break
+        verb = 'added';
+        cp = ' to your account';
+        break;
       case 'send':
-        verb = 'gifted'
-        cp = ` to ${counterParty}`
-        messageTitle = 'Your '
-        break
+        verb = 'gifted';
+        cp = ` to ${counterParty}`;
+        messageTitle = 'Your ';
+        break;
       case 'receive':
-        verb = 'received'
-        cp = ` from ${counterParty}`
-        messageTitle = 'Their '
-        break
+        verb = 'received';
+        cp = ` from ${counterParty}`;
+        messageTitle = 'Their ';
+        break;
       case 'redeem':
-        verb = 'paid'
-        break
+        verb = 'paid';
+        break;
     }
 
-    let counterPartyAvatar
+    let counterPartyAvatar;
     if (transferType === 'send' || transferType === 'receive') {
       counterPartyAvatar = (
         <View style={{marginLeft: -20, zIndex: -1}}>
@@ -74,10 +74,10 @@ export class Transfer extends React.Component {
             firstWord={counterParty}
             pictureUrl={counterPartyProfileImageUrl} />
         </View>
-      )
+      );
     }
 
-    let messageSection
+    let messageSection;
     if (message) {
       messageSection = (
         <View style={styles.section}>
@@ -89,13 +89,13 @@ export class Transfer extends React.Component {
             {message}
           </Text>
         </View>
-      )
+      );
     }
 
-    let purchaseDetailsSection
-    let termsSection
-    let paymentSection
-    let feesSection
+    let purchaseDetailsSection;
+    let termsSection;
+    let paymentSection;
+    let feesSection;
     if (transferType === 'purchase') {
       purchaseDetailsSection = (
         <View style={styles.section}>
@@ -130,7 +130,7 @@ export class Transfer extends React.Component {
             </View>
           </View>
         </View>
-      )
+      );
       termsSection = (
         <View style={styles.section}>
           <Text style={styles.sectionHeader}>Terms</Text>
@@ -153,7 +153,7 @@ export class Transfer extends React.Component {
             </Text>
           </View>
         </View>
-      )
+      );
       paymentSection = (
         <View style={styles.section}>
           <Text style={styles.sectionHeader}>Payment Method</Text>
@@ -164,10 +164,10 @@ export class Transfer extends React.Component {
             </Text>
           </View>
         </View>
-      )
-      const d = new Date()
-      d.setDate(d.getDate() + 1825)
-      const expirationDate = formatDate(d, 'MMM D, YYYY')
+      );
+      const d = new Date();
+      d.setDate(d.getDate() + 1825);
+      const expirationDate = formatDate(d, 'MMM D, YYYY');
       feesSection = (
         <View style={styles.section}>
           <Text style={styles.sectionHeader}>Expiration & Fees</Text>
@@ -190,7 +190,7 @@ export class Transfer extends React.Component {
             </Text>
           </View>
         </View>
-      )
+      );
     }
     return (
       <ScrollView style={{backgroundColor: 'white'}}>
@@ -231,7 +231,7 @@ export class Transfer extends React.Component {
         {feesSection}
         {termsSection}
       </ScrollView>
-    )
+    );
   }
 }
 
@@ -240,29 +240,29 @@ const styles = StyleSheet.create({
   section: {marginTop: 10, paddingHorizontal: 20, padding: 20},
   sectionHeader: {fontSize: 18},
   sectionText: {color: 'darkgray', fontSize: 16}
-})
+});
 
 Transfer.propTypes = {
   apiRequire: PropTypes.func.isRequired,
   transferDetails: PropTypes.object.isRequired,
   transferUrl: PropTypes.string.isRequired,
   navigation: PropTypes.object.isRequired
-}
+};
 
 function mapStateToProps (state, ownProps) {
-  const transfer = ownProps.navigation.state.params
-  const transferUrl = createUrl('transfer', {transfer_id: transfer.id})
-  const apiStore = state.api.apiStore
-  const details = apiStore[transferUrl] || {}
-  const transferDetails = {...transfer, ...details}
+  const transfer = ownProps.navigation.state.params;
+  const transferUrl = createUrl('transfer', {transfer_id: transfer.id});
+  const apiStore = state.api.apiStore;
+  const details = apiStore[transferUrl] || {};
+  const transferDetails = {...transfer, ...details};
   return {
     transferDetails,
     transferUrl
-  }
+  };
 }
 
 const mapDispatchToProps = {
   apiRequire
-}
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(Transfer)
+export default connect(mapStateToProps, mapDispatchToProps)(Transfer);

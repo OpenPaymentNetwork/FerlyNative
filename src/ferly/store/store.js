@@ -1,35 +1,35 @@
-import {createStore, applyMiddleware} from 'redux'
-import {API_REQUIRE, API_REFRESH, apiInject, apiExpire} from 'ferly/store/api'
-import rootReducer from 'ferly/store/rootReducer'
-import {retryFetch} from 'ferly/utils/fetch'
+import {createStore, applyMiddleware} from 'redux';
+import {API_REQUIRE, API_REFRESH, apiInject, apiExpire} from 'ferly/store/api';
+import rootReducer from 'ferly/store/rootReducer';
+import {retryFetch} from 'ferly/utils/fetch';
 // Convert all API_REQUIRE types into API_INJECT types after
 // fetching the data they depend on
 const apiMiddleware = (store) => (next) => (action) => {
-  const {type} = action
+  const {type} = action;
   if (type === API_REQUIRE || type === API_REFRESH) {
-    const state = store.getState()
-    const currentApiStore = state.api.apiStore
-    let deviceId = state.settings.deviceId
+    const state = store.getState();
+    const currentApiStore = state.api.apiStore;
+    let deviceId = state.settings.deviceId;
     if (!deviceId) {
       setTimeout(() => {
-        const state = store.getState()
-        deviceId = state.settings.deviceId
+        const state = store.getState();
+        deviceId = state.settings.deviceId;
         retryFetch(action.url, deviceId)
           .then((response) => response.json())
           .then((responseJson) => {
-            next(apiInject(action.url, responseJson))
+            next(apiInject(action.url, responseJson));
           })
           .catch((error) => {
-            next(apiInject(action.url, error.toString()))
-          })
-      }, 300)
+            next(apiInject(action.url, error.toString()));
+          });
+      }, 300);
     }
 
     // and if the data has expired (add meta to store),
     // and if the data is already being fetched
     if (!currentApiStore.hasOwnProperty(action.url) || type === API_REFRESH) {
       if (type === API_REFRESH) {
-        next(apiExpire(action.url))
+        next(apiExpire(action.url));
       }
       retryFetch(action.url, deviceId, {
         headers: {
@@ -38,22 +38,22 @@ const apiMiddleware = (store) => (next) => (action) => {
       })
         .then((response) => response.json())
         .then((responseJson) => {
-          next(apiInject(action.url, responseJson))
+          next(apiInject(action.url, responseJson));
         })
         .catch((error) => {
-          next(apiInject(action.url, error.toString()))
-        })
+          next(apiInject(action.url, error.toString()));
+        });
     }
   } else {
-    next(action)
+    next(action);
   }
-}
+};
 export default function configureStore () {
   let store = createStore(
     rootReducer,
     applyMiddleware(
       apiMiddleware
     )
-  )
-  return store
+  );
+  return store;
 }

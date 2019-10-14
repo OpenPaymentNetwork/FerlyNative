@@ -1,13 +1,13 @@
-import MapView from 'react-native-maps'
-import PropTypes from 'prop-types'
-import React from 'react'
-import Spinner from 'ferly/components/Spinner'
-import StoreAvatar from 'ferly/components/StoreAvatar'
-import Theme from 'ferly/utils/theme'
-import {apiRequire} from 'ferly/store/api'
-import {connect} from 'react-redux'
-import {createUrl} from 'ferly/utils/fetch'
-import {MaterialIcons} from '@expo/vector-icons'
+import MapView from 'react-native-maps';
+import PropTypes from 'prop-types';
+import React from 'react';
+import Spinner from 'ferly/components/Spinner';
+import StoreAvatar from 'ferly/components/StoreAvatar';
+import Theme from 'ferly/utils/theme';
+import {apiRequire} from 'ferly/store/api';
+import {connect} from 'react-redux';
+import {createUrl} from 'ferly/utils/fetch';
+import {MaterialIcons} from '@expo/vector-icons';
 import {
   View,
   Text,
@@ -15,7 +15,7 @@ import {
   StyleSheet,
   Platform,
   Linking
-} from 'react-native'
+} from 'react-native';
 
 export class Locations extends React.Component {
   static navigationOptions = {
@@ -23,56 +23,56 @@ export class Locations extends React.Component {
   };
 
   constructor (props) {
-    super(props)
-    this.state = {selectedLocation: null}
+    super(props);
+    this.state = {selectedLocation: null};
   }
 
   componentDidMount () {
-    this.props.apiRequire(this.props.locationsUrl)
+    this.props.apiRequire(this.props.locationsUrl);
   }
 
   fitToMarkers = () => {
-    const {locations} = this.props
+    const {locations} = this.props;
     if (locations.length > 0) {
       this.mapview.fitToCoordinates(locations, {
         edgePadding: {top: 100, right: 100, bottom: 100, left: 100},
         animated: false
-      })
+      });
     }
   }
 
   openInMaps = () => {
-    const {selectedLocation} = this.state
-    const {latitude, longitude, title} = selectedLocation
-    const scheme = Platform.OS === 'ios' ? 'maps:0,0?q=' : 'geo:0,0?q='
-    const latLng = `${latitude},${longitude}`
+    const {selectedLocation} = this.state;
+    const {latitude, longitude, title} = selectedLocation;
+    const scheme = Platform.OS === 'ios' ? 'maps:0,0?q=' : 'geo:0,0?q=';
+    const latLng = `${latitude},${longitude}`;
     const url = Platform.select({
       ios: `${scheme}${title}@${latLng}`,
       android: `${scheme}${latLng}(${title})`
-    })
-    Linking.openURL(url)
+    });
+    Linking.openURL(url);
   }
 
   render () {
-    const {locations, loaded} = this.props
-    const {selectedLocation} = this.state
+    const {locations, loaded} = this.props;
+    const {selectedLocation} = this.state;
 
     if (!loaded) {
-      return <Spinner />
+      return <Spinner />;
     }
 
     if (locations.length === 0) {
       return (
         <Text>There are no plottable locations to show</Text>
-      )
+      );
     }
 
-    let selectedDetails
+    let selectedDetails;
     if (selectedLocation != null) {
-      const {params} = this.props.navigation.state
-      const {design} = params
-      const {field_color: fieldColor} = design
-      const {title, address} = selectedLocation
+      const {params} = this.props.navigation.state;
+      const {design} = params;
+      const {field_color: fieldColor} = design;
+      const {title, address} = selectedLocation;
       selectedDetails = (
         <View style={styles.shadow}>
           <View style={[styles.logo, {backgroundColor: `#${fieldColor}`}]} >
@@ -98,7 +98,7 @@ export class Locations extends React.Component {
             </View>
           </View>
         </View>
-      )
+      );
     }
 
     return (
@@ -116,13 +116,13 @@ export class Locations extends React.Component {
                   coordinate={location}
                   onPress={
                     () => this.setState({selectedLocation: location})} />
-              )
+              );
             })
           }
         </MapView>
         {selectedDetails}
       </View>
-    )
+    );
   }
 }
 
@@ -133,7 +133,7 @@ Locations.propTypes = {
   loaded: PropTypes.bool.isRequired,
   locations: PropTypes.array,
   locationsUrl: PropTypes.string.isRequired
-}
+};
 
 const styles = StyleSheet.create({
   shadow: {
@@ -163,15 +163,15 @@ const styles = StyleSheet.create({
   selectionTitle: {fontWeight: 'bold', fontSize: 22, color: Theme.darkBlue},
   selectionOptions: {flexDirection: 'row', justifyContent: 'space-between'},
   selectionAddress: {maxWidth: '80%', fontSize: 16}
-})
+});
 
 function mapStateToProps (state, props) {
-  const {design} = props.navigation.state.params
-  const {id: designId, logo_image_url: imageUrl} = design
-  const locationsUrl = createUrl('locations', {design_id: designId})
-  const apiStore = state.api.apiStore
-  const {locations} = apiStore[locationsUrl] || {}
-  let locationCoordinates = []
+  const {design} = props.navigation.state.params;
+  const {id: designId, logo_image_url: imageUrl} = design;
+  const locationsUrl = createUrl('locations', {design_id: designId});
+  const apiStore = state.api.apiStore;
+  const {locations} = apiStore[locationsUrl] || {};
+  let locationCoordinates = [];
   if (locations) {
     locations.forEach((location, index) => {
       if (location.latitude && location.longitude) {
@@ -180,21 +180,21 @@ function mapStateToProps (state, props) {
           latitude: parseFloat(location.latitude),
           longitude: parseFloat(location.longitude),
           title: location.title
-        }
-        locationCoordinates.push(coordinates)
+        };
+        locationCoordinates.push(coordinates);
       }
-    })
+    });
   }
   return {
     imageUrl,
     loaded: locations !== undefined,
     locationsUrl,
     locations: locationCoordinates
-  }
+  };
 }
 
 const mapDispatchToProps = {
   apiRequire
-}
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(Locations)
+export default connect(mapStateToProps, mapDispatchToProps)(Locations);

@@ -1,46 +1,46 @@
-import Constants from 'expo-constants'
-import PropTypes from 'prop-types'
-import React from 'react'
-import Theme from 'ferly/utils/theme'
-import {apiRequire} from 'ferly/store/api'
-import {connect} from 'react-redux'
-import {CreateAuthSwitch} from 'ferly/navigation'
-import {createUrl} from 'ferly/utils/fetch'
-import {logoWhite} from 'ferly/images/index'
-import {View, Text, Image, AsyncStorage} from 'react-native'
-import {setDeviceId} from 'ferly/store/settings'
+import Constants from 'expo-constants';
+import PropTypes from 'prop-types';
+import React from 'react';
+import Theme from 'ferly/utils/theme';
+import {apiRequire} from 'ferly/store/api';
+import {connect} from 'react-redux';
+import {CreateAuthSwitch} from 'ferly/navigation';
+import {createUrl} from 'ferly/utils/fetch';
+import {logoWhite} from 'ferly/images/index';
+import {View, Text, Image, AsyncStorage} from 'react-native';
+import {setDeviceId} from 'ferly/store/settings';
 
 export class AppEntry extends React.Component {
   componentDidMount () {
-    this.props.dispatch(apiRequire(this.props.isCustomerUrl))
+    this.props.dispatch(apiRequire(this.props.isCustomerUrl));
     this.retrieveData().then((device2) => {
       if (device2 === '') {
-        AsyncStorage.setItem('deviceid', device)
-        device2 = device
+        AsyncStorage.setItem('deviceid', device);
+        device2 = device;
       }
       try {
-        this.props.dispatch(setDeviceId(device2))
+        this.props.dispatch(setDeviceId(device2));
       } catch (error) {
       }
-    })
+    });
   }
 
   retrieveData = async () => {
     try {
-      const deviceId = await AsyncStorage.getItem('deviceid') || ''
+      const deviceId = await AsyncStorage.getItem('deviceid') || '';
       if (deviceId !== '') {
-        device2 = deviceId
+        device2 = deviceId;
       }
-      return device2
+      return device2;
     } catch (error) {
     }
   }
 
   render () {
-    let errorMessage
-    const {auth, hasError} = this.props
+    let errorMessage;
+    const {auth, hasError} = this.props;
     if (hasError) {
-      errorMessage = <Text style={{color: 'red'}}>Connection Error</Text>
+      errorMessage = <Text style={{color: 'red'}}>Connection Error</Text>;
     }
     if (auth === undefined) {
       return (
@@ -54,23 +54,23 @@ export class AppEntry extends React.Component {
           <Image source={logoWhite} style={{height: 140, width: 150}}/>
           {errorMessage}
         </View>
-      )
+      );
     }
-    const Layout = CreateAuthSwitch(auth)
-    return <Layout />
+    const Layout = CreateAuthSwitch(auth);
+    return <Layout />;
   }
 }
 
-var device2 = ''
-let device = makeid(32)
+var device2 = '';
+let device = makeid(32);
 function makeid (length) {
-  var result = ''
-  var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-  var charactersLength = characters.length
+  var result = '';
+  var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var charactersLength = characters.length;
   for (var i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength))
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
   }
-  return result
+  return result;
 }
 
 AppEntry.propTypes = {
@@ -78,24 +78,24 @@ AppEntry.propTypes = {
   auth: PropTypes.bool,
   hasError: PropTypes.bool,
   isCustomerUrl: PropTypes.string.isRequired
-}
+};
 
 function mapStateToProps (state) {
-  const {deviceId} = state.settings
-  const {releaseChannel = 'staging'} = Constants.manifest
+  const {deviceId} = state.settings;
+  const {releaseChannel = 'staging'} = Constants.manifest;
   const isCustomerUrl =
-      createUrl('is-customer', {'expected_env': releaseChannel})
-  const apiStore = state.api.apiStore
-  const isCustomer = apiStore[isCustomerUrl] || {}
-  const {is_customer: auth} = isCustomer
-  const hasError = isCustomer === 'TypeError: Network request failed'
+      createUrl('is-customer', {'expected_env': releaseChannel});
+  const apiStore = state.api.apiStore;
+  const isCustomer = apiStore[isCustomerUrl] || {};
+  const {is_customer: auth} = isCustomer;
+  const hasError = isCustomer === 'TypeError: Network request failed';
   return {
     auth,
     hasError,
     isCustomerUrl,
     idFound: true,
     deviceId
-  }
+  };
 }
 
-export default connect(mapStateToProps)(AppEntry)
+export default connect(mapStateToProps)(AppEntry);

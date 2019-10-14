@@ -1,19 +1,19 @@
 /* eslint-disable react/no-unescaped-entities */
-import StoreAvatar from 'ferly/components/StoreAvatar'
-import SearchBar from 'ferly/components/SearchBar'
-import PropTypes from 'prop-types'
-import React from 'react'
-import TestElement from 'ferly/components/TestElement'
-import {apiRequire} from 'ferly/store/api'
-import {connect} from 'react-redux'
-import {createUrl} from 'ferly/utils/fetch'
+import StoreAvatar from 'ferly/components/StoreAvatar';
+import SearchBar from 'ferly/components/SearchBar';
+import PropTypes from 'prop-types';
+import React from 'react';
+import TestElement from 'ferly/components/TestElement';
+import {apiRequire} from 'ferly/store/api';
+import {connect} from 'react-redux';
+import {createUrl} from 'ferly/utils/fetch';
 import {
   View,
   TouchableOpacity,
   ScrollView,
   Text,
   StyleSheet
-} from 'react-native'
+} from 'react-native';
 
 export class Market extends React.Component {
   static navigationOptions = {
@@ -21,20 +21,20 @@ export class Market extends React.Component {
   };
 
   constructor (props) {
-    super(props)
+    super(props);
     this.state = {
       searchResults: null,
       searchText: ''
-    }
+    };
   }
 
   componentDidMount () {
-    this.props.apiRequire(this.props.designsUrl)
+    this.props.apiRequire(this.props.designsUrl);
   }
 
   onChangeText (text) {
     if (text === '') {
-      this.setState({searchResults: null})
+      this.setState({searchResults: null});
     } else {
       fetch(createUrl('search-market', {query: text}), {
         headers: {
@@ -43,30 +43,30 @@ export class Market extends React.Component {
         .then((response) => response.json())
         .then((json) => {
           if (this.state.searchText === text) { // The customer is done typing.
-            this.setState({searchResults: json.results})
+            this.setState({searchResults: json.results});
           }
-        })
+        });
     }
-    this.setState({searchText: text})
+    this.setState({searchText: text});
   }
 
   render () {
-    const {designs, navigation} = this.props
-    const {searchResults} = this.state
-    let body
+    const {designs, navigation} = this.props;
+    const {searchResults} = this.state;
+    let body;
     if (searchResults && searchResults.length === 0) {
       body = (
         <Text style={styles.noResults}>
           We're sorry, no results found.
         </Text>
-      )
+      );
     } else {
-      const display = searchResults || designs
+      const display = searchResults || designs;
       body = (
         <ScrollView style={{flex: 1}}>
           {
             display.map((design) => {
-              const {title, field_color: fieldColor} = design
+              const {title, field_color: fieldColor} = design;
               return (
                 <TestElement
                   parent={TouchableOpacity}
@@ -89,11 +89,11 @@ export class Market extends React.Component {
                     </View>
                   </View>
                 </TestElement>
-              )
+              );
             })
           }
         </ScrollView>
-      )
+      );
     }
 
     return (
@@ -103,7 +103,7 @@ export class Market extends React.Component {
           onChangeText={this.onChangeText.bind(this)} />
         {body}
       </View>
-    )
+    );
   }
 }
 
@@ -113,7 +113,7 @@ Market.propTypes = {
   designsUrl: PropTypes.string.isRequired,
   navigation: PropTypes.object.isRequired,
   deviceId: PropTypes.string.isRequired
-}
+};
 
 const styles = StyleSheet.create({
   noResults: {paddingHorizontal: 20},
@@ -124,23 +124,23 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 15
   }
-})
+});
 
 function mapStateToProps (state) {
-  const {deviceId} = state.settings
-  const designsUrl = createUrl('list-designs')
-  const apiStore = state.api.apiStore
-  const designs = apiStore[designsUrl] || []
+  const {deviceId} = state.settings;
+  const designsUrl = createUrl('list-designs');
+  const apiStore = state.api.apiStore;
+  const designs = apiStore[designsUrl] || [];
 
   return {
     designsUrl,
     designs,
     deviceId
-  }
+  };
 }
 
 const mapDispatchToProps = {
   apiRequire
-}
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(Market)
+export default connect(mapStateToProps, mapDispatchToProps)(Market);

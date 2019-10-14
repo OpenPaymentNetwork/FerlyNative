@@ -1,12 +1,12 @@
-import Icon from 'react-native-vector-icons/FontAwesome'
-import PropTypes from 'prop-types'
-import React from 'react'
-import TestElement from 'ferly/components/TestElement'
-import Theme from 'ferly/utils/theme'
-import {apiRequire, apiExpire} from 'ferly/store/api'
-import {connect} from 'react-redux'
-import {createUrl, post} from 'ferly/utils/fetch'
-import {StackActions} from 'react-navigation'
+import Icon from 'react-native-vector-icons/FontAwesome';
+import PropTypes from 'prop-types';
+import React from 'react';
+import TestElement from 'ferly/components/TestElement';
+import Theme from 'ferly/utils/theme';
+import {apiRequire, apiExpire} from 'ferly/store/api';
+import {connect} from 'react-redux';
+import {createUrl, post} from 'ferly/utils/fetch';
+import {StackActions} from 'react-navigation';
 import {
   View,
   Text,
@@ -14,8 +14,8 @@ import {
   TouchableOpacity,
   Alert,
   StyleSheet
-} from 'react-native'
-import {format as formatDate} from 'date-fns'
+} from 'react-native';
+import {format as formatDate} from 'date-fns';
 
 export class Invitations extends React.Component {
   static navigationOptions = {
@@ -23,42 +23,42 @@ export class Invitations extends React.Component {
   }
 
   constructor (props) {
-    super(props)
+    super(props);
     this.state = {
       deleting: false
-    }
+    };
   }
 
   componentDidMount () {
-    this.props.apiRequire(this.props.invitationsUrl)
+    this.props.apiRequire(this.props.invitationsUrl);
   }
 
   deleteInvite (invite) {
-    this.setState({deleting: true})
+    this.setState({deleting: true});
     post('delete-invitation', this.props.deviceId, {invite_id: invite.id.toString()})
       .then((response) => response.json())
       .then((json) => {
         if (Object.keys(json).length === 0) {
-          this.props.apiExpire(this.props.invitationsUrl)
+          this.props.apiExpire(this.props.invitationsUrl);
           const resetAction = StackActions.reset({
             index: 0,
             actions: [StackActions.push({routeName: 'Invitations'})]
-          })
-          this.props.navigation.dispatch(resetAction)
+          });
+          this.props.navigation.dispatch(resetAction);
           Alert.alert('Deleted',
-            `Your invitation to ${invite.recipient} has been deleted.`)
+            `Your invitation to ${invite.recipient} has been deleted.`);
         } else {
-          this.setState({deleting: false})
+          this.setState({deleting: false});
         }
-      })
+      });
   }
 
   renderInvite (invite) {
-    const b = invite.created.split(/\D+/)
-    const date = new Date(Date.UTC(b[0], --b[1], b[2], b[3], b[4], b[5]))
+    const b = invite.created.split(/\D+/);
+    const date = new Date(Date.UTC(b[0], --b[1], b[2], b[3], b[4], b[5]));
     // React Native doesn't fully support Date.toLocaleString() on Android
     // use date-fns. Expect the JavaScriptCore to be updated in SDK 31.
-    const dateDisplay = formatDate(date, 'MMM D, YYYY h:mm A')
+    const dateDisplay = formatDate(date, 'MMM D, YYYY h:mm A');
     return (
       <TestElement
         parent={View}
@@ -88,27 +88,27 @@ export class Invitations extends React.Component {
           </TouchableOpacity>
         </View>
       </TestElement>
-    )
+    );
   }
 
   render () {
-    const {pending, navigation} = this.props
+    const {pending, navigation} = this.props;
 
-    let renderedPending
+    let renderedPending;
     if (pending && pending.length > 0) {
       renderedPending = (
         <View style={styles.pendingTitleContainer}>
           <Text style={styles.pendingTitle}>Pending Invitations</Text>
           {pending.map((invite) => this.renderInvite(invite))}
         </View>
-      )
+      );
     }
 
     const addIcon = (
       <View style={styles.addIconContainer}>
         <Icon name='plus' color="white" size={16} />
       </View>
-    )
+    );
 
     return (
       <View style={{flex: 1, backgroundColor: 'white'}}>
@@ -130,7 +130,7 @@ export class Invitations extends React.Component {
           {renderedPending}
         </ScrollView>
       </View>
-    )
+    );
   }
 }
 
@@ -194,7 +194,7 @@ const styles = StyleSheet.create({
   },
   pendingTitle: {color: Theme.darkBlue, fontSize: 22, paddingVertical: 12},
   recipientText: {fontSize: 18, color: Theme.darkBlue}
-})
+});
 
 Invitations.propTypes = {
   apiExpire: PropTypes.func.isRequired,
@@ -203,24 +203,24 @@ Invitations.propTypes = {
   navigation: PropTypes.object.isRequired,
   pending: PropTypes.array,
   deviceId: PropTypes.string.isRequired
-}
+};
 
 function mapStateToProps (state) {
-  const {deviceId} = state.settings
-  const invitationsUrl = createUrl('existing-invitations', {status: 'pending'})
-  const apiStore = state.api.apiStore
-  const {results: pending = []} = apiStore[invitationsUrl] || {}
+  const {deviceId} = state.settings;
+  const invitationsUrl = createUrl('existing-invitations', {status: 'pending'});
+  const apiStore = state.api.apiStore;
+  const {results: pending = []} = apiStore[invitationsUrl] || {};
 
   return {
     invitationsUrl,
     pending,
     deviceId
-  }
+  };
 }
 
 const mapDispatchToProps = {
   apiExpire,
   apiRequire
-}
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(Invitations)
+export default connect(mapStateToProps, mapDispatchToProps)(Invitations);

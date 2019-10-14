@@ -1,34 +1,34 @@
-import PropTypes from 'prop-types'
-import React from 'react'
-import ReCaptcha from 'react-native-recaptcha-v3'
-import {apiRequire} from 'ferly/store/api'
-import {connect} from 'react-redux'
-import {createUrl} from 'ferly/utils/fetch'
+import PropTypes from 'prop-types';
+import React from 'react';
+import ReCaptcha from 'react-native-recaptcha-v3';
+import {apiRequire} from 'ferly/store/api';
+import {connect} from 'react-redux';
+import {createUrl} from 'ferly/utils/fetch';
 
 export class Recaptcha extends React.Component {
   componentDidMount () {
-    const {apiRequire, recaptchaUrl, bypass, onExecute} = this.props
-    apiRequire(recaptchaUrl)
+    const {apiRequire, recaptchaUrl, bypass, onExecute} = this.props;
+    apiRequire(recaptchaUrl);
     if (onExecute && bypass) {
-      onExecute(bypass)
+      onExecute(bypass);
     }
   }
 
   componentDidUpdate (prevProps, prevState) {
-    const {bypass, onExecute} = this.props
+    const {bypass, onExecute} = this.props;
     if (!prevProps.bypass && bypass) {
-      onExecute(bypass)
+      onExecute(bypass);
     }
   }
 
   onExecute (response) {
-    this.props.onExecute(this.props.bypass || response)
+    this.props.onExecute(this.props.bypass || response);
   }
 
   render () {
-    const {sitekey, action, bypass} = this.props
+    const {sitekey, action, bypass} = this.props;
     if (!sitekey || bypass) {
-      return null
+      return null;
     }
     return (
       <ReCaptcha
@@ -42,7 +42,7 @@ export class Recaptcha extends React.Component {
         siteKey={sitekey}
         onExecute={(response) => this.onExecute(response)}
       />
-    )
+    );
   }
 }
 
@@ -53,24 +53,24 @@ Recaptcha.propTypes = {
   onExecute: PropTypes.func.isRequired,
   recaptchaUrl: PropTypes.string.isRequired,
   sitekey: PropTypes.string
-}
+};
 
 function mapStateToProps (state) {
-  const recaptchaUrl = createUrl('recaptcha-sitekey')
-  const apiStore = state.api.apiStore
-  const recaptchaInfo = apiStore[recaptchaUrl] || {}
-  const {sitekey} = recaptchaInfo
-  const bypass = recaptchaInfo.captcha_bypass
+  const recaptchaUrl = createUrl('recaptcha-sitekey');
+  const apiStore = state.api.apiStore;
+  const recaptchaInfo = apiStore[recaptchaUrl] || {};
+  const {sitekey} = recaptchaInfo;
+  const bypass = recaptchaInfo.captcha_bypass;
 
   return {
     recaptchaUrl,
     sitekey,
     bypass
-  }
+  };
 }
 
 const mapDispatchToProps = {
   apiRequire
-}
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(Recaptcha)
+export default connect(mapStateToProps, mapDispatchToProps)(Recaptcha);

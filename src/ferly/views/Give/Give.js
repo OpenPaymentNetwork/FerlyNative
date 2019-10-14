@@ -1,14 +1,14 @@
-import accounting from 'ferly/utils/accounting'
-import PrimaryButton from 'ferly/components/PrimaryButton'
-import PropTypes from 'prop-types'
-import React from 'react'
-import SimpleCurrencyInput from 'ferly/components/SimpleCurrencyInput'
-import Spinner from 'ferly/components/Spinner'
-import Theme from 'ferly/utils/theme'
-import {apiExpire, apiRequire} from 'ferly/store/api'
-import {connect} from 'react-redux'
-import {post, urls} from 'ferly/utils/fetch'
-import {StackActions} from 'react-navigation'
+import accounting from 'ferly/utils/accounting';
+import PrimaryButton from 'ferly/components/PrimaryButton';
+import PropTypes from 'prop-types';
+import React from 'react';
+import SimpleCurrencyInput from 'ferly/components/SimpleCurrencyInput';
+import Spinner from 'ferly/components/Spinner';
+import Theme from 'ferly/utils/theme';
+import {apiExpire, apiRequire} from 'ferly/store/api';
+import {connect} from 'react-redux';
+import {post, urls} from 'ferly/utils/fetch';
+import {StackActions} from 'react-navigation';
 import {
   Alert,
   StyleSheet,
@@ -16,7 +16,7 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   View
-} from 'react-native'
+} from 'react-native';
 
 export class Give extends React.Component {
   static navigationOptions = {
@@ -24,76 +24,76 @@ export class Give extends React.Component {
   };
 
   constructor (props) {
-    super(props)
-    this.maxMessageLength = 400
-    this.state = {amount: 0, error: '', submitting: false, message: ''}
+    super(props);
+    this.maxMessageLength = 400;
+    this.state = {amount: 0, error: '', submitting: false, message: ''};
   }
 
   componentDidMount () {
-    this.props.apiRequire(urls.profile)
+    this.props.apiRequire(urls.profile);
   }
 
   send () {
-    const {navigation, apiExpire} = this.props
-    const params = navigation.state.params
-    const {design, customer} = params
-    const {title} = design
-    const {first_name: firstName, last_name: lastName} = customer
-    const {amount, message} = this.state
-    const formatted = accounting.formatMoney(parseFloat(amount))
+    const {navigation, apiExpire} = this.props;
+    const params = navigation.state.params;
+    const {design, customer} = params;
+    const {title} = design;
+    const {first_name: firstName, last_name: lastName} = customer;
+    const {amount, message} = this.state;
+    const formatted = accounting.formatMoney(parseFloat(amount));
 
     const postParams = {
       recipient_id: customer.id.toString(),
       amount: amount,
       design_id: design.id.toString(),
       message: message
-    }
+    };
 
-    this.setState({submitting: true})
+    this.setState({submitting: true});
     post('send', this.props.deviceId, postParams)
       .then((response) => response.json())
       .then((json) => {
         if (Object.keys(json).length === 0) {
-          apiExpire(urls.history)
-          apiExpire(urls.profile)
+          apiExpire(urls.history);
+          apiExpire(urls.profile);
           const resetAction = StackActions.reset({
             index: 0,
             actions: [StackActions.push({routeName: 'Home'})]
-          })
-          navigation.dispatch(resetAction)
+          });
+          navigation.dispatch(resetAction);
           Alert.alert(
             'Complete!',
-            `You gifted ${formatted} ${title} to ${firstName} ${lastName}.`)
+            `You gifted ${formatted} ${title} to ${firstName} ${lastName}.`);
         } else {
-          const error = json.invalid['amounts.0'] || json.invalid['amount']
-          this.setState({error: error, amount: 0, submitting: false})
+          const error = json.invalid['amounts.0'] || json.invalid['amount'];
+          this.setState({error: error, amount: 0, submitting: false});
         }
-      })
+      });
   }
 
   onChange (newAmount) {
-    this.setState({amount: newAmount})
+    this.setState({amount: newAmount});
   }
 
   render () {
-    const params = this.props.navigation.state.params
-    const {design} = params
-    const {amount, submitting, error, message} = this.state
-    const amounts = this.props.amounts || []
-    const fieldValue = accounting.formatMoney(parseFloat(amount))
+    const params = this.props.navigation.state.params;
+    const {design} = params;
+    const {amount, submitting, error, message} = this.state;
+    const amounts = this.props.amounts || [];
+    const fieldValue = accounting.formatMoney(parseFloat(amount));
 
     const found = amounts.find((cashRow) => {
-      return cashRow.id === design.id
-    })
+      return cashRow.id === design.id;
+    });
 
-    const foundAmount = found ? found.amount : 0
-    const formatted = accounting.formatMoney(parseFloat(foundAmount))
+    const foundAmount = found ? found.amount : 0;
+    const formatted = accounting.formatMoney(parseFloat(foundAmount));
 
     const counter = (
       <Text style={{color: 'lightgray'}}>
         {`${message.length}/${this.maxMessageLength}`}
       </Text>
-    )
+    );
 
     return (
       <View style={{flex: 1, backgroundColor: 'white'}}>
@@ -142,7 +142,7 @@ export class Give extends React.Component {
           onPress={this.send.bind(this)}
         />
       </View>
-    )
+    );
   }
 }
 
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
     fontSize: 22
   },
   messageTitle: {fontSize: 14, color: Theme.lightBlue, marginBottom: 8}
-})
+});
 
 Give.propTypes = {
   amounts: PropTypes.array,
@@ -178,22 +178,22 @@ Give.propTypes = {
   apiRequire: PropTypes.func.isRequired,
   navigation: PropTypes.object.isRequired,
   deviceId: PropTypes.string.isRequired
-}
+};
 
 function mapStateToProps (state) {
-  const {deviceId} = state.settings
-  const apiStore = state.api.apiStore
-  const {amounts} = apiStore[urls.profile] || {}
+  const {deviceId} = state.settings;
+  const apiStore = state.api.apiStore;
+  const {amounts} = apiStore[urls.profile] || {};
 
   return {
     amounts,
     deviceId
-  }
+  };
 }
 
 const mapDispatchToProps = {
   apiExpire,
   apiRequire
-}
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(Give)
+export default connect(mapStateToProps, mapDispatchToProps)(Give);

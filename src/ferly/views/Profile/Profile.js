@@ -1,16 +1,16 @@
-import Avatar from 'ferly/components/Avatar'
-import Icon from 'react-native-vector-icons/FontAwesome'
-import PrimaryButton from 'ferly/components/PrimaryButton'
-import ProfilePicturePicker from 'ferly/views/Profile/ProfilePicturePicker'
-import PropTypes from 'prop-types'
-import React from 'react'
-import Spinner from 'ferly/components/Spinner'
-import TestElement from 'ferly/components/TestElement'
-import Theme from 'ferly/utils/theme'
-import {apiRequire, apiExpire} from 'ferly/store/api'
-import {connect} from 'react-redux'
-import {createUrl, post, urls} from 'ferly/utils/fetch'
-import {StackActions} from 'react-navigation'
+import Avatar from 'ferly/components/Avatar';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import PrimaryButton from 'ferly/components/PrimaryButton';
+import ProfilePicturePicker from 'ferly/views/Profile/ProfilePicturePicker';
+import PropTypes from 'prop-types';
+import React from 'react';
+import Spinner from 'ferly/components/Spinner';
+import TestElement from 'ferly/components/TestElement';
+import Theme from 'ferly/utils/theme';
+import {apiRequire, apiExpire} from 'ferly/store/api';
+import {connect} from 'react-redux';
+import {createUrl, post, urls} from 'ferly/utils/fetch';
+import {StackActions} from 'react-navigation';
 import {
   View,
   Text,
@@ -19,7 +19,7 @@ import {
   TextInput,
   KeyboardAvoidingView,
   ScrollView
-} from 'react-native'
+} from 'react-native';
 
 class Profile extends React.Component {
   static navigationOptions = {
@@ -27,31 +27,31 @@ class Profile extends React.Component {
   };
 
   constructor (props) {
-    super(props)
-    const {firstName, lastName, username} = props
+    super(props);
+    const {firstName, lastName, username} = props;
     this.state = {
       editing: false,
       submitting: false,
       form: {firstName, lastName, username},
       invalid: {},
       image: ''
-    }
+    };
   }
 
   componentDidMount () {
-    this.props.apiRequire(urls.profile)
+    this.props.apiRequire(urls.profile);
   }
 
   updateProfileImage () {
-    const {image} = this.state
-    let uriParts = image.split('.')
-    let fileType = uriParts[uriParts.length - 1]
-    const formData = new FormData()
+    const {image} = this.state;
+    let uriParts = image.split('.');
+    let fileType = uriParts[uriParts.length - 1];
+    const formData = new FormData();
     formData.append('image', {
       uri: image,
       name: `photo.${fileType}`,
       type: `image/${fileType}`
-    })
+    });
     let options = {
       method: 'POST',
       body: formData,
@@ -60,44 +60,44 @@ class Profile extends React.Component {
         'Content-Type': 'multipart/form-data',
         Authorization: 'Bearer ' + this.props.deviceId
       }
-    }
-    return fetch(createUrl('upload-profile-image'), options)
+    };
+    return fetch(createUrl('upload-profile-image'), options);
   }
 
   updateProfileInfo () {
-    const form = this.state.form
+    const form = this.state.form;
     const postParams = {
       first_name: form.firstName,
       last_name: form.lastName,
       username: form.username
-    }
-    return post('edit-profile', this.props.deviceId, postParams)
+    };
+    return post('edit-profile', this.props.deviceId, postParams);
   }
 
   onSuccessfulEdit () {
-    const {apiExpire, navigation} = this.props
-    apiExpire(urls.profile)
+    const {apiExpire, navigation} = this.props;
+    apiExpire(urls.profile);
     const resetAction = StackActions.reset({
       index: 0,
       actions: [StackActions.push({routeName: 'Profile'})]
-    })
-    navigation.dispatch(resetAction)
+    });
+    navigation.dispatch(resetAction);
   }
 
   formSubmit () {
-    const {firstName, lastName, username} = this.props
-    const {form, image} = this.state
+    const {firstName, lastName, username} = this.props;
+    const {form, image} = this.state;
     const {
       firstName: formFirstName,
       lastName: formLastName,
       username: formUsername
-    } = form
+    } = form;
     const formChanged = (
       firstName !== formFirstName ||
       lastName !== formLastName ||
-      username !== formUsername)
-    const imageChanged = image !== ''
-    this.setState({submitting: true})
+      username !== formUsername);
+    const imageChanged = image !== '';
+    this.setState({submitting: true});
     if (formChanged) {
       this.updateProfileInfo()
         .then((response) => response.json())
@@ -107,69 +107,69 @@ class Profile extends React.Component {
               this.updateProfileImage()
                 .then((response) => response.json())
                 .then((json) => {
-                  this.onSuccessfulEdit()
-                })
+                  this.onSuccessfulEdit();
+                });
             } else {
-              this.onSuccessfulEdit()
+              this.onSuccessfulEdit();
             }
           } else {
-            this.setState({submitting: false})
+            this.setState({submitting: false});
           }
-        })
+        });
     } else if (imageChanged) {
       this.updateProfileImage()
         .then((response) => response.json())
         .then((json) => {
-          this.onSuccessfulEdit()
-        })
+          this.onSuccessfulEdit();
+        });
     }
   }
 
   validateResponse (responseJson) {
     if (responseJson.invalid) {
-      this.setState({invalid: responseJson.invalid})
-      return false
+      this.setState({invalid: responseJson.invalid});
+      return false;
     } else if (responseJson.error === 'existing_username') {
-      this.setState({invalid: {username: 'Username already taken'}})
-      return false
+      this.setState({invalid: {username: 'Username already taken'}});
+      return false;
     } else {
-      return true
+      return true;
     }
   }
 
   invalidUsernameMessage (username) {
-    let msg
+    let msg;
     if (username.length < 4 || username.length > 20) {
-      msg = 'Must be 4-20 characters long.'
+      msg = 'Must be 4-20 characters long.';
     } else if (!username.charAt(0).match('^[a-zA-Z]$')) {
-      msg = 'Must start with a letter.'
+      msg = 'Must start with a letter.';
     } else if (!username.match('^[0-9a-zA-Z.]+$')) {
-      msg = 'Must contain only letters, numbers, and periods.'
+      msg = 'Must contain only letters, numbers, and periods.';
     }
-    return msg
+    return msg;
   }
 
   validateUsername (username) {
-    let msg = this.invalidUsernameMessage(username)
+    let msg = this.invalidUsernameMessage(username);
     if (msg) {
-      this.setState({form: {username: username}, invalid: {username: msg}})
+      this.setState({form: {username: username}, invalid: {username: msg}});
     } else {
-      const newInvalid = Object.assign({}, this.state.invalid)
-      delete newInvalid.username
-      this.setState({invalid: newInvalid})
+      const newInvalid = Object.assign({}, this.state.invalid);
+      delete newInvalid.username;
+      this.setState({invalid: newInvalid});
     }
   }
 
   renderPage () {
-    const {firstName, lastName, username, profileImage} = this.props
-    const {editing, submitting, invalid} = this.state
+    const {firstName, lastName, username, profileImage} = this.props;
+    const {editing, submitting, invalid} = this.state;
 
     const avatarProps = {
       size: 110,
       firstWord: firstName,
       secondWord: lastName,
       pictureUrl: profileImage
-    }
+    };
 
     if (!editing) {
       return (
@@ -178,21 +178,21 @@ class Profile extends React.Component {
           <Text style={styles.name}>{firstName + ' ' + lastName}</Text>
           <Text style={styles.username}>{'@' + username}</Text>
         </View>
-      )
+      );
     } else {
-      const {form, image} = this.state
+      const {form, image} = this.state;
       const {
         firstName: formFirstName,
         lastName: formLastName,
         username: formUsername
-      } = form
+      } = form;
 
       const formChanged = (
         firstName !== formFirstName ||
         lastName !== formLastName ||
-        username !== formUsername)
+        username !== formUsername);
 
-      const imageChanged = image !== ''
+      const imageChanged = image !== '';
 
       return (
         <View
@@ -212,7 +212,7 @@ class Profile extends React.Component {
                 style={styles.field}
                 underlineColorAndroid={'transparent'}
                 onChangeText={(text) => {
-                  this.setState({form: Object.assign(form, {firstName: text})})
+                  this.setState({form: Object.assign(form, {firstName: text})});
                 }}
                 value={formFirstName} />
               {
@@ -225,7 +225,7 @@ class Profile extends React.Component {
                 style={styles.field}
                 underlineColorAndroid={'transparent'}
                 onChangeText={(text) => {
-                  this.setState({form: Object.assign(form, {lastName: text})})
+                  this.setState({form: Object.assign(form, {lastName: text})});
                 }}
                 value={formLastName} />
               {
@@ -238,8 +238,8 @@ class Profile extends React.Component {
                 style={styles.field}
                 underlineColorAndroid={'transparent'}
                 onChangeText={(text) => {
-                  this.validateUsername(text)
-                  this.setState({form: Object.assign(form, {username: text})})
+                  this.validateUsername(text);
+                  this.setState({form: Object.assign(form, {username: text})});
                 }}
                 value={formUsername} />
               {
@@ -262,26 +262,26 @@ class Profile extends React.Component {
             color={Theme.lightBlue}
             onPress={() => this.formSubmit()} />
         </View>
-      )
+      );
     }
   }
 
   toggleEdit () {
-    const {editing} = this.state
-    const {firstName, lastName, username} = this.props
-    const refreshedFormState = {firstName, lastName, username}
-    this.setState({editing: !editing, form: refreshedFormState, invalid: {}})
+    const {editing} = this.state;
+    const {firstName, lastName, username} = this.props;
+    const refreshedFormState = {firstName, lastName, username};
+    this.setState({editing: !editing, form: refreshedFormState, invalid: {}});
   }
 
   onImageChange (image) {
-    this.setState({image: image})
+    this.setState({image: image});
   }
 
   render () {
-    const {editing} = this.state
+    const {editing} = this.state;
 
     if (!this.props.firstName) {
-      return <Spinner />
+      return <Spinner />;
     }
 
     return (
@@ -298,7 +298,7 @@ class Profile extends React.Component {
             size={24} />
         </TestElement>
       </View>
-    )
+    );
   }
 }
 
@@ -338,7 +338,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     width: '100%'
   }
-})
+});
 
 Profile.propTypes = {
   apiExpire: PropTypes.func.isRequired,
@@ -349,18 +349,18 @@ Profile.propTypes = {
   profileImage: PropTypes.string,
   username: PropTypes.string,
   deviceId: PropTypes.string.isRequired
-}
+};
 
 function mapStateToProps (state) {
-  const {deviceId} = state.settings
-  const apiStore = state.api.apiStore
+  const {deviceId} = state.settings;
+  const apiStore = state.api.apiStore;
   const {
     amounts,
     username,
     profile_image_url: profileImage,
     first_name: firstName,
     last_name: lastName
-  } = apiStore[urls.profile] || {}
+  } = apiStore[urls.profile] || {};
 
   return {
     amounts,
@@ -369,12 +369,12 @@ function mapStateToProps (state) {
     username,
     profileImage,
     deviceId
-  }
+  };
 }
 
 const mapDispatchToProps = {
   apiExpire,
   apiRequire
-}
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(Profile)
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);

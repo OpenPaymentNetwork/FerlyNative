@@ -1,11 +1,11 @@
-import HistoryEntry from 'ferly/components/HistoryEntry'
-import Spinner from 'ferly/components/Spinner'
-import PropTypes from 'prop-types'
-import React from 'react'
-import {View, FlatList, Text} from 'react-native'
-import {apiRequire, apiInject, apiRefresh} from 'ferly/store/api'
-import {connect} from 'react-redux'
-import {urls} from 'ferly/utils/fetch'
+import HistoryEntry from 'ferly/components/HistoryEntry';
+import Spinner from 'ferly/components/Spinner';
+import PropTypes from 'prop-types';
+import React from 'react';
+import {View, FlatList, Text} from 'react-native';
+import {apiRequire, apiInject, apiRefresh} from 'ferly/store/api';
+import {connect} from 'react-redux';
+import {urls} from 'ferly/utils/fetch';
 
 export class History extends React.Component {
   static navigationOptions = {
@@ -13,45 +13,45 @@ export class History extends React.Component {
   };
 
   constructor (props) {
-    super(props)
+    super(props);
     this.state = {
       updating: false
-    }
+    };
   }
 
   componentDidMount () {
-    this.props.apiRequire(urls.history)
+    this.props.apiRequire(urls.history);
   }
 
   loadMore () {
-    const {hasMore, history} = this.props
-    const {updating} = this.state
-    this.setState({updating: true})
+    const {hasMore, history} = this.props;
+    const {updating} = this.state;
+    this.setState({updating: true});
     if (!hasMore || updating) {
-      return
+      return;
     }
-    const nextUrl = `${urls.history}&offset=${history.length}`
+    const nextUrl = `${urls.history}&offset=${history.length}`;
     fetch(nextUrl, {
       headers: {
         Authorization: 'Bearer ' + this.props.deviceId
       }})
       .then((response) => response.json())
       .then((responseJson) => {
-        const newHistory = history.concat(responseJson.history)
+        const newHistory = history.concat(responseJson.history);
         this.props.apiInject(urls.history, {
           'history': newHistory,
           'has_more': responseJson.has_more
-        })
+        });
 
         // TODO don't set state here in case they navigate away while loading
-        this.setState({updating: false})
-      })
+        this.setState({updating: false});
+      });
   }
 
   render () {
-    const {history, navigation} = this.props
+    const {history, navigation} = this.props;
     if (!history) {
-      return <Spinner />
+      return <Spinner />;
     }
     return (
       <View>
@@ -71,7 +71,7 @@ export class History extends React.Component {
               <HistoryEntry navigation={navigation} entry={entry.item} />
             )} />
       </View>
-    )
+    );
   }
 }
 
@@ -83,25 +83,25 @@ History.propTypes = {
   navigation: PropTypes.object.isRequired,
   history: PropTypes.array,
   deviceId: PropTypes.string.isRequired
-}
+};
 
 function mapStateToProps (state) {
-  const {deviceId} = state.settings
-  const apiStore = state.api.apiStore
-  const historyResponse = apiStore[urls.history] || {}
-  const history = historyResponse.history
-  const hasMore = historyResponse.has_more
+  const {deviceId} = state.settings;
+  const apiStore = state.api.apiStore;
+  const historyResponse = apiStore[urls.history] || {};
+  const history = historyResponse.history;
+  const hasMore = historyResponse.has_more;
   return {
     hasMore,
     history,
     deviceId
-  }
+  };
 }
 
 const mapDispatchToProps = {
   apiInject,
   apiRequire,
   apiRefresh
-}
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(History)
+export default connect(mapStateToProps, mapDispatchToProps)(History);

@@ -1,10 +1,10 @@
-import PrimaryButton from 'ferly/components/PrimaryButton'
-import PropTypes from 'prop-types'
-import React from 'react'
-import Theme from 'ferly/utils/theme'
-import {connect} from 'react-redux'
-import {post} from 'ferly/utils/fetch'
-import {View, Text, TextInput, StyleSheet, TouchableOpacity} from 'react-native'
+import PrimaryButton from 'ferly/components/PrimaryButton';
+import PropTypes from 'prop-types';
+import React from 'react';
+import Theme from 'ferly/utils/theme';
+import {connect} from 'react-redux';
+import {post} from 'ferly/utils/fetch';
+import {View, Text, TextInput, StyleSheet, TouchableOpacity} from 'react-native';
 
 export class RecoveryChannel extends React.Component {
   static navigationOptions = {
@@ -12,29 +12,29 @@ export class RecoveryChannel extends React.Component {
   };
 
   constructor (props) {
-    super(props)
+    super(props);
     this.state = {
       fieldValue: '',
       invalid: '',
       submitting: false
-    }
+    };
   }
 
   handleSubmit () {
-    const {navigation} = this.props
-    const {fieldValue} = this.state
+    const {navigation} = this.props;
+    const {fieldValue} = this.state;
 
-    this.setState({'submitting': true, invalid: ''})
+    this.setState({'submitting': true, invalid: ''});
 
     post('recover', this.props.deviceId, {'login': fieldValue})
       .then((response) => response.json())
       .then((responseJson) => {
         if (this.validate(responseJson)) {
-          this.setState({submitting: false})
-          const codeLength = responseJson.code_length
-          let code = ''
+          this.setState({submitting: false});
+          const codeLength = responseJson.code_length;
+          let code = '';
           if (responseJson.revealed_codes) {
-            code = responseJson.revealed_codes[0].substring(0, codeLength)
+            code = responseJson.revealed_codes[0].substring(0, codeLength);
           }
           const navParams = {
             attemptPath: responseJson.attempt_path,
@@ -43,24 +43,24 @@ export class RecoveryChannel extends React.Component {
             code: code,
             loginType: responseJson.login_type,
             codeLength: codeLength
-          }
-          navigation.navigate('RecoveryCode', navParams)
+          };
+          navigation.navigate('RecoveryCode', navParams);
         }
-      })
+      });
   }
 
   validate (json) {
     if (json.invalid) {
-      this.setState({'invalid': json.invalid, submitting: false})
-      return false
+      this.setState({'invalid': json.invalid, submitting: false});
+      return false;
     } else if (json.error) {
-      return false
+      return false;
     }
-    return true
+    return true;
   }
 
   renderRecoveryOption () {
-    const {navigation} = this.props
+    const {navigation} = this.props;
     return (
       <View style={{
         width: '100%',
@@ -77,11 +77,11 @@ export class RecoveryChannel extends React.Component {
             paddingLeft: 5}}>Sign Up</Text>
         </TouchableOpacity>
       </View>
-    )
+    );
   }
 
   render () {
-    const {fieldValue, invalid, submitting} = this.state
+    const {fieldValue, invalid, submitting} = this.state;
 
     return (
       <View style={{
@@ -121,27 +121,27 @@ export class RecoveryChannel extends React.Component {
           {this.renderRecoveryOption()}
         </View>
       </View>
-    )
+    );
   }
 }
 
 RecoveryChannel.propTypes = {
   navigation: PropTypes.object.isRequired,
   deviceId: PropTypes.string.isRequired
-}
+};
 
 const styles = StyleSheet.create({
   error: {
     fontSize: 16,
     color: 'red'
   }
-})
+});
 
 function mapStateToProps (state) {
-  const {deviceId} = state.settings
+  const {deviceId} = state.settings;
   return {
     deviceId
-  }
+  };
 }
 
-export default connect(mapStateToProps)(RecoveryChannel)
+export default connect(mapStateToProps)(RecoveryChannel);

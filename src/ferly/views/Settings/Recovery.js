@@ -1,12 +1,12 @@
-import PropTypes from 'prop-types'
-import React from 'react'
-import Spinner from 'ferly/components/Spinner'
-import TestElement from 'ferly/components/TestElement'
-import UIDController from 'ferly/views/Settings/UIDController'
-import {apiRequire} from 'ferly/store/api'
-import {connect} from 'react-redux'
-import {urls} from 'ferly/utils/fetch'
-import {View, Text, ScrollView, KeyboardAvoidingView} from 'react-native'
+import PropTypes from 'prop-types';
+import React from 'react';
+import Spinner from 'ferly/components/Spinner';
+import TestElement from 'ferly/components/TestElement';
+import UIDController from 'ferly/views/Settings/UIDController';
+import {apiRequire} from 'ferly/store/api';
+import {connect} from 'react-redux';
+import {urls} from 'ferly/utils/fetch';
+import {View, Text, ScrollView, KeyboardAvoidingView} from 'react-native';
 
 export class Recovery extends React.Component {
   static navigationOptions = {
@@ -14,15 +14,15 @@ export class Recovery extends React.Component {
   };
 
   componentDidMount () {
-    this.props.apiRequire(urls.profile)
+    this.props.apiRequire(urls.profile);
   }
 
   render () {
-    const {email, phone, navigation, myProfile} = this.props
+    const {email, phone, navigation, myProfile} = this.props;
 
-    let form
+    let form;
     if (Object.keys(myProfile).length === 0) {
-      form = <Spinner />
+      form = <Spinner />;
     } else {
       form = (
         <View>
@@ -38,15 +38,15 @@ export class Recovery extends React.Component {
             <UIDController type="phone" uid={phone} navigation={navigation} />
           </TestElement>
         </View>
-      )
+      );
     }
 
     const message = `If you replace your phone or uninstall the Ferly app, ` +
       `you'll need to recover your account. Add an email address or phone ` +
-      `number we can verify and use for account recovery.`
+      `number we can verify and use for account recovery.`;
     const note = `If you don't enter an email address or phone number, your ` +
       `account cannot be recovered, which may result in the loss of gift ` +
-      `value you hold.`
+      `value you hold.`;
     return (
       <KeyboardAvoidingView
         style={{flex: 1, backgroundColor: 'white'}}
@@ -63,7 +63,7 @@ export class Recovery extends React.Component {
           {form}
         </ScrollView>
       </KeyboardAvoidingView>
-    )
+    );
   }
 }
 
@@ -73,32 +73,32 @@ Recovery.propTypes = {
   myProfile: PropTypes.object,
   phone: PropTypes.string,
   navigation: PropTypes.object.isRequired
-}
+};
 
 function mapStateToProps (state) {
-  const apiStore = state.api.apiStore
-  const myProfile = apiStore[urls.profile] || {}
-  const {uids = []} = myProfile
-  let emails = []
-  let phones = []
+  const apiStore = state.api.apiStore;
+  const myProfile = apiStore[urls.profile] || {};
+  const {uids = []} = myProfile;
+  let emails = [];
+  let phones = [];
   uids.forEach((uid) => {
-    const split = uid.split(':')
+    const split = uid.split(':');
     if (split[0] === 'email') {
-      emails.push(split[1])
+      emails.push(split[1]);
     } else if (split[0] === 'phone') {
-      phones.push(split[1])
+      phones.push(split[1]);
     }
-  })
+  });
 
   return {
     myProfile,
     email: emails[0],
     phone: phones[0]
-  }
+  };
 }
 
 const mapDispatchToProps = {
   apiRequire
-}
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(Recovery)
+export default connect(mapStateToProps, mapDispatchToProps)(Recovery);

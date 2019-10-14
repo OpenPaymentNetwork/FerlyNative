@@ -1,12 +1,12 @@
-import * as Permissions from 'expo-permissions'
-import Constants from 'expo-constants'
-import Icon from 'react-native-vector-icons/FontAwesome'
-import PropTypes from 'prop-types'
-import React from 'react'
-import {connect} from 'react-redux'
-import {envId} from 'ferly/utils/fetch'
-import {Notifications, Updates} from 'expo'
-import {View, Text, TouchableOpacity, StyleSheet, Alert} from 'react-native'
+import * as Permissions from 'expo-permissions';
+import Constants from 'expo-constants';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import PropTypes from 'prop-types';
+import React from 'react';
+import {connect} from 'react-redux';
+import {envId} from 'ferly/utils/fetch';
+import {Notifications, Updates} from 'expo';
+import {View, Text, TouchableOpacity, StyleSheet, Alert} from 'react-native';
 
 export class Settings extends React.Component {
   static navigationOptions = {
@@ -14,48 +14,48 @@ export class Settings extends React.Component {
   };
 
   constructor (props) {
-    super(props)
+    super(props);
     this.state = {
       expoToken: '',
       showDebug: false
-    }
+    };
   }
 
   componentDidMount () {
-    this.getToken()
+    this.getToken();
   }
 
   async getToken () {
     const { status: existingStatus } = await Permissions.getAsync(
       Permissions.NOTIFICATIONS
-    )
+    );
 
     if (existingStatus === 'granted') {
-      let token = await Notifications.getExpoPushTokenAsync()
-      this.setState({expoToken: token})
+      let token = await Notifications.getExpoPushTokenAsync();
+      this.setState({expoToken: token});
     }
   }
 
   toggleDebug () {
-    const {showDebug} = this.state
-    this.setState({showDebug: !showDebug})
+    const {showDebug} = this.state;
+    this.setState({showDebug: !showDebug});
   }
 
   handleUpdateClick () {
     const buttons = [
       {text: 'No', onPress: null, style: 'cancel'},
       {text: 'Yes', onPress: () => Updates.reloadFromCache()}
-    ]
+    ];
     Alert.alert(
       'New version available',
       'Would you like to update to the newest version?',
       buttons
-    )
+    );
   }
 
   render () {
-    const {navigation, updateDownloaded} = this.props
-    const {version} = Constants.manifest
+    const {navigation, updateDownloaded} = this.props;
+    const {version} = Constants.manifest;
     let debugInfo = (
       <View>
         <Text style={{fontSize: 12, color: 'lightgray'}}>
@@ -65,21 +65,21 @@ export class Settings extends React.Component {
           pt: {this.state.expoToken.substring(18, 40)}
         </Text>
       </View>
-    )
+    );
 
     const arrowIcon = (
       <Icon
         name="angle-right"
         color="gray"
         size={28} />
-    )
+    );
 
     const updateIcon = (
       <Icon
         name="exclamation-circle"
         color="red"
         size={28} />
-    )
+    );
 
     return (
       <View style={{flex: 1, backgroundColor: 'white'}}>
@@ -119,14 +119,14 @@ export class Settings extends React.Component {
             onPress={() => this.toggleDebug()} />
         </View>
       </View>
-    )
+    );
   }
 }
 
 Settings.propTypes = {
   navigation: PropTypes.object.isRequired,
   updateDownloaded: PropTypes.bool.isRequired
-}
+};
 
 const styles = StyleSheet.create({
   title: {
@@ -149,15 +149,15 @@ const styles = StyleSheet.create({
   item: {
     height: 80
   }
-})
+});
 
 function mapStateToProps (state) {
-  const {updateDownloaded} = state.settings
+  const {updateDownloaded} = state.settings;
   return {
     updateDownloaded
-  }
+  };
 }
 
-const mapDispatchToProps = {}
+const mapDispatchToProps = {};
 
-export default connect(mapStateToProps, mapDispatchToProps)(Settings)
+export default connect(mapStateToProps, mapDispatchToProps)(Settings);

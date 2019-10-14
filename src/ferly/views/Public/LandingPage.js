@@ -1,21 +1,21 @@
-import * as Permissions from 'expo-permissions'
-import Constants from 'expo-constants'
-import PrimaryButton from 'ferly/components/PrimaryButton'
-import PropTypes from 'prop-types'
-import React from 'react'
-import Theme from 'ferly/utils/theme'
-import {Notifications} from 'expo'
-import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native'
-import {envId} from 'ferly/utils/fetch'
+import * as Permissions from 'expo-permissions';
+import Constants from 'expo-constants';
+import PrimaryButton from 'ferly/components/PrimaryButton';
+import PropTypes from 'prop-types';
+import React from 'react';
+import Theme from 'ferly/utils/theme';
+import {Notifications} from 'expo';
+import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
+import {envId} from 'ferly/utils/fetch';
 import {
   tutorialTwo,
   tutorialThree,
   tutorialSix
-} from 'ferly/images/index'
+} from 'ferly/images/index';
 
 export default class LandingPage extends React.Component {
   constructor (props) {
-    super(props)
+    super(props);
     this.state = {
       page: 0,
       isMounted: false,
@@ -26,25 +26,25 @@ export default class LandingPage extends React.Component {
           title: 2
         }
       ]
-    }
+    };
   }
 
   componentDidMount () {
-    this.getToken()
+    this.getToken();
     this.interval = setInterval(() => {
       this.setState({
         page: this.state.page === this.state.dataSource.length ? 0 : this.state.page + 1
-      })
-    }, 5000)
+      });
+    }, 5000);
   }
 
   componentWillUnmount () {
-    clearInterval(this.interval)
+    clearInterval(this.interval);
   }
 
   renderDots () {
-    const {page} = this.state
-    let dots = []
+    const {page} = this.state;
+    let dots = [];
     for (let i = 0; i < 3; i++) {
       dots.push(
         <View
@@ -53,47 +53,47 @@ export default class LandingPage extends React.Component {
             styles.circle,
             {backgroundColor: i === page ? Theme.lightBlue : 'white'}
           ]} />
-      )
+      );
     }
-    return dots
+    return dots;
   }
 
   async getToken () {
     const { status: existingStatus } = await Permissions.getAsync(
       Permissions.NOTIFICATIONS
-    )
-    let finalStatus = existingStatus
+    );
+    let finalStatus = existingStatus;
     // only ask if permissions have not already been determined, because
     // iOS won't necessarily prompt a second time.
     if (existingStatus !== 'granted') {
       // Android remote notification permissions are granted during the app
       // install, so this will only ask on iOS
-      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS)
-      finalStatus = status
+      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+      finalStatus = status;
     }
 
     if (finalStatus === 'granted') {
-      let token = await Notifications.getExpoPushTokenAsync()
-      this.setState({expoToken: token})
+      let token = await Notifications.getExpoPushTokenAsync();
+      this.setState({expoToken: token});
     }
   }
 
   render () {
-    const {navigation} = this.props
-    const {version} = Constants.manifest
-    const {page} = this.state
+    const {navigation} = this.props;
+    const {version} = Constants.manifest;
+    const {page} = this.state;
 
     const images = [
       tutorialTwo,
       tutorialSix,
       tutorialThree
-    ]
+    ];
 
     const descriptions = [
       'Buy gift value anytime, anywhere, perfect for that last minute gift.',
       'Easily send gifts to friends and family, even those far away.',
       'Have real time access to gift card balances.'
-    ]
+    ];
 
     return (
       <View style={{flex: 1, justifyContent: 'space-between', backgroundColor: Theme.darkBlue}}>
@@ -126,13 +126,13 @@ export default class LandingPage extends React.Component {
           </Text>
         </View>
       </View>
-    )
+    );
   }
 }
 
 LandingPage.propTypes = {
   navigation: PropTypes.object.isRequired
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -146,4 +146,4 @@ const styles = StyleSheet.create({
   text: {textAlign: 'center', color: 'white'},
   dots: {flexDirection: 'row', justifyContent: 'space-between', width: 120},
   circle: {width: 12, height: 12, borderRadius: 6}
-})
+});

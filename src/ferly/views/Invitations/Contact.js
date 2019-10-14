@@ -1,18 +1,18 @@
-import Avatar from 'ferly/components/Avatar'
-import Icon from 'react-native-vector-icons/FontAwesome'
-import PropTypes from 'prop-types'
-import React from 'react'
-import {apiExpire} from 'ferly/store/api'
-import {connect} from 'react-redux'
-import {createUrl, post} from 'ferly/utils/fetch'
-import {StackActions} from 'react-navigation'
+import Avatar from 'ferly/components/Avatar';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import PropTypes from 'prop-types';
+import React from 'react';
+import {apiExpire} from 'ferly/store/api';
+import {connect} from 'react-redux';
+import {createUrl, post} from 'ferly/utils/fetch';
+import {StackActions} from 'react-navigation';
 import {
   View,
   Text,
   ScrollView,
   TouchableOpacity,
   Alert
-} from 'react-native'
+} from 'react-native';
 
 export class Contact extends React.Component {
   static navigationOptions = {
@@ -24,18 +24,18 @@ export class Contact extends React.Component {
       .then((response) => response.json())
       .then((json) => {
         if (Object.keys(json).length > 0) {
-          Alert.alert('Error', `Unable to send to ${option}`)
-          return
+          Alert.alert('Error', `Unable to send to ${option}`);
+          return;
         }
         this.props.apiExpire(
-          createUrl('existing-invitations', {status: 'pending'}))
+          createUrl('existing-invitations', {status: 'pending'}));
         const resetAction = StackActions.reset({
           index: 0,
           actions: [StackActions.push({routeName: 'Invitations'})]
-        })
-        this.props.navigation.dispatch(resetAction)
-        Alert.alert('Invite Sent!', `You sent an invite to ${option}.`)
-      })
+        });
+        this.props.navigation.dispatch(resetAction);
+        Alert.alert('Invite Sent!', `You sent an invite to ${option}.`);
+      });
   }
 
   confirm (option) {
@@ -46,7 +46,7 @@ export class Contact extends React.Component {
         {text: 'No', onPress: null},
         {text: 'Yes', onPress: () => this.submit(option)}
       ]
-    )
+    );
   }
 
   renderOption (option) {
@@ -66,13 +66,13 @@ export class Contact extends React.Component {
           size={26} />
         <Text style={{fontSize: 22, paddingLeft: 20}}>{option}</Text>
       </TouchableOpacity>
-    )
+    );
   }
 
   render () {
-    const contact = this.props.navigation.state.params
-    const options = contact.phones.concat(contact.emails)
-    const {display} = contact
+    const contact = this.props.navigation.state.params;
+    const options = contact.phones.concat(contact.emails);
+    const {display} = contact;
     return (
       <ScrollView contentContainerStyle={{flex: 1, backgroundColor: 'white'}}>
         <View
@@ -92,7 +92,7 @@ export class Contact extends React.Component {
         </View>
         {options.map((option) => this.renderOption(option))}
       </ScrollView>
-    )
+    );
   }
 }
 
@@ -100,17 +100,17 @@ Contact.propTypes = {
   apiExpire: PropTypes.func.isRequired,
   navigation: PropTypes.object.isRequired,
   deviceId: PropTypes.string.isRequired
-}
+};
 
 function mapStateToProps (state) {
-  const {deviceId} = state.settings
+  const {deviceId} = state.settings;
   return {
     deviceId
-  }
+  };
 }
 
 const mapDispatchToProps = {
   apiExpire
-}
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(Contact)
+export default connect(mapStateToProps, mapDispatchToProps)(Contact);

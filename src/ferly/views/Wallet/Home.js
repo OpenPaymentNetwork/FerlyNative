@@ -1,14 +1,14 @@
-import accounting from 'ferly/utils/accounting'
-import Icon from 'react-native-vector-icons/FontAwesome'
-import PropTypes from 'prop-types'
-import React from 'react'
-import Spinner from 'ferly/components/Spinner'
-import Theme from 'ferly/utils/theme'
-import TestElement from 'ferly/components/TestElement'
-import {apiRequire, apiRefresh} from 'ferly/store/api'
-import {checkedUidPrompt} from 'ferly/store/settings'
-import {connect} from 'react-redux'
-import {urls} from 'ferly/utils/fetch'
+import accounting from 'ferly/utils/accounting';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import PropTypes from 'prop-types';
+import React from 'react';
+import Spinner from 'ferly/components/Spinner';
+import Theme from 'ferly/utils/theme';
+import TestElement from 'ferly/components/TestElement';
+import {apiRequire, apiRefresh} from 'ferly/store/api';
+import {checkedUidPrompt} from 'ferly/store/settings';
+import {connect} from 'react-redux';
+import {urls} from 'ferly/utils/fetch';
 import {
   View,
   TouchableOpacity,
@@ -17,7 +17,7 @@ import {
   ScrollView,
   Alert,
   StyleSheet
-} from 'react-native'
+} from 'react-native';
 
 export class Wallet extends React.Component {
   static navigationOptions = {
@@ -25,13 +25,13 @@ export class Wallet extends React.Component {
   };
 
   componentDidMount () {
-    this.props.apiRequire(urls.profile)
+    this.props.apiRequire(urls.profile);
   }
 
   renderCard (design) {
-    const {navigation} = this.props
-    const {amount, id, title, field_color: fieldColor} = design
-    const formatted = accounting.formatMoney(parseFloat(amount))
+    const {navigation} = this.props;
+    const {amount, id, title, field_color: fieldColor} = design;
+    const formatted = accounting.formatMoney(parseFloat(amount));
 
     return (
       <TestElement
@@ -85,17 +85,17 @@ export class Wallet extends React.Component {
           </View>
         </View>
       </TestElement>
-    )
+    );
   }
 
   renderAmounts () {
-    const amounts = this.props.amounts || []
+    const amounts = this.props.amounts || [];
     if (amounts.length === 0) {
       return (
         <Text style={{margin: 20, fontSize: 18}}>
           There’s nothing here! Click ‘+’ below to purchase your first gift.
         </Text>
-      )
+      );
     } else {
       return (
         <ScrollView
@@ -108,22 +108,22 @@ export class Wallet extends React.Component {
           {amounts.map((cashRow) => this.renderCard(cashRow))}
           <View style={{height: 80}} />
         </ScrollView>
-      )
+      );
     }
   }
 
   showAddAccountRecoveryDialog () {
-    const {navigation, amounts, uids, checkedUidPrompt} = this.props
+    const {navigation, amounts, uids, checkedUidPrompt} = this.props;
     if (uids.length > 0 || amounts.length === 0) {
-      return
+      return;
     }
-    const title = 'Add Account Recovery'
+    const title = 'Add Account Recovery';
     const message = (
       'If you replace your phone or uninstall the app you\'ll need to ' +
       'recover your account using a verified email address or phone number. ' +
       'You may lose your gift value if account recovery is not set up prior ' +
       'to replacing your phone or uninstalling the app.'
-    )
+    );
     const buttons = [
       {
         text: 'Close',
@@ -132,23 +132,23 @@ export class Wallet extends React.Component {
       {
         text: 'Add',
         onPress: () => {
-          checkedUidPrompt()
-          navigation.navigate('Recovery')
+          checkedUidPrompt();
+          navigation.navigate('Recovery');
         }
       }
-    ]
-    Alert.alert(title, message, buttons, {cancelable: false})
+    ];
+    Alert.alert(title, message, buttons, {cancelable: false});
   }
 
   render () {
-    const {firstName, navigation, checkUidPrompt} = this.props
+    const {firstName, navigation, checkUidPrompt} = this.props;
 
     if (!firstName) {
-      return <Spinner />
+      return <Spinner />;
     }
 
     if (checkUidPrompt) {
-      this.showAddAccountRecoveryDialog()
+      this.showAddAccountRecoveryDialog();
     }
 
     return (
@@ -162,7 +162,7 @@ export class Wallet extends React.Component {
           <Icon name="plus" color="white" size={24} />
         </TestElement>
       </View>
-    )
+    );
   }
 }
 
@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     paddingHorizontal: 20
   }
-})
+});
 
 Wallet.propTypes = {
   amounts: PropTypes.array,
@@ -236,18 +236,18 @@ Wallet.propTypes = {
   navigation: PropTypes.object.isRequired,
   profileImage: PropTypes.string,
   uids: PropTypes.array
-}
+};
 
 function mapStateToProps (state) {
-  const apiStore = state.api.apiStore
-  const {checkUidPrompt, updateDownloaded} = state.settings
+  const apiStore = state.api.apiStore;
+  const {checkUidPrompt, updateDownloaded} = state.settings;
   const {
     amounts,
     profile_image_url: profileImage,
     first_name: firstName,
     last_name: lastName,
     uids = []
-  } = apiStore[urls.profile] || {}
+  } = apiStore[urls.profile] || {};
 
   return {
     amounts,
@@ -257,13 +257,13 @@ function mapStateToProps (state) {
     uids,
     checkUidPrompt,
     updateDownloaded
-  }
+  };
 }
 
 const mapDispatchToProps = {
   apiRefresh,
   apiRequire,
   checkedUidPrompt
-}
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(Wallet)
+export default connect(mapStateToProps, mapDispatchToProps)(Wallet);

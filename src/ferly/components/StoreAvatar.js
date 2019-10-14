@@ -1,15 +1,15 @@
-import PropTypes from 'prop-types'
-import React from 'react'
-import {Text, View, StyleSheet} from 'react-native'
+import PropTypes from 'prop-types';
+import React from 'react';
+import {Text, View, StyleSheet} from 'react-native';
 
 export default class StoreAvatar extends React.Component {
   render () {
-    const {title, size, shade} = this.props
+    const {title, size, shade} = this.props;
     const sizeStyle = {
       height: size,
       width: size,
       borderRadius: size / 2
-    }
+    };
 
     if (title) {
       return (
@@ -18,9 +18,9 @@ export default class StoreAvatar extends React.Component {
             {title.charAt(0)}
           </Text>
         </View>
-      )
+      );
     }
-    return null
+    return null;
   }
 }
 const styles = StyleSheet.create({
@@ -33,10 +33,10 @@ const styles = StyleSheet.create({
     shadowColor: 'lightgray',
     shadowOpacity: 1
   }
-})
+});
 
 StoreAvatar.propTypes = {
   title: PropTypes.string,
   shade: PropTypes.bool,
   size: PropTypes.number.isRequired
-}
+};

@@ -1,13 +1,13 @@
-import Avatar from 'ferly/components/Avatar'
-import PropTypes from 'prop-types'
-import React from 'react'
-import SearchBar from 'ferly/components/SearchBar'
-import Spinner from 'ferly/components/Spinner'
-import Theme from 'ferly/utils/theme'
-import {apiRequire} from 'ferly/store/api'
-import {connect} from 'react-redux'
-import {createUrl, urls} from 'ferly/utils/fetch'
-import {ScrollView, Text, TouchableOpacity, View} from 'react-native'
+import Avatar from 'ferly/components/Avatar';
+import PropTypes from 'prop-types';
+import React from 'react';
+import SearchBar from 'ferly/components/SearchBar';
+import Spinner from 'ferly/components/Spinner';
+import Theme from 'ferly/utils/theme';
+import {apiRequire} from 'ferly/store/api';
+import {connect} from 'react-redux';
+import {createUrl, urls} from 'ferly/utils/fetch';
+import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 
 class Recipient extends React.Component {
   static navigationOptions = {
@@ -15,21 +15,21 @@ class Recipient extends React.Component {
   }
 
   constructor (props) {
-    super(props)
+    super(props);
     this.state = {
       searchResults: null,
       searchText: ''
-    }
+    };
   }
 
   componentDidMount () {
-    this.props.apiRequire(urls.profile)
+    this.props.apiRequire(urls.profile);
   }
 
   onChangeText (text) {
-    const query = text[0] === '@' ? text.slice(1) : text
+    const query = text[0] === '@' ? text.slice(1) : text;
     if (query === '') {
-      this.setState({searchResults: null})
+      this.setState({searchResults: null});
     } else {
       fetch(createUrl('search-customers', {query: query}), {
         headers: {
@@ -38,23 +38,23 @@ class Recipient extends React.Component {
         .then((response) => response.json())
         .then((json) => {
           if (this.state.searchText === text) { // The customer is done typing.
-            this.setState({searchResults: json.results})
+            this.setState({searchResults: json.results});
           }
-        })
+        });
     }
-    this.setState({searchText: text})
+    this.setState({searchText: text});
   }
 
   renderCustomers (customers) {
-    const {navigation} = this.props
-    const design = navigation.state.params
+    const {navigation} = this.props;
+    const design = navigation.state.params;
 
     return (
       <ScrollView style={{flex: 1}}>
         {
           customers.map((customer) => {
-            const firstName = customer.first_name
-            const lastName = customer.last_name
+            const firstName = customer.first_name;
+            const lastName = customer.last_name;
             return (
               <TouchableOpacity
                 key={customer.id}
@@ -76,17 +76,17 @@ class Recipient extends React.Component {
                   </View>
                 </View>
               </TouchableOpacity>
-            )
+            );
           })
         }
       </ScrollView>
-    )
+    );
   }
 
   render () {
-    const {recents} = this.props
-    const {searchResults, searchText} = this.state
-    let body
+    const {recents} = this.props;
+    const {searchResults, searchText} = this.state;
+    let body;
     if (searchResults) {
       if (searchResults.length === 0) {
         body = (
@@ -97,12 +97,12 @@ class Recipient extends React.Component {
               'someone to Ferly.'
             }
           </Text>
-        )
+        );
       } else {
-        body = this.renderCustomers(searchResults)
+        body = this.renderCustomers(searchResults);
       }
     } else {
-      let display = <Spinner />
+      let display = <Spinner />;
       if (recents) {
         if (recents.length === 0) {
           display = (
@@ -113,9 +113,9 @@ class Recipient extends React.Component {
                 'can\'t find.'
               }
             </Text>
-          )
+          );
         } else {
-          display = this.renderCustomers(recents)
+          display = this.renderCustomers(recents);
         }
       }
       body = (
@@ -125,7 +125,7 @@ class Recipient extends React.Component {
           </Text>
           {display}
         </View>
-      )
+      );
     }
 
     return (
@@ -137,7 +137,7 @@ class Recipient extends React.Component {
           {body}
         </View>
       </View>
-    )
+    );
   }
 }
 
@@ -146,21 +146,21 @@ Recipient.propTypes = {
   navigation: PropTypes.object.isRequired,
   recents: PropTypes.array,
   deviceId: PropTypes.string.isRequired
-}
+};
 
 function mapStateToProps (state) {
-  const {deviceId} = state.settings
-  const apiStore = state.api.apiStore
-  const {recents} = apiStore[urls.profile] || {}
+  const {deviceId} = state.settings;
+  const apiStore = state.api.apiStore;
+  const {recents} = apiStore[urls.profile] || {};
 
   return {
     recents,
     deviceId
-  }
+  };
 }
 
 const mapDispatchToProps = {
   apiRequire
-}
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(Recipient)
+export default connect(mapStateToProps, mapDispatchToProps)(Recipient);

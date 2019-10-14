@@ -1,20 +1,20 @@
-import Icon from 'react-native-vector-icons/FontAwesome'
-import PropTypes from 'prop-types'
-import React from 'react'
-import TestElement from 'ferly/components/TestElement'
-import {TextInput, View, StyleSheet} from 'react-native'
+import Icon from 'react-native-vector-icons/FontAwesome';
+import PropTypes from 'prop-types';
+import React from 'react';
+import TestElement from 'ferly/components/TestElement';
+import {TextInput, View, StyleSheet} from 'react-native';
 
 export default class SearchBar extends React.Component {
   constructor (props) {
-    super(props)
+    super(props);
     this.state = {
       searchText: ''
-    }
+    };
   }
 
   onChangeText (text) {
-    this.setState({searchText: text})
-    this.props.onChangeText(text)
+    this.setState({searchText: text});
+    this.props.onChangeText(text);
   }
 
   render () {
@@ -34,7 +34,7 @@ export default class SearchBar extends React.Component {
           value={this.state.searchText}
           placeholder={this.props.placeholder || 'Search'} />
       </View>
-    )
+    );
   }
 }
 
@@ -58,9 +58,9 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 18
   }
-})
+});
 
 SearchBar.propTypes = {
   onChangeText: PropTypes.func.isRequired,
   placeholder: PropTypes.string
-}
+};

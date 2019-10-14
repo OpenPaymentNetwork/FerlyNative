@@ -1,9 +1,9 @@
-import StoreAvatar from 'ferly/components/StoreAvatar'
-import PropTypes from 'prop-types'
-import React from 'react'
-import Theme from 'ferly/utils/theme'
-import {viewLocations} from 'ferly/images/index'
-import {format as formatDate} from 'date-fns'
+import StoreAvatar from 'ferly/components/StoreAvatar';
+import PropTypes from 'prop-types';
+import React from 'react';
+import Theme from 'ferly/utils/theme';
+import {viewLocations} from 'ferly/images/index';
+import {format as formatDate} from 'date-fns';
 import {
   View,
   ScrollView,
@@ -12,7 +12,7 @@ import {
   Image,
   StyleSheet,
   Linking
-} from 'react-native'
+} from 'react-native';
 
 export class Value extends React.Component {
   static navigationOptions = {
@@ -25,28 +25,28 @@ export class Value extends React.Component {
         <Text style={styles.leftColumn}>{column1}</Text>
         <Text>{column2}</Text>
       </View>
-    )
+    );
   }
 
   render () {
-    const {navigation} = this.props
-    const {params: design} = this.props.navigation.state
-    const {amount, title, expiring = [], field_color: fieldColor} = design
+    const {navigation} = this.props;
+    const {params: design} = this.props.navigation.state;
+    const {amount, title, expiring = [], field_color: fieldColor} = design;
     const tableHeader = (
       <View style={styles.tableRow}>
         <Text style={[styles.leftColumn, {fontWeight: 'bold'}]}>Amount</Text>
         <Text style={{fontWeight: 'bold'}}>Expiration Date</Text>
       </View>
-    )
+    );
 
     const expiringInfo = expiring.map((expiration, index) => {
-      const b = expiration.expire_time.split(/\D+/)
-      const date = new Date(Date.UTC(b[0], --b[1], b[2], b[3], b[4], b[5]))
+      const b = expiration.expire_time.split(/\D+/);
+      const date = new Date(Date.UTC(b[0], --b[1], b[2], b[3], b[4], b[5]));
       // React Native doesn't fully support Date.toLocaleString() on Android
       // use date-fns. Expect the JavaScriptCore to be updated in SDK 31.
-      const dateDisplay = formatDate(date, 'MM/DD/YYYY')
-      return this.renderRow(index, `$${expiration.amount}`, dateDisplay)
-    })
+      const dateDisplay = formatDate(date, 'MM/DD/YYYY');
+      return this.renderRow(index, `$${expiration.amount}`, dateDisplay);
+    });
 
     return (
       <ScrollView style={{flex: 1, padding: 20, backgroundColor: 'white'}}>
@@ -88,20 +88,20 @@ export class Value extends React.Component {
           <Text style={[
             styles.supportParagraph,
             {textDecorationLine: 'underline'}]}
-          onPress={() => { Linking.openURL('tel://8006512186') }}>
+          onPress={() => { Linking.openURL('tel://8006512186'); }}>
             (800) 651-2186 </Text>
           <Text style={styles.supportParagraph}>
             Monday through Friday from 9:00 am - 5:00 pm MST, or email </Text>
           <Text style={[
             styles.supportParagraph,
             {textDecorationLine: 'underline'}]}
-          onPress={() => { Linking.openURL('mailto:support@ferly.com') }}>
+          onPress={() => { Linking.openURL('mailto:support@ferly.com'); }}>
             support@ferly.com.
           </Text>
         </Text>
         <Text style={{paddingTop: 20}} />
       </ScrollView>
-    )
+    );
   }
 }
 
@@ -124,10 +124,10 @@ const styles = StyleSheet.create({
   supportParagraph: {fontSize: 16, color: 'gray'},
   tableRow: {flexDirection: 'row', paddingLeft: 10},
   leftColumn: {width: 120}
-})
+});
 
 Value.propTypes = {
   navigation: PropTypes.object.isRequired
-}
+};
 
-export default Value
+export default Value;

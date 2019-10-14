@@ -1,15 +1,15 @@
-import NewAddressForm from 'ferly/views/FerlyCard/NewAddressForm'
-import AwaitingCard from 'ferly/views/FerlyCard/AwaitingCard'
-import CardForm from 'ferly/views/FerlyCard/CardForm'
-import PropTypes from 'prop-types'
-import React from 'react'
-import Spinner from 'ferly/components/Spinner'
-import Theme from 'ferly/utils/theme'
-import {apiRequire, apiRefresh} from 'ferly/store/api'
-import {connect} from 'react-redux'
-import {ferlyCard} from 'ferly/images/index'
-import {Ionicons} from '@expo/vector-icons'
-import {urls, post, createUrl} from 'ferly/utils/fetch'
+import NewAddressForm from 'ferly/views/FerlyCard/NewAddressForm';
+import AwaitingCard from 'ferly/views/FerlyCard/AwaitingCard';
+import CardForm from 'ferly/views/FerlyCard/CardForm';
+import PropTypes from 'prop-types';
+import React from 'react';
+import Spinner from 'ferly/components/Spinner';
+import Theme from 'ferly/utils/theme';
+import {apiRequire, apiRefresh} from 'ferly/store/api';
+import {connect} from 'react-redux';
+import {ferlyCard} from 'ferly/images/index';
+import {Ionicons} from '@expo/vector-icons';
+import {urls, post, createUrl} from 'ferly/utils/fetch';
 import {
   View,
   ImageBackground,
@@ -20,8 +20,8 @@ import {
   TouchableOpacity,
   Switch,
   Modal
-} from 'react-native'
-import { setHaveCard } from '../../store/settings'
+} from 'react-native';
+import { setHaveCard } from '../../store/settings';
 
 export class FerlyCard extends React.Component {
   static navigationOptions = {
@@ -29,7 +29,7 @@ export class FerlyCard extends React.Component {
   };
 
   constructor (props) {
-    super(props)
+    super(props);
     this.state = {
       invalid: {},
       submitting: false,
@@ -39,53 +39,53 @@ export class FerlyCard extends React.Component {
       passed: '',
       address: {},
       haveCard: false
-    }
+    };
   }
 
   componentDidMount () {
-    const {haveCard} = this.state
-    this.props.dispatch(apiRequire(urls.profile))
+    const {haveCard} = this.state;
+    this.props.dispatch(apiRequire(urls.profile));
     fetch(createUrl('verify-address'), {
       headers: {
         Authorization: 'Bearer ' + this.props.deviceId
       }})
       .then((response) => response.json())
       .then((json) => {
-        this.setState({address: json})
+        this.setState({address: json});
         if (json['verified'] === 'yes') {
-          this.setState({passed: 'true'})
+          this.setState({passed: 'true'});
         } else if (json['verified'] === 'no') {
-          this.setState({passed: ''})
+          this.setState({passed: ''});
         } else if (json['error'] === 'No address on file' && haveCard) {
-          this.setState({passed: 'false'})
+          this.setState({passed: 'false'});
         } else {
-          this.setState({passed: ''})
+          this.setState({passed: ''});
         }
-      })
+      });
   }
 
   componentWillUnmount () {
-    const {assumedAbility} = this.state
+    const {assumedAbility} = this.state;
     if (assumedAbility !== null) {
-      this.props.dispatch(apiRefresh(urls.profile))
+      this.props.dispatch(apiRefresh(urls.profile));
     }
   }
 
   changeAbility = (requestedEnable) => {
-    const urlTail = requestedEnable ? 'unsuspend-card' : 'suspend-card'
-    const {card_id: cardId} = this.props.card
-    const alertTitle = requestedEnable ? 'Card Enabled' : 'Card Disabled'
+    const urlTail = requestedEnable ? 'unsuspend-card' : 'suspend-card';
+    const {card_id: cardId} = this.props.card;
+    const alertTitle = requestedEnable ? 'Card Enabled' : 'Card Disabled';
     const enabledMessage = 'Re-enabling your Ferly Card allows it to be ' +
-      'used to spend your gift value.'
+      'used to spend your gift value.';
     const disabledMessage = 'While your Ferly Card is disabled it cannot be ' +
-      'used to spend your gift value and its activity may appear fraudulent.'
-    this.setState({assumedAbility: requestedEnable, changingAbility: true})
-    Alert.alert(alertTitle, requestedEnable ? enabledMessage : disabledMessage)
+      'used to spend your gift value and its activity may appear fraudulent.';
+    this.setState({assumedAbility: requestedEnable, changingAbility: true});
+    Alert.alert(alertTitle, requestedEnable ? enabledMessage : disabledMessage);
     post(urlTail, this.props.deviceId, {card_id: cardId})
       .then((response) => response.json())
       .then((json) => {
-        this.setState({changingAbility: false})
-      })
+        this.setState({changingAbility: false});
+      });
   }
 
   handleExpirationClick () {
@@ -95,31 +95,31 @@ export class FerlyCard extends React.Component {
       'account does not expire unless permitted by applicable federal ' +
       'or state regulations. See a gift value page to view expiration ' +
       'dates, if any, for the gift value you hold.'
-    )
+    );
   }
 
   handleChangePinClick = () => {
-    this.setState({showNewPinModal: true})
+    this.setState({showNewPinModal: true});
   }
 
   removeCard = () => {
-    const {address} = this.state
-    const {card_id: cardId} = this.props.card
+    const {address} = this.state;
+    const {card_id: cardId} = this.props.card;
     post('delete-card', this.props.deviceId, {card_id: cardId})
       .then((response) => response.json())
       .then((json) => {
-        this.props.dispatch(apiRefresh(urls.profile))
-        this.setState({passed: ''})
+        this.props.dispatch(apiRefresh(urls.profile));
+        this.setState({passed: ''});
         if (this.state.passed === '') {
           if (!address['address_line1']) {
-            address['verified'] = 'no'
+            address['verified'] = 'no';
             post('request-card', this.props.deviceId, this.modifyAddress(address))
               .then((response) => response.json())
               .then((json) => {
-                this.setState({passed: ''})
-              })
+                this.setState({passed: ''});
+              });
           } else {
-            let addressLine2 = address['address_line2'] === '' ? '' : address['address_line2'] + '\n'
+            let addressLine2 = address['address_line2'] === '' ? '' : address['address_line2'] + '\n';
             Alert.alert(
               'Correct Address?',
               address['address_line1'] + '\n' +
@@ -130,40 +130,40 @@ export class FerlyCard extends React.Component {
               [
                 {text: 'Yes',
                   onPress: () => {
-                    address['verified'] = 'yes'
+                    address['verified'] = 'yes';
                     post('request-card', this.modifyAddress(address))
                       .then((response) => response.json())
                       .then((json) => {
-                        this.setState({passed: 'true'})
-                      })
+                        this.setState({passed: 'true'});
+                      });
                   }},
                 {text: 'No',
                   onPress: () => {
-                    address['verified'] = 'no'
-                    this.props.dispatch(setHaveCard(true))
+                    address['verified'] = 'no';
+                    this.props.dispatch(setHaveCard(true));
                     post('request-card', this.props.deviceId, this.modifyAddress(address))
                       .then((response) => response.json())
                       .then((json) => {
-                        this.setState({passed: ''})
-                      })
+                        this.setState({passed: ''});
+                      });
                   }}
               ]
-            )
+            );
           }
         }
-      })
+      });
   }
 
   modifyAddress = function (address) {
-    address['line1'] = address['address_line1']
-    address['zip_code'] = address['zip'].slice(0, 5)
-    return address
+    address['line1'] = address['address_line1'];
+    address['zip_code'] = address['zip'].slice(0, 5);
+    return address;
   }
 
   submitNewPin = () => {
-    const {card_id: cardId} = this.props.card
-    const {pin} = this.state
-    this.setState({submitting: true})
+    const {card_id: cardId} = this.props.card;
+    const {pin} = this.state;
+    this.setState({submitting: true});
     post('change-pin', this.props.deviceId, {card_id: cardId, pin: pin})
       .then((response) => response.json())
       .then((json) => {
@@ -173,21 +173,21 @@ export class FerlyCard extends React.Component {
             submitting: false,
             pin: '',
             invalid: {}
-          })
+          });
           // Modal needs time to close, or it'll freeze on ios. Rn bug.
           setTimeout(() => {
-            Alert.alert('Saved!', 'Your new pin is ready to use.')
-          }, 300)
+            Alert.alert('Saved!', 'Your new pin is ready to use.');
+          }, 300);
         }
-      })
+      });
   }
 
   validateNewPin = (json) => {
     if (json.invalid) {
-      this.setState({invalid: json.invalid, submitting: false})
-      return false
+      this.setState({invalid: json.invalid, submitting: false});
+      return false;
     } else {
-      return true
+      return true;
     }
   }
 
@@ -199,15 +199,15 @@ export class FerlyCard extends React.Component {
         {text: 'Cancel', onPress: null},
         {text: 'Yes', onPress: this.removeCard}
       ]
-    )
+    );
   }
 
   handleCloseModal = () => {
-    this.setState({showNewPinModal: false, pin: '', invalid: {}})
+    this.setState({showNewPinModal: false, pin: '', invalid: {}});
   }
 
   render () {
-    const {card, loaded} = this.props
+    const {card, loaded} = this.props;
     const {
       assumedAbility,
       changingAbility,
@@ -216,30 +216,30 @@ export class FerlyCard extends React.Component {
       invalid,
       submitting,
       passed
-    } = this.state
-    const {pin: pinError} = invalid
+    } = this.state;
+    const {pin: pinError} = invalid;
 
     if (!loaded) {
-      return <Spinner />
+      return <Spinner />;
     }
 
     if (!card) {
       if (passed === 'false') {
-        return <CardForm onPass={() => this.setState({passed: ''})} />
+        return <CardForm onPass={() => this.setState({passed: ''})} />;
       } else if (passed === 'true') {
-        return <AwaitingCard onPass={() => this.setState({passed: 'false'})} />
+        return <AwaitingCard onPass={() => this.setState({passed: 'false'})} />;
       } else {
-        return <NewAddressForm onPass={() => this.setState({passed: 'true'})} />
+        return <NewAddressForm onPass={() => this.setState({passed: 'true'})} />;
       }
     }
 
-    const {suspended, expiration} = card
-    let abilityValue = !suspended
+    const {suspended, expiration} = card;
+    let abilityValue = !suspended;
     if (assumedAbility !== null) {
-      abilityValue = assumedAbility
+      abilityValue = assumedAbility;
     }
 
-    const splitExpiration = expiration.split('-')
+    const splitExpiration = expiration.split('-');
 
     return (
       <View style={{flex: 1, backgroundColor: 'white'}}>
@@ -335,7 +335,7 @@ export class FerlyCard extends React.Component {
           </Modal>
         </View>
       </View>
-    )
+    );
   }
 }
 
@@ -377,30 +377,30 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10
   }
-})
+});
 
 FerlyCard.propTypes = {
   deviceId: PropTypes.string,
-  onPass: PropTypes.func,
+  onPass: PropTypes.func.isRequired,
   card: PropTypes.object,
   dispatch: PropTypes.func.isRequired,
   loaded: PropTypes.bool.isRequired
-}
+};
 
 function mapStateToProps (state) {
-  const apiStore = state.api.apiStore
-  const {deviceId} = state.settings
-  const data = apiStore[urls.profile]
-  const {cards} = data || {}
-  let card
+  const apiStore = state.api.apiStore;
+  const {deviceId} = state.settings;
+  const data = apiStore[urls.profile];
+  const {cards} = data || {};
+  let card;
   if (cards) {
-    card = cards[0]
+    card = cards[0];
   }
   return {
     loaded: !!data,
     card,
     deviceId
-  }
+  };
 }
 
-export default connect(mapStateToProps)(FerlyCard)
+export default connect(mapStateToProps)(FerlyCard);

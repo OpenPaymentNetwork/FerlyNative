@@ -1,17 +1,17 @@
-import React from 'react'
-import PrimaryButton from 'ferly/components/PrimaryButton'
-import Theme from 'ferly/utils/theme'
-import PropTypes from 'prop-types'
-import {connect} from 'react-redux'
-import {apiRefresh} from 'ferly/store/api'
-import {urls, post} from 'ferly/utils/fetch'
+import React from 'react';
+import PrimaryButton from 'ferly/components/PrimaryButton';
+import Theme from 'ferly/utils/theme';
+import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import {apiRefresh} from 'ferly/store/api';
+import {urls, post} from 'ferly/utils/fetch';
 import {
   View,
   Text,
   TextInput,
   Alert,
   StyleSheet
-} from 'react-native'
+} from 'react-native';
 
 export class CardForm extends React.Component {
     static navigationOptions = {
@@ -19,7 +19,7 @@ export class CardForm extends React.Component {
     }
 
     constructor (props) {
-      super(props)
+      super(props);
       this.state = {
         pan: '',
         pin: '',
@@ -28,84 +28,84 @@ export class CardForm extends React.Component {
         assumedAbility: null,
         changingAbility: false,
         showNewPinModal: false
-      }
+      };
     }
 
     componentWillUnmount () {
-      const {assumedAbility} = this.state
+      const {assumedAbility} = this.state;
       if (assumedAbility !== null) {
-        this.props.apiRefresh(urls.profile)
+        this.props.apiRefresh(urls.profile);
       }
     }
     validateCardNumber (code) {
-      var len = code.length
-      var parity = len % 2
-      var sum = 0
+      var len = code.length;
+      var parity = len % 2;
+      var sum = 0;
       for (var i = len - 1; i >= 0; i--) {
-        var d = parseInt(code.charAt(i))
-        if (i % 2 === parity) { d *= 2 }
-        if (d > 9) { d -= 9 }
-        sum += d
+        var d = parseInt(code.charAt(i));
+        if (i % 2 === parity) { d *= 2; }
+        if (d > 9) { d -= 9; }
+        sum += d;
       }
-      return sum % 10 === 0
+      return sum % 10 === 0;
     }
 
   onChangePan = (value) => {
-    const withoutSpaces = value.replace(/\s/g, '')
-    const {invalid} = this.state
+    const withoutSpaces = value.replace(/\s/g, '');
+    const {invalid} = this.state;
     if (withoutSpaces.length === 16) {
-      const newInvalid = Object.assign({}, invalid)
+      const newInvalid = Object.assign({}, invalid);
       if (!this.validateCardNumber(withoutSpaces)) {
-        newInvalid.pan = 'Invalid card number'
+        newInvalid.pan = 'Invalid card number';
       } else {
-        delete newInvalid.pan
+        delete newInvalid.pan;
       }
-      this.setState({invalid: newInvalid})
+      this.setState({invalid: newInvalid});
     }
-    this.setState({pan: withoutSpaces})
+    this.setState({pan: withoutSpaces});
   }
 
   onChangePin = (newPin) => {
-    this.setState({pin: newPin})
+    this.setState({pin: newPin});
   }
 
   submitForm = () => {
-    const {navigation} = this.props
-    const {pan, pin} = this.state
-    this.setState({submitting: true})
+    const {navigation} = this.props;
+    const {pan, pin} = this.state;
+    this.setState({submitting: true});
     post('add-card', this.props.deviceId, {pan, pin})
       .then((response) => response.json())
       .then((json) => {
-        this.setState({submitting: false, pin: '', invalid: {}})
+        this.setState({submitting: false, pin: '', invalid: {}});
         if (this.validateAddCard(json)) {
-          this.props.apiRefresh(urls.profile)
-          navigation.navigate('Wallet')
+          this.props.apiRefresh(urls.profile);
+          navigation.navigate('Wallet');
           const alertText = 'Your card is ready to use. Remember to select ' +
-            'debit when using your card.'
-          Alert.alert('Success', alertText)
+            'debit when using your card.';
+          Alert.alert('Success', alertText);
         }
-      })
+      });
   }
 
   validateAddCard = (json) => {
     if (json.invalid) {
-      const newInvalid = json.invalid
+      const newInvalid = json.invalid;
       if (newInvalid['']) {
-        newInvalid.pan = newInvalid['']
+        newInvalid.pan = newInvalid[''];
       }
-      this.setState({invalid: newInvalid})
-      return false
+      this.setState({invalid: newInvalid});
+      return false;
     } else {
-      return json.result
+      return json.result;
     }
   }
 
   render () {
-    const {pin, pan, invalid, submitting} = this.state
-    const {pin: pinError, pan: panError} = invalid
+    const {pin, pan, invalid, submitting} = this.state;
+    const {pin: pinError, pan: panError} = invalid;
 
     const instructions = 'Enter the 16-digit number found on the back of ' +
-      'your Ferly Card and set a 4-digit PIN you\'ll remember later.'
+      'your Ferly Card and set a 4-digit PIN you\'ll remember later.';
     return (
       <View style={{flex: 1, backgroundColor: 'white'}}>
         <View style={{flex: 1, paddingVertical: 20}}>
@@ -154,7 +154,7 @@ export class CardForm extends React.Component {
           </View>
         </View>
       </View>
-    )
+    );
   }
 }
 
@@ -202,33 +202,33 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10
   }
-})
+});
 
 CardForm.propTypes = {
   navigation: PropTypes.object,
   apiRefresh: PropTypes.func.isRequired,
   card: PropTypes.object,
   deviceId: PropTypes.string.isRequired
-}
+};
 
 function mapStateToProps (state) {
-  const {deviceId} = state.settings
-  const apiStore = state.api.apiStore
-  const data = apiStore[urls.profile]
-  const {cards} = data || {}
-  let card
+  const {deviceId} = state.settings;
+  const apiStore = state.api.apiStore;
+  const data = apiStore[urls.profile];
+  const {cards} = data || {};
+  let card;
   if (cards) {
-    card = cards[0]
+    card = cards[0];
   }
   return {
     loaded: !!data,
     card,
     deviceId
-  }
+  };
 }
 
 const mapDispatchToProps = {
   apiRefresh
-}
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(CardForm)
+export default connect(mapStateToProps, mapDispatchToProps)(CardForm);
