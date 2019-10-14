@@ -204,7 +204,7 @@ export class SignUp extends React.Component {
             placeholder='Last Name'
             onBlur={() => {
               this.validateLastName(lastName);
-              this.setState({showLastNameError: false});
+              this.setState({showLastNameError: true});
             }}
             onChangeText={
               (text) => {
@@ -250,7 +250,7 @@ export class SignUp extends React.Component {
               : null
           }
         </View>
-        <View style={{width: '100%', marginVertical: 20}} >
+        <View style={{width: '100%', marginTop: 20}} >
           <PrimaryButton
             title="Next"
             disabled={
