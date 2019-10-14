@@ -118,8 +118,8 @@ export class SignUp extends React.Component {
     let msg
     if (firstName.length < 1 || firstName.length > 20) {
       msg = 'Must be 1-20 characters long'
-    } else if (!firstName.match('^[a-zA-Z]+$')) {
-      msg = 'Must contain letters only'
+    } else if (!firstName.match('^[a-zA-Z._ ]+$')) {
+      msg = 'Must contain only letters, periods, and spaces.'
     }
     return msg
   }
@@ -143,8 +143,8 @@ export class SignUp extends React.Component {
     let msg
     if (lastName.length < 1 || lastName.length > 20) {
       msg = 'Must be 1-20 characters long'
-    } else if (!lastName.match('^[a-zA-Z]+$')) {
-      msg = 'Must contain letters only'
+    } else if (!lastName.match('^[-a-zA-Z _.,s]+$')) {
+      msg = 'Must contain only letters, periods, dashes, and spaces'
     }
     return msg
   }
@@ -280,7 +280,8 @@ export class SignUp extends React.Component {
                 lastName === '' ||
                 submitting ||
                 !!invalid.username ||
-                !username
+                !username ||
+                !fieldValue
             }
             color={Theme.lightBlue}
             onPress={this.handleSubmit.bind(this)} />
