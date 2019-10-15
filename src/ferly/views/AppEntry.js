@@ -8,18 +8,18 @@ import {CreateAuthSwitch} from 'ferly/navigation';
 import {createUrl} from 'ferly/utils/fetch';
 import {logoWhite} from 'ferly/images/index';
 import {View, Text, Image, AsyncStorage} from 'react-native';
-import {setDeviceId} from 'ferly/store/settings';
+import {setPassword} from 'ferly/store/settings';
 
 export class AppEntry extends React.Component {
   componentDidMount () {
     this.props.dispatch(apiRequire(this.props.isCustomerUrl));
-    this.retrieveData().then((device2) => {
-      if (device2 === '') {
-        AsyncStorage.setItem('deviceid', device);
-        device2 = device;
+    this.retrieveData().then((password2) => {
+      if (password2 === '') {
+        AsyncStorage.setItem('password', device);
+        password2 = device;
       }
       try {
-        this.props.dispatch(setDeviceId(device2));
+        this.props.dispatch(setPassword(password2));
       } catch (error) {
       }
     });
@@ -27,11 +27,11 @@ export class AppEntry extends React.Component {
 
   retrieveData = async () => {
     try {
-      const deviceId = await AsyncStorage.getItem('deviceid') || '';
-      if (deviceId !== '') {
-        device2 = deviceId;
+      const password = await AsyncStorage.getItem('password') || '';
+      if (password !== '') {
+        password2 = password;
       }
-      return device2;
+      return password2;
     } catch (error) {
     }
   }
@@ -61,7 +61,7 @@ export class AppEntry extends React.Component {
   }
 }
 
-var device2 = '';
+var password2 = '';
 let device = makeid(32);
 function makeid (length) {
   var result = '';
@@ -81,7 +81,7 @@ AppEntry.propTypes = {
 };
 
 function mapStateToProps (state) {
-  const {deviceId} = state.settings;
+  const {password} = state.settings;
   const {releaseChannel = 'staging'} = Constants.manifest;
   const isCustomerUrl =
       createUrl('is-customer', {'expected_env': releaseChannel});
@@ -94,7 +94,7 @@ function mapStateToProps (state) {
     hasError,
     isCustomerUrl,
     idFound: true,
-    deviceId
+    password
   };
 }
 

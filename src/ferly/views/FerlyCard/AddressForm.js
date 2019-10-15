@@ -59,7 +59,7 @@ export class AddressForm extends React.Component {
         zip_code: zipCode,
         verified: 'yes'
       };
-      post('request-card', this.props.deviceId, params)
+      post('request-card', this.props.password, params)
         .then((response) => response.json())
         .then((json) => {
           this.setState({submitting: false});
@@ -231,7 +231,7 @@ export class AddressForm extends React.Component {
 
 AddressForm.propTypes = {
   navigation: PropTypes.object,
-  deviceId: PropTypes.string.isRequired
+  password: PropTypes.string.isRequired
 };
 
 const styles = StyleSheet.create({
@@ -253,9 +253,9 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps (state) {
-  const {deviceId} = state.settings;
+  const {password} = state.settings;
   return {
-    deviceId
+    password
   };
 }
 

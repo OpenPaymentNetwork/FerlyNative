@@ -58,7 +58,7 @@ export class SignUpCode extends React.Component {
       code: fieldValue.replace(/-/g, ''),
       recaptcha_response: recaptchaResponse
     };
-    post('auth-uid', this.props.deviceId, postParams)
+    post('auth-uid', this.props.password, postParams)
       .then((response) => response.json())
       .then((responseJson) => {
         if (this.validate(responseJson)) {
@@ -68,7 +68,7 @@ export class SignUpCode extends React.Component {
               os: responseJson.os,
               expo_token: responseJson.expo_token
             };
-            post('login', this.props.deviceId, loginParams)
+            post('login', this.props.password, loginParams)
               .then((response) => response.json())
               .then((responseJson) => {
                 if (!responseJson.error) {
@@ -77,11 +77,11 @@ export class SignUpCode extends React.Component {
                 }
               });
           } else if (dontLogin) {
-            post('set-signup-data', this.props.deviceId, setParams)
+            post('set-signup-data', this.props.password, setParams)
               .then((response) => response.json())
               .then((responseJson) => {
                 if (this.validate(responseJson)) {
-                  post('signup-finish', this.props.deviceId, agreedParam)
+                  post('signup-finish', this.props.password, agreedParam)
                     .then((response) => response.json())
                     .then((responseJson) => {
                       if (this.validate(responseJson)) {
@@ -98,7 +98,7 @@ export class SignUpCode extends React.Component {
                           code: fieldValue.replace(/-/g, ''),
                           recaptcha_response: recaptchaResponse
                         };
-                        post('register', this.props.deviceId, finalParams)
+                        post('register', this.props.password, finalParams)
                           .then((response) => response.json())
                           .then((responseJson) => {
                             if (this.validate(responseJson)) {
@@ -195,7 +195,7 @@ export class SignUpCode extends React.Component {
 
 SignUpCode.propTypes = {
   navigation: PropTypes.object.isRequired,
-  deviceId: PropTypes.string.isRequired
+  password: PropTypes.string.isRequired
 };
 
 const styles = StyleSheet.create({
@@ -206,9 +206,9 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps (state) {
-  const {deviceId} = state.settings;
+  const {password} = state.settings;
   return {
-    deviceId
+    password
   };
 }
 

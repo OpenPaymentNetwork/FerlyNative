@@ -59,7 +59,7 @@ export class Settings extends React.Component {
     let debugInfo = (
       <View>
         <Text style={{fontSize: 12, color: 'lightgray'}}>
-          did: {Constants.deviceId}
+          did: {this.props.password}
         </Text>
         <Text style={{fontSize: 12, color: 'lightgray'}}>
           pt: {this.state.expoToken.substring(18, 40)}
@@ -125,7 +125,8 @@ export class Settings extends React.Component {
 
 Settings.propTypes = {
   navigation: PropTypes.object.isRequired,
-  updateDownloaded: PropTypes.bool.isRequired
+  updateDownloaded: PropTypes.bool.isRequired,
+  password: PropTypes.string.isRequired
 };
 
 const styles = StyleSheet.create({
@@ -152,9 +153,10 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps (state) {
-  const {updateDownloaded} = state.settings;
+  const {updateDownloaded, password} = state.settings;
   return {
-    updateDownloaded
+    updateDownloaded,
+    password
   };
 }
 

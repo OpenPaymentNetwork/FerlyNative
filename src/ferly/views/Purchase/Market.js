@@ -38,7 +38,7 @@ export class Market extends React.Component {
     } else {
       fetch(createUrl('search-market', {query: text}), {
         headers: {
-          Authorization: 'Bearer ' + this.props.deviceId
+          Authorization: 'Bearer ' + this.props.password
         }})
         .then((response) => response.json())
         .then((json) => {
@@ -112,7 +112,7 @@ Market.propTypes = {
   designs: PropTypes.array.isRequired,
   designsUrl: PropTypes.string.isRequired,
   navigation: PropTypes.object.isRequired,
-  deviceId: PropTypes.string.isRequired
+  password: PropTypes.string.isRequired
 };
 
 const styles = StyleSheet.create({
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps (state) {
-  const {deviceId} = state.settings;
+  const {password} = state.settings;
   const designsUrl = createUrl('list-designs');
   const apiStore = state.api.apiStore;
   const designs = apiStore[designsUrl] || [];
@@ -135,7 +135,7 @@ function mapStateToProps (state) {
   return {
     designsUrl,
     designs,
-    deviceId
+    password
   };
 }
 

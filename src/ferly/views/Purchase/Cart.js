@@ -51,7 +51,7 @@ export class Cart extends React.Component {
     };
 
     this.setState({submitting: true});
-    post('purchase', this.props.deviceId, purchaseParams)
+    post('purchase', this.props.password, purchaseParams)
       .then((response) => response.json())
       .then((responseJson) => {
         if (this.validate(responseJson)) {
@@ -123,7 +123,7 @@ export class Cart extends React.Component {
     }
     fetch(createUrl('delete-stripe-source', {source_id: sourceId}), {
       headers: {
-        Authorization: 'Bearer ' + this.props.deviceId
+        Authorization: 'Bearer ' + this.props.password
       }})
       .then((response) => response.json())
       .then((json) => {
@@ -335,11 +335,11 @@ Cart.propTypes = {
   navigation: PropTypes.object.isRequired,
   sources: PropTypes.array,
   sourcesUrl: PropTypes.string.isRequired,
-  deviceId: PropTypes.string.isRequired
+  password: PropTypes.string.isRequired
 };
 
 function mapStateToProps (state) {
-  const {deviceId} = state.settings;
+  const {password} = state.settings;
   const sourcesUrl = createUrl('list-stripe-sources');
   const apiStore = state.api.apiStore;
   const sourcesResponse = apiStore[sourcesUrl] || {};
@@ -355,7 +355,7 @@ function mapStateToProps (state) {
   return {
     sourcesUrl,
     sources,
-    deviceId
+    password
   };
 }
 

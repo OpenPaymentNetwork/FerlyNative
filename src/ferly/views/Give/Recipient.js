@@ -33,7 +33,7 @@ class Recipient extends React.Component {
     } else {
       fetch(createUrl('search-customers', {query: query}), {
         headers: {
-          Authorization: 'Bearer ' + this.props.deviceId
+          Authorization: 'Bearer ' + this.props.password
         }})
         .then((response) => response.json())
         .then((json) => {
@@ -145,17 +145,17 @@ Recipient.propTypes = {
   apiRequire: PropTypes.func.isRequired,
   navigation: PropTypes.object.isRequired,
   recents: PropTypes.array,
-  deviceId: PropTypes.string.isRequired
+  password: PropTypes.string.isRequired
 };
 
 function mapStateToProps (state) {
-  const {deviceId} = state.settings;
+  const {password} = state.settings;
   const apiStore = state.api.apiStore;
   const {recents} = apiStore[urls.profile] || {};
 
   return {
     recents,
-    deviceId
+    password
   };
 }
 

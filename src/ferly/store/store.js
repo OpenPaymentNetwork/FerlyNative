@@ -9,12 +9,12 @@ const apiMiddleware = (store) => (next) => (action) => {
   if (type === API_REQUIRE || type === API_REFRESH) {
     const state = store.getState();
     const currentApiStore = state.api.apiStore;
-    let deviceId = state.settings.deviceId;
-    if (!deviceId) {
+    let password = state.settings.password;
+    if (!password) {
       setTimeout(() => {
         const state = store.getState();
-        deviceId = state.settings.deviceId;
-        retryFetch(action.url, deviceId)
+        password = state.settings.password;
+        retryFetch(action.url, password)
           .then((response) => response.json())
           .then((responseJson) => {
             next(apiInject(action.url, responseJson));
@@ -31,9 +31,9 @@ const apiMiddleware = (store) => (next) => (action) => {
       if (type === API_REFRESH) {
         next(apiExpire(action.url));
       }
-      retryFetch(action.url, deviceId, {
+      retryFetch(action.url, password, {
         headers: {
-          Authorization: 'Bearer ' + deviceId
+          Authorization: 'Bearer ' + password
         }
       })
         .then((response) => response.json())
