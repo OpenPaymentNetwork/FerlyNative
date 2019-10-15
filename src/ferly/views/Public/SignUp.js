@@ -1,4 +1,3 @@
-// import Constants from 'expo-constants';
 import PrimaryButton from 'ferly/components/PrimaryButton';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -90,11 +89,11 @@ export class SignUp extends React.Component {
   invalidUsernameMessage (username) {
     let msg;
     if (username.length < 4 || username.length > 20) {
-      msg = 'Must be 4-20 characters long';
+      msg = 'Must be 4-20 characters long.';
     } else if (!username.charAt(0).match('^[a-zA-Z]$')) {
-      msg = 'Must start with a letter';
+      msg = 'Must start with a letter.';
     } else if (!username.match('^[0-9a-zA-Z.]+$')) {
-      msg = 'Must contain only letters, numbers, and periods';
+      msg = 'Must contain only letters, numbers, and periods.';
     }
     return msg;
   }
@@ -114,11 +113,11 @@ export class SignUp extends React.Component {
   invalidFirstNameMessage (firstName) {
     let msg;
     if (firstName.length < 2 || firstName.length > 20) {
-      msg = 'Must be 2-20 characters long';
+      msg = 'Must be 2-20 characters long.';
     } else if (!firstName.match('^[a-zA-Z._ ]+$')) {
       msg = 'Must contain only letters, periods, and spaces.';
     } else if (!firstName.charAt(0).match('^[a-zA-Z]$')) {
-      msg = 'Must start with a letter';
+      msg = 'Must start with a letter.';
     }
     return msg;
   }
@@ -138,11 +137,11 @@ export class SignUp extends React.Component {
   invalidLastNameMessage (lastName) {
     let msg;
     if (lastName.length < 2 || lastName.length > 20) {
-      msg = 'Must be 2-20 characters long';
+      msg = 'Must be 2-20 characters long.';
     } else if (!lastName.match('^[-a-zA-Z _.,s]+$')) {
-      msg = 'Must contain only letters, periods, dashes, and spaces';
+      msg = 'Must contain only letters, periods, dashes, and spaces.';
     } else if (!lastName.charAt(0).match('^[a-zA-Z]$')) {
-      msg = 'Must start with a letter';
+      msg = 'Must start with a letter.';
     }
     return msg;
   }
