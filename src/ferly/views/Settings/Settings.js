@@ -3,10 +3,12 @@ import Constants from 'expo-constants';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import PropTypes from 'prop-types';
 import React from 'react';
+import Theme from 'ferly/utils/theme';
 import {connect} from 'react-redux';
 import {envId} from 'ferly/utils/fetch';
 import {Notifications, Updates} from 'expo';
-import {View, Text, TouchableOpacity, StyleSheet, Alert} from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet, Alert, AsyncStorage} from 'react-native';
+import {setPassword} from 'ferly/store/settings';
 
 export class Settings extends React.Component {
   static navigationOptions = {
@@ -25,6 +27,22 @@ export class Settings extends React.Component {
     this.getToken();
   }
 
+  SignOut () {
+    AsyncStorage.setItem('password', device).then(() => {
+      try {
+        this.props.dispatch(setPassword(device));
+        const alertText = 'You have been successfully signed out.';
+        Alert.alert('Done!', alertText);
+      } catch (error) {
+      }
+      this.navigateToLanding = true;
+    });
+  }
+
+  componentWillUnmount () {
+
+  }
+
   async getToken () {
     const { status: existingStatus } = await Permissions.getAsync(
       Permissions.NOTIFICATIONS
@@ -34,11 +52,6 @@ export class Settings extends React.Component {
       let token = await Notifications.getExpoPushTokenAsync();
       this.setState({expoToken: token});
     }
-  }
-
-  toggleDebug () {
-    const {showDebug} = this.state;
-    this.setState({showDebug: !showDebug});
   }
 
   handleUpdateClick () {
@@ -56,17 +69,9 @@ export class Settings extends React.Component {
   render () {
     const {navigation, updateDownloaded} = this.props;
     const {version} = Constants.manifest;
-    let debugInfo = (
-      <View>
-        <Text style={{fontSize: 12, color: 'lightgray'}}>
-          did: {this.props.password}
-        </Text>
-        <Text style={{fontSize: 12, color: 'lightgray'}}>
-          pt: {this.state.expoToken.substring(18, 40)}
-        </Text>
-      </View>
-    );
-
+    if (navigateToLanding) {
+      return navigation.navigate('LandingPage');
+    }
     const arrowIcon = (
       <Icon
         name="angle-right"
@@ -110,20 +115,39 @@ export class Settings extends React.Component {
             {updateDownloaded ? updateIcon : null}
           </View>
         </TouchableOpacity>
-        <View style={{flexGrow: 1}} />
-        <View style={{height: 40, flexDirection: 'row'}}>
-          {this.state.showDebug ? debugInfo : null}
+        <View style={{height: 40, flexDirection: 'row', paddingRight: 20}}>
           <View style={{flexGrow: 1}} />
-          <TouchableOpacity
-            style={{width: 40, backgroundColor: 'white'}}
-            onPress={() => this.toggleDebug()} />
+          <TouchableOpacity style={{
+            backgroundColor: Theme.lightBlue,
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: 90,
+            height: 35,
+            borderRadius: 10
+          }}
+          onPress={() => this.SignOut()}>
+            <Text style={{color: 'white', fontSize: 18, fontWeight: 'bold'}} >Sign Out</Text>
+          </TouchableOpacity>
         </View>
       </View>
     );
   }
 }
 
+let navigateToLanding = false;
+let device = makeid(32);
+function makeid (length) {
+  var result = '';
+  var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var charactersLength = characters.length;
+  for (var i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
+
 Settings.propTypes = {
+  dispatch: PropTypes.func.isRequired,
   navigation: PropTypes.object.isRequired,
   updateDownloaded: PropTypes.bool.isRequired,
   password: PropTypes.string.isRequired
@@ -160,6 +184,4 @@ function mapStateToProps (state) {
   };
 }
 
-const mapDispatchToProps = {};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Settings);
+export default connect(mapStateToProps)(Settings);

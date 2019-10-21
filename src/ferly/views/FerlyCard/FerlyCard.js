@@ -131,7 +131,8 @@ export class FerlyCard extends React.Component {
                 {text: 'Yes',
                   onPress: () => {
                     address['verified'] = 'yes';
-                    post('request-card', this.modifyAddress(address))
+                    this.props.dispatch(setHaveCard(false));
+                    post('request-card', this.props.password, this.modifyAddress(address))
                       .then((response) => response.json())
                       .then((json) => {
                         this.setState({passed: 'true'});

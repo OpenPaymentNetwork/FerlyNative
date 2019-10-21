@@ -48,7 +48,6 @@ export class RecoveryCode extends React.Component {
       expo_token: expoToken,
       os: `${Platform.OS}:${Platform.Version}`
     };
-
     post('recover-code', this.props.password, postParams)
       .then((response) => response.json())
       .then((responseJson) => {

@@ -42,7 +42,7 @@ export class SignUp extends React.Component {
       username: username
     };
 
-    post('signup', this.props.password, login)
+    post('newSignup', this.props.password, login)
       .then((response) => response.json())
       .then((responseJson) => {
         this.setState({submitting: false});
