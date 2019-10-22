@@ -29,7 +29,7 @@ export class ManualAdd extends React.Component {
 
   submit (option) {
     this.setState({submitting: true});
-    post('invite', this.props.password, {recipient: option})
+    post('invite', this.props.deviceToken, {recipient: option})
       .then((response) => response.json())
       .then((json) => {
         this.setState({submitting: false});
@@ -93,13 +93,13 @@ export class ManualAdd extends React.Component {
 ManualAdd.propTypes = {
   apiExpire: PropTypes.func.isRequired,
   navigation: PropTypes.object.isRequired,
-  password: PropTypes.string.isRequired
+  deviceToken: PropTypes.string.isRequired
 };
 
 function mapStateToProps (state) {
-  const {password} = state.settings;
+  const {deviceToken} = state.settings;
   return {
-    password
+    deviceToken
   };
 }
 

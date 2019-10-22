@@ -25,6 +25,7 @@ export class Wallet extends React.Component {
   };
 
   componentDidMount () {
+    this.props.apiRefresh(urls.profile);
     this.props.apiRequire(urls.profile);
   }
 

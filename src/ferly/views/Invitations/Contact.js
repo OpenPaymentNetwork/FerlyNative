@@ -20,7 +20,7 @@ export class Contact extends React.Component {
   };
 
   submit (option) {
-    post('invite', this.props.password, {recipient: option})
+    post('invite', this.props.deviceToken, {recipient: option})
       .then((response) => response.json())
       .then((json) => {
         if (Object.keys(json).length > 0) {
@@ -99,13 +99,13 @@ export class Contact extends React.Component {
 Contact.propTypes = {
   apiExpire: PropTypes.func.isRequired,
   navigation: PropTypes.object.isRequired,
-  password: PropTypes.string.isRequired
+  deviceToken: PropTypes.string.isRequired
 };
 
 function mapStateToProps (state) {
-  const {password} = state.settings;
+  const {deviceToken} = state.settings;
   return {
-    password
+    deviceToken
   };
 }
 

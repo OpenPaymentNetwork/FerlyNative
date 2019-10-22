@@ -58,7 +58,7 @@ class Profile extends React.Component {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'multipart/form-data',
-        Authorization: 'Bearer ' + this.props.password
+        Authorization: 'Bearer ' + this.props.deviceToken
       }
     };
     return fetch(createUrl('upload-profile-image'), options);
@@ -71,7 +71,7 @@ class Profile extends React.Component {
       last_name: form.lastName,
       username: form.username
     };
-    return post('edit-profile', this.props.password, postParams);
+    return post('edit-profile', this.props.deviceToken, postParams);
   }
 
   onSuccessfulEdit () {
@@ -348,11 +348,11 @@ Profile.propTypes = {
   navigation: PropTypes.object.isRequired,
   profileImage: PropTypes.string,
   username: PropTypes.string,
-  password: PropTypes.string.isRequired
+  deviceToken: PropTypes.string.isRequired
 };
 
 function mapStateToProps (state) {
-  const {password} = state.settings;
+  const {deviceToken} = state.settings;
   const apiStore = state.api.apiStore;
   const {
     amounts,
@@ -368,7 +368,7 @@ function mapStateToProps (state) {
     lastName,
     username,
     profileImage,
-    password
+    deviceToken
   };
 }
 

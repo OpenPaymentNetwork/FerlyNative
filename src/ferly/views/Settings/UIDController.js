@@ -56,7 +56,7 @@ export class UIDController extends React.Component {
     };
 
     this.setState({submitting: true});
-    post('add-uid', this.props.password, postParams)
+    post('add-uid', this.props.deviceToken, postParams)
       .then((response) => response.json())
       .then((json) => {
         if (this.validate(json)) {
@@ -125,7 +125,7 @@ export class UIDController extends React.Component {
       postParams['replace_uid'] = `${type}:${uid}`;
     }
     this.setState({submitting: true, resubmit: false});
-    post('confirm-uid', this.props.password, postParams)
+    post('confirm-uid', this.props.deviceToken, postParams)
       .then((response) => response.json())
       .then((json) => {
         if (this.validate(json)) {
@@ -313,13 +313,13 @@ UIDController.propTypes = {
   navigation: PropTypes.object.isRequired,
   type: PropTypes.string,
   uid: PropTypes.string,
-  password: PropTypes.string.isRequired
+  deviceToken: PropTypes.string.isRequired
 };
 
 function mapStateToProps (state) {
-  const {password} = state.settings;
+  const {deviceToken} = state.settings;
   return {
-    password
+    deviceToken
   };
 }
 

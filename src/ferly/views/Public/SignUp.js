@@ -42,7 +42,7 @@ export class SignUp extends React.Component {
       username: username
     };
 
-    post('newSignup', this.props.password, login)
+    post('newSignup', this.props.deviceToken, login)
       .then((response) => response.json())
       .then((responseJson) => {
         this.setState({submitting: false});
@@ -313,13 +313,13 @@ SignUp.propTypes = {
   navigation: PropTypes.object.isRequired,
   onFocus: PropTypes.object,
   onBlur: PropTypes.object,
-  password: PropTypes.string.isRequired
+  deviceToken: PropTypes.string.isRequired
 };
 
 function mapStateToProps (state) {
-  const {password} = state.settings;
+  const {deviceToken} = state.settings;
   return {
-    password
+    deviceToken
   };
 }
 

@@ -26,7 +26,7 @@ export class RecoveryChannel extends React.Component {
 
     this.setState({'submitting': true, invalid: ''});
 
-    post('recover', this.props.password, {'login': fieldValue})
+    post('recover', this.props.deviceToken, {'login': fieldValue})
       .then((response) => response.json())
       .then((responseJson) => {
         if (this.validate(responseJson)) {
@@ -127,7 +127,7 @@ export class RecoveryChannel extends React.Component {
 
 RecoveryChannel.propTypes = {
   navigation: PropTypes.object.isRequired,
-  password: PropTypes.string.isRequired
+  deviceToken: PropTypes.string.isRequired
 };
 
 const styles = StyleSheet.create({
@@ -138,9 +138,9 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps (state) {
-  const {password} = state.settings;
+  const {deviceToken} = state.settings;
   return {
-    password
+    deviceToken
   };
 }
 

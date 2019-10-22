@@ -155,14 +155,14 @@ const PubStack = createStackNavigator(
   }
 );
 
-export const CreateAuthSwitch = (isUser) => {
+export const CreateAuthSwitch = (isUser, signedIn) => {
   const AppLayout = createSwitchNavigator(
     {
       Pub: PubStack,
       Auth: AuthDrawer
     },
     {
-      initialRouteName: isUser ? 'Auth' : 'Pub'
+      initialRouteName: (isUser && signedIn) ? 'Auth' : 'Pub'
     });
   return AppLayout;
 };

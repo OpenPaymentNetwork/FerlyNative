@@ -5,10 +5,11 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Theme from 'ferly/utils/theme';
 import {connect} from 'react-redux';
-import {envId} from 'ferly/utils/fetch';
+import {envId, post} from 'ferly/utils/fetch';
 import {Notifications, Updates} from 'expo';
 import {View, Text, TouchableOpacity, StyleSheet, Alert, AsyncStorage} from 'react-native';
-import {setPassword} from 'ferly/store/settings';
+import {setDeviceToken, setSignOut} from 'ferly/store/settings';
+import {apiErase} from 'ferly/store/api';
 
 export class Settings extends React.Component {
   static navigationOptions = {
@@ -28,19 +29,23 @@ export class Settings extends React.Component {
   }
 
   SignOut () {
-    AsyncStorage.setItem('password', device).then(() => {
-      try {
-        this.props.dispatch(setPassword(device));
+    this.props.dispatch(apiErase());
+    post('delete-device-tokens', this.props.deviceToken)
+      .then((response) => response.json())
+      .then((json) => {
+      });
+    device = makeid(32);
+    AsyncStorage.setItem('deviceToken', device).then(() => {
+      setTimeout(() => {
         const alertText = 'You have been successfully signed out.';
         Alert.alert('Done!', alertText);
-      } catch (error) {
-      }
-      this.navigateToLanding = true;
+        try {
+          this.props.dispatch(setSignOut(false));
+          this.props.dispatch(setDeviceToken(device));
+        } catch (error) {
+        }
+      }, 500);
     });
-  }
-
-  componentWillUnmount () {
-
   }
 
   async getToken () {
@@ -69,9 +74,6 @@ export class Settings extends React.Component {
   render () {
     const {navigation, updateDownloaded} = this.props;
     const {version} = Constants.manifest;
-    if (navigateToLanding) {
-      return navigation.navigate('LandingPage');
-    }
     const arrowIcon = (
       <Icon
         name="angle-right"
@@ -134,7 +136,6 @@ export class Settings extends React.Component {
   }
 }
 
-let navigateToLanding = false;
 let device = makeid(32);
 function makeid (length) {
   var result = '';
@@ -150,7 +151,7 @@ Settings.propTypes = {
   dispatch: PropTypes.func.isRequired,
   navigation: PropTypes.object.isRequired,
   updateDownloaded: PropTypes.bool.isRequired,
-  password: PropTypes.string.isRequired
+  deviceToken: PropTypes.string.isRequired
 };
 
 const styles = StyleSheet.create({
@@ -177,11 +178,10 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps (state) {
-  const {updateDownloaded, password} = state.settings;
+  const {updateDownloaded, deviceToken} = state.settings;
   return {
     updateDownloaded,
-    password
+    deviceToken
   };
 }
-
 export default connect(mapStateToProps)(Settings);

@@ -50,7 +50,7 @@ export class Give extends React.Component {
     };
 
     this.setState({submitting: true});
-    post('send', this.props.password, postParams)
+    post('send', this.props.deviceToken, postParams)
       .then((response) => response.json())
       .then((json) => {
         if (Object.keys(json).length === 0) {
@@ -177,17 +177,17 @@ Give.propTypes = {
   apiExpire: PropTypes.func.isRequired,
   apiRequire: PropTypes.func.isRequired,
   navigation: PropTypes.object.isRequired,
-  password: PropTypes.string.isRequired
+  deviceToken: PropTypes.string.isRequired
 };
 
 function mapStateToProps (state) {
-  const {password} = state.settings;
+  const {deviceToken} = state.settings;
   const apiStore = state.api.apiStore;
   const {amounts} = apiStore[urls.profile] || {};
 
   return {
     amounts,
-    password
+    deviceToken
   };
 }
 

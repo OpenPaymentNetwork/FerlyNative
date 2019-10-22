@@ -78,9 +78,21 @@ export default class LandingPage extends React.Component {
     }
   }
 
+  versionCode () {
+    const {version} = Constants.manifest;
+    if (envId === 's') {
+      return (
+        <Text style={{alignSelf: 'flex-end'}}>
+          {`${version}/${envId}`}
+        </Text>
+      );
+    } else {
+      return null;
+    }
+  }
+
   render () {
     const {navigation} = this.props;
-    const {version} = Constants.manifest;
     const {page} = this.state;
 
     const images = [
@@ -121,9 +133,7 @@ export default class LandingPage extends React.Component {
               </Text>
             </TouchableOpacity>
           </View>
-          <Text style={{alignSelf: 'flex-end'}}>
-            {`${version}/${envId}`}
-          </Text>
+          {this.versionCode()}
         </View>
       </View>
     );

@@ -33,7 +33,7 @@ export class History extends React.Component {
     const nextUrl = `${urls.history}&offset=${history.length}`;
     fetch(nextUrl, {
       headers: {
-        Authorization: 'Bearer ' + this.props.password
+        Authorization: 'Bearer ' + this.props.deviceToken
       }})
       .then((response) => response.json())
       .then((responseJson) => {
@@ -82,11 +82,11 @@ History.propTypes = {
   hasMore: PropTypes.bool,
   navigation: PropTypes.object.isRequired,
   history: PropTypes.array,
-  password: PropTypes.string.isRequired
+  deviceToken: PropTypes.string.isRequired
 };
 
 function mapStateToProps (state) {
-  const {password} = state.settings;
+  const {deviceToken} = state.settings;
   const apiStore = state.api.apiStore;
   const historyResponse = apiStore[urls.history] || {};
   const history = historyResponse.history;
@@ -94,7 +94,7 @@ function mapStateToProps (state) {
   return {
     hasMore,
     history,
-    password
+    deviceToken
   };
 }
 

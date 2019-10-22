@@ -37,14 +37,14 @@ export function createUrl (urlTail, params = {}) {
   return [url, queryString].join('?');
 }
 
-export function post (urlTail, password, params = {}) {
+export function post (urlTail, deviceToken, params = {}) {
   const url = baseUrl + urlTail;
   return fetch(url, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + password
+      Authorization: 'Bearer ' + deviceToken
     },
     body: JSON.stringify(params)
   });
@@ -55,13 +55,13 @@ export const urls = {
   profile: createUrl('profile')
 };
 
-export const retryFetch = async (url, password, tries = 5, delay = 2000) => {
+export const retryFetch = async (url, deviceToken, tries = 5, delay = 2000) => {
   if (__DEV__) tries = 1;
   try {
     const response = await fetch(url, {
       headers: {
         Accept: 'application/json',
-        Authorization: 'Bearer ' + password
+        Authorization: 'Bearer ' + deviceToken
       }
     });
     // change back to 400

@@ -5,6 +5,7 @@ export const API_REQUIRE = 'API_REQUIRE';
 export const API_INJECT = 'API_INJECT';
 export const API_EXPIRE = 'API_EXPIRE';
 export const API_REFRESH = 'API_REFRESH';
+export const API_ERASE = 'API_ERASE';
 
 // Actions to dispatch
 export const apiRequire = (url) => ({type: API_REQUIRE, url: url});
@@ -15,6 +16,7 @@ export const apiInject = (url, data) => ({
 });
 export const apiExpire = (url) => ({type: API_EXPIRE, url: url});
 export const apiRefresh = (url) => ({type: API_REFRESH, url: url});
+export const apiErase = () => ({type: API_ERASE});
 
 const initialState = {
   apiStore: {}
@@ -31,6 +33,9 @@ const actionHandlers = {
     const newStore = Object.assign({}, state.apiStore);
     delete newStore[url];
     return {apiStore: newStore};
+  },
+  [API_ERASE]: (state) => {
+    return {apiStore: {}};
   }
 };
 

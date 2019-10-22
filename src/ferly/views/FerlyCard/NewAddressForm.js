@@ -58,7 +58,7 @@ export class NewAddressForm extends React.Component {
         zip_code: zipCode,
         verified: 'yes'
       };
-      post('request-card', this.props.password, params)
+      post('request-card', this.props.deviceToken, params)
         .then((response) => response.json())
         .then((json) => {
           this.props.dispatch(setHaveCard(false));
@@ -231,7 +231,7 @@ export class NewAddressForm extends React.Component {
 NewAddressForm.propTypes = {
   onPass: PropTypes.func,
   navigation: PropTypes.object,
-  password: PropTypes.string.isRequired,
+  deviceToken: PropTypes.string.isRequired,
   dispatch: PropTypes.func.isRequired
 };
 
@@ -253,9 +253,9 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps (state) {
-  const {password} = state.settings;
+  const {deviceToken} = state.settings;
   return {
-    password
+    deviceToken
   };
 }
 

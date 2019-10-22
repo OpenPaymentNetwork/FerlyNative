@@ -48,7 +48,7 @@ export class RecoveryCode extends React.Component {
       expo_token: expoToken,
       os: `${Platform.OS}:${Platform.Version}`
     };
-    post('recover-code', this.props.password, postParams)
+    post('recover-code', this.props.deviceToken, postParams)
       .then((response) => response.json())
       .then((responseJson) => {
         if (this.validate(responseJson)) {
@@ -138,7 +138,7 @@ export class RecoveryCode extends React.Component {
 
 RecoveryCode.propTypes = {
   navigation: PropTypes.object.isRequired,
-  password: PropTypes.string.isRequired
+  deviceToken: PropTypes.string.isRequired
 };
 
 const styles = StyleSheet.create({
@@ -149,9 +149,9 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps (state) {
-  const {password} = state.settings;
+  const {deviceToken} = state.settings;
   return {
-    password
+    deviceToken
   };
 }
 

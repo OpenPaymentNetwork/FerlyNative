@@ -8,18 +8,18 @@ import {CreateAuthSwitch} from 'ferly/navigation';
 import {createUrl} from 'ferly/utils/fetch';
 import {logoWhite} from 'ferly/images/index';
 import {View, Text, Image, AsyncStorage} from 'react-native';
-import {setPassword} from 'ferly/store/settings';
+import {setDeviceToken} from 'ferly/store/settings';
 
 export class AppEntry extends React.Component {
   componentDidMount () {
     this.props.dispatch(apiRequire(this.props.isCustomerUrl));
-    this.retrieveData().then((password2) => {
-      if (password2 === '') {
-        AsyncStorage.setItem('password', device);
-        password2 = device;
+    this.retrieveData().then((deviceToken2) => {
+      if (deviceToken2 === '') {
+        AsyncStorage.setItem('deviceToken', device);
+        deviceToken2 = device;
       }
       try {
-        this.props.dispatch(setPassword(password2));
+        this.props.dispatch(setDeviceToken(deviceToken2));
       } catch (error) {
       }
     });
@@ -27,22 +27,22 @@ export class AppEntry extends React.Component {
 
   retrieveData = async () => {
     try {
-      const password = await AsyncStorage.getItem('password') || '';
-      if (password !== '') {
-        password2 = password;
+      const deviceToken = await AsyncStorage.getItem('deviceToken') || '';
+      if (deviceToken !== '') {
+        deviceToken2 = deviceToken;
       }
-      return password2;
+      return deviceToken2;
     } catch (error) {
     }
   }
 
   render () {
     let errorMessage;
-    const {auth, hasError} = this.props;
+    const {auth, hasError, signOut} = this.props;
     if (hasError) {
       errorMessage = <Text style={{color: 'red'}}>Connection Error</Text>;
     }
-    if (auth === undefined) {
+    if (auth === undefined && signOut) {
       return (
         <View
           style={{
@@ -56,12 +56,12 @@ export class AppEntry extends React.Component {
         </View>
       );
     }
-    const Layout = CreateAuthSwitch(auth);
+    const Layout = CreateAuthSwitch(auth, signOut);
     return <Layout />;
   }
 }
 
-var password2 = '';
+var deviceToken2 = '';
 let device = makeid(32);
 function makeid (length) {
   var result = '';
@@ -75,13 +75,14 @@ function makeid (length) {
 
 AppEntry.propTypes = {
   dispatch: PropTypes.func.isRequired,
+  signOut: PropTypes.bool,
   auth: PropTypes.bool,
   hasError: PropTypes.bool,
   isCustomerUrl: PropTypes.string.isRequired
 };
 
 function mapStateToProps (state) {
-  const {password} = state.settings;
+  const {deviceToken, signOut} = state.settings;
   const {releaseChannel = 'staging'} = Constants.manifest;
   const isCustomerUrl =
       createUrl('is-customer', {'expected_env': releaseChannel});
@@ -94,7 +95,8 @@ function mapStateToProps (state) {
     hasError,
     isCustomerUrl,
     idFound: true,
-    password
+    deviceToken,
+    signOut
   };
 }
 

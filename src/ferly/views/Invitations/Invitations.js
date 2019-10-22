@@ -35,7 +35,7 @@ export class Invitations extends React.Component {
 
   deleteInvite (invite) {
     this.setState({deleting: true});
-    post('delete-invitation', this.props.password, {invite_id: invite.id.toString()})
+    post('delete-invitation', this.props.deviceToken, {invite_id: invite.id.toString()})
       .then((response) => response.json())
       .then((json) => {
         if (Object.keys(json).length === 0) {
@@ -202,11 +202,11 @@ Invitations.propTypes = {
   invitationsUrl: PropTypes.string.isRequired,
   navigation: PropTypes.object.isRequired,
   pending: PropTypes.array,
-  password: PropTypes.string.isRequired
+  deviceToken: PropTypes.string.isRequired
 };
 
 function mapStateToProps (state) {
-  const {password} = state.settings;
+  const {deviceToken} = state.settings;
   const invitationsUrl = createUrl('existing-invitations', {status: 'pending'});
   const apiStore = state.api.apiStore;
   const {results: pending = []} = apiStore[invitationsUrl] || {};
@@ -214,7 +214,7 @@ function mapStateToProps (state) {
   return {
     invitationsUrl,
     pending,
-    password
+    deviceToken
   };
 }
 
