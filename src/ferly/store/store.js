@@ -49,7 +49,6 @@ const apiMiddleware = (store) => (next) => (action) => {
   }
 };
 export default function configureStore () {
-  console.log('here store');
   let store = createStore(
     rootReducer,
     applyMiddleware(
