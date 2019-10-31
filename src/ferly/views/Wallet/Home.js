@@ -5,11 +5,10 @@ import React from 'react';
 import Spinner from 'ferly/components/Spinner';
 import Theme from 'ferly/utils/theme';
 import TestElement from 'ferly/components/TestElement';
-import _ from 'lodash';
 import {apiRequire, apiRefresh} from 'ferly/store/api';
 import {checkedUidPrompt} from 'ferly/store/settings';
 import {connect} from 'react-redux';
-import {urls, createUrl} from 'ferly/utils/fetch';
+import {urls} from 'ferly/utils/fetch';
 import {
   View,
   TouchableOpacity,
@@ -27,26 +26,6 @@ export class Wallet extends React.Component {
 
   componentDidMount () {
     this.props.apiRequire(urls.profile);
-  }
-
-  autoUpdate () {
-    this.interval = setInterval(() => {
-      fetch(createUrl('profile'), {
-        headers: {
-          Authorization: 'Bearer ' + this.props.deviceToken
-        }})
-        .then((response) => response.json())
-        .then((json) => {
-          if (count === 0) {
-            walletList = json;
-            count++;
-          }
-          if (Object.keys(walletList).length !== Object.keys(json).length || !_.isEqual(walletList, json)) {
-            this.props.apiRefresh(urls.profile);
-          }
-          walletList = json;
-        });
-    }, 800);
   }
 
   renderCard (design) {
@@ -175,7 +154,6 @@ export class Wallet extends React.Component {
     return (
       <View style={{flex: 1}}>
         {this.renderAmounts()}
-        {this.autoUpdate()}
         <TestElement
           parent={TouchableOpacity}
           label='test-id-fab'
@@ -289,8 +267,5 @@ const mapDispatchToProps = {
   apiRequire,
   checkedUidPrompt
 };
-
-let count = 0;
-let walletList = {};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Wallet);
