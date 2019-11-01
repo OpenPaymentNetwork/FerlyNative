@@ -29,13 +29,15 @@ export class SignUp extends React.Component {
       showFirstNameError: false,
       showLastNameError: false,
       invalid: {},
-      expoToken: '',
       submitting: false
     };
   }
 
   handleSubmit () {
-    const {firstName, lastName, username, fieldValue, expoToken} = this.state;
+    const {navigation} = this.props;
+    const params = navigation.state.params;
+    let {expoToken} = params;
+    const {firstName, lastName, username, fieldValue} = this.state;
     this.setState({submitting: true});
     const login = {
       login: fieldValue,

@@ -22,6 +22,8 @@ export class RecoveryChannel extends React.Component {
 
   handleSubmit () {
     const {navigation} = this.props;
+    const params = navigation.state.params;
+    const {expoToken} = params;
     const {fieldValue} = this.state;
 
     this.setState({'submitting': true, invalid: ''});
@@ -40,6 +42,7 @@ export class RecoveryChannel extends React.Component {
             attemptPath: responseJson.attempt_path,
             secret: responseJson.secret,
             factorId: responseJson.factor_id,
+            expoToken: expoToken,
             code: code,
             loginType: responseJson.login_type,
             codeLength: codeLength

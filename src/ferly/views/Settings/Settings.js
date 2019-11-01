@@ -29,11 +29,11 @@ export class Settings extends React.Component {
   }
 
   SignOut () {
-    this.props.dispatch(apiErase());
     post('delete-device-tokens', this.props.deviceToken)
       .then((response) => response.json())
       .then((json) => {
       });
+    this.props.dispatch(apiErase());
     device = makeid(32);
     AsyncStorage.setItem('deviceToken', device).then(() => {
       setTimeout(() => {

@@ -19,7 +19,6 @@ export class RecoveryCode extends React.Component {
       invalid: '',
       submitting: false,
       recaptchaResponse: '',
-      expoToken: '',
       showRecaptcha: false,
       resubmit: false
     };
@@ -35,8 +34,8 @@ export class RecoveryCode extends React.Component {
   handleSubmit () {
     const {navigation} = this.props;
     const params = navigation.state.params;
-    const {attemptPath, secret, factorId} = params;
-    const {fieldValue, recaptchaResponse, expoToken} = this.state;
+    const {attemptPath, secret, factorId, expoToken} = params;
+    const {fieldValue, recaptchaResponse} = this.state;
     this.setState({'submitting': true, invalid: '', resubmit: false});
 
     const postParams = {

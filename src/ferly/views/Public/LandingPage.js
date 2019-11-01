@@ -18,6 +18,7 @@ export default class LandingPage extends React.Component {
     super(props);
     this.state = {
       page: 0,
+      expoToken: '',
       isMounted: false,
       dataSource: [
         {
@@ -93,7 +94,11 @@ export default class LandingPage extends React.Component {
 
   render () {
     const {navigation} = this.props;
-    const {page} = this.state;
+    const {page, expoToken} = this.state;
+
+    const passParams = {
+      expoToken: expoToken
+    };
 
     const images = [
       tutorialTwo,
@@ -122,12 +127,12 @@ export default class LandingPage extends React.Component {
           <PrimaryButton
             title="Sign Up"
             color={Theme.lightBlue}
-            onPress={() => navigation.navigate('SignUp')} />
+            onPress={() => navigation.navigate('SignUp', passParams)} />
           <View style={{flexDirection: 'row', justifyContent: 'center'}}>
             <Text style={[styles.text, {paddingBottom: 30, fontSize: 18}]}>
               Already have an account?
             </Text>
-            <TouchableOpacity onPress={() => navigation.navigate('RecoveryChannel')}>
+            <TouchableOpacity onPress={() => navigation.navigate('RecoveryChannel', passParams)}>
               <Text style={{color: Theme.lightBlue, fontSize: 18, paddingLeft: 10}}>
                 Sign In
               </Text>
