@@ -312,7 +312,7 @@ export class Wallet extends React.Component {
             ]}
             source={blankCard}
           />
-          <Image style={styles.ferlyImg} source={logoHorizontal}/>
+          <Image resizeMode={'contain'} style={styles.ferlyImg} source={logoHorizontal}/>
           <Text style={{
             padding: 20,
             marginTop: 17,
