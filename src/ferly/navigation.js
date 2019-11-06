@@ -48,12 +48,8 @@ const drawerOptions = ({navigation}) => ({
       onPress={() => navigation.toggleDrawer()} />
   ),
   headerStyle: {
-    backgroundColor: Theme.darkBlue,
-    elevation: 1,
-    shadowColor: 'gray',
-    shadowOffset: { width: 2, height: 1 },
-    shadowOpacity: 5,
-    shadowRadius: 10},
+    backgroundColor: Theme.darkBlue
+  },
   headerTintColor: 'white'
 });
 

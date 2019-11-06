@@ -43,22 +43,6 @@ export default class LandingPage extends React.Component {
     clearInterval(this.interval);
   }
 
-  renderDots () {
-    const {page} = this.state;
-    let dots = [];
-    for (let i = 0; i < 3; i++) {
-      dots.push(
-        <View
-          key={i}
-          style={[
-            styles.circle,
-            {backgroundColor: i === page ? Theme.lightBlue : 'white'}
-          ]} />
-      );
-    }
-    return dots;
-  }
-
   async getToken () {
     const { status: existingStatus } = await Permissions.getAsync(
       Permissions.NOTIFICATIONS
@@ -90,6 +74,22 @@ export default class LandingPage extends React.Component {
     } else {
       return null;
     }
+  }
+
+  renderDots () {
+    const {page} = this.state;
+    let dots = [];
+    for (let i = 0; i < 3; i++) {
+      dots.push(
+        <View
+          key={i}
+          style={[
+            styles.circle,
+            {backgroundColor: i === page ? Theme.lightBlue : 'white'}
+          ]} />
+      );
+    }
+    return dots;
   }
 
   render () {

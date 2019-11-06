@@ -1,8 +1,8 @@
+
 import accounting from 'ferly/utils/accounting';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Avatar from 'ferly/components/Avatar';
-import StoreAvatar from 'ferly/components/StoreAvatar';
 import Theme from 'ferly/utils/theme';
 import {apiRequire} from 'ferly/store/api';
 import {connect} from 'react-redux';
@@ -25,7 +25,6 @@ export class Transfer extends React.Component {
       amount,
       message,
       timestamp,
-      design,
       design_title: designTitle,
       counter_party: counterParty,
       counter_party_profile_image_url: counterPartyProfileImageUrl,
@@ -45,32 +44,37 @@ export class Transfer extends React.Component {
     let verb = '';
     let cp = '';
     let messageTitle = '';
+    let symbol = '';
     switch (transferType) {
       case 'purchase':
         verb = 'added';
+        symbol = '+';
         cp = ' to your account';
         break;
       case 'send':
         verb = 'gifted';
+        symbol = '-';
         cp = ` to ${counterParty}`;
         messageTitle = 'Your ';
         break;
       case 'receive':
         verb = 'received';
+        symbol = '+';
         cp = ` from ${counterParty}`;
         messageTitle = 'Their ';
         break;
       case 'redeem':
         verb = 'paid';
+        symbol = '-';
         break;
     }
 
     let counterPartyAvatar;
     if (transferType === 'send' || transferType === 'receive') {
       counterPartyAvatar = (
-        <View style={{marginLeft: -20, zIndex: -1}}>
+        <View style={{marginTop: 5, zIndex: -1}}>
           <Avatar
-            size={90}
+            size={50}
             firstWord={counterParty}
             pictureUrl={counterPartyProfileImageUrl} />
         </View>
@@ -82,16 +86,18 @@ export class Transfer extends React.Component {
       messageSection = (
         <View style={styles.section}>
           <Text style={styles.sectionHeader}>
-            {`${messageTitle}Message:`}
+            {`${messageTitle}Message`}
           </Text>
-          <Text
-            style={{fontSize: 18, color: Theme.lightBlue, paddingLeft: 20}}>
+          <Text style={{fontSize: 16, paddingLeft: 20, color: 'darkgray'}}>
             {message}
           </Text>
         </View>
       );
     }
 
+    let giftValue;
+    let recipiant;
+    let received;
     let purchaseDetailsSection;
     let termsSection;
     let paymentSection;
@@ -190,41 +196,116 @@ export class Transfer extends React.Component {
             </Text>
           </View>
         </View>
+
+      );
+    } else if (transferType === 'send') {
+      giftValue = (
+        <View style={styles.section} >
+          <View>
+            <Text style={styles.sectionHeader} >Gift Value</Text>
+          </View>
+          <View style={{paddingLeft: 20}} >
+            <Text style={[styles.sectionText, {fontSize: 16}]} >{designTitle}</Text>
+          </View>
+        </View>
+      );
+      recipiant = (
+        <View style={styles.section} >
+          <View>
+            <Text style={styles.sectionHeader} >
+              Recipiant
+            </Text>
+          </View>
+          <View style={{paddingLeft: 15, flexDirection: 'row'}} >
+            {counterPartyAvatar}
+            <Text style={{alignSelf: 'center', paddingLeft: 10, color: 'darkgray', fontSize: 16}} >
+              {counterParty}
+            </Text>
+          </View>
+        </View>
+      );
+    } else if (transferType === 'receive') {
+      giftValue = (
+        <View style={styles.section} >
+          <View>
+            <Text style={styles.sectionHeader} >Gift Value</Text>
+          </View>
+          <View style={{paddingLeft: 20}} >
+            <Text style={[styles.sectionText, {fontSize: 16}]} >{designTitle}</Text>
+          </View>
+        </View>
+      );
+      received = (
+        <View style={styles.section} >
+          <View>
+            <Text style={styles.sectionHeader} >Received From</Text>
+          </View>
+          <View style={{paddingLeft: 15, flexDirection: 'row'}} >
+            {counterPartyAvatar}
+            <Text style={{alignSelf: 'center', paddingLeft: 10, color: 'darkgray', fontSize: 16}} >
+              {counterParty}
+            </Text>
+          </View>
+        </View>
+      );
+      const d = new Date();
+      d.setDate(d.getDate() + 1825);
+      const expirationDate = formatDate(d, 'MMM D, YYYY');
+      feesSection = (
+        <View style={styles.section}>
+          <Text style={styles.sectionHeader}>Expiration & Fees</Text>
+          <View style={[styles.functionRow, {paddingLeft: 20}]}>
+            <Text style={styles.sectionText}>Expiration Date</Text>
+            <Text style={[styles.sectionText, {color: Theme.lightBlue}]}>
+              {expirationDate}
+            </Text>
+          </View>
+          <View style={[styles.functionRow, {paddingLeft: 20}]}>
+            <Text style={styles.sectionText}>Dormancy/Inactivity Fee</Text>
+            <Text style={[styles.sectionText, {color: Theme.lightBlue}]}>
+              None
+            </Text>
+          </View>
+          <View style={[styles.functionRow, {paddingLeft: 20}]}>
+            <Text style={styles.sectionText}>Service Fee</Text>
+            <Text style={[styles.sectionText, {color: Theme.lightBlue}]}>
+              None
+            </Text>
+          </View>
+        </View>
       );
     }
     return (
       <ScrollView style={{backgroundColor: 'white'}}>
-        <View style={{
-          alignItems: 'center',
-          flexDirection: 'row',
-          height: 110,
-          justifyContent: 'center',
-          paddingTop: 20
-        }}>
-          <View style={{backgroundColor: `#${design.field_color}`, borderRadius: 45}} >
-            <StoreAvatar size={90} shade={true} title={`${designTitle}`}/>
+        <View style={{backgroundColor: Theme.darkBlue}} >
+          <View style={{
+            alignItems: 'center',
+            flexDirection: 'row',
+            height: 110,
+            justifyContent: 'center',
+            paddingTop: 10
+          }}>
+            <Text style={{color: Theme.lightBlue, fontSize: 35}}>
+              {symbol}${amount}
+            </Text>
           </View>
-          {counterPartyAvatar}
+          <View style={{
+            alignItems: 'center',
+            marginHorizontal: 20,
+            paddingBottom: 10
+          }}>
+            <Text style={{textAlign: 'center', fontSize: 18, color: 'white'}}>
+              {`You ${verb} ${designTitle}${cp}.`}
+            </Text>
+            <Text style={[styles.sectionText, {paddingTop: 5, paddingBottom: 30}]}>
+              {dateDisplay}
+            </Text>
+            <View style={styles.spacer} />
+          </View>
         </View>
-        <View style={{
-          alignItems: 'center',
-          borderBottomWidth: 1,
-          borderColor: 'darkgray',
-          marginHorizontal: 20,
-          paddingBottom: 10
-        }}>
-          <Text style={{textAlign: 'center', fontSize: 22}}>
-            {`You ${verb} ${designTitle}${cp}.`}
-          </Text>
-          <View style={styles.spacer} />
-          <Text style={{color: Theme.lightBlue, fontSize: 22}}>
-            ${amount}
-          </Text>
-          <View style={styles.spacer} />
-          <Text style={styles.sectionText}>
-            {dateDisplay}
-          </Text>
-        </View>
+        {giftValue}
+        {recipiant}
+        {received}
         {messageSection}
         {purchaseDetailsSection}
         {paymentSection}
@@ -237,9 +318,9 @@ export class Transfer extends React.Component {
 
 const styles = StyleSheet.create({
   functionRow: {flexDirection: 'row', justifyContent: 'space-between'},
-  section: {marginTop: 10, paddingHorizontal: 20, padding: 20},
+  section: {paddingHorizontal: 20, padding: 15},
   sectionHeader: {fontSize: 18},
-  sectionText: {color: 'darkgray', fontSize: 16}
+  sectionText: {color: 'darkgray', fontSize: 14}
 });
 
 Transfer.propTypes = {

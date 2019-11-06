@@ -2,7 +2,6 @@ import MapView from 'react-native-maps';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Spinner from 'ferly/components/Spinner';
-import StoreAvatar from 'ferly/components/StoreAvatar';
 import Theme from 'ferly/utils/theme';
 import {apiRequire} from 'ferly/store/api';
 import {connect} from 'react-redux';
@@ -69,15 +68,9 @@ export class Locations extends React.Component {
 
     let selectedDetails;
     if (selectedLocation != null) {
-      const {params} = this.props.navigation.state;
-      const {design} = params;
-      const {field_color: fieldColor} = design;
       const {title, address} = selectedLocation;
       selectedDetails = (
         <View style={styles.shadow}>
-          <View style={[styles.logo, {backgroundColor: `#${fieldColor}`}]} >
-            <StoreAvatar size={55} title={title} />
-          </View>
           <View style={{flexDirection: 'row'}}>
             <View style={styles.selectionDetails}>
               <Text style={styles.selectionTitle}>
@@ -158,7 +151,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingHorizontal: 20,
     paddingBottom: 20,
-    paddingTop: 35
+    paddingTop: 20
   },
   selectionTitle: {fontWeight: 'bold', fontSize: 22, color: Theme.darkBlue},
   selectionOptions: {flexDirection: 'row', justifyContent: 'space-between'},

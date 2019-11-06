@@ -92,17 +92,7 @@ export class Invitations extends React.Component {
   }
 
   render () {
-    const {pending, navigation} = this.props;
-
-    let renderedPending;
-    if (pending && pending.length > 0) {
-      renderedPending = (
-        <View style={styles.pendingTitleContainer}>
-          <Text style={styles.pendingTitle}>Pending Invitations</Text>
-          {pending.map((invite) => this.renderInvite(invite))}
-        </View>
-      );
-    }
+    const {navigation} = this.props;
 
     const addIcon = (
       <View style={styles.addIconContainer}>
@@ -127,7 +117,6 @@ export class Invitations extends React.Component {
             <Text style={styles.buttonText}>New</Text>
           </TouchableOpacity>
           <View style={{marginTop: 10}} />
-          {renderedPending}
         </ScrollView>
       </View>
     );

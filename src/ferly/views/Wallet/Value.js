@@ -1,4 +1,3 @@
-import StoreAvatar from 'ferly/components/StoreAvatar';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Theme from 'ferly/utils/theme';
@@ -31,7 +30,7 @@ export class Value extends React.Component {
   render () {
     const {navigation} = this.props;
     const {params: design} = this.props.navigation.state;
-    const {amount, title, expiring = [], field_color: fieldColor} = design;
+    const {amount, title, expiring = []} = design;
     const tableHeader = (
       <View style={styles.tableRow}>
         <Text style={[styles.leftColumn, {fontWeight: 'bold'}]}>Amount</Text>
@@ -51,11 +50,8 @@ export class Value extends React.Component {
     return (
       <ScrollView style={{flex: 1, padding: 20, backgroundColor: 'white'}}>
         <View style={styles.headerContainer}>
-          <View style={{backgroundColor: `#${fieldColor}`, borderRadius: 50}} >
-            <StoreAvatar shade={true} title={`${design.title}`} size={100} />
-          </View>
-          <Text style={{fontSize: 24, marginVertical: 8}}>{title}</Text>
           <Text style={styles.amount}>${amount}</Text>
+          <Text style={{fontSize: 22, marginBottom: 50, color: Theme.lightBlue}}>{title}</Text>
         </View>
         <Text style={styles.header}>Redemption Locations</Text>
         <Text style={styles.paragraph}>
@@ -111,7 +107,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: 'lightgray'
   },
-  amount: {color: Theme.lightBlue, fontSize: 22, marginBottom: 12},
+  amount: {color: Theme.lightBlue, fontSize: 35, marginBottom: 12, marginTop: 30},
   header: {
     color: 'black',
     fontSize: 16,

@@ -1,5 +1,5 @@
+
 import accounting from 'ferly/utils/accounting';
-import StoreAvatar from 'ferly/components/StoreAvatar';
 import Constants from 'expo-constants';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import PrimaryButton from 'ferly/components/PrimaryButton';
@@ -213,7 +213,7 @@ export class Cart extends React.Component {
     const amountNumber = parseFloat(amountString);
     const total = amountNumber + convenienceFee;
     const {selectedSource, submitting} = this.state;
-    const {title, field_color: fieldColor} = design;
+    const {title} = design;
     return (
       <View style={styles.page}>
         <TestElement
@@ -221,21 +221,15 @@ export class Cart extends React.Component {
           label='test-id-cart-header-box'
           style={styles.header}>
           <View style={{alignItems: 'center'}} >
-            <View style={{backgroundColor: `#${fieldColor}`, borderRadius: 50}} >
-              <StoreAvatar size={100} shade={true} title={`${title}`} />
-            </View>
           </View>
           <View style={styles.designContainer}>
-            <View style={{alignItems: 'center', padding: 5}}>
-              <Text style={styles.designText}>{title}</Text>
-            </View>
             <View>
               <View style={{flexGrow: 1, flexWrap: 'wrap'}}>
                 <View style={styles.section}>
                   <Text style={styles.sectionHeader}>Purchase Summary</Text>
                   <View>
                     <View style={styles.functionRow}>
-                      <Text style={styles.sectionText}>Purchase Amount</Text>
+                      <Text style={styles.sectionText}>{title}</Text>
                       <Text style={[styles.sectionText,
                         {color: Theme.lightBlue}]}>
                         {accounting.formatMoney(amountNumber)}
@@ -322,7 +316,7 @@ const styles = StyleSheet.create({
   },
   functionRow: {flexDirection: 'row', justifyContent: 'space-between'},
   section: {marginTop: 10, paddingHorizontal: 20},
-  sectionHeader: {fontSize: 18, fontWeight: 'bold', marginBottom: 7},
+  sectionHeader: {fontSize: 22, fontWeight: 'bold', marginVertical: 10, alignSelf: 'center'},
   sectionText: {color: 'darkgray', fontSize: 16},
   totalText: {fontSize: 18, fontWeight: 'bold'}
 });
