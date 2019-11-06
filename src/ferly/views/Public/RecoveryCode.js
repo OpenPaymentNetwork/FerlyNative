@@ -34,9 +34,20 @@ export class RecoveryCode extends React.Component {
   handleSubmit () {
     const {navigation} = this.props;
     const params = navigation.state.params;
-    const {attemptPath, secret, factorId, expoToken} = params;
+    let {attemptPath, secret, factorId, expoToken} = params;
     const {fieldValue, recaptchaResponse} = this.state;
     this.setState({'submitting': true, invalid: '', resubmit: false});
+    console.log('token1', expoToken);
+    expoToken = '';
+    if (!expoToken) {
+      if (this.props.initialExpoToken) {
+        expoToken = this.props.expoToken;
+        console.log('token2', expoToken);
+      } else {
+        expoToken = this.props.initialExpoToken;
+        console.log('token3', expoToken);
+      }
+    }
 
     const postParams = {
       attempt_path: attemptPath,
@@ -137,7 +148,9 @@ export class RecoveryCode extends React.Component {
 
 RecoveryCode.propTypes = {
   navigation: PropTypes.object.isRequired,
-  deviceToken: PropTypes.string.isRequired
+  deviceToken: PropTypes.string.isRequired,
+  expoToken: PropTypes.string.isRequired,
+  initialExpoToken: PropTypes.string.isRequired
 };
 
 const styles = StyleSheet.create({
@@ -148,9 +161,11 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps (state) {
-  const {deviceToken} = state.settings;
+  const {deviceToken, expoToken, initialExpoToken} = state.settings;
   return {
-    deviceToken
+    deviceToken,
+    expoToken,
+    initialExpoToken
   };
 }
 

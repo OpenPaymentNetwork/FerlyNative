@@ -85,6 +85,13 @@ export class SignUpCode extends React.Component {
                     .then((response) => response.json())
                     .then((responseJson) => {
                       if (this.validate(responseJson)) {
+                        if (!expoToken) {
+                          if (!this.props.initialExpoToken) {
+                            expoToken = this.props.expoToken;
+                          } else {
+                            expoToken = this.props.initialExpoToken;
+                          }
+                        }
                         const finalParams = {
                           first_name: firstName,
                           last_name: lastName,
@@ -195,7 +202,9 @@ export class SignUpCode extends React.Component {
 
 SignUpCode.propTypes = {
   navigation: PropTypes.object.isRequired,
-  deviceToken: PropTypes.string.isRequired
+  deviceToken: PropTypes.string.isRequired,
+  expoToken: PropTypes.string.isRequired,
+  initialExpoToken: PropTypes.string.isRequired
 };
 
 const styles = StyleSheet.create({
@@ -206,9 +215,11 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps (state) {
-  const {deviceToken} = state.settings;
+  const {deviceToken, expoToken, initialExpoToken} = state.settings;
   return {
-    deviceToken
+    deviceToken,
+    expoToken,
+    initialExpoToken
   };
 }
 

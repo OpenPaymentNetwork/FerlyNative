@@ -4,7 +4,9 @@ import PrimaryButton from 'ferly/components/PrimaryButton';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Theme from 'ferly/utils/theme';
+import {connect} from 'react-redux';
 import {Notifications} from 'expo';
+import {setInitialExpoToken} from 'ferly/store/settings';
 import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
 import {envId} from 'ferly/utils/fetch';
 import {
@@ -13,7 +15,7 @@ import {
   tutorialSix
 } from 'ferly/images/index';
 
-export default class LandingPage extends React.Component {
+export class LandingPage extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
@@ -31,7 +33,9 @@ export default class LandingPage extends React.Component {
   }
 
   componentDidMount () {
-    this.getToken();
+    this.getToken().then((response) => {
+      this.props.dispatch(setInitialExpoToken(response));
+    });
     this.interval = setInterval(() => {
       this.setState({
         page: this.state.page === this.state.dataSource.length ? 0 : this.state.page + 1
@@ -60,6 +64,7 @@ export default class LandingPage extends React.Component {
     if (finalStatus === 'granted') {
       let token = await Notifications.getExpoPushTokenAsync();
       this.setState({expoToken: token});
+      return token;
     }
   }
 
@@ -146,7 +151,8 @@ export default class LandingPage extends React.Component {
 }
 
 LandingPage.propTypes = {
-  navigation: PropTypes.object.isRequired
+  navigation: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired
 };
 
 const styles = StyleSheet.create({
@@ -162,3 +168,12 @@ const styles = StyleSheet.create({
   dots: {flexDirection: 'row', justifyContent: 'space-between', width: 120},
   circle: {width: 12, height: 12, borderRadius: 6}
 });
+
+function mapStateToProps (state) {
+  const {initialExpoToken} = state.settings;
+  return {
+    initialExpoToken
+  };
+}
+
+export default connect(mapStateToProps)(LandingPage);

@@ -8,7 +8,7 @@ import {connect} from 'react-redux';
 import {envId, post} from 'ferly/utils/fetch';
 import {Notifications, Updates} from 'expo';
 import {View, Text, TouchableOpacity, StyleSheet, Alert, AsyncStorage} from 'react-native';
-import {setDeviceToken, setSignOut} from 'ferly/store/settings';
+import {setDeviceToken, setSignOut, setExpoToken} from 'ferly/store/settings';
 import {apiErase} from 'ferly/store/api';
 
 export class Settings extends React.Component {
@@ -29,6 +29,11 @@ export class Settings extends React.Component {
   }
 
   SignOut () {
+    post('get-expo-token', this.props.deviceToken)
+      .then((response) => response.json())
+      .then((json) => {
+        this.props.dispatch(setExpoToken(json.expo_token));
+      });
     post('delete-device-tokens', this.props.deviceToken)
       .then((response) => response.json())
       .then((json) => {
