@@ -99,14 +99,13 @@ export class Wallet extends React.Component {
     }
   }
 
-  renderCard (design) {
+  renderCard (design, count) {
     const {navigation} = this.props;
     const {amount, id, title} = design;
     const formatted = accounting.formatMoney(parseFloat(amount));
-    count++;
     let color = 'white';
     let text = 'white';
-    switch (count) {
+    switch ((count % 6) + 1) {
       case 1: color = '#8FD6D6';
         text = '#1D3A54';
         break;
@@ -124,7 +123,6 @@ export class Wallet extends React.Component {
         break;
       case 6: color = '#4A9191';
         text = '#FFFFFF';
-        count = 0;
         break;
       default:break;
     }
@@ -197,7 +195,7 @@ export class Wallet extends React.Component {
               onRefresh={() => this.props.apiRefresh(urls.profile)}
             />
           }>
-          {amounts.map((cashRow) => this.renderCard(cashRow))}
+          {amounts.map((cashRow, index) => this.renderCard(cashRow, index))}
           <View style={{height: 80}} />
         </ScrollView>
       );
@@ -233,8 +231,8 @@ export class Wallet extends React.Component {
   }
 
   render () {
-    count2++;
-    if (count2 < 2) {
+    count++;
+    if (count < 2) {
       const text = {'text': 'Wallet'};
       post('log-info', this.props.deviceToken, text)
         .then((response) => response.json())
@@ -359,7 +357,6 @@ const HEADER_MAX_HEIGHT = 160;
 const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 let count = 0;
-let count2 = 0;
 const {width} = Dimensions.get('window');
 const newWidth = width / 3;
 const logoWidth = width / 2.4;
