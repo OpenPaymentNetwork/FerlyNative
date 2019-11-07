@@ -19,9 +19,9 @@ export class LandingPage extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
+      time: 0,
       page: 0,
       expoToken: '',
-      isMounted: false,
       dataSource: [
         {
           title: 1
@@ -36,15 +36,15 @@ export class LandingPage extends React.Component {
     this.getToken().then((response) => {
       this.props.dispatch(setInitialExpoToken(response));
     });
-    this.interval = setInterval(() => {
+    let interval = setInterval(() => {
       this.setState({
-        page: this.state.page === this.state.dataSource.length ? 0 : this.state.page + 1
+        page: this.state.page === this.state.dataSource.length ? 0 : this.state.page + 1,
+        time: this.state.time + 1
       });
+      if (this.state.time === 5) {
+        clearInterval(interval);
+      }
     }, 5000);
-  }
-
-  componentWillUnmount () {
-    clearInterval(this.interval);
   }
 
   async getToken () {
@@ -120,6 +120,7 @@ export class LandingPage extends React.Component {
     return (
       <View style={{flex: 1, justifyContent: 'space-between', backgroundColor: Theme.darkBlue}}>
         <View style={styles.container}>
+          {/* {this.renderSlide()} */}
           <Text style={[styles.text, {fontSize: 18}]}>
             {descriptions[page]}
           </Text>

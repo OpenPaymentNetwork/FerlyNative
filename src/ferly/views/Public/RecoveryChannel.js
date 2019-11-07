@@ -64,6 +64,11 @@ export class RecoveryChannel extends React.Component {
 
   renderRecoveryOption () {
     const {navigation} = this.props;
+    const params = navigation.state.params;
+    const {expoToken} = params;
+    const signUpParams = {
+      expoToken: expoToken
+    };
     return (
       <View style={{
         width: '100%',
@@ -72,7 +77,7 @@ export class RecoveryChannel extends React.Component {
         marginBottom: 30}}>
         <Text style={{fontSize: 16}}>{`Don't have an account?`}</Text>
         <TouchableOpacity
-          onPress={() => navigation.navigate('SignUp')}>
+          onPress={() => navigation.navigate('SignUp', signUpParams)}>
           <Text style={{
             color: Theme.lightBlue,
             textDecorationLine: 'underline',

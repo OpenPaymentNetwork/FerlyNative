@@ -4,6 +4,7 @@ import Theme from 'ferly/utils/theme';
 import {viewLocations} from 'ferly/images/index';
 import {format as formatDate} from 'date-fns';
 import {
+  Dimensions,
   View,
   ScrollView,
   Text,
@@ -63,6 +64,9 @@ export class Value extends React.Component {
           <Image
             source={viewLocations}
             style={styles.image}/>
+          <Text style={styles.locations}>
+              View Locations
+          </Text>
         </TouchableOpacity>
         <Text style={styles.header}>Expiration</Text>
         <Text style={styles.paragraph}>
@@ -101,11 +105,19 @@ export class Value extends React.Component {
   }
 }
 
+const {width} = Dimensions.get('window');
 const styles = StyleSheet.create({
   headerContainer: {
     alignItems: 'center',
     borderBottomWidth: 1,
     borderColor: 'lightgray'
+  },
+  locations: {
+    alignSelf: 'center',
+    marginTop: 30,
+    fontWeight: 'bold',
+    fontSize: 15,
+    position: 'absolute'
   },
   amount: {color: Theme.lightBlue, fontSize: 35, marginBottom: 12, marginTop: 30},
   header: {
@@ -115,7 +127,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10
   },
-  image: {resizeMode: 'stretch', width: undefined},
+  image: {width: width - 40, height: 80, borderRadius: 10},
   paragraph: {fontSize: 16, marginBottom: 10, color: 'gray'},
   supportParagraph: {fontSize: 16, color: 'gray'},
   tableRow: {flexDirection: 'row', paddingLeft: 10},

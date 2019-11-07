@@ -182,16 +182,17 @@ export class Wallet extends React.Component {
     const amounts = this.props.amounts || [];
     if (amounts.length === 0) {
       return (
-        <Text style={{marginTop: Platform.OS === 'ios' ? 75 : 235, margin: 20, fontSize: 18}}>
+        <Text style={{marginTop: Platform.OS === 'ios' ? 20 : 235, margin: 20, fontSize: 18}}>
           There’s nothing here! Click ‘+’ below to purchase your first gift.
         </Text>
       );
     } else {
       return (
         <ScrollView
-          style={{marginTop: Platform.OS === 'ios' ? 80 : 240}}
+          style={{marginTop: Platform.OS === 'ios' ? 20 : 240}}
           refreshControl={
             <RefreshControl
+              style={{position: 'absolute'}}
               refreshing={false}
               onRefresh={() => this.props.apiRefresh(urls.profile)}
             />
@@ -283,15 +284,15 @@ export class Wallet extends React.Component {
                   1000);
               }}
               // Android offset for RefreshControl
-              progressViewOffset={HEADER_MAX_HEIGHT}
+              progressViewOffset={250}
             />
           }
           // iOS offset for RefreshControl
           contentInset={{
-            top: HEADER_MAX_HEIGHT
+            top: 220
           }}
           contentOffset={{
-            y: -HEADER_MAX_HEIGHT
+            y: -220
           }}
         >
           {this.renderAmounts()}
@@ -361,7 +362,7 @@ const styles = StyleSheet.create({
   bar: {
     marginTop: 82,
     height: 50,
-    marginRight: 20,
+    marginRight: 30,
     alignItems: 'flex-end',
     justifyContent: 'center',
     position: 'absolute',
@@ -381,7 +382,7 @@ const styles = StyleSheet.create({
   },
   backgroundImage: {
     height: 190,
-    width: width - 20,
+    width: width - 35,
     flexDirection: 'row-reverse',
     alignSelf: 'center',
     padding: 10,
@@ -454,7 +455,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     height: 40,
     flex: 1,
-    maxWidth: 150
+    maxWidth: 275
   },
   buttonRow: {
     flexDirection: 'row',

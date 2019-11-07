@@ -37,15 +37,12 @@ export class RecoveryCode extends React.Component {
     let {attemptPath, secret, factorId, expoToken} = params;
     const {fieldValue, recaptchaResponse} = this.state;
     this.setState({'submitting': true, invalid: '', resubmit: false});
-    console.log('token1', expoToken);
-    expoToken = '';
+
     if (!expoToken) {
       if (this.props.initialExpoToken) {
         expoToken = this.props.expoToken;
-        console.log('token2', expoToken);
       } else {
         expoToken = this.props.initialExpoToken;
-        console.log('token3', expoToken);
       }
     }
 
@@ -150,7 +147,7 @@ RecoveryCode.propTypes = {
   navigation: PropTypes.object.isRequired,
   deviceToken: PropTypes.string.isRequired,
   expoToken: PropTypes.string.isRequired,
-  initialExpoToken: PropTypes.string.isRequired
+  initialExpoToken: PropTypes.string
 };
 
 const styles = StyleSheet.create({

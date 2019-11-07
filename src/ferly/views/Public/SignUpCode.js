@@ -204,7 +204,7 @@ SignUpCode.propTypes = {
   navigation: PropTypes.object.isRequired,
   deviceToken: PropTypes.string.isRequired,
   expoToken: PropTypes.string.isRequired,
-  initialExpoToken: PropTypes.string.isRequired
+  initialExpoToken: PropTypes.string
 };
 
 const styles = StyleSheet.create({
