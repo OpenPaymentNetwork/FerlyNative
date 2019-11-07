@@ -11,6 +11,7 @@ import {connect} from 'react-redux';
 import {format as formatDate} from 'date-fns';
 import {urls} from 'ferly/utils/fetch';
 import {
+  Dimensions,
   View,
   Text,
   StyleSheet,
@@ -99,6 +100,9 @@ export class Purchase extends React.Component {
             <Image
               source={viewLocations}
               style={styles.image}/>
+            <Text style={styles.locations}>
+              View Locations
+            </Text>
           </TouchableOpacity>
           <Text style={styles.header}>Expiration and Fees</Text>
           <Text style={styles.paragraph}>
@@ -130,6 +134,7 @@ export class Purchase extends React.Component {
   }
 }
 
+const {width} = Dimensions.get('window');
 const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
@@ -158,7 +163,14 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 4
   },
-  image: {resizeMode: 'stretch', width: undefined},
+  locations: {
+    alignSelf: 'center',
+    marginTop: 30,
+    fontWeight: 'bold',
+    fontSize: 15,
+    position: 'absolute'
+  },
+  image: {width: width - 40, height: 80, borderRadius: 10},
   paragraph: {fontSize: 16, marginBottom: 10, color: 'darkgray'}
 });
 
