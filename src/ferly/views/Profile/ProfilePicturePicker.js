@@ -5,9 +5,11 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Theme from 'ferly/utils/theme';
+import {connect} from 'react-redux';
+import {post} from 'ferly/utils/fetch';
 import {Platform, TouchableOpacity, Alert, View} from 'react-native';
 
-export default class ProfilePicturePicker extends React.Component {
+export class ProfilePicturePicker extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
@@ -102,6 +104,17 @@ export default class ProfilePicturePicker extends React.Component {
   }
 
   render () {
+    count++;
+    if (count < 2) {
+      const text = {'text': 'Profile Picture Picker'};
+      post('log-info', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch((error) => {
+          console.log('error', error);
+        });
+    }
     const {avatarProps} = this.props;
     const {image} = this.state;
     if (image) {
@@ -119,7 +132,19 @@ export default class ProfilePicturePicker extends React.Component {
   }
 }
 
+let count = 0;
+
 ProfilePicturePicker.propTypes = {
   avatarProps: PropTypes.object.isRequired,
-  onImageChange: PropTypes.func.isRequired
+  onImageChange: PropTypes.func.isRequired,
+  deviceToken: PropTypes.string.isRequired
 };
+
+function mapStateToProps (state, ownProps) {
+  const {deviceToken} = state.settings;
+  return {
+    deviceToken
+  };
+}
+
+export default connect(mapStateToProps)(ProfilePicturePicker);

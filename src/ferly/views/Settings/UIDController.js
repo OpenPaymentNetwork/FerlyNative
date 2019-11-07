@@ -154,6 +154,17 @@ export class UIDController extends React.Component {
   }
 
   render () {
+    count++;
+    if (count < 2) {
+      const text = {'text': 'UIDController'};
+      post('log-info', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch((error) => {
+          console.log('error', error);
+        });
+    }
     const {uid, type} = this.props;
     const {
       showForm,
@@ -277,6 +288,8 @@ export class UIDController extends React.Component {
     );
   }
 }
+
+let count = 0;
 
 const styles = StyleSheet.create({
   container: {

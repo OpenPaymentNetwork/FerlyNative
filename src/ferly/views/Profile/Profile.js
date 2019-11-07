@@ -278,6 +278,17 @@ class Profile extends React.Component {
   }
 
   render () {
+    count++;
+    if (count < 2) {
+      const text = {'text': 'Contacts'};
+      post('log-info', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch((error) => {
+          console.log('error', error);
+        });
+    }
     const {editing} = this.state;
 
     if (!this.props.firstName) {
@@ -301,6 +312,8 @@ class Profile extends React.Component {
     );
   }
 }
+
+let count = 0;
 
 const styles = StyleSheet.create({
   avatarContainer: {

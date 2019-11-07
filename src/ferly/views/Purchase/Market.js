@@ -6,7 +6,7 @@ import React from 'react';
 import TestElement from 'ferly/components/TestElement';
 import {apiRequire} from 'ferly/store/api';
 import {connect} from 'react-redux';
-import {createUrl} from 'ferly/utils/fetch';
+import {createUrl, post} from 'ferly/utils/fetch';
 import {
   View,
   TouchableOpacity,
@@ -51,6 +51,17 @@ export class Market extends React.Component {
   }
 
   render () {
+    count++;
+    if (count < 2) {
+      const text = {'text': 'Market'};
+      post('log-info', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch((error) => {
+          console.log('error', error);
+        });
+    }
     const {designs, navigation} = this.props;
     const {searchResults} = this.state;
     let body;
@@ -100,6 +111,8 @@ export class Market extends React.Component {
     );
   }
 }
+
+let count = 0;
 
 Market.propTypes = {
   apiRequire: PropTypes.func.isRequired,

@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import Theme from 'ferly/utils/theme';
+import {connect} from 'react-redux';
+import {post} from 'ferly/utils/fetch';
 import {viewLocations} from 'ferly/images/index';
 import {format as formatDate} from 'date-fns';
 import {
@@ -29,6 +31,17 @@ export class Value extends React.Component {
   }
 
   render () {
+    count++;
+    if (count < 2) {
+      const text = {'text': 'Value'};
+      post('log-info', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch((error) => {
+          console.log('error', error);
+        });
+    }
     const {navigation} = this.props;
     const {params: design} = this.props.navigation.state;
     const {amount, title, expiring = []} = design;
@@ -105,6 +118,8 @@ export class Value extends React.Component {
   }
 }
 
+let count = 0;
+
 const {width} = Dimensions.get('window');
 const styles = StyleSheet.create({
   headerContainer: {
@@ -135,7 +150,15 @@ const styles = StyleSheet.create({
 });
 
 Value.propTypes = {
-  navigation: PropTypes.object.isRequired
+  navigation: PropTypes.object.isRequired,
+  deviceToken: PropTypes.string.isRequired
 };
 
-export default Value;
+function mapStateToProps (state) {
+  const {deviceToken} = state.settings;
+  return {
+    deviceToken
+  };
+}
+
+export default connect(mapStateToProps)(Value);

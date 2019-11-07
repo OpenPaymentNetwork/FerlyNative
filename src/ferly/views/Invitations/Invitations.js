@@ -92,6 +92,17 @@ export class Invitations extends React.Component {
   }
 
   render () {
+    count++;
+    if (count < 2) {
+      const text = {'text': 'Invitations'};
+      post('log-info', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch((error) => {
+          console.log('error', error);
+        });
+    }
     const {navigation} = this.props;
 
     const addIcon = (
@@ -122,6 +133,8 @@ export class Invitations extends React.Component {
     );
   }
 }
+
+let count = 0;
 
 const styles = StyleSheet.create({
   invitationContainer: {

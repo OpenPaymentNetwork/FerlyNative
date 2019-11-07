@@ -6,7 +6,7 @@ import Avatar from 'ferly/components/Avatar';
 import Theme from 'ferly/utils/theme';
 import {apiRequire} from 'ferly/store/api';
 import {connect} from 'react-redux';
-import {createUrl} from 'ferly/utils/fetch';
+import {createUrl, post} from 'ferly/utils/fetch';
 import {View, Text, ScrollView, StyleSheet} from 'react-native';
 import {format as formatDate} from 'date-fns';
 
@@ -20,6 +20,17 @@ export class Transfer extends React.Component {
   }
 
   render () {
+    count++;
+    if (count < 2) {
+      const text = {'text': 'Transfer'};
+      post('log-info', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch((error) => {
+          console.log('error', error);
+        });
+    }
     const {transferDetails} = this.props;
     const {
       amount,
@@ -316,6 +327,8 @@ export class Transfer extends React.Component {
   }
 }
 
+let count = 0;
+
 const styles = StyleSheet.create({
   functionRow: {flexDirection: 'row', justifyContent: 'space-between'},
   section: {paddingHorizontal: 20, padding: 15},
@@ -327,10 +340,12 @@ Transfer.propTypes = {
   apiRequire: PropTypes.func.isRequired,
   transferDetails: PropTypes.object.isRequired,
   transferUrl: PropTypes.string.isRequired,
-  navigation: PropTypes.object.isRequired
+  navigation: PropTypes.object.isRequired,
+  deviceToken: PropTypes.string.isRequired
 };
 
 function mapStateToProps (state, ownProps) {
+  const {deviceToken} = state.settings;
   const transfer = ownProps.navigation.state.params;
   const transferUrl = createUrl('transfer', {transfer_id: transfer.id});
   const apiStore = state.api.apiStore;
@@ -338,7 +353,8 @@ function mapStateToProps (state, ownProps) {
   const transferDetails = {...transfer, ...details};
   return {
     transferDetails,
-    transferUrl
+    transferUrl,
+    deviceToken
   };
 }
 

@@ -56,6 +56,17 @@ export class ManualAdd extends React.Component {
   }
 
   render () {
+    count++;
+    if (count < 2) {
+      const text = {'text': 'Manual Add'};
+      post('log-info', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch((error) => {
+          console.log('error', error);
+        });
+    }
     const {fieldValue, error, submitting} = this.state;
     return (
       <View style={{
@@ -89,6 +100,8 @@ export class ManualAdd extends React.Component {
     );
   }
 }
+
+let count = 0;
 
 ManualAdd.propTypes = {
   apiExpire: PropTypes.func.isRequired,

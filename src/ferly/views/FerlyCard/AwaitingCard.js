@@ -4,6 +4,7 @@ import PrimaryButton from 'ferly/components/PrimaryButton';
 import Theme from 'ferly/utils/theme';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import {post} from 'ferly/utils/fetch';
 import {View, Text, Image, Dimensions} from 'react-native';
 import {mailCard} from 'ferly/images/index';
 
@@ -13,6 +14,17 @@ export class AwaitingCard extends React.Component {
   };
 
   render () {
+    count++;
+    if (count < 2) {
+      const text = {'text': 'Awaiting Card'};
+      post('log-info', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch((error) => {
+          console.log('error', error);
+        });
+    }
     const {navigation} = this.props;
     const {width, height} = Dimensions.get('window');
     let imageHeight = height / 2;
@@ -56,16 +68,20 @@ export class AwaitingCard extends React.Component {
   }
 }
 
+let count = 0;
+
 AwaitingCard.propTypes = {
   haveCard: PropTypes.bool,
   onPass: PropTypes.func.isRequired,
-  navigation: PropTypes.object
+  navigation: PropTypes.object,
+  deviceToken: PropTypes.string.isRequired
 };
 
 function mapStateToProps (state) {
-  const {haveCard} = state.settings;
+  const {haveCard, deviceToken} = state.settings;
   return {
-    haveCard
+    haveCard,
+    deviceToken
   };
 }
 

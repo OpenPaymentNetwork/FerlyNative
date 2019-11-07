@@ -5,7 +5,7 @@ import TestElement from 'ferly/components/TestElement';
 import UIDController from 'ferly/views/Settings/UIDController';
 import {apiRequire} from 'ferly/store/api';
 import {connect} from 'react-redux';
-import {urls} from 'ferly/utils/fetch';
+import {urls, post} from 'ferly/utils/fetch';
 import {View, Text, ScrollView, KeyboardAvoidingView} from 'react-native';
 
 export class Recovery extends React.Component {
@@ -18,6 +18,17 @@ export class Recovery extends React.Component {
   }
 
   render () {
+    count++;
+    if (count < 2) {
+      const text = {'text': 'Recovery'};
+      post('log-info', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch((error) => {
+          console.log('error', error);
+        });
+    }
     const {email, phone, navigation, myProfile} = this.props;
 
     let form;
@@ -67,15 +78,19 @@ export class Recovery extends React.Component {
   }
 }
 
+let count = 0;
+
 Recovery.propTypes = {
   apiRequire: PropTypes.func.isRequired,
   email: PropTypes.string,
   myProfile: PropTypes.object,
   phone: PropTypes.string,
-  navigation: PropTypes.object.isRequired
+  navigation: PropTypes.object.isRequired,
+  deviceToken: PropTypes.string.isRequired
 };
 
 function mapStateToProps (state) {
+  const {deviceToken} = state.settings;
   const apiStore = state.api.apiStore;
   const myProfile = apiStore[urls.profile] || {};
   const {uids = []} = myProfile;
@@ -93,7 +108,8 @@ function mapStateToProps (state) {
   return {
     myProfile,
     email: emails[0],
-    phone: phones[0]
+    phone: phones[0],
+    deviceToken
   };
 }
 

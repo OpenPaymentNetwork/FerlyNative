@@ -70,6 +70,17 @@ export class Contact extends React.Component {
   }
 
   render () {
+    count++;
+    if (count < 2) {
+      const text = {'text': 'Contact'};
+      post('log-info', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch((error) => {
+          console.log('error', error);
+        });
+    }
     const contact = this.props.navigation.state.params;
     const options = contact.phones.concat(contact.emails);
     const {display} = contact;
@@ -95,6 +106,8 @@ export class Contact extends React.Component {
     );
   }
 }
+
+let count = 0;
 
 Contact.propTypes = {
   apiExpire: PropTypes.func.isRequired,

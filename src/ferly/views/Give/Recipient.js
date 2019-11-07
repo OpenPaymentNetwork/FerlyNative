@@ -6,7 +6,7 @@ import Spinner from 'ferly/components/Spinner';
 import Theme from 'ferly/utils/theme';
 import {apiRequire} from 'ferly/store/api';
 import {connect} from 'react-redux';
-import {createUrl, urls} from 'ferly/utils/fetch';
+import {createUrl, urls, post} from 'ferly/utils/fetch';
 import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 
 class Recipient extends React.Component {
@@ -84,6 +84,17 @@ class Recipient extends React.Component {
   }
 
   render () {
+    count++;
+    if (count < 2) {
+      const text = {'text': 'Recipient'};
+      post('log-info', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch((error) => {
+          console.log('error', error);
+        });
+    }
     const {recents} = this.props;
     const {searchResults, searchText} = this.state;
     let body;
@@ -140,6 +151,8 @@ class Recipient extends React.Component {
     );
   }
 }
+
+let count = 0;
 
 Recipient.propTypes = {
   apiRequire: PropTypes.func.isRequired,
