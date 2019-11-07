@@ -239,7 +239,6 @@ export class Wallet extends React.Component {
       post('log-info', this.props.deviceToken, text)
         .then((response) => response.json())
         .then((responseJson) => {
-          console.log('here', responseJson);
         })
         .catch((error) => {
           console.log('error', error);

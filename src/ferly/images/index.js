@@ -14,4 +14,4 @@ export const tutorialFive = require('./Debit.png');
 export const tutorialSix = require('./tutorial_graphic_six.png');
 export const viewLocations = require('./ViewLocationsButton2.png');
 export const mailCard = require('./Mail_Card.png');
-export const blankCard = require('./FerlyCard_nologo_roundcorners.png');
+export const blankCard = require('./FerlyCard_nologo_roundcorners.jpg');
