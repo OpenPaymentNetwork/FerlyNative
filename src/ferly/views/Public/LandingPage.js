@@ -41,7 +41,7 @@ export class LandingPage extends React.Component {
         page: this.state.page === this.state.dataSource.length ? 0 : this.state.page + 1,
         time: this.state.time + 1
       });
-      if (this.state.time === 5) {
+      if (this.state.time === 8) {
         clearInterval(interval);
       }
     }, 5000);
