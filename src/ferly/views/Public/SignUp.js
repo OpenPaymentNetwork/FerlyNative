@@ -162,11 +162,16 @@ export class SignUp extends React.Component {
 
   renderRecoveryOption () {
     const {navigation} = this.props;
+    const params = navigation.state.params;
+    let {expoToken} = params;
+    const signInParams = {
+      expoToken: expoToken
+    };
     return (
       <View style={[styles.row, {marginBottom: 30}]}>
         <Text style={{fontSize: 16}}>Already have an account?</Text>
         <TouchableOpacity
-          onPress={() => navigation.navigate('RecoveryChannel')}>
+          onPress={() => navigation.navigate('RecoveryChannel', signInParams)}>
           <Text style={[styles.recoveryText, {paddingLeft: 5}]}>Sign In</Text>
         </TouchableOpacity>
       </View>
