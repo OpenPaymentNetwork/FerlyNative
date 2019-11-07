@@ -96,6 +96,17 @@ export class RecoveryCode extends React.Component {
     const {navigation} = this.props;
     const params = navigation.state.params;
     const {codeLength, loginType} = params;
+    count++;
+    if (count < 2) {
+      const text = {'text': 'sign in code'};
+      post('log-info-initial', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch((error) => {
+          console.log('error', error);
+        });
+    }
 
     let channelType = 'device';
     if (loginType === 'email') {
@@ -142,6 +153,8 @@ export class RecoveryCode extends React.Component {
     );
   }
 }
+
+let count = 0;
 
 RecoveryCode.propTypes = {
   navigation: PropTypes.object.isRequired,

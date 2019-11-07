@@ -77,6 +77,17 @@ export class Settings extends React.Component {
   }
 
   render () {
+    count++;
+    if (count < 2) {
+      const text = {'text': 'Settings'};
+      post('log-info', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch((error) => {
+          console.log('error', error);
+        });
+    }
     const {navigation, updateDownloaded} = this.props;
     const {version} = Constants.manifest;
     const arrowIcon = (
@@ -140,6 +151,8 @@ export class Settings extends React.Component {
     );
   }
 }
+
+let count = 0;
 
 let device = makeid(32);
 function makeid (length) {

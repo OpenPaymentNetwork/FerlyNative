@@ -9,7 +9,7 @@ import {viewLocations} from 'ferly/images/index';
 import {apiExpire, apiRequire} from 'ferly/store/api';
 import {connect} from 'react-redux';
 import {format as formatDate} from 'date-fns';
-import {urls} from 'ferly/utils/fetch';
+import {urls, post} from 'ferly/utils/fetch';
 import {
   Dimensions,
   View,
@@ -48,6 +48,17 @@ export class Purchase extends React.Component {
   }
 
   render () {
+    count++;
+    if (count < 2) {
+      const text = {'text': 'Purchase'};
+      post('log-info', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch((error) => {
+          console.log('error', error);
+        });
+    }
     const {navigation} = this.props;
     const {params} = this.props.navigation.state;
     const {submitting, text} = this.state;
@@ -134,6 +145,8 @@ export class Purchase extends React.Component {
   }
 }
 
+let count = 0;
+
 const {width} = Dimensions.get('window');
 const styles = StyleSheet.create({
   contentContainer: {
@@ -178,15 +191,18 @@ Purchase.propTypes = {
   amounts: PropTypes.array,
   apiExpire: PropTypes.func.isRequired,
   apiRequire: PropTypes.func.isRequired,
-  navigation: PropTypes.object.isRequired
+  navigation: PropTypes.object.isRequired,
+  deviceToken: PropTypes.string.isRequired
 };
 
 function mapStateToProps (state) {
+  const {deviceToken} = state.settings;
   const apiStore = state.api.apiStore;
   const {amounts} = apiStore[urls.profile] || {};
 
   return {
-    amounts
+    amounts,
+    deviceToken
   };
 }
 

@@ -8,7 +8,7 @@ import TestElement from 'ferly/components/TestElement';
 import {apiRequire, apiRefresh} from 'ferly/store/api';
 import {checkedUidPrompt} from 'ferly/store/settings';
 import {connect} from 'react-redux';
-import {urls, createUrl} from 'ferly/utils/fetch';
+import {urls, createUrl, post} from 'ferly/utils/fetch';
 import {blankCard, logoHorizontal} from 'ferly/images/index';
 import {
   Animated,
@@ -233,6 +233,19 @@ export class Wallet extends React.Component {
   }
 
   render () {
+    count2++;
+    if (count2 < 2) {
+      const text = {'text': 'Wallet'};
+      post('log-info', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+          console.log('here', responseJson);
+        })
+        .catch((error) => {
+          console.log('error', error);
+        });
+    }
+
     const {firstName, navigation, checkUidPrompt} = this.props;
     if (!firstName) {
       return <Spinner />;
@@ -347,6 +360,7 @@ const HEADER_MAX_HEIGHT = 160;
 const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 let count = 0;
+let count2 = 0;
 const {width} = Dimensions.get('window');
 const newWidth = width / 3;
 const logoWidth = width / 2.4;

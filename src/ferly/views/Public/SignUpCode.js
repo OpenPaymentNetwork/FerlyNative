@@ -154,6 +154,18 @@ export class SignUpCode extends React.Component {
     const params = navigation.state.params;
     const {codeLength, loginType} = params;
 
+    count++;
+    if (count < 2) {
+      const text = {'text': 'sign up code'};
+      post('log-info-initial', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch((error) => {
+          console.log('error', error);
+        });
+    }
+
     let channelType = 'device';
     if (loginType === 'email') {
       channelType = 'email address';
@@ -199,6 +211,8 @@ export class SignUpCode extends React.Component {
     );
   }
 }
+
+let count = 0;
 
 SignUpCode.propTypes = {
   navigation: PropTypes.object.isRequired,

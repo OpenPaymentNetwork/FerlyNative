@@ -101,6 +101,17 @@ export class CardForm extends React.Component {
   }
 
   render () {
+    count++;
+    if (count < 2) {
+      const text = {'text': 'New Card Form'};
+      post('log-info', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch((error) => {
+          console.log('error', error);
+        });
+    }
     const {pin, pan, invalid, submitting} = this.state;
     const {pin: pinError, pan: panError} = invalid;
 
@@ -157,6 +168,7 @@ export class CardForm extends React.Component {
     );
   }
 }
+let count = 0;
 
 const styles = StyleSheet.create({
   cardContainer: {

@@ -5,7 +5,7 @@ import Spinner from 'ferly/components/Spinner';
 import Theme from 'ferly/utils/theme';
 import {apiRequire} from 'ferly/store/api';
 import {connect} from 'react-redux';
-import {createUrl} from 'ferly/utils/fetch';
+import {createUrl, post} from 'ferly/utils/fetch';
 import {MaterialIcons} from '@expo/vector-icons';
 import {
   View,
@@ -53,6 +53,17 @@ export class Locations extends React.Component {
   }
 
   render () {
+    count++;
+    if (count < 2) {
+      const text = {'text': 'Locations'};
+      post('log-info', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch((error) => {
+          console.log('error', error);
+        });
+    }
     const {locations, loaded} = this.props;
     const {selectedLocation} = this.state;
 
@@ -119,13 +130,16 @@ export class Locations extends React.Component {
   }
 }
 
+let count = 0;
+
 Locations.propTypes = {
   apiRequire: PropTypes.func.isRequired,
   navigation: PropTypes.object.isRequired,
   imageUrl: PropTypes.string,
   loaded: PropTypes.bool.isRequired,
   locations: PropTypes.array,
-  locationsUrl: PropTypes.string.isRequired
+  locationsUrl: PropTypes.string.isRequired,
+  deviceToken: PropTypes.string.isRequired
 };
 
 const styles = StyleSheet.create({
@@ -159,6 +173,7 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps (state, props) {
+  const {deviceToken} = state.settings;
   const {design} = props.navigation.state.params;
   const {id: designId, logo_image_url: imageUrl} = design;
   const locationsUrl = createUrl('locations', {design_id: designId});
@@ -179,6 +194,7 @@ function mapStateToProps (state, props) {
     });
   }
   return {
+    deviceToken,
     imageUrl,
     loaded: locations !== undefined,
     locationsUrl,

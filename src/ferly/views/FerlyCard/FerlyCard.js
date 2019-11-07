@@ -208,6 +208,17 @@ export class FerlyCard extends React.Component {
   }
 
   render () {
+    count++;
+    if (count < 2) {
+      const text = {'text': 'Ferly Card'};
+      post('log-info', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch((error) => {
+          console.log('error', error);
+        });
+    }
     const {card, loaded} = this.props;
     const {
       assumedAbility,
@@ -339,6 +350,8 @@ export class FerlyCard extends React.Component {
     );
   }
 }
+
+let count = 0;
 
 const styles = StyleSheet.create({
   cardContainer: {

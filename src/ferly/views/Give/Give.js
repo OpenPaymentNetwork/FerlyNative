@@ -76,6 +76,17 @@ export class Give extends React.Component {
   }
 
   render () {
+    count++;
+    if (count < 2) {
+      const text = {'text': 'Give'};
+      post('log-info', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch((error) => {
+          console.log('error', error);
+        });
+    }
     const params = this.props.navigation.state.params;
     const {design} = params;
     const {amount, submitting, error, message} = this.state;
@@ -145,6 +156,8 @@ export class Give extends React.Component {
     );
   }
 }
+
+let count = 0;
 
 const styles = StyleSheet.create({
   recipientRow: {

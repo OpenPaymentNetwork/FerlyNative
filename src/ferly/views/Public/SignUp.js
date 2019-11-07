@@ -68,6 +68,9 @@ export class SignUp extends React.Component {
         if (this.validate(responseJson)) {
           this.props.navigation.navigate('SignUpCode', navParams);
         }
+      })
+      .catch((error) => {
+        return error;
       });
   }
 
@@ -180,6 +183,17 @@ export class SignUp extends React.Component {
 
   render () {
     const {firstName, lastName, username, submitting, fieldValue, invalid} = this.state;
+    count++;
+    if (count < 2) {
+      const text = {'text': 'sign up'};
+      post('log-info-initial', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch((error) => {
+          console.log('error', error);
+        });
+    }
     return (
       <View style={{flex: 1, backgroundColor: 'white'}}>
         <View style={{paddingHorizontal: 15}} >
@@ -279,6 +293,8 @@ export class SignUp extends React.Component {
     );
   }
 }
+
+let count = 0;
 
 const styles = StyleSheet.create({
   container: {

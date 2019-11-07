@@ -110,6 +110,18 @@ export class AddressForm extends React.Component {
         zipCode: zipError
       } = invalid;
 
+      count++;
+      if (count < 2) {
+        const text = {'text': 'Address Form'};
+        post('log-info', this.props.deviceToken, text)
+          .then((response) => response.json())
+          .then((responseJson) => {
+          })
+          .catch((error) => {
+            console.log('error', error);
+          });
+      }
+
       return (
         <View style={styles.page}>
           <KeyboardAvoidingView style={styles.form}
@@ -228,6 +240,8 @@ export class AddressForm extends React.Component {
       );
     }
 }
+
+let count = 0;
 
 AddressForm.propTypes = {
   navigation: PropTypes.object,

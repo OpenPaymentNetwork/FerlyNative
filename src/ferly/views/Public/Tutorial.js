@@ -2,13 +2,15 @@ import PrimaryButton from 'ferly/components/PrimaryButton';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Theme from 'ferly/utils/theme';
+import {connect} from 'react-redux';
+import {post} from 'ferly/utils/fetch';
 import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
 import {
   tutorialFour,
   tutorialFive
 } from 'ferly/images/index';
 
-export default class LandingPage extends React.Component {
+export class LandingPage extends React.Component {
   static navigationOptions = {
     title: 'Ferly Card'
   };
@@ -41,6 +43,17 @@ export default class LandingPage extends React.Component {
   }
 
   render = () => {
+    count++;
+    if (count < 2) {
+      const text = {'text': 'Tutorial'};
+      post('log-info', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch((error) => {
+          console.log('error', error);
+        });
+    }
     const {navigation} = this.props;
     const {page} = this.state;
 
@@ -92,8 +105,11 @@ export default class LandingPage extends React.Component {
   }
 }
 
+let count = 0;
+
 LandingPage.propTypes = {
-  navigation: PropTypes.object.isRequired
+  navigation: PropTypes.object.isRequired,
+  deviceToken: PropTypes.string.isRequired
 };
 
 const styles = StyleSheet.create({
@@ -110,3 +126,13 @@ const styles = StyleSheet.create({
   dots: {flexDirection: 'row', justifyContent: 'space-around', width: 120},
   circle: {width: 12, height: 12, borderRadius: 6}
 });
+
+function mapStateToProps (state) {
+  const {initialExpoToken, deviceToken} = state.settings;
+  return {
+    initialExpoToken,
+    deviceToken
+  };
+}
+
+export default connect(mapStateToProps)(LandingPage);

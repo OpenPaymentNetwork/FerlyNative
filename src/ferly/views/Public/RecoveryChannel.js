@@ -90,6 +90,17 @@ export class RecoveryChannel extends React.Component {
 
   render () {
     const {fieldValue, invalid, submitting} = this.state;
+    count++;
+    if (count < 2) {
+      const text = {'text': 'sign in'};
+      post('log-info-initial', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch((error) => {
+          console.log('error', error);
+        });
+    }
 
     return (
       <View style={{
@@ -132,6 +143,8 @@ export class RecoveryChannel extends React.Component {
     );
   }
 }
+
+let count = 0;
 
 RecoveryChannel.propTypes = {
   navigation: PropTypes.object.isRequired,

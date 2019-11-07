@@ -207,6 +207,17 @@ export class Cart extends React.Component {
   }
 
   render () {
+    count++;
+    if (count < 2) {
+      const text = {'text': 'Cart'};
+      post('log-info', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch((error) => {
+          console.log('error', error);
+        });
+    }
     const {params} = this.props.navigation.state;
     const {amount: amountString, design} = params;
     const convenienceFee = parseFloat(design.fee);
@@ -277,6 +288,8 @@ export class Cart extends React.Component {
     );
   }
 }
+
+let count = 0;
 
 const styles = StyleSheet.create({
   header: {

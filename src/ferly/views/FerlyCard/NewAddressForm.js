@@ -91,6 +91,17 @@ export class NewAddressForm extends React.Component {
     }
 
     render () {
+      count++;
+      if (count < 2) {
+        const text = {'text': 'New Addresss Form'};
+        post('log-info', this.props.deviceToken, text)
+          .then((response) => response.json())
+          .then((responseJson) => {
+          })
+          .catch((error) => {
+            console.log('error', error);
+          });
+      }
       const {
         name,
         address,
@@ -227,6 +238,7 @@ export class NewAddressForm extends React.Component {
       );
     }
 }
+let count = 0;
 
 NewAddressForm.propTypes = {
   onPass: PropTypes.func,

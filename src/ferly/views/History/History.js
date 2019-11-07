@@ -5,7 +5,7 @@ import React from 'react';
 import {View, FlatList, Text} from 'react-native';
 import {apiRequire, apiInject, apiRefresh} from 'ferly/store/api';
 import {connect} from 'react-redux';
-import {urls} from 'ferly/utils/fetch';
+import {urls, post} from 'ferly/utils/fetch';
 
 export class History extends React.Component {
   static navigationOptions = {
@@ -49,6 +49,17 @@ export class History extends React.Component {
   }
 
   render () {
+    count++;
+    if (count < 2) {
+      const text = {'text': 'History'};
+      post('log-info', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch((error) => {
+          console.log('error', error);
+        });
+    }
     const {history, navigation} = this.props;
     if (!history) {
       return <Spinner />;
@@ -74,6 +85,8 @@ export class History extends React.Component {
     );
   }
 }
+
+let count = 0;
 
 History.propTypes = {
   apiInject: PropTypes.func.isRequired,

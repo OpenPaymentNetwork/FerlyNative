@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import SearchBar from 'ferly/components/SearchBar';
 import TestElement from 'ferly/components/TestElement';
+import {connect} from 'react-redux';
+import {post} from 'ferly/utils/fetch';
 import {
   View,
   Text,
@@ -14,7 +16,7 @@ import {
   Platform
 } from 'react-native';
 
-export default class Contacts extends React.Component {
+export class Contacts extends React.Component {
   static navigationOptions = {
     title: 'Select Recipient'
   };
@@ -133,6 +135,17 @@ export default class Contacts extends React.Component {
   }
 
   render () {
+    count++;
+    if (count < 2) {
+      const text = {'text': 'Contacts'};
+      post('log-info', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch((error) => {
+          console.log('error', error);
+        });
+    }
     const {contacts, permission, searchResults} = this.state;
     if (permission !== 'granted') {
       return (
@@ -186,6 +199,18 @@ export default class Contacts extends React.Component {
   }
 }
 
+let count = 0;
+
 Contacts.propTypes = {
-  navigation: PropTypes.object.isRequired
+  navigation: PropTypes.object.isRequired,
+  deviceToken: PropTypes.string.isRequired
 };
+
+function mapStateToProps (state, ownProps) {
+  const {deviceToken} = state.settings;
+  return {
+    deviceToken
+  };
+}
+
+export default connect(mapStateToProps)(Contacts);
