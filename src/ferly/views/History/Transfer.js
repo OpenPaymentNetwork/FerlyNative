@@ -107,7 +107,7 @@ export class Transfer extends React.Component {
     }
 
     let giftValue;
-    let recipiant;
+    let recipient;
     let received;
     let purchaseDetailsSection;
     let termsSection;
@@ -220,11 +220,11 @@ export class Transfer extends React.Component {
           </View>
         </View>
       );
-      recipiant = (
+      recipient = (
         <View style={styles.section} >
           <View>
             <Text style={styles.sectionHeader} >
-              Recipiant
+              Recipient
             </Text>
           </View>
           <View style={{paddingLeft: 15, flexDirection: 'row'}} >
@@ -315,7 +315,7 @@ export class Transfer extends React.Component {
           </View>
         </View>
         {giftValue}
-        {recipiant}
+        {recipient}
         {received}
         {messageSection}
         {purchaseDetailsSection}
