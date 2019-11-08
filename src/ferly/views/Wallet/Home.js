@@ -336,7 +336,7 @@ export class Wallet extends React.Component {
         </Animated.View>
         <Animated.View style={styles.bar}>
           <TouchableOpacity style={styles.theCard}onPress={() => navigation.navigate('Ferly Card')}>
-            <Text style={{fontSize: 16, color: Theme.darkBlue, fontWeight: 'bold'}} >
+            <Text style={styles.cardManager} >
               {this.cardPage()}
             </Text>
           </TouchableOpacity>
@@ -380,6 +380,11 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0
   },
+  cardManager: {
+    fontSize: width < 330 ? 14 : 16,
+    color: Theme.darkBlue,
+    fontWeight: 'bold'
+  },
   title: {
     color: 'white',
     fontSize: 18
@@ -388,7 +393,7 @@ const styles = StyleSheet.create({
     width: logoWidth,
     height: 57,
     marginTop: -65,
-    marginLeft: 20
+    marginLeft: width < 330 ? 30 : 20
   },
   backgroundImage: {
     height: 190,
