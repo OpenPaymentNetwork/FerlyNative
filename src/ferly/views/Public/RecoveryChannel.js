@@ -99,7 +99,6 @@ export class RecoveryChannel extends React.Component {
       post('log-info-initial', this.props.deviceToken, text)
         .then((response) => response.json())
         .then((responseJson) => {
-          throw RangeError;
         })
         .catch(() => {
           Alert.alert('Error trying to log!');
