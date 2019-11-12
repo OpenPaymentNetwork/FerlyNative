@@ -68,6 +68,9 @@ export class Give extends React.Component {
           const error = json.invalid['amounts.0'] || json.invalid['amount'];
           this.setState({error: error, amount: 0, submitting: false});
         }
+      })
+      .catch((error) => {
+        Alert.alert('Oops!', error);
       });
   }
 

@@ -8,7 +8,7 @@ import {connect} from 'react-redux';
 import {envId, post} from 'ferly/utils/fetch';
 import {Notifications, Updates} from 'expo';
 import {View, Text, TouchableOpacity, StyleSheet, Alert, AsyncStorage} from 'react-native';
-import {setDeviceToken, setSignOut, setExpoToken} from 'ferly/store/settings';
+import {setDeviceToken, setIsCustomer, setExpoToken} from 'ferly/store/settings';
 import {apiErase} from 'ferly/store/api';
 
 export class Settings extends React.Component {
@@ -33,10 +33,16 @@ export class Settings extends React.Component {
       .then((response) => response.json())
       .then((json) => {
         this.props.dispatch(setExpoToken(json.expo_token));
+      })
+      .catch((error) => {
+        Alert.alert('Oops!', error);
       });
     post('delete-device-tokens', this.props.deviceToken)
       .then((response) => response.json())
       .then((json) => {
+      })
+      .catch((error) => {
+        Alert.alert('Oops!', error);
       });
     this.props.dispatch(apiErase());
     device = makeid(32);
@@ -45,8 +51,10 @@ export class Settings extends React.Component {
         const alertText = 'You have been successfully signed out.';
         Alert.alert('Done!', alertText);
         try {
-          this.props.dispatch(setSignOut(false));
-          this.props.dispatch(setDeviceToken(device));
+          AsyncStorage.setItem('isCustomer', 'false').then((response) => {
+            this.props.dispatch(setIsCustomer(false));
+            this.props.dispatch(setDeviceToken(device));
+          });
         } catch (error) {
         }
       }, 500);

@@ -5,6 +5,7 @@ import Theme from 'ferly/utils/theme';
 import {connect} from 'react-redux';
 import {post} from 'ferly/utils/fetch';
 import {
+  Alert,
   View,
   Text,
   TextInput,
@@ -70,7 +71,7 @@ export class SignUp extends React.Component {
         }
       })
       .catch((error) => {
-        return error;
+        Alert.alert('Oops!', error);
       });
   }
 
@@ -204,7 +205,7 @@ export class SignUp extends React.Component {
             placeholder='First Name'
             onBlur={() => {
               this.validateFirstName(firstName);
-              this.setState({showFirstNameError: true});
+              this.setState({showFirstNameError: false});
             }}
             onChangeText={
               (text) => {
@@ -224,7 +225,7 @@ export class SignUp extends React.Component {
             placeholder='Last Name'
             onBlur={() => {
               this.validateLastName(lastName);
-              this.setState({showLastNameError: true});
+              this.setState({showLastNameError: false});
             }}
             onChangeText={
               (text) => {
@@ -244,7 +245,7 @@ export class SignUp extends React.Component {
             placeholder='Username'
             onBlur={() => {
               this.validateUsername(username);
-              this.setState({showUsernameError: true});
+              this.setState({showUsernameError: false});
             }}
             onChangeText={
               (text) => {

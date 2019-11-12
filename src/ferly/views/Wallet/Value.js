@@ -8,6 +8,7 @@ import {format as formatDate} from 'date-fns';
 import {
   Dimensions,
   View,
+  Platform,
   ScrollView,
   Text,
   TouchableOpacity,
@@ -30,6 +31,18 @@ export class Value extends React.Component {
     );
   }
 
+  openInMaps = () => {
+    const {params: design} = this.props.navigation.state;
+    const {title} = design;
+    let newDesign = title.replace('&', 'and');
+    const scheme = Platform.OS === 'ios' ? 'maps:0,0?q=' : 'geo:0,0?q=';
+    const url = Platform.select({
+      ios: `${scheme}${newDesign}`,
+      android: `${scheme}(${newDesign})`
+    });
+    Linking.openURL(url);
+  }
+
   render () {
     count++;
     if (count < 2) {
@@ -42,7 +55,6 @@ export class Value extends React.Component {
           console.log('error', error);
         });
     }
-    const {navigation} = this.props;
     const {params: design} = this.props.navigation.state;
     const {amount, title, expiring = []} = design;
     const tableHeader = (
@@ -73,7 +85,7 @@ export class Value extends React.Component {
           redeem this gift value for goods and services.
         </Text>
         <TouchableOpacity
-          onPress={() => navigation.navigate('Locations', {design})}>
+          onPress={this.openInMaps}>
           <Image
             source={viewLocations}
             style={styles.image}/>
@@ -154,7 +166,7 @@ Value.propTypes = {
   deviceToken: PropTypes.string.isRequired
 };
 
-function mapStateToProps (state) {
+function mapStateToProps (state, props) {
   const {deviceToken} = state.settings;
   return {
     deviceToken

@@ -22,7 +22,6 @@ import {
   View,
   WebView
 } from 'react-native';
-// import {WebView} from 'react-native-webview'
 
 export class Cart extends React.Component {
   static navigationOptions = {
@@ -67,6 +66,9 @@ export class Cart extends React.Component {
           Alert.alert('Complete!', desc);
           this.props.apiExpire(this.props.sourcesUrl);
         }
+      })
+      .catch((error) => {
+        Alert.alert('Oops!', error);
       });
   }
 
@@ -128,6 +130,9 @@ export class Cart extends React.Component {
       .then((response) => response.json())
       .then((json) => {
         this.props.apiRefresh(this.props.sourcesUrl);
+      })
+      .catch((error) => {
+        Alert.alert('Oops!', error);
       });
   }
 

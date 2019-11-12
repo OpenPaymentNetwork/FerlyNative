@@ -35,6 +35,9 @@ export class Contact extends React.Component {
         });
         this.props.navigation.dispatch(resetAction);
         Alert.alert('Invite Sent!', `You sent an invite to ${option}.`);
+      })
+      .catch((error) => {
+        Alert.alert('Oops!', error);
       });
   }
 

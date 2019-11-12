@@ -82,6 +82,9 @@ export class CardForm extends React.Component {
             'debit when using your card.';
           Alert.alert('Success', alertText);
         }
+      })
+      .catch((error) => {
+        Alert.alert('Oops!', error);
       });
   }
 

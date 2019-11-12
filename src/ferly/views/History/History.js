@@ -2,7 +2,7 @@ import HistoryEntry from 'ferly/components/HistoryEntry';
 import Spinner from 'ferly/components/Spinner';
 import PropTypes from 'prop-types';
 import React from 'react';
-import {View, FlatList, Text} from 'react-native';
+import {Alert, View, FlatList, Text} from 'react-native';
 import {apiRequire, apiInject, apiRefresh} from 'ferly/store/api';
 import {connect} from 'react-redux';
 import {urls, post} from 'ferly/utils/fetch';
@@ -41,7 +41,10 @@ export class History extends React.Component {
         this.props.apiInject(urls.history, {
           'history': newHistory,
           'has_more': responseJson.has_more
-        });
+        })
+          .catch((error) => {
+            Alert.alert('Oops!', error);
+          });
 
         // TODO don't set state here in case they navigate away while loading
         this.setState({updating: false});

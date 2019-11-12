@@ -84,20 +84,16 @@ export class LandingPage extends React.Component {
             title="Get a Ferly Card"
             color={Theme.lightBlue}
             onPress={() => navigation.navigate('AddressForm')} />
-          <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-            <Text style={[styles.text, {paddingBottom: 30, fontSize: 20}]}>
+          <View style={{justifyContent: 'center'}}>
+            <Text style={[styles.text, {fontSize: 20}]}>
               Already have a Ferly Card?
             </Text>
-            <TouchableOpacity onPress={() => navigation.navigate('NewCardForm')}>
-              <Text style={{color: Theme.darkBlue, fontSize: 18, paddingLeft: 10}}>
+            <TouchableOpacity
+              style={{alignItems: 'center'}} onPress={() => navigation.navigate('NewCardForm')}>
+              <Text style={{color: Theme.darkBlue, fontSize: 18, paddingBottom: 20}}>
                 Activate It
               </Text>
             </TouchableOpacity>
-            {/* <TouchableOpacity onPress={() => navigation.navigate('Wallet')}>
-              <Text style={{color: Theme.lightBlue, fontSize: 18, paddingLeft: 10}}>
-                Skip
-              </Text>
-            </TouchableOpacity> */}
           </View>
         </View>
       </View>

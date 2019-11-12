@@ -8,6 +8,7 @@ import {apiRequire} from 'ferly/store/api';
 import {connect} from 'react-redux';
 import {createUrl, post} from 'ferly/utils/fetch';
 import {
+  Alert,
   View,
   TouchableOpacity,
   ScrollView,
@@ -45,6 +46,9 @@ export class Market extends React.Component {
           if (this.state.searchText === text) { // The customer is done typing.
             this.setState({searchResults: json.results});
           }
+        })
+        .catch((error) => {
+          Alert.alert('Oops!', error);
         });
     }
     this.setState({searchText: text});

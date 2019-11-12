@@ -61,6 +61,9 @@ export class FerlyCard extends React.Component {
         } else {
           this.setState({passed: ''});
         }
+      })
+      .catch((error) => {
+        Alert.alert('Oops!', error);
       });
   }
 
@@ -85,6 +88,9 @@ export class FerlyCard extends React.Component {
       .then((response) => response.json())
       .then((json) => {
         this.setState({changingAbility: false});
+      })
+      .catch((error) => {
+        Alert.alert('Oops!', error);
       });
   }
 
@@ -117,6 +123,9 @@ export class FerlyCard extends React.Component {
               .then((response) => response.json())
               .then((json) => {
                 this.setState({passed: ''});
+              })
+              .catch((error) => {
+                Alert.alert('Oops!', error);
               });
           } else {
             let addressLine2 = address['address_line2'] === '' ? '' : address['address_line2'] + '\n';
@@ -136,6 +145,9 @@ export class FerlyCard extends React.Component {
                       .then((response) => response.json())
                       .then((json) => {
                         this.setState({passed: 'true'});
+                      })
+                      .catch((error) => {
+                        Alert.alert('Oops!', error);
                       });
                   }},
                 {text: 'No',
@@ -146,12 +158,18 @@ export class FerlyCard extends React.Component {
                       .then((response) => response.json())
                       .then((json) => {
                         this.setState({passed: ''});
+                      })
+                      .catch((error) => {
+                        Alert.alert('Oops!', error);
                       });
                   }}
               ]
             );
           }
         }
+      })
+      .catch((error) => {
+        Alert.alert('Oops!', error);
       });
   }
 
@@ -180,6 +198,9 @@ export class FerlyCard extends React.Component {
             Alert.alert('Saved!', 'Your new pin is ready to use.');
           }, 300);
         }
+      })
+      .catch((error) => {
+        Alert.alert('Oops!', error);
       });
   }
 

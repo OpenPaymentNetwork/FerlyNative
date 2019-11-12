@@ -68,6 +68,9 @@ export class AddressForm extends React.Component {
             const alertText = 'Your card will arrive in 7 to 10 business days.';
             Alert.alert('Done!', alertText);
           }
+        })
+        .catch((error) => {
+          Alert.alert('Oops!', error);
         });
     }
 

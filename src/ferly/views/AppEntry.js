@@ -1,18 +1,13 @@
-import Constants from 'expo-constants';
 import PropTypes from 'prop-types';
 import React from 'react';
-import Theme from 'ferly/utils/theme';
-import {apiRequire} from 'ferly/store/api';
 import {connect} from 'react-redux';
 import {CreateAuthSwitch} from 'ferly/navigation';
-import {createUrl} from 'ferly/utils/fetch';
-import {logoWhite} from 'ferly/images/index';
-import {View, Text, Image, AsyncStorage} from 'react-native';
+import {Alert, AsyncStorage} from 'react-native';
 import {setDeviceToken} from 'ferly/store/settings';
+import { setIsCustomer } from '../store/settings';
 
 export class AppEntry extends React.Component {
   componentDidMount () {
-    this.props.dispatch(apiRequire(this.props.isCustomerUrl));
     this.retrieveData().then((deviceToken2) => {
       if (deviceToken2 === '') {
         AsyncStorage.setItem('deviceToken', device);
@@ -22,7 +17,10 @@ export class AppEntry extends React.Component {
         this.props.dispatch(setDeviceToken(deviceToken2));
       } catch (error) {
       }
+    }).catch((error) => {
+      Alert.alert('Oops!', error);
     });
+    this.retrieveIsCustomer();
   }
 
   retrieveData = async () => {
@@ -33,30 +31,24 @@ export class AppEntry extends React.Component {
       }
       return deviceToken2;
     } catch (error) {
+      console.log('error', error);
+    }
+  }
+
+  retrieveIsCustomer = async () => {
+    try {
+      const isCustomer = await AsyncStorage.getItem('isCustomer') || '';
+      if (isCustomer === 'true') {
+        this.props.dispatch(setIsCustomer(true));
+      }
+    } catch (error) {
+      console.log('error', error);
     }
   }
 
   render () {
-    let errorMessage;
-    const {auth, hasError, signOut} = this.props;
-    if (hasError) {
-      errorMessage = <Text style={{color: 'red'}}>Connection Error</Text>;
-    }
-    if (auth === undefined && signOut) {
-      return (
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: Theme.darkBlue
-          }}>
-          <Image source={logoWhite} style={{height: 140, width: 150}}/>
-          {errorMessage}
-        </View>
-      );
-    }
-    const Layout = CreateAuthSwitch(auth, signOut);
+    const {isCustomer} = this.props;
+    const Layout = CreateAuthSwitch(isCustomer);
     return <Layout />;
   }
 }
@@ -75,28 +67,17 @@ function makeid (length) {
 
 AppEntry.propTypes = {
   dispatch: PropTypes.func.isRequired,
-  signOut: PropTypes.bool,
+  isCustomer: PropTypes.bool,
   auth: PropTypes.bool,
-  hasError: PropTypes.bool,
-  isCustomerUrl: PropTypes.string.isRequired
+  hasError: PropTypes.bool
 };
 
 function mapStateToProps (state) {
-  const {deviceToken, signOut} = state.settings;
-  const {releaseChannel = 'staging'} = Constants.manifest;
-  const isCustomerUrl =
-      createUrl('is-customer', {'expected_env': releaseChannel});
-  const apiStore = state.api.apiStore;
-  const isCustomer = apiStore[isCustomerUrl] || {};
-  const {is_customer: auth} = isCustomer;
-  const hasError = isCustomer === 'TypeError: Network request failed';
+  const {deviceToken, isCustomer} = state.settings;
   return {
-    auth,
-    hasError,
-    isCustomerUrl,
     idFound: true,
     deviceToken,
-    signOut
+    isCustomer
   };
 }
 

@@ -12,6 +12,7 @@ import {format as formatDate} from 'date-fns';
 import {urls, post} from 'ferly/utils/fetch';
 import {
   Dimensions,
+  Platform,
   View,
   Text,
   StyleSheet,
@@ -33,6 +34,19 @@ export class Purchase extends React.Component {
 
   componentDidMount () {
     this.props.apiRequire(urls.profile);
+  }
+
+  openInMaps = () => {
+    const {params} = this.props.navigation.state;
+    const {design} = params;
+    const {title} = design;
+    let newDesign = title.replace('&', 'and');
+    const scheme = Platform.OS === 'ios' ? 'maps:0,0?q=' : 'geo:0,0?q=';
+    const url = Platform.select({
+      ios: `${scheme}${newDesign}`,
+      android: `${scheme}(${newDesign})`
+    });
+    Linking.openURL(url);
   }
 
   onPurchase () {
@@ -59,7 +73,6 @@ export class Purchase extends React.Component {
           console.log('error', error);
         });
     }
-    const {navigation} = this.props;
     const {params} = this.props.navigation.state;
     const {submitting, text} = this.state;
     const {design} = params;
@@ -107,7 +120,9 @@ export class Purchase extends React.Component {
             use your Ferly Card.
           </Text>
           <TouchableOpacity
-            onPress={() => navigation.navigate('Locations', {design})}>
+            // onPress={() => navigation.navigate('Locations', {design})}
+            onPress={this.openInMaps}
+          >
             <Image
               source={viewLocations}
               style={styles.image}/>

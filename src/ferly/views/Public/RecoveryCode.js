@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Recaptcha from 'ferly/components/Recaptcha';
 import Theme from 'ferly/utils/theme';
+import {setIsCustomer} from 'ferly/store/settings';
 import {connect} from 'react-redux';
 import {post} from 'ferly/utils/fetch';
-import {View, Text, TextInput, StyleSheet, Alert, Platform} from 'react-native';
+import {AsyncStorage, View, Text, TextInput, StyleSheet, Alert, Platform} from 'react-native';
 
 export class RecoveryCode extends React.Component {
   static navigationOptions = {
@@ -29,6 +30,16 @@ export class RecoveryCode extends React.Component {
     if (resubmit && recaptchaResponse) {
       this.handleSubmit();
     }
+  }
+
+  async storage () {
+    AsyncStorage.setItem('isCustomer', 'true').then(() => {
+      try {
+        this.props.dispatch(setIsCustomer(true));
+      } catch (error) {
+        console.log('error', error);
+      }
+    });
   }
 
   handleSubmit () {
@@ -59,8 +70,13 @@ export class RecoveryCode extends React.Component {
       .then((response) => response.json())
       .then((responseJson) => {
         if (this.validate(responseJson)) {
-          navigation.navigate('Wallet');
+          this.storage().then((responseJson) => {
+            navigation.navigate('Wallet');
+          });
         }
+      })
+      .catch((error) => {
+        Alert.alert('Oops!', error);
       });
   }
 
@@ -157,6 +173,7 @@ export class RecoveryCode extends React.Component {
 let count = 0;
 
 RecoveryCode.propTypes = {
+  dispatch: PropTypes.func.isRequired,
   navigation: PropTypes.object.isRequired,
   deviceToken: PropTypes.string.isRequired,
   expoToken: PropTypes.string.isRequired,

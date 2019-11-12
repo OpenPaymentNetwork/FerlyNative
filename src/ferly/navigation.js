@@ -22,7 +22,6 @@ import Transfer from 'ferly/views/History/Transfer';
 import Home from 'ferly/views/Wallet/Home';
 import Value from 'ferly/views/Wallet/Value';
 import LandingPage from 'ferly/views/Public/LandingPage';
-import Locations from 'ferly/views/Wallet/Locations';
 import Cart from 'ferly/views/Purchase/Cart';
 import Purchase from 'ferly/views/Purchase/Purchase';
 import Market from 'ferly/views/Purchase/Market';
@@ -61,7 +60,6 @@ const WalletStack = createStackNavigator(
   {
     Home: {screen: Home, navigationOptions: drawerOptions},
     Value: {screen: Value, navigationOptions: drawerOptions},
-    Locations: {screen: Locations, navigationOptions: drawerOptions},
     Give: {screen: Recipient, navigationOptions: drawerOptions},
     Amount: {screen: Give, navigationOptions: drawerOptions},
     Market: {screen: Market, navigationOptions: drawerOptions},
@@ -151,14 +149,14 @@ const PubStack = createStackNavigator(
   }
 );
 
-export const CreateAuthSwitch = (isUser, signedIn) => {
+export const CreateAuthSwitch = (isUser) => {
   const AppLayout = createSwitchNavigator(
     {
       Pub: PubStack,
       Auth: AuthDrawer
     },
     {
-      initialRouteName: (isUser && signedIn) ? 'Auth' : 'Pub'
+      initialRouteName: (isUser) ? 'Auth' : 'Pub'
     });
   return AppLayout;
 };

@@ -12,6 +12,7 @@ import {connect} from 'react-redux';
 import {createUrl, post, urls} from 'ferly/utils/fetch';
 import {StackActions} from 'react-navigation';
 import {
+  Alert,
   View,
   Text,
   StyleSheet,
@@ -108,6 +109,9 @@ class Profile extends React.Component {
                 .then((response) => response.json())
                 .then((json) => {
                   this.onSuccessfulEdit();
+                })
+                .catch((error) => {
+                  Alert.alert('Oops!', error);
                 });
             } else {
               this.onSuccessfulEdit();
@@ -115,12 +119,18 @@ class Profile extends React.Component {
           } else {
             this.setState({submitting: false});
           }
+        })
+        .catch((error) => {
+          Alert.alert('Oops!', error);
         });
     } else if (imageChanged) {
       this.updateProfileImage()
         .then((response) => response.json())
         .then((json) => {
           this.onSuccessfulEdit();
+        })
+        .catch((error) => {
+          Alert.alert('Oops!', error);
         });
     }
   }

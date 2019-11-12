@@ -77,6 +77,9 @@ export class UIDController extends React.Component {
             submitting: false
           });
         }
+      })
+      .catch((error) => {
+        Alert.alert('Oops!', error);
       });
   }
 
@@ -150,6 +153,9 @@ export class UIDController extends React.Component {
           });
           navigation.dispatch(resetAction);
         }
+      })
+      .catch((error) => {
+        Alert.alert('Oops!', error);
       });
   }
 

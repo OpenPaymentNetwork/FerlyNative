@@ -4,7 +4,7 @@ import React from 'react';
 import Theme from 'ferly/utils/theme';
 import {connect} from 'react-redux';
 import {post} from 'ferly/utils/fetch';
-import {View, Text, TextInput, StyleSheet, TouchableOpacity} from 'react-native';
+import {Alert, View, Text, TextInput, StyleSheet, TouchableOpacity} from 'react-native';
 
 export class RecoveryChannel extends React.Component {
   static navigationOptions = {
@@ -49,6 +49,9 @@ export class RecoveryChannel extends React.Component {
           };
           navigation.navigate('RecoveryCode', navParams);
         }
+      })
+      .catch((error) => {
+        Alert.alert('Oops!', error);
       });
   }
 

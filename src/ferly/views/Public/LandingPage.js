@@ -36,15 +36,16 @@ export class LandingPage extends React.Component {
     this.getToken().then((response) => {
       this.props.dispatch(setInitialExpoToken(response));
     });
-    let interval = setInterval(() => {
+    interval = setInterval(() => {
       this.setState({
         page: this.state.page === this.state.dataSource.length ? 0 : this.state.page + 1,
         time: this.state.time + 1
       });
-      if (this.state.time === 8) {
-        clearInterval(interval);
-      }
     }, 5000);
+  }
+
+  componentWillUnmount () {
+    clearInterval(interval);
   }
 
   async getToken () {
@@ -150,6 +151,8 @@ export class LandingPage extends React.Component {
     );
   }
 }
+
+let interval = 0;
 
 LandingPage.propTypes = {
   navigation: PropTypes.object.isRequired,

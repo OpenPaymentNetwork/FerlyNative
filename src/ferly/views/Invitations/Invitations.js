@@ -50,6 +50,9 @@ export class Invitations extends React.Component {
         } else {
           this.setState({deleting: false});
         }
+      })
+      .catch((error) => {
+        Alert.alert('Oops!', error);
       });
   }
 

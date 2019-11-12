@@ -37,32 +37,33 @@ export class Wallet extends React.Component {
       scrollY: new Animated.Value(
         Platform.OS === 'ios' ? -HEADER_MAX_HEIGHT : 0
       ),
-      passed: '',
       refreshing: false
     };
   }
 
   componentDidMount () {
-    this.props.apiRequire(urls.profile);
     for (var i = 1; i <= 75; i++) {
       this.array.push(i);
     }
+    this.props.apiRequire(urls.profile);
     fetch(createUrl('verify-address'), {
       headers: {
         Authorization: 'Bearer ' + this.props.deviceToken
       }})
       .then((response) => response.json())
       .then((json) => {
-        this.setState({address: json});
         if (json['verified'] === 'yes') {
-          this.setState({passed: 'true'});
+          passed = 'true';
         } else if (json['verified'] === 'no') {
-          this.setState({passed: 'false'});
+          passed = 'false';
         } else if (json['error']) {
-          this.setState({passed: 'false'});
+          passed = 'false';
         } else {
-          this.setState({passed: ''});
+          passed = '';
         }
+      })
+      .catch((error) => {
+        Alert.alert('Oops!', error);
       });
   }
 
@@ -81,7 +82,6 @@ export class Wallet extends React.Component {
 
   cardPage () {
     const {card} = this.props;
-    const {passed} = this.state;
     if (!card) {
       if (passed === 'true') {
         return (
@@ -353,6 +353,7 @@ export class Wallet extends React.Component {
   }
 }
 
+let passed = '';
 const HEADER_MAX_HEIGHT = 160;
 const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;

@@ -7,7 +7,7 @@ import Theme from 'ferly/utils/theme';
 import {apiRequire} from 'ferly/store/api';
 import {connect} from 'react-redux';
 import {createUrl, urls, post} from 'ferly/utils/fetch';
-import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {Alert, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 
 class Recipient extends React.Component {
   static navigationOptions = {
@@ -40,6 +40,9 @@ class Recipient extends React.Component {
           if (this.state.searchText === text) { // The customer is done typing.
             this.setState({searchResults: json.results});
           }
+        })
+        .catch((error) => {
+          Alert.alert('Oops!', error);
         });
     }
     this.setState({searchText: text});
