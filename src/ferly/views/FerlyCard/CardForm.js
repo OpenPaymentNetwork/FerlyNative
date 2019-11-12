@@ -110,7 +110,7 @@ export class CardForm extends React.Component {
         .then((responseJson) => {
         })
         .catch(() => {
-          Alert.alert('Error trying to log!');
+          Alert.alert('Error please check internet connection!');
         });
     }
     const {pin, pan, invalid, submitting} = this.state;

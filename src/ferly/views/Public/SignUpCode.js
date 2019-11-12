@@ -90,7 +90,7 @@ export class SignUpCode extends React.Component {
                 }
               })
               .catch(() => {
-                Alert.alert('Error trying to login!');
+                Alert.alert('Error please check internet connectionin!');
               });
           } else if (dontLogin) {
             post('set-signup-data', this.props.deviceToken, setParams)
@@ -192,7 +192,7 @@ export class SignUpCode extends React.Component {
         .then((responseJson) => {
         })
         .catch(() => {
-          Alert.alert('Error trying to log!');
+          Alert.alert('Error please check internet connection!');
         });
     }
 

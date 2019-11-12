@@ -168,7 +168,7 @@ export class UIDController extends React.Component {
         .then((responseJson) => {
         })
         .catch(() => {
-          Alert.alert('Error trying to log!');
+          Alert.alert('Error please check internet connection!');
         });
     }
     const {uid, type} = this.props;

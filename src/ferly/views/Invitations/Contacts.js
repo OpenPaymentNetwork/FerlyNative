@@ -144,7 +144,7 @@ export class Contacts extends React.Component {
         .then((responseJson) => {
         })
         .catch(() => {
-          Alert.alert('Error trying to log!');
+          Alert.alert('Error please check internet connection!');
         });
     }
     const {contacts, permission, searchResults} = this.state;

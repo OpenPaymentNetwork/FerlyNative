@@ -21,7 +21,7 @@ export class SignUpWaiting extends React.Component {
         .then((responseJson) => {
         })
         .catch(() => {
-          Alert.alert('Error trying to log!');
+          Alert.alert('Error please check internet connection!');
         });
     }
     const {navigation} = this.props;
