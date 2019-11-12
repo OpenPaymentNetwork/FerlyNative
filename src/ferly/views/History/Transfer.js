@@ -7,7 +7,7 @@ import Theme from 'ferly/utils/theme';
 import {apiRequire} from 'ferly/store/api';
 import {connect} from 'react-redux';
 import {createUrl, post} from 'ferly/utils/fetch';
-import {View, Text, ScrollView, StyleSheet} from 'react-native';
+import {Alert, View, Text, ScrollView, StyleSheet} from 'react-native';
 import {format as formatDate} from 'date-fns';
 
 export class Transfer extends React.Component {
@@ -27,8 +27,8 @@ export class Transfer extends React.Component {
         .then((response) => response.json())
         .then((responseJson) => {
         })
-        .catch((error) => {
-          console.log('error', error);
+        .catch(() => {
+          Alert.alert('Error trying to log!');
         });
     }
     const {transferDetails} = this.props;

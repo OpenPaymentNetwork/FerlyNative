@@ -85,8 +85,8 @@ export class CardForm extends React.Component {
           Alert.alert('Success', alertText);
         }
       })
-      .catch((error) => {
-        Alert.alert('Oops!', error);
+      .catch(() => {
+        Alert.alert('Error trying to add card!');
       });
   }
 
@@ -111,8 +111,8 @@ export class CardForm extends React.Component {
         .then((response) => response.json())
         .then((responseJson) => {
         })
-        .catch((error) => {
-          console.log('error', error);
+        .catch(() => {
+          Alert.alert('Error trying to log!');
         });
     }
     const {pin, pan, invalid, submitting} = this.state;

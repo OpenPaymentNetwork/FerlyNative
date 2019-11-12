@@ -38,7 +38,7 @@ export class SignUpCode extends React.Component {
       try {
         this.props.dispatch(setIsCustomer(true));
       } catch (error) {
-        console.log('error', error);
+        Alert.alert('error', error);
       }
     });
   }
@@ -89,8 +89,8 @@ export class SignUpCode extends React.Component {
                   });
                 }
               })
-              .catch((error) => {
-                Alert.alert('Oops!', error);
+              .catch(() => {
+                Alert.alert('Error trying to login!');
               });
           } else if (dontLogin) {
             post('set-signup-data', this.props.deviceToken, setParams)
@@ -130,24 +130,24 @@ export class SignUpCode extends React.Component {
                               });
                             }
                           })
-                          .catch((error) => {
-                            Alert.alert('Oops!', error);
+                          .catch(() => {
+                            Alert.alert('Error trying to register!');
                           });
                       }
                     })
-                    .catch((error) => {
-                      Alert.alert('Oops!', error);
+                    .catch(() => {
+                      Alert.alert('Error trying to sign up!');
                     });
                 }
               })
-              .catch((error) => {
-                Alert.alert('Oops!', error);
+              .catch(() => {
+                Alert.alert('Error trying to sign up!');
               });
           }
         }
       })
-      .catch((error) => {
-        Alert.alert('Oops!', error);
+      .catch(() => {
+        Alert.alert('Error trying to sign up!');
       });
   }
 
@@ -191,8 +191,8 @@ export class SignUpCode extends React.Component {
         .then((response) => response.json())
         .then((responseJson) => {
         })
-        .catch((error) => {
-          console.log('error', error);
+        .catch(() => {
+          Alert.alert('Error trying to log!');
         });
     }
 

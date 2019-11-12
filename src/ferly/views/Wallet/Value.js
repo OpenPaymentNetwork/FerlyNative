@@ -6,6 +6,7 @@ import {post} from 'ferly/utils/fetch';
 import {viewLocations} from 'ferly/images/index';
 import {format as formatDate} from 'date-fns';
 import {
+  Alert,
   Dimensions,
   View,
   Platform,
@@ -51,8 +52,8 @@ export class Value extends React.Component {
         .then((response) => response.json())
         .then((responseJson) => {
         })
-        .catch((error) => {
-          console.log('error', error);
+        .catch(() => {
+          Alert.alert('Error trying to log!');
         });
     }
     const {params: design} = this.props.navigation.state;

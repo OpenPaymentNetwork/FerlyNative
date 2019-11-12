@@ -8,6 +8,7 @@ import TestElement from 'ferly/components/TestElement';
 import {connect} from 'react-redux';
 import {post} from 'ferly/utils/fetch';
 import {
+  Alert,
   View,
   Text,
   ScrollView,
@@ -142,8 +143,8 @@ export class Contacts extends React.Component {
         .then((response) => response.json())
         .then((responseJson) => {
         })
-        .catch((error) => {
-          console.log('error', error);
+        .catch(() => {
+          Alert.alert('Error trying to log!');
         });
     }
     const {contacts, permission, searchResults} = this.state;

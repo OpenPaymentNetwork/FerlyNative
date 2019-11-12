@@ -44,8 +44,8 @@ export class ManualAdd extends React.Component {
           Alert.alert('Invite Sent!', `You sent an invite to ${option}.`);
         }
       })
-      .catch((error) => {
-        Alert.alert('Oops!', error);
+      .catch(() => {
+        Alert.alert('Error trying to invite!');
       });
   }
 
@@ -66,8 +66,8 @@ export class ManualAdd extends React.Component {
         .then((response) => response.json())
         .then((responseJson) => {
         })
-        .catch((error) => {
-          console.log('error', error);
+        .catch(() => {
+          Alert.alert('Error trying to log!');
         });
     }
     const {fieldValue, error, submitting} = this.state;

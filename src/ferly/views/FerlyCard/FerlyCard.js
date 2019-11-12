@@ -62,8 +62,8 @@ export class FerlyCard extends React.Component {
           this.setState({passed: ''});
         }
       })
-      .catch((error) => {
-        Alert.alert('Oops!', error);
+      .catch(() => {
+        Alert.alert('Error trying to get address!');
       });
   }
 
@@ -89,8 +89,8 @@ export class FerlyCard extends React.Component {
       .then((json) => {
         this.setState({changingAbility: false});
       })
-      .catch((error) => {
-        Alert.alert('Oops!', error);
+      .catch(() => {
+        Alert.alert('Error trying to change info!');
       });
   }
 
@@ -124,8 +124,8 @@ export class FerlyCard extends React.Component {
               .then((json) => {
                 this.setState({passed: ''});
               })
-              .catch((error) => {
-                Alert.alert('Oops!', error);
+              .catch(() => {
+                Alert.alert('Error trying to request card!');
               });
           } else {
             let addressLine2 = address['address_line2'] === '' ? '' : address['address_line2'] + '\n';
@@ -146,8 +146,8 @@ export class FerlyCard extends React.Component {
                       .then((json) => {
                         this.setState({passed: 'true'});
                       })
-                      .catch((error) => {
-                        Alert.alert('Oops!', error);
+                      .catch(() => {
+                        Alert.alert('Error trying to request card!');
                       });
                   }},
                 {text: 'No',
@@ -159,8 +159,8 @@ export class FerlyCard extends React.Component {
                       .then((json) => {
                         this.setState({passed: ''});
                       })
-                      .catch((error) => {
-                        Alert.alert('Oops!', error);
+                      .catch(() => {
+                        Alert.alert('Error trying to request card!');
                       });
                   }}
               ]
@@ -168,8 +168,8 @@ export class FerlyCard extends React.Component {
           }
         }
       })
-      .catch((error) => {
-        Alert.alert('Oops!', error);
+      .catch(() => {
+        Alert.alert('Error trying to delete card!');
       });
   }
 
@@ -199,8 +199,8 @@ export class FerlyCard extends React.Component {
           }, 300);
         }
       })
-      .catch((error) => {
-        Alert.alert('Oops!', error);
+      .catch(() => {
+        Alert.alert('Error trying to change pin!');
       });
   }
 
@@ -236,8 +236,8 @@ export class FerlyCard extends React.Component {
         .then((response) => response.json())
         .then((responseJson) => {
         })
-        .catch((error) => {
-          console.log('error', error);
+        .catch(() => {
+          Alert.alert('Error trying to log!');
         });
     }
     const {card, loaded} = this.props;

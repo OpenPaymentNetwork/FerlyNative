@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {post} from 'ferly/utils/fetch';
-import {View, Text, Image, Dimensions} from 'react-native';
+import {Alert, View, Text, Image, Dimensions} from 'react-native';
 import {mailCard} from 'ferly/images/index';
 import PrimaryButton from 'ferly/components/PrimaryButton';
 import Theme from 'ferly/utils/theme';
@@ -20,8 +20,8 @@ export class SignUpWaiting extends React.Component {
         .then((response) => response.json())
         .then((responseJson) => {
         })
-        .catch((error) => {
-          console.log('error', error);
+        .catch(() => {
+          Alert.alert('Error trying to log!');
         });
     }
     const {navigation} = this.props;

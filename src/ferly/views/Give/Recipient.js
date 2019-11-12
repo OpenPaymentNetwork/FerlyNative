@@ -41,8 +41,8 @@ class Recipient extends React.Component {
             this.setState({searchResults: json.results});
           }
         })
-        .catch((error) => {
-          Alert.alert('Oops!', error);
+        .catch(() => {
+          Alert.alert('Error trying to search!');
         });
     }
     this.setState({searchText: text});
@@ -94,8 +94,8 @@ class Recipient extends React.Component {
         .then((response) => response.json())
         .then((responseJson) => {
         })
-        .catch((error) => {
-          console.log('error', error);
+        .catch(() => {
+          Alert.alert('Error trying to log!');
         });
     }
     const {recents} = this.props;

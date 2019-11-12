@@ -110,8 +110,8 @@ class Profile extends React.Component {
                 .then((json) => {
                   this.onSuccessfulEdit();
                 })
-                .catch((error) => {
-                  Alert.alert('Oops!', error);
+                .catch(() => {
+                  Alert.alert('Error trying to update!');
                 });
             } else {
               this.onSuccessfulEdit();
@@ -120,8 +120,8 @@ class Profile extends React.Component {
             this.setState({submitting: false});
           }
         })
-        .catch((error) => {
-          Alert.alert('Oops!', error);
+        .catch(() => {
+          Alert.alert('Error trying to update!');
         });
     } else if (imageChanged) {
       this.updateProfileImage()
@@ -129,8 +129,8 @@ class Profile extends React.Component {
         .then((json) => {
           this.onSuccessfulEdit();
         })
-        .catch((error) => {
-          Alert.alert('Oops!', error);
+        .catch(() => {
+          Alert.alert('Error trying to update!');
         });
     }
   }
@@ -295,8 +295,8 @@ class Profile extends React.Component {
         .then((response) => response.json())
         .then((responseJson) => {
         })
-        .catch((error) => {
-          console.log('error', error);
+        .catch(() => {
+          Alert.alert('Error trying to log!');
         });
     }
     const {editing} = this.state;

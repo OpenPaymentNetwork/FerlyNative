@@ -62,8 +62,8 @@ export class Wallet extends React.Component {
           passed = '';
         }
       })
-      .catch((error) => {
-        Alert.alert('Oops!', error);
+      .catch(() => {
+        Alert.alert('Error trying to get address!');
       });
   }
 
@@ -238,8 +238,8 @@ export class Wallet extends React.Component {
         .then((response) => response.json())
         .then((responseJson) => {
         })
-        .catch((error) => {
-          console.log('error', error);
+        .catch(() => {
+          Alert.alert('Error trying to log!');
         });
     }
 

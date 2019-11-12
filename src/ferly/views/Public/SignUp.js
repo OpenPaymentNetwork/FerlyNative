@@ -70,8 +70,8 @@ export class SignUp extends React.Component {
           this.props.navigation.navigate('SignUpCode', navParams);
         }
       })
-      .catch((error) => {
-        Alert.alert('Oops!', error);
+      .catch(() => {
+        Alert.alert('Error trying to sign up!');
       });
   }
 
@@ -191,8 +191,8 @@ export class SignUp extends React.Component {
         .then((response) => response.json())
         .then((responseJson) => {
         })
-        .catch((error) => {
-          console.log('error', error);
+        .catch(() => {
+          Alert.alert('Error trying to log!');
         });
     }
     return (

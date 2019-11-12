@@ -78,8 +78,8 @@ export class UIDController extends React.Component {
           });
         }
       })
-      .catch((error) => {
-        Alert.alert('Oops!', error);
+      .catch(() => {
+        Alert.alert('Error trying to add!');
       });
   }
 
@@ -154,8 +154,8 @@ export class UIDController extends React.Component {
           navigation.dispatch(resetAction);
         }
       })
-      .catch((error) => {
-        Alert.alert('Oops!', error);
+      .catch(() => {
+        Alert.alert('Error trying to confirm!');
       });
   }
 
@@ -167,8 +167,8 @@ export class UIDController extends React.Component {
         .then((response) => response.json())
         .then((responseJson) => {
         })
-        .catch((error) => {
-          console.log('error', error);
+        .catch(() => {
+          Alert.alert('Error trying to log!');
         });
     }
     const {uid, type} = this.props;

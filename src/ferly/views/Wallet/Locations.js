@@ -8,6 +8,7 @@ import {connect} from 'react-redux';
 import {createUrl, post} from 'ferly/utils/fetch';
 import {MaterialIcons} from '@expo/vector-icons';
 import {
+  Alert,
   View,
   Text,
   TouchableOpacity,
@@ -60,8 +61,8 @@ export class Locations extends React.Component {
         .then((response) => response.json())
         .then((responseJson) => {
         })
-        .catch((error) => {
-          console.log('error', error);
+        .catch(() => {
+          Alert.alert('Error trying to log!');
         });
     }
     const {locations, loaded} = this.props;

@@ -34,15 +34,15 @@ export class Settings extends React.Component {
       .then((json) => {
         this.props.dispatch(setExpoToken(json.expo_token));
       })
-      .catch((error) => {
-        Alert.alert('Oops!', error);
+      .catch(() => {
+        Alert.alert('Error trying to get token!');
       });
     post('delete-device-tokens', this.props.deviceToken)
       .then((response) => response.json())
       .then((json) => {
       })
-      .catch((error) => {
-        Alert.alert('Oops!', error);
+      .catch(() => {
+        Alert.alert('Error trying to sign out!');
       });
     this.props.dispatch(apiErase());
     device = makeid(32);
@@ -92,8 +92,8 @@ export class Settings extends React.Component {
         .then((response) => response.json())
         .then((responseJson) => {
         })
-        .catch((error) => {
-          console.log('error', error);
+        .catch(() => {
+          Alert.alert('Error trying to log!');
         });
     }
     const {navigation, updateDownloaded} = this.props;

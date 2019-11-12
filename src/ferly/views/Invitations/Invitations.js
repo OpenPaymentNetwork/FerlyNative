@@ -51,8 +51,8 @@ export class Invitations extends React.Component {
           this.setState({deleting: false});
         }
       })
-      .catch((error) => {
-        Alert.alert('Oops!', error);
+      .catch(() => {
+        Alert.alert('Error trying to delete invitation!');
       });
   }
 
@@ -102,8 +102,8 @@ export class Invitations extends React.Component {
         .then((response) => response.json())
         .then((responseJson) => {
         })
-        .catch((error) => {
-          console.log('error', error);
+        .catch(() => {
+          Alert.alert('Error trying to log!');
         });
     }
     const {navigation} = this.props;

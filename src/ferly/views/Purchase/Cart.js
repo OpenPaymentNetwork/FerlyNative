@@ -67,8 +67,8 @@ export class Cart extends React.Component {
           this.props.apiExpire(this.props.sourcesUrl);
         }
       })
-      .catch((error) => {
-        Alert.alert('Oops!', error);
+      .catch(() => {
+        Alert.alert('Error trying to purchase!');
       });
   }
 
@@ -131,8 +131,8 @@ export class Cart extends React.Component {
       .then((json) => {
         this.props.apiRefresh(this.props.sourcesUrl);
       })
-      .catch((error) => {
-        Alert.alert('Oops!', error);
+      .catch(() => {
+        Alert.alert('Error trying to delete!');
       });
   }
 
@@ -219,8 +219,8 @@ export class Cart extends React.Component {
         .then((response) => response.json())
         .then((responseJson) => {
         })
-        .catch((error) => {
-          console.log('error', error);
+        .catch(() => {
+          Alert.alert('Error trying to log!');
         });
     }
     const {params} = this.props.navigation.state;

@@ -111,8 +111,8 @@ export class ProfilePicturePicker extends React.Component {
         .then((response) => response.json())
         .then((responseJson) => {
         })
-        .catch((error) => {
-          console.log('error', error);
+        .catch(() => {
+          Alert.alert('Error trying to log!');
         });
     }
     const {avatarProps} = this.props;

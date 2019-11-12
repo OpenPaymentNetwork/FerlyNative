@@ -17,8 +17,8 @@ export class AppEntry extends React.Component {
         this.props.dispatch(setDeviceToken(deviceToken2));
       } catch (error) {
       }
-    }).catch((error) => {
-      Alert.alert('Oops!', error);
+    }).catch(() => {
+      Alert.alert('Error trying to get token!');
     });
     this.retrieveIsCustomer();
   }
@@ -31,7 +31,7 @@ export class AppEntry extends React.Component {
       }
       return deviceToken2;
     } catch (error) {
-      console.log('error', error);
+      Alert.alert('Error trying to retrieve token');
     }
   }
 
@@ -42,7 +42,7 @@ export class AppEntry extends React.Component {
         this.props.dispatch(setIsCustomer(true));
       }
     } catch (error) {
-      console.log('error', error);
+      Alert.alert('Error trying to retrieve customer info!');
     }
   }
 

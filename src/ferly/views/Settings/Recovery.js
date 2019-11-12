@@ -6,7 +6,7 @@ import UIDController from 'ferly/views/Settings/UIDController';
 import {apiRequire} from 'ferly/store/api';
 import {connect} from 'react-redux';
 import {urls, post} from 'ferly/utils/fetch';
-import {View, Text, ScrollView, KeyboardAvoidingView} from 'react-native';
+import {Alert, View, Text, ScrollView, KeyboardAvoidingView} from 'react-native';
 
 export class Recovery extends React.Component {
   static navigationOptions = {
@@ -25,8 +25,8 @@ export class Recovery extends React.Component {
         .then((response) => response.json())
         .then((responseJson) => {
         })
-        .catch((error) => {
-          console.log('error', error);
+        .catch(() => {
+          Alert.alert('Error trying to log!');
         });
     }
     const {email, phone, navigation, myProfile} = this.props;

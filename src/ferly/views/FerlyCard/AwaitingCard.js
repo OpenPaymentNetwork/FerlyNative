@@ -5,7 +5,7 @@ import Theme from 'ferly/utils/theme';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {post} from 'ferly/utils/fetch';
-import {View, Text, Image, Dimensions} from 'react-native';
+import {Alert, View, Text, Image, Dimensions} from 'react-native';
 import {mailCard} from 'ferly/images/index';
 
 export class AwaitingCard extends React.Component {
@@ -21,8 +21,8 @@ export class AwaitingCard extends React.Component {
         .then((response) => response.json())
         .then((responseJson) => {
         })
-        .catch((error) => {
-          console.log('error', error);
+        .catch(() => {
+          Alert.alert('Error trying to log!');
         });
     }
     const {navigation} = this.props;

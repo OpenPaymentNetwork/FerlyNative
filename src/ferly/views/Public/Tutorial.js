@@ -4,7 +4,7 @@ import React from 'react';
 import Theme from 'ferly/utils/theme';
 import {connect} from 'react-redux';
 import {post} from 'ferly/utils/fetch';
-import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
+import {Alert, View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
 import {
   tutorialFour,
   tutorialFive
@@ -50,8 +50,8 @@ export class LandingPage extends React.Component {
         .then((response) => response.json())
         .then((responseJson) => {
         })
-        .catch((error) => {
-          console.log('error', error);
+        .catch(() => {
+          Alert.alert('Error trying to log!');
         });
     }
     const {navigation} = this.props;

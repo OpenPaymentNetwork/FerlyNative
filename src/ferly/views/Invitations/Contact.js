@@ -36,8 +36,8 @@ export class Contact extends React.Component {
         this.props.navigation.dispatch(resetAction);
         Alert.alert('Invite Sent!', `You sent an invite to ${option}.`);
       })
-      .catch((error) => {
-        Alert.alert('Oops!', error);
+      .catch(() => {
+        Alert.alert('Error trying to send invite!');
       });
   }
 
@@ -80,8 +80,8 @@ export class Contact extends React.Component {
         .then((response) => response.json())
         .then((responseJson) => {
         })
-        .catch((error) => {
-          console.log('error', error);
+        .catch(() => {
+          Alert.alert('Error trying to log!');
         });
     }
     const contact = this.props.navigation.state.params;

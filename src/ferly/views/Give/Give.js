@@ -69,8 +69,8 @@ export class Give extends React.Component {
           this.setState({error: error, amount: 0, submitting: false});
         }
       })
-      .catch((error) => {
-        Alert.alert('Oops!', error);
+      .catch(() => {
+        Alert.alert('Error trying to send!');
       });
   }
 
@@ -86,8 +86,8 @@ export class Give extends React.Component {
         .then((response) => response.json())
         .then((responseJson) => {
         })
-        .catch((error) => {
-          console.log('error', error);
+        .catch(() => {
+          Alert.alert('Error trying to log!');
         });
     }
     const params = this.props.navigation.state.params;

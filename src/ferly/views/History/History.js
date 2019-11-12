@@ -42,8 +42,8 @@ export class History extends React.Component {
           'history': newHistory,
           'has_more': responseJson.has_more
         })
-          .catch((error) => {
-            Alert.alert('Oops!', error);
+          .catch(() => {
+            Alert.alert('Error trying to load!');
           });
 
         // TODO don't set state here in case they navigate away while loading
@@ -59,8 +59,8 @@ export class History extends React.Component {
         .then((response) => response.json())
         .then((responseJson) => {
         })
-        .catch((error) => {
-          console.log('error', error);
+        .catch(() => {
+          Alert.alert('Error trying to log!');
         });
     }
     const {history, navigation} = this.props;

@@ -50,8 +50,8 @@ export class RecoveryChannel extends React.Component {
           navigation.navigate('RecoveryCode', navParams);
         }
       })
-      .catch((error) => {
-        Alert.alert('Oops!', error);
+      .catch(() => {
+        Alert.alert('Error trying to recover!');
       });
   }
 
@@ -99,9 +99,10 @@ export class RecoveryChannel extends React.Component {
       post('log-info-initial', this.props.deviceToken, text)
         .then((response) => response.json())
         .then((responseJson) => {
+          throw RangeError;
         })
-        .catch((error) => {
-          console.log('error', error);
+        .catch(() => {
+          Alert.alert('Error trying to log!');
         });
     }
 

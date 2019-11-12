@@ -11,6 +11,7 @@ import {connect} from 'react-redux';
 import {format as formatDate} from 'date-fns';
 import {urls, post} from 'ferly/utils/fetch';
 import {
+  Alert,
   Dimensions,
   Platform,
   View,
@@ -69,8 +70,8 @@ export class Purchase extends React.Component {
         .then((response) => response.json())
         .then((responseJson) => {
         })
-        .catch((error) => {
-          console.log('error', error);
+        .catch(() => {
+          Alert.alert('Error trying to log!');
         });
     }
     const {params} = this.props.navigation.state;

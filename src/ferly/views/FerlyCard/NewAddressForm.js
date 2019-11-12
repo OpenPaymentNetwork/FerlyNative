@@ -69,8 +69,8 @@ export class NewAddressForm extends React.Component {
             Alert.alert('Done!', alertText);
           }
         })
-        .catch((error) => {
-          Alert.alert('Oops!', error);
+        .catch(() => {
+          Alert.alert('Error trying to request card!');
         });
     }
 
@@ -101,8 +101,8 @@ export class NewAddressForm extends React.Component {
           .then((response) => response.json())
           .then((responseJson) => {
           })
-          .catch((error) => {
-            console.log('error', error);
+          .catch(() => {
+            Alert.alert('Error trying to log!');
           });
       }
       const {
