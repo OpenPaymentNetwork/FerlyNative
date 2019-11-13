@@ -1,8 +1,10 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import Theme from 'ferly/utils/theme';
 import {connect} from 'react-redux';
 import {CreateAuthSwitch} from 'ferly/navigation';
-import {Alert, AsyncStorage} from 'react-native';
+import {logoWhite} from 'ferly/images/index';
+import {Alert, View, Image, AsyncStorage} from 'react-native';
 import {setDeviceToken} from 'ferly/store/settings';
 import { setIsCustomer } from '../store/settings';
 
@@ -39,7 +41,9 @@ export class AppEntry extends React.Component {
     try {
       const isCustomer = await AsyncStorage.getItem('isCustomer') || '';
       if (isCustomer === 'true') {
-        this.props.dispatch(setIsCustomer(true));
+        this.props.dispatch(setIsCustomer('true'));
+      } else if (isCustomer === '') {
+        this.props.dispatch(setIsCustomer('false'));
       }
     } catch (error) {
       Alert.alert('Error trying to retrieve customer info!');
@@ -48,6 +52,20 @@ export class AppEntry extends React.Component {
 
   render () {
     const {isCustomer} = this.props;
+    console.log('customer', isCustomer);
+    if (isCustomer === '') {
+      return (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: Theme.darkBlue
+          }}>
+          <Image source={logoWhite} style={{height: 140, width: 150}}/>
+        </View>
+      );
+    }
     const Layout = CreateAuthSwitch(isCustomer);
     return <Layout />;
   }
@@ -67,7 +85,7 @@ function makeid (length) {
 
 AppEntry.propTypes = {
   dispatch: PropTypes.func.isRequired,
-  isCustomer: PropTypes.bool,
+  isCustomer: PropTypes.string,
   auth: PropTypes.bool,
   hasError: PropTypes.bool
 };

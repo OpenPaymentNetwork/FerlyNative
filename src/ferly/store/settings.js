@@ -26,7 +26,7 @@ const initialState = {
   expoToken: '',
   initialExpoToken: '',
   haveCard: true,
-  isCustomer: false
+  isCustomer: ''
 };
 
 // Reducer functions

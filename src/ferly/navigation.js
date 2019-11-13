@@ -156,7 +156,7 @@ export const CreateAuthSwitch = (isUser) => {
       Auth: AuthDrawer
     },
     {
-      initialRouteName: (isUser) ? 'Auth' : 'Pub'
+      initialRouteName: (isUser === 'true') ? 'Auth' : 'Pub'
     });
   return AppLayout;
 };

@@ -45,7 +45,11 @@ export class Wallet extends React.Component {
     for (var i = 1; i <= 75; i++) {
       this.array.push(i);
     }
-    this.props.apiRequire(urls.profile);
+    try {
+      this.props.apiRequire(urls.profile);
+    } catch (error) {
+      Alert.alert('Failed to refresh profile!');
+    }
     fetch(createUrl('verify-address'), {
       headers: {
         Authorization: 'Bearer ' + this.props.deviceToken
@@ -63,7 +67,7 @@ export class Wallet extends React.Component {
         }
       })
       .catch(() => {
-        Alert.alert('Error trying to get address!');
+        Alert.alert('Error', 'Trying to get address!');
       });
   }
 

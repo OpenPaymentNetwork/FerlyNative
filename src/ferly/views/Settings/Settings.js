@@ -52,7 +52,7 @@ export class Settings extends React.Component {
         Alert.alert('Done!', alertText);
         try {
           AsyncStorage.setItem('isCustomer', 'false').then((response) => {
-            this.props.dispatch(setIsCustomer(false));
+            this.props.dispatch(setIsCustomer('false'));
             this.props.dispatch(setDeviceToken(device));
           });
         } catch (error) {

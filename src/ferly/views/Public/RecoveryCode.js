@@ -35,7 +35,7 @@ export class RecoveryCode extends React.Component {
   async storage () {
     AsyncStorage.setItem('isCustomer', 'true').then(() => {
       try {
-        this.props.dispatch(setIsCustomer(true));
+        this.props.dispatch(setIsCustomer('true'));
       } catch (error) {
         Alert.alert('error', error);
       }
