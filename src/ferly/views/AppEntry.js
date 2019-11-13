@@ -52,7 +52,6 @@ export class AppEntry extends React.Component {
 
   render () {
     const {isCustomer} = this.props;
-    console.log('customer', isCustomer);
     if (isCustomer === '') {
       return (
         <View
