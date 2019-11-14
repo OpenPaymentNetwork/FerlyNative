@@ -5,8 +5,7 @@ import {connect} from 'react-redux';
 import {CreateAuthSwitch} from 'ferly/navigation';
 import {logoWhite} from 'ferly/images/index';
 import {Alert, View, Image, AsyncStorage} from 'react-native';
-import {setDeviceToken} from 'ferly/store/settings';
-import { setIsCustomer } from '../store/settings';
+import {setDeviceToken, setIsCustomer} from 'ferly/store/settings';
 
 export class AppEntry extends React.Component {
   componentDidMount () {
@@ -42,8 +41,10 @@ export class AppEntry extends React.Component {
       const isCustomer = await AsyncStorage.getItem('isCustomer') || '';
       if (isCustomer === 'true') {
         this.props.dispatch(setIsCustomer('true'));
-      } else if (isCustomer === '') {
+        AsyncStorage.setItem('isCustomer', 'true');
+      } else {
         this.props.dispatch(setIsCustomer('false'));
+        AsyncStorage.setItem('isCustomer', 'false');
       }
     } catch (error) {
       Alert.alert('Error trying to retrieve customer info!');
