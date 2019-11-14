@@ -9,7 +9,8 @@
     "ios": {
       "supportsTablet": true,
       "isTabletOnly": false,
-      "bundleIdentifier": "com.ferly.ferly"
+      "bundleIdentifier": "com.ferly.ferly",
+      "buildNumber": "2"
     },
     "android": {
       "versionCode": 8,
