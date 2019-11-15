@@ -7,7 +7,7 @@ import React from 'react';
 import Theme from 'ferly/utils/theme';
 import {connect} from 'react-redux';
 import {post} from 'ferly/utils/fetch';
-import {Platform, TouchableOpacity, Alert, View} from 'react-native';
+import {AsyncStorage, Platform, TouchableOpacity, Alert, View} from 'react-native';
 
 export class ProfilePicturePicker extends React.Component {
   constructor (props) {
@@ -30,6 +30,7 @@ export class ProfilePicturePicker extends React.Component {
     let finalStatus = existingStatus;
 
     if (finalStatus !== 'granted') {
+      AsyncStorage.setItem('granted', 'true');
       const {status} = await Permissions.askAsync(Permissions.CAMERA_ROLL);
       finalStatus = status;
     }
@@ -42,6 +43,7 @@ export class ProfilePicturePicker extends React.Component {
     );
     let finalStatus = existingStatus;
     if (finalStatus !== 'granted') {
+      AsyncStorage.setItem('granted', 'true');
       const {status} = await Permissions.askAsync(Permissions.CAMERA);
       finalStatus = status;
     }
@@ -103,6 +105,23 @@ export class ProfilePicturePicker extends React.Component {
     Alert.alert('Profile Picture', '', buttons);
   }
 
+  async showDetails () {
+    if (Platform.OS === 'ios') {
+      const buttons = [
+        {text: 'Ok', onPress: () => this.showOptions()}
+      ];
+      AsyncStorage.getItem('granted').then((result) => {
+        if (result !== 'true') {
+          Alert.alert('Access Images and Camera', 'Ferly will need access to images and camera for the use of your profile picture', buttons);
+        } else {
+          this.showOptions();
+        }
+      });
+    } else {
+      this.showOptions();
+    }
+  }
+
   render () {
     count++;
     if (count < 2) {
@@ -122,7 +141,7 @@ export class ProfilePicturePicker extends React.Component {
     }
 
     return (
-      <TouchableOpacity onPress={this.showOptions.bind(this)}>
+      <TouchableOpacity onPress={this.showDetails.bind(this)}>
         <Avatar {...avatarProps} />
         <View style={{position: 'absolute', bottom: 0, right: 0}}>
           <Icon name='camera' color={Theme.lightBlue} size={24} />
