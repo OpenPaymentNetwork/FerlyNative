@@ -10,7 +10,7 @@
       "supportsTablet": true,
       "isTabletOnly": false,
       "bundleIdentifier": "com.ferly.ferly",
-      "buildNumber": "2"
+      "buildNumber": "3"
     },
     "android": {
       "versionCode": 8,
