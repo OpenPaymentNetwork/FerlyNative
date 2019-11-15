@@ -19,9 +19,9 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
-  WebView
+  View
 } from 'react-native';
+import {WebView} from 'react-native-webview';
 
 export class Cart extends React.Component {
   static navigationOptions = {
