@@ -28,7 +28,7 @@ export class Contacts extends React.Component {
       permission: undefined,
       contacts: undefined,
       hasMore: true,
-      pageSize: 10,
+      pageSize: 25000,
       pageOffset: 0,
       searchResults: null
     };
@@ -57,8 +57,21 @@ export class Contacts extends React.Component {
 
   async getContacts () {
     const {pageSize, pageOffset, contacts: currentContacts = []} = this.state;
-    const {data} = await expoContacts.getContactsAsync({
-      pageSize, pageOffset, sort: expoContacts.SortTypes.FirstName});
+    let test = {};
+    try {
+      test = await expoContacts.getContactsAsync({
+        pageSize, pageOffset, sort: expoContacts.SortTypes.FirstName});
+    } catch (error) {
+      // This is a workaround for an expo bug
+      test = await expoContacts.getContactsAsync({
+        pageSize, pageOffset});
+      if (contacts.length < 1) {
+        contacts.push(test);
+      }
+      test.data = test.data.filter(item => item.firstName !== undefined);
+      test.data.sort((a, b) => (a.firstName > b.firstName) ? 1 : -1);
+    }
+    const {data} = test;
     const moreContacts = this.convertDataToContacts(data);
     const hasMore = pageSize === moreContacts.length;
     this.setState({
@@ -199,6 +212,8 @@ export class Contacts extends React.Component {
     );
   }
 }
+
+let contacts = [];
 
 let count = 0;
 
