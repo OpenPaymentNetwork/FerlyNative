@@ -71,6 +71,7 @@ export class NewAddressForm extends React.Component {
         })
         .catch(() => {
           Alert.alert('Error trying to request card!');
+          navigator.navigate('Home');
         });
     }
 

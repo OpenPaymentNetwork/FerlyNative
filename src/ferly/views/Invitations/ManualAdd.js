@@ -46,6 +46,7 @@ export class ManualAdd extends React.Component {
       })
       .catch(() => {
         Alert.alert('Error trying to invite!');
+        navigator.navigate('Home');
       });
   }
 

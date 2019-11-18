@@ -91,6 +91,7 @@ export class FerlyCard extends React.Component {
       })
       .catch(() => {
         Alert.alert('Error trying to change info!');
+        navigator.navigate('Home');
       });
   }
 
@@ -126,6 +127,7 @@ export class FerlyCard extends React.Component {
               })
               .catch(() => {
                 Alert.alert('Error trying to request card!');
+                navigator.navigate('Home');
               });
           } else {
             let addressLine2 = address['address_line2'] === '' ? '' : address['address_line2'] + '\n';
@@ -148,6 +150,7 @@ export class FerlyCard extends React.Component {
                       })
                       .catch(() => {
                         Alert.alert('Error trying to request card!');
+                        navigator.navigate('Home');
                       });
                   }},
                 {text: 'No',
@@ -161,6 +164,7 @@ export class FerlyCard extends React.Component {
                       })
                       .catch(() => {
                         Alert.alert('Error trying to request card!');
+                        navigator.navigate('Home');
                       });
                   }}
               ]
@@ -170,6 +174,7 @@ export class FerlyCard extends React.Component {
       })
       .catch(() => {
         Alert.alert('Error trying to delete card!');
+        navigator.navigate('Home');
       });
   }
 
@@ -201,6 +206,7 @@ export class FerlyCard extends React.Component {
       })
       .catch(() => {
         Alert.alert('Error trying to change pin!');
+        navigator.navigate('Home');
       });
   }
 

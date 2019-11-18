@@ -71,6 +71,7 @@ export class Give extends React.Component {
       })
       .catch(() => {
         Alert.alert('Error trying to send!');
+        navigation.navigate('Home');
       });
   }
 

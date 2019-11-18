@@ -53,6 +53,7 @@ export class Invitations extends React.Component {
       })
       .catch(() => {
         Alert.alert('Error trying to delete invitation!');
+        navigator.navigate('Home');
       });
   }
 

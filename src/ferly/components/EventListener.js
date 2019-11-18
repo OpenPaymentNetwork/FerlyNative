@@ -58,6 +58,7 @@ class EventListener extends React.Component {
 }
 
 EventListener.propTypes = {
+  navigation: PropTypes.object,
   apiRefresh: PropTypes.func.isRequired,
   children: PropTypes.object.isRequired,
   updateDownloaded: PropTypes.func.isRequired

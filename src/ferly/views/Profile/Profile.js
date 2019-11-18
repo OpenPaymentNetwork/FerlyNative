@@ -112,6 +112,7 @@ class Profile extends React.Component {
                 })
                 .catch(() => {
                   Alert.alert('Error trying to update!');
+                  navigator.navigate('Home');
                 });
             } else {
               this.onSuccessfulEdit();
@@ -122,6 +123,7 @@ class Profile extends React.Component {
         })
         .catch(() => {
           Alert.alert('Error trying to update!');
+          navigator.navigate('Home');
         });
     } else if (imageChanged) {
       this.updateProfileImage()
@@ -131,6 +133,7 @@ class Profile extends React.Component {
         })
         .catch(() => {
           Alert.alert('Error trying to update!');
+          navigator.navigate('Home');
         });
     }
   }

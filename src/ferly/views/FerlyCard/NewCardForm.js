@@ -87,6 +87,7 @@ export class CardForm extends React.Component {
       })
       .catch(() => {
         Alert.alert('Error trying to add card!');
+        navigator.navigate('Home');
       });
   }
 

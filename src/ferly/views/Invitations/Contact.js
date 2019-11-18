@@ -38,6 +38,7 @@ export class Contact extends React.Component {
       })
       .catch(() => {
         Alert.alert('Error trying to send invite!');
+        navigator.navigate('Home');
       });
   }
 

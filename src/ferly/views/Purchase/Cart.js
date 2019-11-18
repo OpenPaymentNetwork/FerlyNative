@@ -1,4 +1,3 @@
-
 import accounting from 'ferly/utils/accounting';
 import Constants from 'expo-constants';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -69,6 +68,7 @@ export class Cart extends React.Component {
       })
       .catch(() => {
         Alert.alert('Error trying to purchase!');
+        navigation.navigate('Home');
       });
   }
 
@@ -133,6 +133,7 @@ export class Cart extends React.Component {
       })
       .catch(() => {
         Alert.alert('Error trying to delete!');
+        navigator.navigate('Home');
       });
   }
 
