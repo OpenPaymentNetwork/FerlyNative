@@ -180,7 +180,7 @@ export class AddressForm extends React.Component {
                     style={styles.textField}
                     returnKeyType='done'
                     value={city}
-                    maxLength={15}
+                    maxLength={20}
                     onChangeText={(text) => this.setState({city: text})} />
                   <Text style={styles.error}>{cityError}</Text>
                 </View>

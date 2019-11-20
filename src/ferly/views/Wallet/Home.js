@@ -86,12 +86,13 @@ export class Wallet extends React.Component {
 
   cardPage () {
     const {card} = this.props;
+    console.log('passed', passed);
     if (!card) {
       if (passed === 'true') {
         return (
           'Activate Card'
         );
-      } else if (passed === 'false' || '') {
+      } else if (passed === 'false' || passed === '') {
         return (
           'Request Card'
         );
@@ -339,11 +340,15 @@ export class Wallet extends React.Component {
           </Text>
         </Animated.View>
         <Animated.View style={styles.bar}>
-          <TouchableOpacity style={styles.theCard}onPress={() => navigation.navigate('Ferly Card')}>
+          <TestElement
+            parent={TouchableOpacity}
+            label='test-id-card-page'
+            style={styles.theCard}
+            onPress={() => navigation.navigate('Ferly Card')}>
             <Text style={styles.cardManager} >
               {this.cardPage()}
             </Text>
-          </TouchableOpacity>
+          </TestElement>
         </Animated.View>
         <TestElement
           parent={TouchableOpacity}
