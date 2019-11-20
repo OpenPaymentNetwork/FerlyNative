@@ -86,7 +86,6 @@ export class Wallet extends React.Component {
 
   cardPage () {
     const {card} = this.props;
-    console.log('passed', passed);
     if (!card) {
       if (passed === 'true') {
         return (
