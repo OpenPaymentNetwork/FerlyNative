@@ -30,7 +30,6 @@ export class ProfilePicturePicker extends React.Component {
     let finalStatus = existingStatus;
 
     if (finalStatus !== 'granted') {
-      AsyncStorage.setItem('granted', 'true');
       const {status} = await Permissions.askAsync(Permissions.CAMERA_ROLL);
       finalStatus = status;
     }
@@ -43,7 +42,6 @@ export class ProfilePicturePicker extends React.Component {
     );
     let finalStatus = existingStatus;
     if (finalStatus !== 'granted') {
-      AsyncStorage.setItem('granted', 'true');
       const {status} = await Permissions.askAsync(Permissions.CAMERA);
       finalStatus = status;
     }
@@ -105,10 +103,15 @@ export class ProfilePicturePicker extends React.Component {
     Alert.alert('Profile Picture', '', buttons);
   }
 
+  switch () {
+    AsyncStorage.setItem('granted', 'true');
+    return this.showOptions();
+  }
+
   async showDetails () {
     if (Platform.OS === 'ios') {
       const buttons = [
-        {text: 'Ok', onPress: () => this.showOptions()}
+        {text: 'Ok', onPress: () => this.switch()}
       ];
       AsyncStorage.getItem('granted').then((result) => {
         if (result !== 'true') {

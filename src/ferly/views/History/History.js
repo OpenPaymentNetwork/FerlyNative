@@ -44,6 +44,9 @@ export class History extends React.Component {
         });
         // TODO don't set state here in case they navigate away while loading
         this.setState({updating: false});
+      })
+      .catch(() => {
+        Alert.alert('Error trying to load!');
       });
   }
 
