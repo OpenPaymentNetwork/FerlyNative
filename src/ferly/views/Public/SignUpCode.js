@@ -74,10 +74,14 @@ export class SignUpCode extends React.Component {
       .then((responseJson) => {
         if (this.validate(responseJson)) {
           if (responseJson.profile_id) {
+            let token = responseJson.expo_token;
+            if (!token) {
+              token = expoToken;
+            }
             const loginParams = {
               profile_id: responseJson.profile_id,
               os: responseJson.os,
-              expo_token: responseJson.expo_token
+              expo_token: token
             };
             post('login', this.props.deviceToken, loginParams)
               .then((response) => response.json())
@@ -248,7 +252,7 @@ SignUpCode.propTypes = {
   dispatch: PropTypes.func.isRequired,
   navigation: PropTypes.object.isRequired,
   deviceToken: PropTypes.string.isRequired,
-  expoToken: PropTypes.string.isRequired,
+  expoToken: PropTypes.string,
   initialExpoToken: PropTypes.string
 };
 
