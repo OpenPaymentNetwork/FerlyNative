@@ -1,4 +1,3 @@
-// import AwaitingCard from 'ferly/views/FerlyCard/AwaitingCard'
 import PrimaryButton from 'ferly/components/PrimaryButton';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -111,7 +110,7 @@ export class AddressForm extends React.Component {
         line1: addressError,
         city: cityError,
         state: stateError,
-        zipCode: zipError
+        zip_code: zipError
       } = invalid;
 
       count++;
@@ -134,7 +133,7 @@ export class AddressForm extends React.Component {
             <ScrollView keyboardShouldPersistTaps='handled'>
               <TestElement parent={View} label='test-id-address-form'>
                 <View>
-                  <View style={styles.textBox}>
+                  <View style={[styles.textBox, {paddingTop: 30}]}>
                     <TextInput
                       placeholder="Name"
                       underlineColorAndroid='transparent'
@@ -170,7 +169,7 @@ export class AddressForm extends React.Component {
                     returnKeyType='done'
                     value={apt}
                     onChangeText={(text) => this.setState({apt: text})}
-                    maxLength={20} />
+                    maxLength={50} />
                   <Text></Text>
                 </View>
                 <View style={styles.textBox}>
@@ -180,7 +179,7 @@ export class AddressForm extends React.Component {
                     style={styles.textField}
                     returnKeyType='done'
                     value={city}
-                    maxLength={20}
+                    maxLength={50}
                     onChangeText={(text) => this.setState({city: text})} />
                   <Text style={styles.error}>{cityError}</Text>
                 </View>
@@ -189,10 +188,10 @@ export class AddressForm extends React.Component {
                     <TextInput
                       placeholder="St"
                       underlineColorAndroid='transparent'
-                      style={styles.zipField}
+                      style={[styles.zipField, {width: 50}]}
                       returnKeyType='done'
                       value={state}
-                      maxLength={15}
+                      maxLength={2}
                       onChangeText={(text) => this.setState({state: text})} />
                     <Text style={styles.error}>{stateError}</Text>
                   </View>
@@ -257,13 +256,12 @@ const styles = StyleSheet.create({
   form: {flex: 1},
   textField: {borderWidth: 1, height: 35, borderRadius: 5, paddingLeft: 10},
   labelText: {color: 'gray'},
-  textBox: {paddingHorizontal: 10, paddingLeft: 20, paddingTop: 25},
+  textBox: {paddingHorizontal: 10, paddingLeft: 20, paddingTop: 15},
   iconStyles: {flexDirection: 'row', paddingTop: 15, paddingLeft: 20},
   page: {flex: 1, justifyContent: 'space-between', backgroundColor: 'white'},
   zipField: {
     borderWidth: 1,
-    width: 75,
-    marginTop: 12,
+    width: 100,
     height: 35,
     borderRadius: 5,
     paddingLeft: 10
