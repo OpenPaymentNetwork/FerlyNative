@@ -119,16 +119,7 @@ export class FerlyCard extends React.Component {
         this.setState({passed: ''});
         if (this.state.passed === '') {
           if (!address['address_line1']) {
-            address['verified'] = 'no';
-            post('request-card', this.props.deviceToken, this.modifyAddress(address))
-              .then((response) => response.json())
-              .then((json) => {
-                this.setState({passed: ''});
-              })
-              .catch(() => {
-                Alert.alert('Error trying to request card!');
-                navigator.navigate('Home');
-              });
+            this.setState({passed: ''});
           } else {
             let addressLine2 = address['address_line2'] === '' ? '' : address['address_line2'] + '\n';
             Alert.alert(
