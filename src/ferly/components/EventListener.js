@@ -5,7 +5,6 @@ import {apiRefresh} from 'ferly/store/api';
 import {connect} from 'react-redux';
 import {Notifications, Updates} from 'expo';
 import {Platform} from 'react-native';
-import {updateDownloaded} from 'ferly/store/settings';
 import {urls} from 'ferly/utils/fetch';
 
 class EventListener extends React.Component {
@@ -39,15 +38,16 @@ class EventListener extends React.Component {
 
   _handleNotification = (notification) => {
     if (notification.origin === 'received') {
-      this.props.apiRefresh(urls.profile);
-      this.props.apiRefresh(urls.history);
+      this.props.dispatch(apiRefresh(urls.profile));
+      this.props.dispatch(apiRefresh(urls.history));
     }
   };
 
   _handleUpdates = (event) => {
+    const {updateDownloaded} = this.props;
     if (event.type === Updates.EventType.DOWNLOAD_FINISHED) {
       if (event.manifest.version !== Constants.manifest.version) {
-        this.props.updateDownloaded();
+        this.props.dispatch(updateDownloaded(true));
       }
     }
   }
@@ -58,19 +58,16 @@ class EventListener extends React.Component {
 }
 
 EventListener.propTypes = {
-  navigation: PropTypes.object,
-  apiRefresh: PropTypes.func.isRequired,
+  dispatch: PropTypes.func.isRequired,
   children: PropTypes.object.isRequired,
-  updateDownloaded: PropTypes.func.isRequired
+  updateDownloaded: PropTypes.bool.isRequired
 };
 
 function mapStateToProps (state) {
-  return {};
+  const {updateDownloaded} = state.settings;
+  return {
+    updateDownloaded
+  };
 }
 
-const mapDispatchToProps = {
-  apiRefresh,
-  updateDownloaded
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(EventListener);
+export default connect(mapStateToProps)(EventListener);
