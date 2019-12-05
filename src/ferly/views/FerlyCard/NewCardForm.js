@@ -2,10 +2,12 @@ import React from 'react';
 import PrimaryButton from 'ferly/components/PrimaryButton';
 import Theme from 'ferly/utils/theme';
 import PropTypes from 'prop-types';
+import {setDoneTutorial} from 'ferly/store/settings';
 import {connect} from 'react-redux';
 import {apiRefresh} from 'ferly/store/api';
 import {urls, post} from 'ferly/utils/fetch';
 import {
+  AsyncStorage,
   View,
   Text,
   TextInput,
@@ -34,7 +36,7 @@ export class CardForm extends React.Component {
     componentWillUnmount () {
       const {assumedAbility} = this.state;
       if (assumedAbility !== null) {
-        this.props.apiRefresh(urls.profile);
+        this.props.dispatch(apiRefresh(urls.profile));
       }
     }
     validateCardNumber (code) {
@@ -69,8 +71,19 @@ export class CardForm extends React.Component {
     this.setState({pin: newPin});
   }
 
+  async storage () {
+    AsyncStorage.setItem('codeRedeemed', 'needed').then(() => {
+      AsyncStorage.setItem('doneTutorial', '').then(() => {
+        try {
+          this.props.dispatch(setDoneTutorial(''));
+        } catch (error) {
+          Alert.alert('error', error);
+        }
+      });
+    });
+  }
+
   submitForm = () => {
-    const {navigation} = this.props;
     const {pan, pin} = this.state;
     this.setState({submitting: true});
     post('add-card', this.props.deviceToken, {pan, pin})
@@ -78,16 +91,17 @@ export class CardForm extends React.Component {
       .then((json) => {
         this.setState({submitting: false, pin: '', invalid: {}});
         if (this.validateAddCard(json)) {
-          this.props.apiRefresh(urls.profile);
-          navigation.navigate('Wallet');
-          const alertText = 'Your card is ready to use. Remember to select ' +
-            'debit when using your card.';
-          Alert.alert('Success', alertText);
+          this.storage().then((response) => {
+          })
+            .catch(() => {
+              Alert.alert('Error trying to add card!');
+            });
+          this.props.dispatch(apiRefresh(urls.profile));
         }
       })
       .catch(() => {
         Alert.alert('Error trying to add card!');
-        navigator.navigate('Home');
+        navigator.navigate('Wallet');
       });
   }
 
@@ -164,7 +178,7 @@ export class CardForm extends React.Component {
             !this.validateCardNumber(pan)
               }
               color={Theme.lightBlue}
-              onPress={this.submitForm}
+              onPress={() => this.submitForm()}
             />
           </View>
         </View>
@@ -222,7 +236,7 @@ const styles = StyleSheet.create({
 
 CardForm.propTypes = {
   navigation: PropTypes.object,
-  apiRefresh: PropTypes.func.isRequired,
+  dispatch: PropTypes.func.isRequired,
   card: PropTypes.object,
   deviceToken: PropTypes.string.isRequired
 };
@@ -243,8 +257,4 @@ function mapStateToProps (state) {
   };
 }
 
-const mapDispatchToProps = {
-  apiRefresh
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(CardForm);
+export default connect(mapStateToProps)(CardForm);

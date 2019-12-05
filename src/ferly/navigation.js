@@ -1,8 +1,10 @@
 import AddressForm from 'ferly/views/FerlyCard/AddressForm';
 import Contact from 'ferly/views/Invitations/Contact';
 import Contacts from 'ferly/views/Invitations/Contacts';
+import EnterCode from 'ferly/views/Give/EnterCode';
 import FerlyCard from 'ferly/views/FerlyCard/FerlyCard';
 import Give from 'ferly/views/Give/Give';
+import GiveContact from 'ferly/views/Give/GiveContact';
 import Recipient from 'ferly/views/Give/Recipient';
 import History from 'ferly/views/History/History';
 import Invitations from 'ferly/views/Invitations/Invitations';
@@ -61,10 +63,12 @@ const WalletStack = createStackNavigator(
     Home: {screen: Home, navigationOptions: drawerOptions},
     Value: {screen: Value, navigationOptions: drawerOptions},
     Give: {screen: Recipient, navigationOptions: drawerOptions},
+    GiveContact: {screen: GiveContact, navigationOptions: drawerOptions},
     Amount: {screen: Give, navigationOptions: drawerOptions},
     Market: {screen: Market, navigationOptions: drawerOptions},
     Purchase: {screen: Purchase, navigationOptions: drawerOptions},
-    Cart: {screen: Cart, navigationOptions: drawerOptions}
+    Cart: {screen: Cart, navigationOptions: drawerOptions},
+    EnterCode: {screen: EnterCode, navigationOptions: drawerOptions}
   },
   {
     initialRouteName: 'Home'
@@ -103,6 +107,15 @@ const HistoryStack = createStackNavigator(
   }
 );
 
+const CodeStack = createStackNavigator(
+  {
+    EnterCode: {screen: EnterCode, navigationOptions: drawerOptions}
+  },
+  {
+    initialRouteName: 'EnterCode'
+  }
+);
+
 const publicHeader = {
   headerStyle: {
     backgroundColor: Theme.darkBlue,
@@ -122,7 +135,8 @@ const AuthDrawer = createDrawerNavigator(
       {Card: {screen: FerlyCard, navigationOptions: drawerOptions}}),
     History: HistoryStack,
     Invitations: InvitationsStack,
-    Settings: SettingsStack
+    Settings: SettingsStack,
+    'Enter Code': CodeStack
   },
   {
     initialRouteName: 'Wallet',
@@ -132,31 +146,40 @@ const AuthDrawer = createDrawerNavigator(
   }
 );
 
-const PubStack = createStackNavigator(
+const MidStack = createStackNavigator(
   {
-    LandingPage: {screen: LandingPage, navigationOptions: {header: null}},
-    SignUp: {screen: SignUp, navigationOptions: publicHeader},
-    SignUpCode: {screen: SignUpCode, navigationOptions: publicHeader},
-    RecoveryCode: {screen: RecoveryCode, navigationOptions: publicHeader},
-    RecoveryChannel: {screen: RecoveryChannel, navigationOptions: publicHeader},
     Tutorial: {screen: Tutorial, navigationOptions: {header: null}},
     AddressForm: {screen: AddressForm, navigationOptions: publicHeader},
     SignUpWaiting: {screen: SignUpWaiting, navigationOptions: publicHeader},
     NewCardForm: {screen: NewCardForm, navigationOptions: publicHeader}
   },
   {
+    initialRouteName: 'Tutorial'
+  }
+);
+
+const PubStack = createStackNavigator(
+  {
+    LandingPage: {screen: LandingPage, navigationOptions: {header: null}},
+    SignUp: {screen: SignUp, navigationOptions: publicHeader},
+    SignUpCode: {screen: SignUpCode, navigationOptions: publicHeader},
+    RecoveryCode: {screen: RecoveryCode, navigationOptions: publicHeader},
+    RecoveryChannel: {screen: RecoveryChannel, navigationOptions: publicHeader}
+  },
+  {
     initialRouteName: 'LandingPage'
   }
 );
 
-export const CreateAuthSwitch = (isUser) => {
+export const CreateAuthSwitch = (isUser, doneTutorial) => {
   const AppLayout = createSwitchNavigator(
     {
       Pub: PubStack,
-      Auth: AuthDrawer
+      Auth: AuthDrawer,
+      Mid: MidStack
     },
     {
-      initialRouteName: (isUser === 'true') ? 'Auth' : 'Pub'
+      initialRouteName: (isUser === 'false') ? 'Pub' : ((doneTutorial === 'false') ? 'Mid' : 'Auth')
     });
   return AppLayout;
 };

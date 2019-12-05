@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Recaptcha from 'ferly/components/Recaptcha';
 import Theme from 'ferly/utils/theme';
-import {setIsCustomer} from 'ferly/store/settings';
+import {setIsCustomer, setDoneTutorial} from 'ferly/store/settings';
 import {connect} from 'react-redux';
 import {post} from 'ferly/utils/fetch';
 import {AsyncStorage, View, Text, TextInput, StyleSheet, Alert} from 'react-native';
@@ -34,6 +34,13 @@ export class SignUpCode extends React.Component {
   }
 
   async storage () {
+    AsyncStorage.setItem('doneTutorial', 'false').then(() => {
+      try {
+        this.props.dispatch(setDoneTutorial('false'));
+      } catch (error) {
+        Alert.alert('error', error);
+      }
+    });
     AsyncStorage.setItem('isCustomer', 'true').then(() => {
       try {
         this.props.dispatch(setIsCustomer('true'));

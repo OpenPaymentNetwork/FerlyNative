@@ -10,9 +10,9 @@ import {
   tutorialFive
 } from 'ferly/images/index';
 
-export class LandingPage extends React.Component {
+export class Tutorial extends React.Component {
   static navigationOptions = {
-    title: 'Ferly Card'
+    title: 'Tutorial'
   };
 
   constructor (props) {
@@ -21,9 +21,13 @@ export class LandingPage extends React.Component {
   }
 
   nextPage = () => {
-    setTimeout(() => {
+    timeout = setTimeout(() => {
       this.setState({page: this.state.page === 0 ? +1 : 0});
     }, 5000);
+  }
+
+  componentWillUnmount () {
+    clearInterval(timeout);
   }
 
   renderDots = () => {
@@ -101,9 +105,10 @@ export class LandingPage extends React.Component {
   }
 }
 
+let timeout = 0;
 let count = 0;
 
-LandingPage.propTypes = {
+Tutorial.propTypes = {
   navigation: PropTypes.object.isRequired,
   deviceToken: PropTypes.string.isRequired
 };
@@ -131,4 +136,4 @@ function mapStateToProps (state) {
   };
 }
 
-export default connect(mapStateToProps)(LandingPage);
+export default connect(mapStateToProps)(Tutorial);

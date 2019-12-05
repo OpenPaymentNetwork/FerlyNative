@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 import {CreateAuthSwitch} from 'ferly/navigation';
 import {logoWhite} from 'ferly/images/index';
 import {Alert, View, Image, AsyncStorage} from 'react-native';
-import {setDeviceToken, setIsCustomer} from 'ferly/store/settings';
+import {setDeviceToken, setIsCustomer, setDoneTutorial} from 'ferly/store/settings';
 
 export class AppEntry extends React.Component {
   componentDidMount () {
@@ -21,6 +21,7 @@ export class AppEntry extends React.Component {
     }).catch(() => {
       Alert.alert('Error trying to get token!');
     });
+    this.retrieveDoneTutorial();
     this.retrieveIsCustomer();
   }
 
@@ -51,8 +52,23 @@ export class AppEntry extends React.Component {
     }
   }
 
+  retrieveDoneTutorial = async () => {
+    try {
+      const doneTutorial = await AsyncStorage.getItem('doneTutorial') || '';
+      if (doneTutorial === '') {
+        this.props.dispatch(setDoneTutorial(''));
+        AsyncStorage.setItem('doneTutorial', '');
+      } else {
+        this.props.dispatch(setDoneTutorial('false'));
+        AsyncStorage.setItem('doneTutorial', 'false');
+      }
+    } catch (error) {
+      Alert.alert('Error trying to retrieve customer info!');
+    }
+  }
+
   render () {
-    const {isCustomer} = this.props;
+    let {isCustomer, doneTutorial} = this.props;
     if (isCustomer === '') {
       return (
         <View
@@ -66,7 +82,7 @@ export class AppEntry extends React.Component {
         </View>
       );
     }
-    const Layout = CreateAuthSwitch(isCustomer);
+    const Layout = CreateAuthSwitch(isCustomer, doneTutorial);
     return <Layout />;
   }
 }
@@ -84,18 +100,21 @@ function makeid (length) {
 }
 
 AppEntry.propTypes = {
+  deviceToken: PropTypes.string,
   dispatch: PropTypes.func.isRequired,
   isCustomer: PropTypes.string,
+  doneTutorial: PropTypes.string,
   auth: PropTypes.bool,
   hasError: PropTypes.bool
 };
 
 function mapStateToProps (state) {
-  const {deviceToken, isCustomer} = state.settings;
+  const {deviceToken, isCustomer, doneTutorial} = state.settings;
   return {
     idFound: true,
     deviceToken,
-    isCustomer
+    isCustomer,
+    doneTutorial
   };
 }
 

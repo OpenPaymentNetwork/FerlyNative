@@ -1,7 +1,8 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {post} from 'ferly/utils/fetch';
-import {Alert, View, Text, Image, Dimensions} from 'react-native';
+import {setDoneTutorial} from 'ferly/store/settings';
+import {Alert, AsyncStorage, View, Text, Image, Dimensions} from 'react-native';
 import {mailCard} from 'ferly/images/index';
 import PrimaryButton from 'ferly/components/PrimaryButton';
 import Theme from 'ferly/utils/theme';
@@ -11,6 +12,26 @@ export class SignUpWaiting extends React.Component {
   static navigationOptions = {
     title: 'Ferly Card'
   };
+
+  async storage () {
+    AsyncStorage.setItem('codeRedeemed', 'needed').then(() => {
+      AsyncStorage.setItem('doneTutorial', '').then(() => {
+        try {
+          this.props.dispatch(setDoneTutorial(''));
+        } catch (error) {
+          Alert.alert('error', error);
+        }
+      });
+    });
+  }
+
+  handleSubmit () {
+    this.storage().then((response) => {
+    })
+      .catch(() => {
+        Alert.alert('Error trying to add card!');
+      });
+  }
 
   render () {
     count++;
@@ -24,7 +45,6 @@ export class SignUpWaiting extends React.Component {
           Alert.alert('Error please check internet connection!');
         });
     }
-    const {navigation} = this.props;
     const {width, height} = Dimensions.get('window');
     let imageHeight = height / 2;
     let imageWidth = width / 2;
@@ -37,7 +57,7 @@ export class SignUpWaiting extends React.Component {
             textAlign: 'center',
             color: Theme.darkBlue
           }} >
-            Your card is on its way! Activate it below when it arrives.
+            Your card is on its way! Make sure you activate it when it arrives.
           </Text>
         </View>
         <View style={{paddingBottom: 20}} >
@@ -54,7 +74,7 @@ export class SignUpWaiting extends React.Component {
           <PrimaryButton
             title="Wallet"
             color={Theme.lightBlue}
-            onPress={() => navigation.navigate('Wallet')} />
+            onPress={() => this.handleSubmit()} />
         </View>
       </View>
     );
@@ -64,7 +84,8 @@ export class SignUpWaiting extends React.Component {
 let count = 0;
 
 SignUpWaiting.propTypes = {
-  navigation: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired,
+  navigation: PropTypes.object,
   deviceToken: PropTypes.string.isRequired
 };
 
