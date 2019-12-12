@@ -12,22 +12,13 @@ export class History extends React.Component {
     title: 'History'
   };
 
-  constructor (props) {
-    super(props);
-    this.state = {
-      updating: false
-    };
-  }
-
   componentDidMount () {
     this.props.apiRequire(urls.history);
   }
 
   loadMore () {
     const {hasMore, history} = this.props;
-    const {updating} = this.state;
-    this.setState({updating: true});
-    if (!hasMore || updating) {
+    if (!hasMore) {
       return;
     }
     const nextUrl = `${urls.history}&offset=${history.length}`;
@@ -42,8 +33,6 @@ export class History extends React.Component {
           'history': newHistory,
           'has_more': responseJson.has_more
         });
-        // TODO don't set state here in case they navigate away while loading
-        this.setState({updating: false});
       })
       .catch(() => {
         Alert.alert('Error trying to load!');

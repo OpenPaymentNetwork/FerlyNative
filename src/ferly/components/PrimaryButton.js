@@ -5,7 +5,7 @@ import {Text, TouchableOpacity} from 'react-native';
 
 export default class PrimaryButton extends React.Component {
   render () {
-    const {title, onPress, disabled} = this.props;
+    const {title, onPress, disabled, marginHorizontal} = this.props;
     return (
       <TouchableOpacity
         style={{
@@ -15,7 +15,7 @@ export default class PrimaryButton extends React.Component {
           height: 50,
           justifyContent: 'center',
           borderRadius: 15,
-          marginHorizontal: 15,
+          marginHorizontal: marginHorizontal || 15,
           marginBottom: 25
         }}
         disabled={disabled}
@@ -29,5 +29,6 @@ export default class PrimaryButton extends React.Component {
 PrimaryButton.propTypes = {
   disabled: PropTypes.bool,
   onPress: PropTypes.func.isRequired,
-  title: PropTypes.string
+  title: PropTypes.string,
+  marginHorizontal: PropTypes.number
 };

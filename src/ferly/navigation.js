@@ -135,8 +135,8 @@ const AuthDrawer = createDrawerNavigator(
       {Card: {screen: FerlyCard, navigationOptions: drawerOptions}}),
     History: HistoryStack,
     Invitations: InvitationsStack,
-    Settings: SettingsStack,
-    'Enter Code': CodeStack
+    'Gift Code': CodeStack,
+    Settings: SettingsStack
   },
   {
     initialRouteName: 'Wallet',

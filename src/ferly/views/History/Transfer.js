@@ -1,13 +1,12 @@
-
 import accounting from 'ferly/utils/accounting';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Avatar from 'ferly/components/Avatar';
 import Theme from 'ferly/utils/theme';
-import {apiRequire} from 'ferly/store/api';
+import {apiRequire, apiRefresh} from 'ferly/store/api';
 import {connect} from 'react-redux';
-import {createUrl, post} from 'ferly/utils/fetch';
-import {Alert, View, Text, ScrollView, StyleSheet} from 'react-native';
+import {createUrl, post, urls} from 'ferly/utils/fetch';
+import {Alert, View, Text, ScrollView, StyleSheet, TouchableOpacity} from 'react-native';
 import {format as formatDate} from 'date-fns';
 
 export class Transfer extends React.Component {
@@ -15,8 +14,77 @@ export class Transfer extends React.Component {
     title: `${navigation.state.params.title}`
   });
 
+  constructor () {
+    super();
+    this.state = {
+      click: false
+    };
+  }
+
   componentDidMount () {
-    this.props.apiRequire(this.props.transferUrl);
+    this.props.dispatch(apiRequire(this.props.transferUrl));
+  }
+
+  confirmTakeBack () {
+    const {transferDetails} = this.props;
+    const takeBackParams = {
+      transfer_id: transferDetails.id
+    };
+    post('retract', this.props.deviceToken, takeBackParams)
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if (responseJson.error || responseJson.invalid) {
+          Alert.alert('Error!', 'Error trying to retract gift invite.');
+        } else {
+          Alert.alert('Success!', 'You have successfully retracted the cash with invite.');
+        }
+        this.props.dispatch(apiRefresh(urls.history));
+        this.props.navigation.navigate('History');
+      })
+      .catch(() => {
+        Alert.alert('Error trying to retract invite!');
+      });
+  }
+
+  takeBack () {
+    const {transferDetails} = this.props;
+    const {counter_party: counterParty} = transferDetails;
+    const buttons = [
+      {text: 'Cancel', onPress: null, style: 'cancel'},
+      {text: 'Yes', onPress: () => this.confirmTakeBack()}
+    ];
+    Alert.alert('Are you sure?', `Click yes to take back the gift you sent to ` +
+    `${counterParty}.`, buttons);
+  }
+
+  remind () {
+    const {transferDetails} = this.props;
+    const remindParams = {
+      transfer_id: transferDetails.id
+    };
+    const {counter_party: counterParty} = transferDetails;
+    post('get_transfer_details', this.props.deviceToken, remindParams)
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if (responseJson.sent_count < 3) {
+          post('resend', this.props.deviceToken, remindParams)
+            .then((response) => response.json())
+            .then((responseJson) => {
+              Alert.alert('Reminder Sent!', `We sent a reminder about your gift to ` +
+        `${counterParty}.`);
+            })
+            .catch(() => {
+              Alert.alert('Error trying to send reminder!');
+              this.props.navigation.navigate('Wallet');
+            });
+        } else {
+          Alert.alert(`Sorry Max Reminders Reached!`);
+        }
+      })
+      .catch(() => {
+        Alert.alert('Error trying to send reminder!');
+        this.props.navigation.navigate('Wallet');
+      });
   }
 
   render () {
@@ -62,11 +130,21 @@ export class Transfer extends React.Component {
         symbol = '+';
         cp = ' to your account';
         break;
+      case 'pending':
+        verb = 'gifted';
+        symbol = '-';
+        cp = ` to ${counterParty}`;
+        break;
       case 'send':
         verb = 'gifted';
         symbol = '-';
         cp = ` to ${counterParty}`;
         messageTitle = 'Your ';
+        break;
+      case 'canceled':
+        verb = 'canceled';
+        symbol = '+';
+        cp = ` to ${counterParty}`;
         break;
       case 'receive':
         verb = 'received';
@@ -79,7 +157,6 @@ export class Transfer extends React.Component {
         symbol = '-';
         break;
     }
-
     let counterPartyAvatar;
     if (transferType === 'send' || transferType === 'receive') {
       counterPartyAvatar = (
@@ -91,7 +168,6 @@ export class Transfer extends React.Component {
         </View>
       );
     }
-
     let messageSection;
     if (message) {
       messageSection = (
@@ -105,10 +181,10 @@ export class Transfer extends React.Component {
         </View>
       );
     }
-
     let giftValue;
     let recipient;
     let received;
+    let status;
     let purchaseDetailsSection;
     let termsSection;
     let paymentSection;
@@ -235,6 +311,96 @@ export class Transfer extends React.Component {
           </View>
         </View>
       );
+    } else if (transferType === 'canceled') {
+      giftValue = (
+        <View style={styles.section} >
+          <View>
+            <Text style={styles.sectionHeader} >Gift Value</Text>
+          </View>
+          <View style={{paddingLeft: 20}} >
+            <Text style={[styles.sectionText, {fontSize: 16}]} >{designTitle}</Text>
+          </View>
+        </View>
+      );
+      recipient = (
+        <View style={styles.section} >
+          <View>
+            <Text style={styles.sectionHeader} >
+              Recipient
+            </Text>
+          </View>
+          <View style={{paddingLeft: 15, flexDirection: 'row'}} >
+            {counterPartyAvatar}
+            <Text style={{alignSelf: 'center', paddingLeft: 10, color: 'darkgray', fontSize: 16}} >
+              {counterParty}
+            </Text>
+          </View>
+        </View>
+      );
+    } else if (transferType === 'pending') {
+      giftValue = (
+        <View style={styles.section} >
+          <View>
+            <Text style={styles.sectionHeader} >Gift Value</Text>
+          </View>
+          <View style={{paddingLeft: 20}} >
+            <Text style={[styles.sectionText, {fontSize: 16}]} >{designTitle}</Text>
+          </View>
+        </View>
+      );
+      recipient = (
+        <View style={styles.section} >
+          <View>
+            <Text style={styles.sectionHeader} >
+              Recipient
+            </Text>
+          </View>
+          <View style={{paddingLeft: 15, flexDirection: 'row'}} >
+            {counterPartyAvatar}
+            <Text style={{alignSelf: 'center', paddingLeft: 10, color: 'darkgray', fontSize: 16}} >
+              {counterParty}
+            </Text>
+          </View>
+        </View>
+      );
+      const giftDate = new Date();
+      giftDate.setDate(giftDate.getDate() + 30);
+      const giftExpiration = formatDate(giftDate, 'MMM D, YYYY');
+      status = (
+        <View style={styles.section} >
+          <View>
+            <Text style={styles.sectionHeader} >
+              Status
+            </Text>
+          </View>
+          <View style={{paddingLeft: 15, flexDirection: 'column'}} >
+            <Text style={{paddingLeft: 10, color: 'darkgray', fontSize: 16}} >
+              {counterParty} hasnt accepted your gift yet.
+            </Text>
+            <Text style={{paddingLeft: 10, paddingBottom: 10, color: 'darkgray', fontSize: 16}} >
+              The gift expires {giftExpiration}.
+            </Text>
+            <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+              <TouchableOpacity
+                onPress={() => this.remind()}
+                style={{backgroundColor: Theme.lightBlue, borderRadius: 5}}
+              >
+                <Text style={{fontSize: 16, paddingHorizontal: 34, paddingVertical: 8}}>
+                  Remind
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => this.takeBack()}
+                style={{backgroundColor: Theme.lightBlue, borderRadius: 5}}
+              >
+                <Text style={{fontSize: 16, paddingHorizontal: 25, paddingVertical: 8}}>
+                  Take Back
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      );
     } else if (transferType === 'receive') {
       giftValue = (
         <View style={styles.section} >
@@ -317,6 +483,7 @@ export class Transfer extends React.Component {
         {giftValue}
         {recipient}
         {received}
+        {status}
         {messageSection}
         {purchaseDetailsSection}
         {paymentSection}
@@ -328,6 +495,7 @@ export class Transfer extends React.Component {
 }
 
 let count = 0;
+// let giftCount = 0;
 
 const styles = StyleSheet.create({
   functionRow: {flexDirection: 'row', justifyContent: 'space-between'},
@@ -337,7 +505,7 @@ const styles = StyleSheet.create({
 });
 
 Transfer.propTypes = {
-  apiRequire: PropTypes.func.isRequired,
+  dispatch: PropTypes.func.isRequired,
   transferDetails: PropTypes.object.isRequired,
   transferUrl: PropTypes.string.isRequired,
   navigation: PropTypes.object.isRequired,
@@ -358,8 +526,4 @@ function mapStateToProps (state, ownProps) {
   };
 }
 
-const mapDispatchToProps = {
-  apiRequire
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Transfer);
+export default connect(mapStateToProps)(Transfer);

@@ -32,7 +32,9 @@ export class Settings extends React.Component {
     post('get-expo-token', this.props.deviceToken)
       .then((response) => response.json())
       .then((json) => {
-        this.props.dispatch(setExpoToken(json.expo_token));
+        AsyncStorage.setItem('expoToken', json.expo_token).then(() => {
+          this.props.dispatch(setExpoToken(json.expo_token));
+        });
       })
       .catch(() => {
         Alert.alert('Error trying to get token!');

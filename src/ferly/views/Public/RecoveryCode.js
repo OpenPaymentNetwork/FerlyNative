@@ -51,9 +51,9 @@ export class RecoveryCode extends React.Component {
 
     if (!expoToken) {
       if (this.props.initialExpoToken) {
-        expoToken = this.props.expoToken;
-      } else {
         expoToken = this.props.initialExpoToken;
+      } else {
+        expoToken = this.props.expoToken;
       }
     }
 

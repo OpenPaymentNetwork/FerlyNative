@@ -1,3 +1,4 @@
+import * as Permissions from 'expo-permissions';
 import accounting from 'ferly/utils/accounting';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import PropTypes from 'prop-types';
@@ -5,6 +6,7 @@ import React from 'react';
 import Spinner from 'ferly/components/Spinner';
 import Theme from 'ferly/utils/theme';
 import TestElement from 'ferly/components/TestElement';
+import {Notifications} from 'expo';
 import {apiRequire, apiRefresh} from 'ferly/store/api';
 import {checkedUidPrompt} from 'ferly/store/settings';
 import {connect} from 'react-redux';
@@ -12,6 +14,7 @@ import {urls, createUrl, post} from 'ferly/utils/fetch';
 import {blankCard, logoHorizontal} from 'ferly/images/index';
 import {
   Animated,
+  AsyncStorage,
   View,
   Dimensions,
   TouchableOpacity,
@@ -41,7 +44,58 @@ export class Wallet extends React.Component {
     };
   }
 
-  componentDidMount () {
+  retrieveCodeRedeemed = async () => {
+    try {
+      codeRedeemed = await AsyncStorage.getItem('codeRedeemed') || '';
+      AsyncStorage.setItem('codeRedeemed', '');
+      return codeRedeemed;
+    } catch (error) {
+      Alert.alert('Error trying to retrieve customer info!');
+    }
+  }
+
+  componentDidMount = async () => {
+    let expoToken = await AsyncStorage.getItem('expoToken') || '';
+    if (!expoToken) {
+      try {
+        expoToken = await this.getToken();
+      } catch (error) {
+      }
+    }
+    post('get-expo-token', this.props.deviceToken)
+      .then((response) => response.json())
+      .then((json) => {
+        if (!json.expo_token && expoToken) {
+          const setParams = {
+            expo_token: expoToken
+          };
+          post('set-expo-token', this.props.deviceToken, setParams)
+            .then((response) => response.json())
+            .then((json) => {
+            })
+            .catch(() => {
+              Alert.alert('Error trying to set token!');
+            });
+        }
+      })
+      .catch(() => {
+        Alert.alert('Error trying to get token!');
+      });
+    codeRedeemed = await this.retrieveCodeRedeemed();
+    if (codeRedeemed === 'needed') {
+      const {navigation} = this.props;
+      const buttons = [
+        {
+          text: 'No',
+          onPress: () => navigation.navigate('Wallet')
+        },
+        {
+          text: 'Yes',
+          onPress: () => navigation.navigate('EnterCode')
+        }
+      ];
+      Alert.alert('Have an invite code?', '', buttons);
+    }
     for (var i = 1; i <= 75; i++) {
       this.array.push(i);
     }
@@ -69,6 +123,26 @@ export class Wallet extends React.Component {
       .catch(() => {
         Alert.alert('Error', 'Trying to get address!');
       });
+  }
+
+  async getToken () {
+    const { status: existingStatus } = await Permissions.getAsync(
+      Permissions.NOTIFICATIONS
+    );
+    let finalStatus = existingStatus;
+    // only ask if permissions have not already been determined, because
+    // iOS won't necessarily prompt a second time.
+    if (existingStatus !== 'granted') {
+      // Android remote notification permissions are granted during the app
+      // install, so this will only ask on iOS
+      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+      finalStatus = status;
+    }
+
+    if (finalStatus === 'granted') {
+      let token = await Notifications.getExpoPushTokenAsync();
+      return token;
+    }
   }
 
   renderScrollViewContent () {
@@ -361,6 +435,7 @@ export class Wallet extends React.Component {
   }
 }
 
+let codeRedeemed = '';
 let passed = '';
 const HEADER_MAX_HEIGHT = 160;
 const HEADER_MIN_HEIGHT = 60;
@@ -503,7 +578,7 @@ Wallet.propTypes = {
 
 function mapStateToProps (state) {
   const apiStore = state.api.apiStore;
-  const {checkUidPrompt, updateDownloaded} = state.settings;
+  const {checkUidPrompt} = state.settings;
   const {
     amounts,
     first_name: firstName,
@@ -523,8 +598,7 @@ function mapStateToProps (state) {
     firstName,
     uids,
     deviceToken,
-    checkUidPrompt,
-    updateDownloaded
+    checkUidPrompt
   };
 }
 

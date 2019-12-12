@@ -51,8 +51,23 @@ export class Contacts extends React.Component {
   }
 
   async searchContacts (name) {
-    const {data} = await expoContacts.getContactsAsync({name: name});
-    this.setState({searchResults: this.convertDataToContacts(data)});
+    if (Platform.OS === 'ios') {
+      const {data} = await expoContacts.getContactsAsync({name: name});
+      this.setState({searchResults: this.convertDataToContacts(data)});
+    } else {
+      let {data} = await expoContacts.getContactsAsync({});
+      let list = [];
+      data.forEach(function (item) {
+        let firstName = item.firstName || '';
+        let lastName = item.lastName || '';
+        let lowerCaseName = name.toLowerCase();
+        if (firstName.toLowerCase().includes(lowerCaseName) ||
+        lastName.toLowerCase().includes(lowerCaseName)) {
+          list.push(item);
+        }
+      });
+      this.setState({searchResults: this.convertDataToContacts(list)});
+    }
   }
 
   async getContacts () {
@@ -204,9 +219,8 @@ export class Contacts extends React.Component {
     }
 
     return (
-      <View
-        style={{flex: 1, backgroundColor: 'white'}}>
-        {Platform.OS === 'ios' ? searchBar : null}
+      <View style={{flex: 1, backgroundColor: 'white'}}>
+        {searchBar}
         {contactsList}
       </View>
     );

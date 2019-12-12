@@ -36,16 +36,45 @@ export class Give extends React.Component {
   send () {
     const {navigation, apiExpire} = this.props;
     const params = navigation.state.params;
-    const {design, customer} = params;
+    const {design, customer, contact} = params;
+    let customerFirstName = '';
+    let customerLastName = '';
+    let id = '';
+    let sender = '';
     const {title} = design;
-    const {first_name: firstName, last_name: lastName} = customer;
+    try {
+      let {first_name: firstName, last_name: lastName} = customer;
+      customerFirstName = firstName;
+      customerLastName = lastName;
+      id = customer.id.toString();
+    } catch (error) {
+      id = contact;
+      if (contact.includes('@')) {
+        id = 'email:' + id;
+      } else {
+        let country = false;
+        if (id[0] === '+') {
+          country = true;
+        }
+        id = id.replace(/\D/g, '');
+        if (id.length === 10 && !country) {
+          id = 'phone:+1' + id.toString();
+        } else {
+          id = 'phone:+' + id.toString();
+        }
+      }
+      sender = 'sending to new customer';
+    }
     const {amount, message} = this.state;
     const formatted = accounting.formatMoney(parseFloat(amount));
 
     const postParams = {
-      recipient_id: customer.id.toString(),
+      sender: sender,
+      recipient_id: id,
       amount: amount,
       design_id: design.id.toString(),
+      invitation_type: 'code_private',
+      invitation_code_length: '6',
       message: message
     };
 
@@ -63,9 +92,13 @@ export class Give extends React.Component {
           navigation.dispatch(resetAction);
           Alert.alert(
             'Complete!',
-            `You gifted ${formatted} ${title} to ${firstName} ${lastName}.`);
+            `You gifted ${formatted} ${title} to ${customerFirstName} ${customerLastName}.`);
         } else {
-          const error = json.invalid['amounts.0'] || json.invalid['amount'];
+          let invalid;
+          if (json.invalid['recipient_uid']) {
+            invalid = 'Invalid Recipient';
+          }
+          const error = json.invalid['amounts.0'] || json.invalid['amount'] || invalid;
           this.setState({error: error, amount: 0, submitting: false});
         }
       })
@@ -77,6 +110,79 @@ export class Give extends React.Component {
 
   onChange (newAmount) {
     this.setState({amount: newAmount});
+  }
+
+  details () {
+    const params = this.props.navigation.state.params;
+    const {name, contact, contactName} = params;
+    if (!contact) {
+      return (
+        <View style={styles.recipientRow}>
+          <Text style={{fontSize: 20, fontWeight: 'bold'}}>Send</Text>
+          <Text style={{fontSize: 20, fontWeight: 'bold', paddingLeft: 40}}>
+            {`${params.customer.first_name} ${params.customer.last_name}`}
+          </Text>
+        </View>
+      );
+    } else if (contactName) {
+      if (contactName.firstName === undefined) {
+        return (
+          <View style={styles.recipientRow}>
+            <Text style={{fontSize: 20, fontWeight: 'bold'}}>Send</Text>
+            <View style={{flexDirection: 'column'}}>
+              <Text style={{fontSize: 18, fontWeight: 'bold', paddingLeft: 40}}>
+                {`${contactName.lastName}`}
+              </Text>
+              <Text style={{fontSize: 14, color: 'gray', paddingLeft: 40}}>
+                {`${contact}`}
+              </Text>
+            </View>
+          </View>
+        );
+      } else if (contactName.lastName === undefined) {
+        return (
+          <View style={styles.recipientRow}>
+            <Text style={{fontSize: 20, fontWeight: 'bold'}}>Send</Text>
+            <View style={{flexDirection: 'column'}}>
+              <Text style={{fontSize: 18, fontWeight: 'bold', paddingLeft: 40}}>
+                {`${contactName.firstName}`}
+              </Text>
+              <Text style={{fontSize: 14, color: 'gray', paddingLeft: 40}}>
+                {`${contact}`}
+              </Text>
+            </View>
+          </View>
+        );
+      } else {
+        return (
+          <View style={styles.recipientRow}>
+            <Text style={{fontSize: 20, fontWeight: 'bold'}}>Send</Text>
+            <View style={{flexDirection: 'column'}}>
+              <Text style={{fontSize: 18, fontWeight: 'bold', paddingLeft: 40}}>
+                {`${contactName.firstName} ${contactName.lastName}`}
+              </Text>
+              <Text style={{fontSize: 14, color: 'gray', paddingLeft: 40}}>
+                {`${contact}`}
+              </Text>
+            </View>
+          </View>
+        );
+      }
+    } else {
+      return (
+        <View style={styles.recipientRow}>
+          <Text style={{fontSize: 20, fontWeight: 'bold'}}>Send</Text>
+          <View style={{flexDirection: 'column'}}>
+            <Text style={{fontSize: 18, fontWeight: 'bold', paddingLeft: 40}}>
+              {`${name}`}
+            </Text>
+            <Text style={{fontSize: 14, color: 'gray', paddingLeft: 40}}>
+              {`${contact}`}
+            </Text>
+          </View>
+        </View>
+      );
+    }
   }
 
   render () {
@@ -113,12 +219,7 @@ export class Give extends React.Component {
     return (
       <View style={{flex: 1, backgroundColor: 'white'}}>
         <View style={{flex: 1}}>
-          <View style={styles.recipientRow}>
-            <Text style={{fontSize: 20, fontWeight: 'bold'}}>Send</Text>
-            <Text style={{fontSize: 20, fontWeight: 'bold', paddingLeft: 40}}>
-              {`${params.customer.first_name} ${params.customer.last_name}`}
-            </Text>
-          </View>
+          {this.details()}
           <View style={styles.designRow}>
             <View style={{flexShrink: 1, paddingVertical: 14}}>
               <Text style={styles.designTitle}>{design.title}</Text>
@@ -151,7 +252,7 @@ export class Give extends React.Component {
           {submitting ? <Spinner /> : null}
         </View>
         <PrimaryButton
-          title="Send"
+          title="Send Gift"
           disabled={fieldValue === '$0.00' || submitting}
           color={Theme.lightBlue}
           onPress={this.send.bind(this)}
@@ -190,6 +291,8 @@ const styles = StyleSheet.create({
 });
 
 Give.propTypes = {
+  email: PropTypes.string,
+  phone: PropTypes.string,
   amounts: PropTypes.array,
   apiExpire: PropTypes.func.isRequired,
   apiRequire: PropTypes.func.isRequired,
@@ -201,8 +304,22 @@ function mapStateToProps (state) {
   const {deviceToken} = state.settings;
   const apiStore = state.api.apiStore;
   const {amounts} = apiStore[urls.profile] || {};
-
+  const myProfile = apiStore[urls.profile] || {};
+  const {uids = []} = myProfile;
+  let emails = [];
+  let phones = [];
+  uids.forEach((uid) => {
+    const split = uid.split(':');
+    if (split[0] === 'email') {
+      emails.push(split[1]);
+    } else if (split[0] === 'phone') {
+      phones.push(split[1]);
+    }
+  });
   return {
+    myProfile,
+    email: emails[0],
+    phone: phones[0],
     amounts,
     deviceToken
   };

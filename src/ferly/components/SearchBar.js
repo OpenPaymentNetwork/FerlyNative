@@ -5,16 +5,13 @@ import TestElement from 'ferly/components/TestElement';
 import {TextInput, View, StyleSheet} from 'react-native';
 
 export default class SearchBar extends React.Component {
-  constructor (props) {
-    super(props);
-    this.state = {
-      searchText: ''
-    };
-  }
-
   onChangeText (text) {
-    this.setState({searchText: text});
     this.props.onChangeText(text);
+    if (this.props.value) {
+      return this.props.value;
+    } else {
+      return text;
+    }
   }
 
   render () {
@@ -31,7 +28,7 @@ export default class SearchBar extends React.Component {
           underlineColorAndroid='transparent'
           style={styles.input}
           onChangeText={this.onChangeText.bind(this)}
-          value={this.state.searchText}
+          value={this.props.value}
           placeholder={this.props.placeholder || 'Search'} />
       </View>
     );
@@ -62,5 +59,6 @@ const styles = StyleSheet.create({
 
 SearchBar.propTypes = {
   onChangeText: PropTypes.func.isRequired,
-  placeholder: PropTypes.string
+  placeholder: PropTypes.string,
+  value: PropTypes.string
 };
