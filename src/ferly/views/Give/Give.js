@@ -10,6 +10,7 @@ import {connect} from 'react-redux';
 import {post, urls} from 'ferly/utils/fetch';
 import {StackActions} from 'react-navigation';
 import {
+  AsyncStorage,
   Alert,
   StyleSheet,
   Text,
@@ -17,6 +18,8 @@ import {
   TouchableWithoutFeedback,
   View
 } from 'react-native';
+import Constants from 'expo-constants';
+const {releaseChannel} = Constants.manifest;
 
 export class Give extends React.Component {
   static navigationOptions = {
@@ -73,7 +76,7 @@ export class Give extends React.Component {
       recipient_id: id,
       amount: amount,
       design_id: design.id.toString(),
-      invitation_type: 'code_private',
+      invitation_type: releaseChannel === 'production' ? 'code_private' : 'code_shared',
       invitation_code_length: '6',
       message: message
     };
@@ -82,7 +85,11 @@ export class Give extends React.Component {
     post('send', this.props.deviceToken, postParams)
       .then((response) => response.json())
       .then((json) => {
-        if (Object.keys(json).length === 0) {
+        if (releaseChannel !== 'production') {
+          AsyncStorage.setItem('giftCode', json.transfer.invitation_code).then(() => {
+          });
+        }
+        if (!(json['error'] || json['invalid'])) {
           apiExpire(urls.history);
           apiExpire(urls.profile);
           const resetAction = StackActions.reset({
@@ -90,9 +97,19 @@ export class Give extends React.Component {
             actions: [StackActions.push({routeName: 'Home'})]
           });
           navigation.dispatch(resetAction);
-          Alert.alert(
-            'Complete!',
-            `You gifted ${formatted} ${title} to ${customerFirstName} ${customerLastName}.`);
+          if (customerLastName) {
+            Alert.alert(
+              'Complete!',
+              `You gifted ${formatted} ${title} to ${customerLastName}.`);
+          } else if (customerFirstName) {
+            Alert.alert(
+              'Complete!',
+              `You gifted ${formatted} ${title} to ${customerFirstName}.`);
+          } else {
+            Alert.alert(
+              'Complete!',
+              `You gifted ${formatted} ${title} to ${contact}.`);
+          }
         } else {
           let invalid;
           if (json.invalid['recipient_uid']) {

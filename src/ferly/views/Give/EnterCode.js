@@ -4,7 +4,9 @@ import React from 'react';
 import Theme from 'ferly/utils/theme';
 import {connect} from 'react-redux';
 import {post} from 'ferly/utils/fetch';
-import {View, Text, TextInput, StyleSheet, Alert} from 'react-native';
+import {AsyncStorage, View, Text, TextInput, StyleSheet, Alert} from 'react-native';
+import Constants from 'expo-constants';
+const {releaseChannel} = Constants.manifest;
 
 export class EnterCode extends React.Component {
   static navigationOptions = {
@@ -14,17 +16,38 @@ export class EnterCode extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
+      code: '',
       fieldValue: '',
       invalid: '',
       submitting: false
     };
   }
 
+  componentDidMount () {
+    if (releaseChannel !== 'production') {
+      this.retrieveData().then(() => {
+      }).catch(() => {
+        Alert.alert('Error trying to get gift code!');
+      });
+    }
+  }
+
+  retrieveData = async () => {
+    try {
+      const giftCode = await AsyncStorage.getItem('giftCode') || '';
+      if (giftCode !== '') {
+        this.setState({code: giftCode});
+      }
+    } catch (error) {
+      Alert.alert('Error trying to retrieve gift code');
+    }
+  }
+
   submitForm = () => {
-    const {fieldValue} = this.state;
+    const {fieldValue, code} = this.state;
     this.setState({submitting: true});
     const postCode = {
-      'code': fieldValue
+      'code': fieldValue === '' ? code : fieldValue
     };
     post('accept-code', this.props.deviceToken, postCode)
       .then((response) => response.json())
@@ -62,7 +85,7 @@ export class EnterCode extends React.Component {
   }
 
   render () {
-    const {fieldValue, submitting, invalid} = this.state;
+    const {fieldValue, submitting, invalid, code} = this.state;
 
     count++;
     if (count < 2) {
@@ -98,18 +121,18 @@ export class EnterCode extends React.Component {
                   paddingHorizontal: 15,
                   alignSelf: 'center'
                 }}
-                onChangeText={(text) => this.setState({fieldValue: text})}
+                onChangeText={(text) => this.setState({fieldValue: text, code: text})}
                 autoFocus
                 returnKeyType='done'
-                placeholder="123-456"
-                value={fieldValue} />
+                placeholder="123456"
+                value={this.state.code !== '' ? this.state.code : fieldValue} />
             </View>
             {invalid ? (<Text style={styles.error}>{invalid}</Text>) : null}
           </View>
           <PrimaryButton
             marginHorizontal={1}
             title="Accept Gift"
-            disabled={fieldValue === '' || submitting}
+            disabled={fieldValue || code === '' || submitting}
             color={Theme.lightBlue}
             onPress={() => this.submitForm()} />
         </View>
