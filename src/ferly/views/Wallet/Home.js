@@ -37,11 +37,18 @@ export class Wallet extends React.Component {
     super();
     this.array = [];
     this.state = {
+      width2: this.getDimensions(),
       scrollY: new Animated.Value(
         Platform.OS === 'ios' ? -HEADER_MAX_HEIGHT : 0
       ),
       refreshing: false
     };
+    this.theWidth = this.theWidth.bind(this);
+  }
+
+  getDimensions () {
+    let {width} = Dimensions.get('window');
+    return width;
   }
 
   retrieveCodeRedeemed = async () => {
@@ -54,7 +61,13 @@ export class Wallet extends React.Component {
     }
   }
 
+  theWidth () {
+    let {width} = Dimensions.get('window');
+    this.setState({width2: width});
+  }
+
   componentDidMount = async () => {
+    Dimensions.addEventListener('change', this.theWidth);
     let expoToken = await AsyncStorage.getItem('expoToken') || '';
     if (!expoToken) {
       try {
@@ -143,6 +156,10 @@ export class Wallet extends React.Component {
       let token = await Notifications.getExpoPushTokenAsync();
       return token;
     }
+  }
+
+  componentWillUnmount () {
+    Dimensions.removeEventListener('change', this.theWidth);
   }
 
   renderScrollViewContent () {
@@ -396,12 +413,20 @@ export class Wallet extends React.Component {
             style={[
               styles.backgroundImage,
               {
+
+                width: this.state.width2 - 35,
                 transform: [{ translateY: imageTranslate }]
               }
             ]}
             source={blankCard}
           />
-          <Image resizeMode={'contain'} style={styles.ferlyImg} source={logoHorizontal}/>
+          <Image resizeMode={'contain'}
+            style={[
+              styles.ferlyImg, {
+                width: this.state.width2 / 2.4,
+                marginLeft: this.state.width < 330 ? 30 : 20}
+            ]}
+            source={logoHorizontal}/>
           <Text style={{
             padding: 20,
             marginTop: 17,
@@ -416,9 +441,9 @@ export class Wallet extends React.Component {
           <TestElement
             parent={TouchableOpacity}
             label='test-id-card-page'
-            style={styles.theCard}
+            style={[styles.theCard, {width: this.state.width2 / 3}]}
             onPress={() => navigation.navigate('Ferly Card')}>
-            <Text style={styles.cardManager} >
+            <Text style={[styles.cardManager, {fontSize: this.state.width2 < 330 ? 14 : 16}]} >
               {this.cardPage()}
             </Text>
           </TestElement>
@@ -441,10 +466,6 @@ const HEADER_MAX_HEIGHT = 160;
 const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 let count = 0;
-const {width} = Dimensions.get('window');
-const newWidth = width / 3;
-const logoWidth = width / 2.4;
-
 const styles = StyleSheet.create({
   header: {
     position: 'absolute',
@@ -465,7 +486,6 @@ const styles = StyleSheet.create({
     right: 0
   },
   cardManager: {
-    fontSize: width < 330 ? 14 : 16,
     color: Theme.darkBlue,
     fontWeight: 'bold'
   },
@@ -474,14 +494,11 @@ const styles = StyleSheet.create({
     fontSize: 18
   },
   ferlyImg: {
-    width: logoWidth,
     height: 57,
-    marginTop: -65,
-    marginLeft: width < 330 ? 30 : 20
+    marginTop: -65
   },
   backgroundImage: {
     height: 190,
-    width: width - 35,
     flexDirection: 'row-reverse',
     alignSelf: 'center',
     padding: 10,
@@ -519,7 +536,6 @@ const styles = StyleSheet.create({
   },
   theCard: {
     backgroundColor: Theme.yellow,
-    width: newWidth,
     height: 40,
     borderRadius: 5,
     justifyContent: 'center',

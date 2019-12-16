@@ -19,6 +19,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Switch,
+  ScrollView,
   Modal
 } from 'react-native';
 import { setHaveCard } from '../../store/settings';
@@ -280,7 +281,7 @@ export class FerlyCard extends React.Component {
             </Text>
           </ImageBackground>
         </View>
-        <View style={styles.actionsContainer}>
+        <ScrollView style={styles.actionsContainer}>
           <View style={styles.actionRow}>
             <Ionicons
               name={abilityValue ? 'md-unlock' : 'md-lock'}
@@ -363,7 +364,7 @@ export class FerlyCard extends React.Component {
               </View>
             </View>
           </Modal>
-        </View>
+        </ScrollView>
       </View>
     );
   }
