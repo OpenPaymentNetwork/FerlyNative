@@ -62,21 +62,23 @@ class Recipient extends React.Component {
   }
 
   async searchContacts (name) {
+    const {contacts} = this.state;
     if (Platform.OS === 'ios') {
       const {data} = await expoContacts.getContactsAsync({name: name});
       this.setState({searchContact: this.convertDataToContacts(data)});
     } else {
-      let {data} = await expoContacts.getContactsAsync({});
+      // getting data from expo is slow in android
       let list = [];
-      data.forEach(function (item) {
-        let firstName = item.firstName || '';
-        let lastName = item.lastName || '';
+      contacts.forEach(function (item) {
+        let firstName = item.display.firstName || '';
+        let lastName = item.display.lastName || '';
         let lowerCaseName = name.toLowerCase();
-        if (firstName.toLowerCase().includes(lowerCaseName) ||
-        lastName.toLowerCase().includes(lowerCaseName)) {
+        let fullName = firstName.toLowerCase() + lastName.toLowerCase();
+        if (fullName.toLowerCase().includes(lowerCaseName)) {
           list.push(item);
         }
       });
+      list = list.slice(0, 50);
       this.setState({searchContact: this.convertDataToContacts(list)});
     }
   }
@@ -89,13 +91,17 @@ class Recipient extends React.Component {
         pageSize, pageOffset, sort: expoContacts.SortTypes.FirstName});
     } catch (error) {
       // This is a workaround for an expo bug
-      test = await expoContacts.getContactsAsync({
-        pageSize, pageOffset});
-      if (contacts.length < 1) {
-        contacts.push(test);
+      try {
+        test = await expoContacts.getContactsAsync({
+          pageSize, pageOffset});
+        if (contacts.length < 1) {
+          contacts.push(test);
+        }
+        test.data = test.data.filter(item => item.firstName !== undefined);
+        test.data.sort((a, b) => (a.firstName > b.firstName) ? 1 : -1);
+      } catch (error) {
+        console.log('unable to get contacts');
       }
-      test.data = test.data.filter(item => item.firstName !== undefined);
-      test.data.sort((a, b) => (a.firstName > b.firstName) ? 1 : -1);
     }
     const {data} = test;
     const moreContacts = this.convertDataToContacts(data);
