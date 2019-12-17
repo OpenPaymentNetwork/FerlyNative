@@ -122,7 +122,6 @@ export class EnterCode extends React.Component {
                   alignSelf: 'center'
                 }}
                 onChangeText={(text) => this.setState({fieldValue: text, code: text})}
-                autoFocus
                 returnKeyType='done'
                 placeholder="123456"
                 value={this.state.code !== '' ? this.state.code : fieldValue} />
@@ -132,7 +131,7 @@ export class EnterCode extends React.Component {
           <PrimaryButton
             marginHorizontal={1}
             title="Accept Gift"
-            disabled={fieldValue || code === '' || submitting}
+            disabled={(fieldValue === '' && code === '') || submitting}
             color={Theme.lightBlue}
             onPress={() => this.submitForm()} />
         </View>

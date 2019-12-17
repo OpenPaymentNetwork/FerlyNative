@@ -16,3 +16,4 @@ export const tutorialSix = require('./tutorial_graphic_six.png');
 export const viewLocations = require('./ViewLocationsButton2.png');
 export const mailCard = require('./Mail_Card.png');
 export const blankCard = require('./FerlyCard_nologo_roundcorners.jpg');
+export const cancelBlue = require('./canceled_gift.png');

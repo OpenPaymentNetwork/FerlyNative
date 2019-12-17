@@ -3,7 +3,14 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import TestElement from 'ferly/components/TestElement';
 import Theme from 'ferly/utils/theme';
-import {giveBlue, addBlue, spendBlue, receiveBlue, pendingBlue} from 'ferly/images/index';
+import {
+  giveBlue,
+  addBlue,
+  spendBlue,
+  receiveBlue,
+  pendingBlue,
+  cancelBlue
+} from 'ferly/images/index';
 import {Text, View, Image, StyleSheet, TouchableOpacity} from 'react-native';
 
 export default class HistoryEntry extends React.Component {
@@ -41,7 +48,7 @@ export default class HistoryEntry extends React.Component {
         involved = `to ${counterParty}`;
         break;
       case 'canceled':
-        iconSource = pendingBlue;
+        iconSource = cancelBlue;
         titleVerb = 'Canceled';
         involved = `to ${counterParty}`;
         break;
