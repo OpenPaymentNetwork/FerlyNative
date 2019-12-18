@@ -86,8 +86,10 @@ export class Give extends React.Component {
       .then((response) => response.json())
       .then((json) => {
         if (releaseChannel !== 'production') {
-          AsyncStorage.setItem('giftCode', json.transfer.invitation_code).then(() => {
-          });
+          if (json.transfer.invitation_code) {
+            AsyncStorage.setItem('giftCode', json.transfer.invitation_code).then(() => {
+            });
+          }
         }
         if (!(json['error'] || json['invalid'])) {
           apiExpire(urls.history);
@@ -97,11 +99,15 @@ export class Give extends React.Component {
             actions: [StackActions.push({routeName: 'Home'})]
           });
           navigation.dispatch(resetAction);
-          if (customerLastName) {
+          if (customerLastName && customerFirstName) {
             Alert.alert(
               'Complete!',
-              `You gifted ${formatted} ${title} to ${customerLastName}.`);
+              `You gifted ${formatted} ${title} to ${customerFirstName} ${customerLastName}.`);
           } else if (customerFirstName) {
+            Alert.alert(
+              'Complete!',
+              `You gifted ${formatted} ${title} to ${customerFirstName}.`);
+          } else if (customerLastName) {
             Alert.alert(
               'Complete!',
               `You gifted ${formatted} ${title} to ${customerFirstName}.`);

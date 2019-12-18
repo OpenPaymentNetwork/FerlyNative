@@ -45,34 +45,70 @@ export class EnterCode extends React.Component {
 
   submitForm = () => {
     const {fieldValue, code} = this.state;
+    let invalidCode = true;
     this.setState({submitting: true});
     const postCode = {
       'code': fieldValue === '' ? code : fieldValue
     };
-    post('accept-code', this.props.deviceToken, postCode)
+    post('get-invalid-code-count', this.props.deviceToken)
       .then((response) => response.json())
       .then((json) => {
         this.setState({submitting: false, fieldValue: '', invalid: ''});
-        if (this.validateCode(json)) {
-          const buttons = [
-            {text: 'OK', onPress: () => this.props.navigation.navigate('Wallet'), style: 'cancel'},
-            {text: 'VIEW', onPress: () => this.props.navigation.navigate('History')}
-          ];
-          try {
-            let title = json.transfer;
-            title = title['appdata.ferly.title'];
-            Alert.alert('Gift Accepted', `You accepted $${json.transfer.amount} of ${title} from ` +
-           `${json.transfer.sender_info.title}. Click View to see details.`, buttons);
-          } catch (error) {
-            Alert.alert('Gift Accepted', `You successfully accepted gift value.`, buttons);
-            this.props.navigation.navigate('Wallet');
-          }
+        if (this.validateCodeCount(json)) {
+          post('accept-code', this.props.deviceToken, postCode)
+            .then((response) => response.json())
+            .then((json) => {
+              this.setState({submitting: false, fieldValue: '', invalid: ''});
+              if (this.validateCode(json)) {
+                invalidCode = false;
+                const buttons = [
+                  {text: 'OK',
+                    onPress: () => this.props.navigation.navigate('Wallet'),
+                    style: 'cancel'
+                  },
+                  {text: 'VIEW', onPress: () => this.props.navigation.navigate('History')}
+                ];
+                try {
+                  let title = json.transfer;
+                  title = title['appdata.ferly.title'];
+                  Alert.alert('Gift Accepted', `You accepted $${json.transfer.amount} of ` +
+                    `${title} from${json.transfer.sender_info.title}. Click View to see details.`,
+                  buttons);
+                } catch (error) {
+                  Alert.alert('Gift Accepted', `You successfully accepted gift value.`, buttons);
+                  this.props.navigation.navigate('Wallet');
+                }
+              }
+            })
+            .catch(() => {
+              Alert.alert('Error trying to submit code!');
+              navigator.navigate('Wallet');
+            });
         }
+        post('update-invalid-code-count', this.props.deviceToken, {'invalid_result': invalidCode})
+          .then((response) => response.json())
+          .then((json) => {
+          })
+          .catch(() => {
+            console.log('unable to update code count');
+          });
       })
       .catch(() => {
         Alert.alert('Error trying to submit code!');
         navigator.navigate('Wallet');
       });
+  }
+
+  validateCodeCount = (json) => {
+    if (json.invalid || json.error) {
+      this.setState({invalid: 'Unable to validate code at this time.'});
+      return false;
+    } else if (parseInt(json.count) > parseInt('5')) {
+      this.setState({invalid: 'Too many failed attempts.', submitting: false});
+      return false;
+    } else {
+      return true;
+    }
   }
 
   validateCode = (json) => {

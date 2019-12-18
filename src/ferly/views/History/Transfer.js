@@ -78,7 +78,8 @@ export class Transfer extends React.Component {
               this.props.navigation.navigate('Wallet');
             });
         } else {
-          Alert.alert(`Sorry Max Reminders Reached!`);
+          Alert.alert(`No Reminders Left`,
+            `Reminder not sent. You've sent the max number of reminders`);
         }
       })
       .catch(() => {
@@ -377,7 +378,7 @@ export class Transfer extends React.Component {
             <Text style={{paddingLeft: 10, color: 'darkgray', fontSize: 16}} >
               {counterParty} hasnt accepted your gift yet.
             </Text>
-            <Text style={{paddingLeft: 10, paddingBottom: 10, color: 'darkgray', fontSize: 16}} >
+            <Text style={{paddingLeft: 10, paddingBottom: 15, color: 'darkgray', fontSize: 16}} >
               The gift expires {giftExpiration}.
             </Text>
             <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
@@ -391,7 +392,7 @@ export class Transfer extends React.Component {
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => this.takeBack()}
-                style={{backgroundColor: Theme.lightBlue, borderRadius: 5}}
+                style={{backgroundColor: '#cfdde2', borderRadius: 5}}
               >
                 <Text style={{fontSize: 16, paddingHorizontal: 25, paddingVertical: 8}}>
                   Take Back
@@ -495,7 +496,6 @@ export class Transfer extends React.Component {
 }
 
 let count = 0;
-// let giftCount = 0;
 
 const styles = StyleSheet.create({
   functionRow: {flexDirection: 'row', justifyContent: 'space-between'},

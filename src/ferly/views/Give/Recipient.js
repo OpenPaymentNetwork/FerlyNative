@@ -35,6 +35,7 @@ class Recipient extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
+      submitting: false,
       permission: undefined,
       contacts: undefined,
       searchResults: null,
@@ -45,6 +46,7 @@ class Recipient extends React.Component {
       pageOffset: 0,
       page: 'Users',
       name: '',
+      error: '',
       contact: ''
     };
   }
@@ -204,7 +206,21 @@ class Recipient extends React.Component {
     const {navigation} = this.props;
     const design = navigation.state.params;
     const {name, contact} = this.state;
-    navigation.navigate('Amount', {name, contact, design});
+    this.setState({submitting: true});
+    if (contact.includes('@')) {
+      if (!contact.includes('.')) {
+        this.setState({error: 'Invalid email address', submitting: false});
+      } else {
+        navigation.navigate('Amount', {name, contact, design});
+      }
+    } else {
+      let numbers = /^[0-9]+$/;
+      if (contact.match(numbers)) {
+        navigation.navigate('Amount', {name, contact, design});
+      } else {
+        this.setState({error: 'Invalid phone number', submitting: false});
+      }
+    }
   }
 
   onChangeText (text) {
@@ -278,7 +294,7 @@ class Recipient extends React.Component {
           Alert.alert('Error please check internet connection!');
         });
     }
-    const {page, permission, contacts} = this.state;
+    const {page, permission, contacts, error} = this.state;
     const {recents} = this.props;
     const {searchResults, searchText, name, contact, searchContact} = this.state;
     let body;
@@ -357,7 +373,7 @@ class Recipient extends React.Component {
               onChangeText={(text) => this.setState({name: text})}
               maxLength={50}/>
           </View>
-          <View style={[styles.inputContainer, {marginBottom: 25}]}>
+          <View style={[styles.inputContainer, {marginBottom: error === '' ? 25 : 5}]}>
             <TextInput
               placeholder="Email Address or Phone Number"
               style={{}}
@@ -365,6 +381,7 @@ class Recipient extends React.Component {
               onChangeText={(text) => this.setState({contact: text})}
               maxLength={50}/>
           </View>
+          {error ? (<Text style={styles.error}>{error}</Text>) : null}
           <View style={{marginHorizontal: -15}}>
             <PrimaryButton
               title="Next"
@@ -484,6 +501,12 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     marginVertical: 10,
     justifyContent: 'center'
+  },
+  error: {
+    fontSize: 16,
+    color: 'red',
+    alignSelf: 'center',
+    marginBottom: 25
   },
   text: {
     marginTop: 20
