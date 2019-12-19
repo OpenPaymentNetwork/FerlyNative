@@ -86,12 +86,12 @@ export class Give extends React.Component {
       .then((response) => response.json())
       .then((json) => {
         if (releaseChannel !== 'production') {
-          if (json.transfer.invitation_code) {
+          if (json.transfer && json.transfer.invitation_code) {
             AsyncStorage.setItem('giftCode', json.transfer.invitation_code).then(() => {
             });
           }
         }
-        if (!(json['error'] || json['invalid'])) {
+        if (!(json.error || json.invalid)) {
           apiExpire(urls.history);
           apiExpire(urls.profile);
           const resetAction = StackActions.reset({
@@ -121,7 +121,7 @@ export class Give extends React.Component {
           if (json.invalid['recipient_uid']) {
             invalid = 'Invalid Recipient';
           }
-          const error = json.invalid['amounts.0'] || json.invalid['amount'] || invalid;
+          const error = (json.invalid['amounts.0'] || json.invalid['amount']) || invalid;
           this.setState({error: error, amount: 0, submitting: false});
         }
       })

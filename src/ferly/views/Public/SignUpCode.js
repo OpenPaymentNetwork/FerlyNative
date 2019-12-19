@@ -180,6 +180,9 @@ export class SignUpCode extends React.Component {
       Alert.alert(
         'Sorry', 'This code has expired. Please try again with a new code.');
       return false;
+    } else if (json.error) {
+      Alert.alert('Unexpected error!', 'Please try again later.');
+      return false;
     } else {
       return true;
     }
