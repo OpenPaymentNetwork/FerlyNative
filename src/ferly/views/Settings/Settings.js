@@ -25,7 +25,11 @@ export class Settings extends React.Component {
   }
 
   componentDidMount () {
-    this.getToken();
+    try {
+      this.getToken();
+    } catch (error) {
+      console.log('Unable to get expo token');
+    }
   }
 
   SignOut () {

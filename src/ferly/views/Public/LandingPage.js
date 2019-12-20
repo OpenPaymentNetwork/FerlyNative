@@ -35,7 +35,10 @@ export class LandingPage extends React.Component {
   componentDidMount () {
     this.getToken().then((response) => {
       this.props.dispatch(setInitialExpoToken(response));
-    });
+    })
+      .catch((error) => {
+        console.log('Unable to get expo token', error);
+      });
     interval = setInterval(() => {
       this.setState({
         page: this.state.page === this.state.dataSource.length ? 0 : this.state.page + 1,
@@ -49,23 +52,28 @@ export class LandingPage extends React.Component {
   }
 
   async getToken () {
-    const { status: existingStatus } = await Permissions.getAsync(
-      Permissions.NOTIFICATIONS
-    );
-    let finalStatus = existingStatus;
-    // only ask if permissions have not already been determined, because
-    // iOS won't necessarily prompt a second time.
-    if (existingStatus !== 'granted') {
+    try {
+      const { status: existingStatus } = await Permissions.getAsync(
+        Permissions.NOTIFICATIONS
+      );
+
+      let finalStatus = existingStatus;
+      // only ask if permissions have not already been determined, because
+      // iOS won't necessarily prompt a second time.
+      if (existingStatus !== 'granted') {
       // Android remote notification permissions are granted during the app
       // install, so this will only ask on iOS
-      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-      finalStatus = status;
-    }
+        const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+        finalStatus = status;
+      }
 
-    if (finalStatus === 'granted') {
-      let token = await Notifications.getExpoPushTokenAsync();
-      this.setState({expoToken: token});
-      return token;
+      if (finalStatus === 'granted') {
+        let token = await Notifications.getExpoPushTokenAsync();
+        this.setState({expoToken: token});
+        return token;
+      }
+    } catch (error) {
+      console.log('Unable to get expo token');
     }
   }
 
