@@ -72,7 +72,7 @@ export class EnterCode extends React.Component {
                   let title = json.transfer;
                   title = title['appdata.ferly.title'];
                   Alert.alert('Gift Accepted', `You accepted $${json.transfer.amount} of ` +
-                    `${title} from${json.transfer.sender_info.title}. Click View to see details.`,
+                    `${title} from ${json.transfer.sender_info.title}. Click View to see details.`,
                   buttons);
                 } catch (error) {
                   Alert.alert('Gift Accepted', `You successfully accepted gift value.`, buttons);
