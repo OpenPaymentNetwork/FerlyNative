@@ -54,7 +54,7 @@ export class Contacts extends React.Component {
     const {contacts} = this.state;
     if (Platform.OS === 'ios') {
       const {data} = await expoContacts.getContactsAsync({name: name});
-      this.setState({searchContact: this.convertDataToContacts(data)});
+      this.setState({searchResults: this.convertDataToContacts(data)});
     } else {
       let list = [];
       contacts.forEach(function (item) {
