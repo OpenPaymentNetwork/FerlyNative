@@ -51,21 +51,22 @@ export class Contacts extends React.Component {
   }
 
   async searchContacts (name) {
+    const {contacts} = this.state;
     if (Platform.OS === 'ios') {
       const {data} = await expoContacts.getContactsAsync({name: name});
-      this.setState({searchResults: this.convertDataToContacts(data)});
+      this.setState({searchContact: this.convertDataToContacts(data)});
     } else {
-      let {data} = await expoContacts.getContactsAsync({});
       let list = [];
-      data.forEach(function (item) {
-        let firstName = item.firstName || '';
-        let lastName = item.lastName || '';
+      contacts.forEach(function (item) {
+        let firstName = item.display.firstName || '';
+        let lastName = item.display.lastName || '';
         let lowerCaseName = name.toLowerCase();
-        if (firstName.toLowerCase().includes(lowerCaseName) ||
-        lastName.toLowerCase().includes(lowerCaseName)) {
+        let fullName = firstName.toLowerCase() + ' ' + lastName.toLowerCase();
+        if (fullName.toLowerCase().includes(lowerCaseName)) {
           list.push(item);
         }
       });
+      list = list.slice(0, 50);
       this.setState({searchResults: this.convertDataToContacts(list)});
     }
   }

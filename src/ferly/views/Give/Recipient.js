@@ -69,13 +69,12 @@ class Recipient extends React.Component {
       const {data} = await expoContacts.getContactsAsync({name: name});
       this.setState({searchContact: this.convertDataToContacts(data)});
     } else {
-      // getting data from expo is slow in android
       let list = [];
       contacts.forEach(function (item) {
         let firstName = item.display.firstName || '';
         let lastName = item.display.lastName || '';
         let lowerCaseName = name.toLowerCase();
-        let fullName = firstName.toLowerCase() + lastName.toLowerCase();
+        let fullName = firstName.toLowerCase() + ' ' + lastName.toLowerCase();
         if (fullName.toLowerCase().includes(lowerCaseName)) {
           list.push(item);
         }
