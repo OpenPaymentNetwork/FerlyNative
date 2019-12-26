@@ -120,8 +120,7 @@ export class RecoveryChannel extends React.Component {
                 marginVertical: 15,
                 width: '100%',
                 height: 35,
-                paddingLeft: 10,
-                marginBottom: 35}}
+                paddingLeft: 10}}
               onChangeText={(text) => this.setState({fieldValue: text})}
               autoFocus
               placeholder="Phone Number or Email"
@@ -156,6 +155,7 @@ RecoveryChannel.propTypes = {
 
 const styles = StyleSheet.create({
   error: {
+    marginBottom: 35,
     fontSize: 16,
     color: 'red'
   }
