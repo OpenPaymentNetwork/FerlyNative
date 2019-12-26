@@ -39,6 +39,9 @@ export class Transfer extends React.Component {
           Alert.alert('Success!', 'You have successfully retracted the cash with invite.');
         }
         this.props.dispatch(apiRefresh(urls.history));
+        setTimeout(() => {
+          this.props.dispatch(apiRefresh(urls.profile));
+        }, 300);
         this.props.navigation.navigate('History');
       })
       .catch(() => {
