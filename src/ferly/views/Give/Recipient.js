@@ -80,7 +80,7 @@ class Recipient extends React.Component {
         }
       });
       list = list.slice(0, 50);
-      this.setState({searchContact: this.convertDataToContacts(list)});
+      this.setState({searchContact: list});
     }
   }
 

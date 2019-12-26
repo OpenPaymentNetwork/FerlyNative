@@ -67,7 +67,7 @@ export class Contacts extends React.Component {
         }
       });
       list = list.slice(0, 50);
-      this.setState({searchResults: this.convertDataToContacts(list)});
+      this.setState({searchResults: list});
     }
   }
 
