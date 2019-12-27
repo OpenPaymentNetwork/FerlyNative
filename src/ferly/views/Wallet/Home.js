@@ -6,7 +6,7 @@ import React from 'react';
 import Spinner from 'ferly/components/Spinner';
 import Theme from 'ferly/utils/theme';
 import TestElement from 'ferly/components/TestElement';
-import {Notifications} from 'expo';
+import {Notifications, Updates} from 'expo';
 import {apiRequire, apiRefresh} from 'ferly/store/api';
 import {checkedUidPrompt} from 'ferly/store/settings';
 import {connect} from 'react-redux';
@@ -338,9 +338,23 @@ export class Wallet extends React.Component {
         });
     }
 
-    const {firstName, navigation, checkUidPrompt} = this.props;
+    const {firstName, navigation, checkUidPrompt, updateDownloaded} = this.props;
     if (!firstName) {
       return <Spinner />;
+    }
+
+    if (updateDownloaded) {
+      const buttons = [
+        {
+          text: 'Keep',
+          onPress: () => null
+        },
+        {
+          text: 'Update',
+          onPress: () => Updates.reloadFromCache()
+        }
+      ];
+      Alert.alert('There is a new version of this app!!', '', buttons);
     }
 
     if (checkUidPrompt) {
@@ -581,6 +595,7 @@ const styles = StyleSheet.create({
 
 Wallet.propTypes = {
   card: PropTypes.object,
+  updateDownloaded: PropTypes.bool.isRequired,
   deviceToken: PropTypes.string,
   amounts: PropTypes.array,
   apiRefresh: PropTypes.func.isRequired,
@@ -594,7 +609,7 @@ Wallet.propTypes = {
 
 function mapStateToProps (state) {
   const apiStore = state.api.apiStore;
-  const {checkUidPrompt} = state.settings;
+  const {checkUidPrompt, updateDownloaded} = state.settings;
   const {
     amounts,
     first_name: firstName,
@@ -610,6 +625,7 @@ function mapStateToProps (state) {
 
   return {
     amounts,
+    updateDownloaded,
     card,
     firstName,
     uids,

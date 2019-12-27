@@ -460,21 +460,42 @@ class Recipient extends React.Component {
           backgroundColor: Theme.darkBlue
         }}>
           <TouchableOpacity
-            style={{height: 60, width: 100, justifyContent: 'center', alignItems: 'center'}}
+            style={{
+              borderBottomWidth: this.state.page === 'Contacts' ? 3 : 0,
+              borderColor: 'white',
+              height: 60,
+              width: 100,
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}
             onPress={() => this.changeToContacts()}>
             <Text style={{color: 'white', fontSize: 16}}>
                 Contacts
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={{height: 60, width: 100, justifyContent: 'center', alignItems: 'center'}}
+            style={{
+              borderBottomWidth: this.state.page === 'Users' ? 3 : 0,
+              borderColor: 'white',
+              height: 60,
+              width: 100,
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}
             onPress={() => this.changeToUsers()}>
             <Text style={{color: 'white', fontSize: 16}}>
               Users
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={{height: 60, width: 100, justifyContent: 'center', alignItems: 'center'}}
+            style={{
+              borderBottomWidth: this.state.page === 'Other' ? 3 : 0,
+              borderColor: 'white',
+              height: 60,
+              width: 100,
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}
             onPress={() => this.changeToOther()}>
             <Text style={{color: 'white', fontSize: 16}}>
               Other

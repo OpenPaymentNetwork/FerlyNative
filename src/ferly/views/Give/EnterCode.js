@@ -1,9 +1,12 @@
 import PrimaryButton from 'ferly/components/PrimaryButton';
 import PropTypes from 'prop-types';
 import React from 'react';
+import {apiRefresh, apiExpire} from 'ferly/store/api';
+import Spinner from 'ferly/components/Spinner';
 import Theme from 'ferly/utils/theme';
 import {connect} from 'react-redux';
-import {post} from 'ferly/utils/fetch';
+import {post, urls} from 'ferly/utils/fetch';
+import {setRefreshHistory} from 'ferly/store/settings';
 import {AsyncStorage, View, Text, TextInput, StyleSheet, Alert} from 'react-native';
 import Constants from 'expo-constants';
 const {releaseChannel} = Constants.manifest;
@@ -53,7 +56,6 @@ export class EnterCode extends React.Component {
     post('get-invalid-code-count', this.props.deviceToken)
       .then((response) => response.json())
       .then((json) => {
-        this.setState({submitting: false, fieldValue: '', invalid: ''});
         if (this.validateCodeCount(json)) {
           post('accept-code', this.props.deviceToken, postCode)
             .then((response) => response.json())
@@ -61,12 +63,19 @@ export class EnterCode extends React.Component {
               this.setState({submitting: false, fieldValue: '', invalid: ''});
               if (this.validateCode(json)) {
                 invalidCode = false;
+                this.props.dispatch(apiRefresh(urls.profile));
+                this.props.dispatch(apiExpire(urls.history));
+                this.props.dispatch(apiRefresh(urls.history));
                 const buttons = [
                   {text: 'OK',
                     onPress: () => this.props.navigation.navigate('Wallet'),
                     style: 'cancel'
                   },
-                  {text: 'VIEW', onPress: () => this.props.navigation.navigate('History')}
+                  {text: 'VIEW',
+                    onPress: () => {
+                      this.props.dispatch(setRefreshHistory(true));
+                      this.props.navigation.navigate('History');
+                    }}
                 ];
                 try {
                   let title = json.transfer;
@@ -79,19 +88,19 @@ export class EnterCode extends React.Component {
                   this.props.navigation.navigate('Wallet');
                 }
               }
+              post('update-invalid-code-count', this.props.deviceToken, {'invalid_result': invalidCode})
+                .then((response) => response.json())
+                .then((json) => {
+                })
+                .catch(() => {
+                  console.log('unable to update code count');
+                });
             })
             .catch(() => {
               Alert.alert('Error trying to submit code!');
               navigator.navigate('Wallet');
             });
         }
-        post('update-invalid-code-count', this.props.deviceToken, {'invalid_result': invalidCode})
-          .then((response) => response.json())
-          .then((json) => {
-          })
-          .catch(() => {
-            console.log('unable to update code count');
-          });
       })
       .catch(() => {
         Alert.alert('Error trying to submit code!');
@@ -151,15 +160,23 @@ export class EnterCode extends React.Component {
               alignSelf: 'center',
               borderColor: invalid ? 'red' : 'gray'}}>
               <TextInput
+                autoCapitalize = 'characters'
                 style={{
                   fontSize: 22,
                   paddingVertical: 5,
                   paddingHorizontal: 15,
                   alignSelf: 'center'
                 }}
-                onChangeText={(text) => this.setState({fieldValue: text, code: text})}
+                onChangeText={(text) => {
+                  if (text.length === 3) {
+                    text += '-';
+                  } else if (text.length === 4) {
+                    text = text.substring(0, 3);
+                  }
+                  this.setState({fieldValue: text, code: text});
+                }}
                 returnKeyType='done'
-                placeholder="123456"
+                placeholder="123-ABC"
                 value={this.state.code !== '' ? this.state.code : fieldValue} />
             </View>
             {invalid ? (<Text style={styles.error}>{invalid}</Text>) : null}
@@ -171,6 +188,7 @@ export class EnterCode extends React.Component {
             color={Theme.lightBlue}
             onPress={() => this.submitForm()} />
         </View>
+        {submitting ? <Spinner /> : null}
       </View>
     );
   }

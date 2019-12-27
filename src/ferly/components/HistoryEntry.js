@@ -2,6 +2,8 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import PropTypes from 'prop-types';
 import React from 'react';
 import TestElement from 'ferly/components/TestElement';
+import {connect} from 'react-redux';
+import {setRefreshHistory} from 'ferly/store/settings';
 import Theme from 'ferly/utils/theme';
 import {
   giveBlue,
@@ -13,7 +15,13 @@ import {
 } from 'ferly/images/index';
 import {Text, View, Image, StyleSheet, TouchableOpacity} from 'react-native';
 
-export default class HistoryEntry extends React.Component {
+export class HistoryEntry extends React.Component {
+  componentDidMount () {
+    if (this.props.refreshHistory) {
+      this.props.dispatch(setRefreshHistory(false));
+      this.props.navigation.navigate('History');
+    }
+  }
   render () {
     const {entry, navigation} = this.props;
     const {amount} = entry;
@@ -108,6 +116,8 @@ const styles = StyleSheet.create({
 });
 
 HistoryEntry.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  refreshHistory: PropTypes.bool.isRequired,
   entry: PropTypes.shape({
     amount: PropTypes.string.isRequired,
     counter_party: PropTypes.string.isRequired,
@@ -117,3 +127,12 @@ HistoryEntry.propTypes = {
   }),
   navigation: PropTypes.object.isRequired
 };
+
+function mapStateToProps (state, ownProps) {
+  const {refreshHistory} = state.settings;
+  return {
+    refreshHistory
+  };
+}
+
+export default connect(mapStateToProps)(HistoryEntry);

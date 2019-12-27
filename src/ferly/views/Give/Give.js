@@ -36,12 +36,33 @@ export class Give extends React.Component {
     this.props.apiRequire(urls.profile);
   }
 
+  alertUser (customerFirstName, customerLastName, formatted, title, contact) {
+    if (customerLastName && customerFirstName) {
+      Alert.alert(
+        'Complete!',
+        `You gifted ${formatted} ${title} to ${customerFirstName} ${customerLastName}.`);
+    } else if (customerFirstName) {
+      Alert.alert(
+        'Complete!',
+        `You gifted ${formatted} ${title} to ${customerFirstName}.`);
+    } else if (customerLastName) {
+      Alert.alert(
+        'Complete!',
+        `You gifted ${formatted} ${title} to ${customerFirstName}.`);
+    } else {
+      Alert.alert(
+        'Complete!',
+        `You gifted ${formatted} ${title} to ${contact}.`);
+    }
+  }
+
   send () {
     const {navigation, apiExpire} = this.props;
     const params = navigation.state.params;
     const {design, customer, contact} = params;
     let customerFirstName = '';
     let customerLastName = '';
+    let customerName = '';
     let id = '';
     let sender = '';
     const {title} = design;
@@ -99,22 +120,24 @@ export class Give extends React.Component {
             actions: [StackActions.push({routeName: 'Home'})]
           });
           navigation.dispatch(resetAction);
-          if (customerLastName && customerFirstName) {
-            Alert.alert(
-              'Complete!',
-              `You gifted ${formatted} ${title} to ${customerFirstName} ${customerLastName}.`);
-          } else if (customerFirstName) {
-            Alert.alert(
-              'Complete!',
-              `You gifted ${formatted} ${title} to ${customerFirstName}.`);
-          } else if (customerLastName) {
-            Alert.alert(
-              'Complete!',
-              `You gifted ${formatted} ${title} to ${customerFirstName}.`);
+          if (json.transfer && json.transfer.recipient_id) {
+            let customerParams = {
+              recipient_id: json.transfer.recipient_id
+            };
+            post('get-customer-name', this.props.deviceToken, customerParams)
+              .then((response) => response.json())
+              .then((json) => {
+                customerName = json.name || '';
+                if (customerName) {
+                  Alert.alert(
+                    'Complete!',
+                    `You gifted ${formatted} ${title} to ${customerName}.`);
+                } else {
+                  this.alertUser(customerFirstName, customerLastName, formatted, title, contact);
+                }
+              });
           } else {
-            Alert.alert(
-              'Complete!',
-              `You gifted ${formatted} ${title} to ${contact}.`);
+            this.alertUser(customerFirstName, customerLastName, formatted, title, contact);
           }
         } else {
           let invalid;
