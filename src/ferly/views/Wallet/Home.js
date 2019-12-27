@@ -345,16 +345,14 @@ export class Wallet extends React.Component {
 
     if (updateDownloaded) {
       const buttons = [
-        {
-          text: 'Keep',
-          onPress: () => null
-        },
-        {
-          text: 'Update',
-          onPress: () => Updates.reloadFromCache()
-        }
+        {text: 'No', onPress: null, style: 'cancel'},
+        {text: 'Yes', onPress: () => Updates.reloadFromCache()}
       ];
-      Alert.alert('There is a new version of this app!!', '', buttons);
+      Alert.alert(
+        'New version available',
+        'Would you like to update to the newest version?',
+        buttons
+      );
     }
 
     if (checkUidPrompt) {

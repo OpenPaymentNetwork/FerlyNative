@@ -453,15 +453,18 @@ class Recipient extends React.Component {
 
     return (
       <View style={{flex: 1, backgroundColor: 'white'}}>
-        <View style={{
-          flexDirection: 'row',
-          justifyContent: 'space-around',
-          alignItems: 'center',
-          backgroundColor: Theme.darkBlue
-        }}>
+        <TestElement
+          parent={View}
+          label='test-id-recipient-navbar'
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            alignItems: 'center',
+            backgroundColor: Theme.darkBlue
+          }}>
           <TouchableOpacity
             style={{
-              borderBottomWidth: this.state.page === 'Contacts' ? 3 : 0,
+              borderBottomWidth: this.state.page === 'Contacts' ? 4 : 0,
               borderColor: 'white',
               height: 60,
               width: 100,
@@ -475,7 +478,7 @@ class Recipient extends React.Component {
           </TouchableOpacity>
           <TouchableOpacity
             style={{
-              borderBottomWidth: this.state.page === 'Users' ? 3 : 0,
+              borderBottomWidth: this.state.page === 'Users' ? 4 : 0,
               borderColor: 'white',
               height: 60,
               width: 100,
@@ -489,7 +492,7 @@ class Recipient extends React.Component {
           </TouchableOpacity>
           <TouchableOpacity
             style={{
-              borderBottomWidth: this.state.page === 'Other' ? 3 : 0,
+              borderBottomWidth: this.state.page === 'Other' ? 4 : 0,
               borderColor: 'white',
               height: 60,
               width: 100,
@@ -501,7 +504,7 @@ class Recipient extends React.Component {
               Other
             </Text>
           </TouchableOpacity>
-        </View>
+        </TestElement>
         <View style={{flex: 1, marginHorizontal: 10}}>
           {body}
         </View>

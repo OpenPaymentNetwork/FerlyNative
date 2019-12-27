@@ -160,6 +160,7 @@ export class EnterCode extends React.Component {
               alignSelf: 'center',
               borderColor: invalid ? 'red' : 'gray'}}>
               <TextInput
+                maxLength={7}
                 autoCapitalize = 'characters'
                 style={{
                   fontSize: 22,
@@ -172,6 +173,9 @@ export class EnterCode extends React.Component {
                     text += '-';
                   } else if (text.length === 4) {
                     text = text.substring(0, 3);
+                  } else if (text.length > 4) {
+                    text = text.replace('-', '');
+                    text = text.substring(0, 3) + '-' + text.substr(text.length - (text.length - 3));
                   }
                   this.setState({fieldValue: text, code: text});
                 }}
