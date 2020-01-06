@@ -108,23 +108,6 @@ export class ProfilePicturePicker extends React.Component {
     return this.showOptions();
   }
 
-  async showDetails () {
-    if (Platform.OS === 'ios') {
-      const buttons = [
-        {text: 'Ok', onPress: () => this.switch()}
-      ];
-      AsyncStorage.getItem('granted').then((result) => {
-        if (result !== 'true') {
-          Alert.alert('Access Images and Camera', 'Ferly will need access to images and camera for the use of your profile picture', buttons);
-        } else {
-          this.showOptions();
-        }
-      });
-    } else {
-      this.showOptions();
-    }
-  }
-
   render () {
     count++;
     if (count < 2) {
@@ -144,7 +127,7 @@ export class ProfilePicturePicker extends React.Component {
     }
 
     return (
-      <TouchableOpacity onPress={this.showDetails.bind(this)}>
+      <TouchableOpacity onPress={this.showOptions.bind(this)}>
         <Avatar {...avatarProps} />
         <View style={{position: 'absolute', bottom: 0, right: 0}}>
           <Icon name='camera' color={Theme.lightBlue} size={24} />

@@ -7,13 +7,17 @@
     "privacy": "public",
     "slug": "ferly",
     "ios": {
+      "infoPlist": {
+        "NSCameraUsageDescription": "Ferly will need access to your camera for the use of your profile picture.",
+        "NSPhotoLibraryUsageDescription": "Ferly will need access to your images for the use of your profile picture"
+      },
       "supportsTablet": true,
       "isTabletOnly": false,
       "bundleIdentifier": "com.ferly.ferly",
-      "buildNumber": "5"
+      "buildNumber": "6"
     },
     "android": {
-      "versionCode": 9,
+      "versionCode": 10,
       "package": "com.ferly.ferly",
       "config": {
         "googleMaps": {
