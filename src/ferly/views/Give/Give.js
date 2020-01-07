@@ -135,16 +135,31 @@ export class Give extends React.Component {
                 } else {
                   this.alertUser(customerFirstName, customerLastName, formatted, title, contact);
                 }
+              })
+              .catch(() => {
+                navigation.navigate('Home');
               });
           } else {
             this.alertUser(customerFirstName, customerLastName, formatted, title, contact);
           }
         } else {
           let invalid;
-          if (json.invalid['recipient_uid']) {
-            invalid = 'Invalid Recipient';
+          if (json.invalid) {
+            if (json.invalid.recipient_uid) {
+              invalid = 'Invalid Recipient';
+            } else if (json.invalid['amounts.0']) {
+              invalid = json.invalid['amounts.0'];
+            } else if (json.invalid.amount) {
+              invalid = json.invalid['amount'];
+            } else {
+              invalid = 'Invalid Input';
+            }
+          } else if (json.error) {
+            invalid = json.error;
+          } else {
+            invalid = 'Unknown Error';
           }
-          const error = (json.invalid['amounts.0'] || json.invalid['amount']) || invalid;
+          const error = invalid;
           this.setState({error: error, amount: 0, submitting: false});
         }
       })

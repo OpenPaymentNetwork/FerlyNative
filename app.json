@@ -14,10 +14,10 @@
       "supportsTablet": true,
       "isTabletOnly": false,
       "bundleIdentifier": "com.ferly.ferly",
-      "buildNumber": "6"
+      "buildNumber": "8"
     },
     "android": {
-      "versionCode": 10,
+      "versionCode": 11,
       "package": "com.ferly.ferly",
       "config": {
         "googleMaps": {
