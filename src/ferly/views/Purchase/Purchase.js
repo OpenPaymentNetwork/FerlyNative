@@ -100,7 +100,7 @@ export class Purchase extends React.Component {
         flex: 1,
         justifyContent: 'space-between',
         backgroundColor: 'white'}}>
-        <ScrollView style={styles.contentContainer}>
+        <ScrollView keyboardShouldPersistTaps='handled' style={styles.contentContainer}>
           <View style={styles.topRow}>
             <View style={{flexShrink: 1, paddingVertical: 14}}>
               <Text style={styles.title}>{title}</Text>

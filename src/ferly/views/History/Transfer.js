@@ -457,7 +457,7 @@ export class Transfer extends React.Component {
       );
     }
     return (
-      <ScrollView style={{backgroundColor: 'white'}}>
+      <ScrollView keyboardShouldPersistTaps='handled' style={{backgroundColor: 'white'}}>
         <View style={{backgroundColor: Theme.darkBlue}} >
           <View style={{
             alignItems: 'center',

@@ -78,7 +78,7 @@ export class Market extends React.Component {
     } else {
       const display = searchResults || designs;
       body = (
-        <ScrollView style={{flex: 1}}>
+        <ScrollView keyboardShouldPersistTaps='handled' style={{flex: 1}}>
           {
             display.map((design) => {
               return (

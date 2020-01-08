@@ -24,7 +24,7 @@ class DrawerContent extends React.Component {
     const {navigation, firstName, lastName, profileImage} = this.props;
     const filteredItems = items.filter(item => item.key !== 'Profile');
     return (
-      <ScrollView>
+      <ScrollView keyboardShouldPersistTaps='handled'>
         <SafeAreaView
           style={styles.container}
           forceInset={{ top: 'always', horizontal: 'never' }}>

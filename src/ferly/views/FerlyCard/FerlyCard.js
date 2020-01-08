@@ -281,7 +281,7 @@ export class FerlyCard extends React.Component {
             </Text>
           </ImageBackground>
         </View>
-        <ScrollView style={styles.actionsContainer}>
+        <ScrollView keyboardShouldPersistTaps='handled' style={styles.actionsContainer}>
           <View style={styles.actionRow}>
             <Ionicons
               name={abilityValue ? 'md-unlock' : 'md-lock'}

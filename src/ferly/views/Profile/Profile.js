@@ -214,7 +214,9 @@ class Profile extends React.Component {
             behavior="padding"
             keyboardVerticalOffset={80}
             style={{flex: 1}}>
-            <ScrollView contentContainerStyle={styles.scrollContainer}>
+            <ScrollView
+              keyboardShouldPersistTaps='handled'
+              contentContainerStyle={styles.scrollContainer}>
               <View style={{alignItems: 'center', width: '100%'}}>
                 <ProfilePicturePicker
                   onImageChange={this.onImageChange.bind(this)}

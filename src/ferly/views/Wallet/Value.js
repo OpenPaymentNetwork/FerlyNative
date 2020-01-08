@@ -75,7 +75,9 @@ export class Value extends React.Component {
     });
 
     return (
-      <ScrollView style={{flex: 1, padding: 20, backgroundColor: 'white'}}>
+      <ScrollView
+        keyboardShouldPersistTaps='handled'
+        style={{flex: 1, padding: 20, backgroundColor: 'white'}}>
         <View style={styles.headerContainer}>
           <Text style={styles.amount}>${amount}</Text>
           <Text style={{fontSize: 22, marginBottom: 50, color: Theme.lightBlue}}>{title}</Text>

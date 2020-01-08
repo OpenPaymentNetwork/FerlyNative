@@ -56,12 +56,10 @@ export class RecoveryChannel extends React.Component {
   }
 
   validate (json) {
-    console.log('json', json);
     if (json.invalid) {
       this.setState({invalid: json.invalid, submitting: false});
       return false;
     } else if (json.error) {
-      console.log('here');
       this.setState({invalid: {'login': 'Error occured please try again'}, submitting: false});
       return false;
     }

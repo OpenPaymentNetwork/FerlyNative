@@ -160,6 +160,7 @@ export class EnterCode extends React.Component {
               alignSelf: 'center',
               borderColor: invalid ? 'red' : 'gray'}}>
               <TextInput
+                keyboardShouldPersistTaps = 'handled'
                 maxLength={7}
                 autoCapitalize = 'characters'
                 style={{

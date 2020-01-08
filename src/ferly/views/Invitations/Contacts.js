@@ -203,7 +203,7 @@ export class Contacts extends React.Component {
         contactsList = <Text>No contacts match your search.</Text>;
       } else {
         contactsList = (
-          <ScrollView>
+          <ScrollView keyboardShouldPersistTaps='handled'>
             {searchResults.map((contact) => this.renderContact(contact))}
           </ScrollView>
         );
@@ -211,6 +211,7 @@ export class Contacts extends React.Component {
     } else {
       contactsList = (
         <FlatList
+          keyboardShouldPersistTaps='handled'
           onEndReached={this.loadMore()}
           onEndReachedThreshold={10}
           keyExtractor={(contact) => contact.id}

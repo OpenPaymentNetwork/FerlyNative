@@ -282,6 +282,7 @@ export class Wallet extends React.Component {
     } else {
       return (
         <ScrollView
+          keyboardShouldPersistTaps='handled'
           style={{marginTop: Platform.OS === 'ios' ? 20 : 240}}
           refreshControl={
             <RefreshControl

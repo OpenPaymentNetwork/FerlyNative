@@ -58,6 +58,7 @@ export class History extends React.Component {
     return (
       <View>
         <FlatList
+          keyboardShouldPersistTaps='handled'
           onRefresh={() => this.props.apiRefresh(urls.history)}
           refreshing={false}
           ListEmptyComponent={<Text>You have no history</Text>}

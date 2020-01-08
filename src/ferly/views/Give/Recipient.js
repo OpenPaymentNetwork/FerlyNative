@@ -248,7 +248,7 @@ class Recipient extends React.Component {
     const {navigation} = this.props;
     const design = navigation.state.params;
     return (
-      <ScrollView style={{flex: 1}}>
+      <ScrollView keyboardShouldPersistTaps='handled' style={{flex: 1}}>
         {
           customers.map((customer) => {
             const firstName = customer.first_name;
@@ -401,7 +401,7 @@ class Recipient extends React.Component {
           contactsList = <Text>No contacts match your search.</Text>;
         } else {
           contactsList = (
-            <ScrollView>
+            <ScrollView keyboardShouldPersistTaps='handled'>
               {searchContact.map((contact) => this.renderContact(contact))}
             </ScrollView>
           );
@@ -409,6 +409,7 @@ class Recipient extends React.Component {
       } else {
         contactsList = (
           <FlatList
+            keyboardShouldPersistTaps='handled'
             onEndReached={this.loadMore()}
             onEndReachedThreshold={10}
             keyExtractor={(contact) => contact.id}

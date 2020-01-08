@@ -78,6 +78,16 @@ export class Cart extends React.Component {
       this.setState({submitting: false});
       return false;
     } else if (!json.result) {
+      if (json.error) {
+        const text = {'text': json.error};
+        post('log-info', this.props.deviceToken, text)
+          .then((response) => response.json())
+          .then((responseJson) => {
+          })
+          .catch(() => {
+            Alert.alert('Error please check internet connection!');
+          });
+      }
       Alert.alert('Error', 'There was a problem processing your credit card.');
       this.setState({submitting: false});
       return false;
@@ -90,8 +100,12 @@ export class Cart extends React.Component {
     const {selectedSource} = this.state;
     if (selectedSource === 'new') {
       if (this.webview) {
-        this.webview.injectJavaScript(
-          "document.getElementById('submit-button').click()");
+        try {
+          this.webview.injectJavaScript(
+            "document.getElementById('submit-button').click()");
+        } catch (error) {
+          Alert.alert('Error', 'Failed to add card.');
+        }
       }
     } else {
       this.onSuccess(selectedSource);
@@ -203,7 +217,9 @@ export class Cart extends React.Component {
           style={{flex: 1}}
           behavior="padding"
           keyboardVerticalOffset={100}>
-          <ScrollView contentContainerStyle={{flexGrow: 1}}>
+          <ScrollView
+            keyboardShouldPersistTaps='handled'
+            contentContainerStyle={{flexGrow: 1}}>
             {existingSources}
             {newCard}
           </ScrollView>

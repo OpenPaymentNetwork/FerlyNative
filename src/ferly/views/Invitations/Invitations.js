@@ -117,7 +117,9 @@ export class Invitations extends React.Component {
 
     return (
       <View style={{flex: 1, backgroundColor: 'white'}}>
-        <ScrollView contentContainerStyle={{paddingVertical: 15}}>
+        <ScrollView
+          keyboardShouldPersistTaps='handled'
+          contentContainerStyle={{paddingVertical: 15}}>
           <Text style={styles.headerText}>Send</Text>
           <TouchableOpacity
             style={styles.button}
