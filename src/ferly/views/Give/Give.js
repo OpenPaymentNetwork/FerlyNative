@@ -5,7 +5,7 @@ import React from 'react';
 import SimpleCurrencyInput from 'ferly/components/SimpleCurrencyInput';
 import Spinner from 'ferly/components/Spinner';
 import Theme from 'ferly/utils/theme';
-import {apiExpire, apiRequire} from 'ferly/store/api';
+import {apiExpire, apiRequire, apiRefresh} from 'ferly/store/api';
 import {connect} from 'react-redux';
 import {post, urls} from 'ferly/utils/fetch';
 import {StackActions} from 'react-navigation';
@@ -33,7 +33,7 @@ export class Give extends React.Component {
   }
 
   componentDidMount () {
-    this.props.apiRequire(urls.profile);
+    this.props.dispatch(apiRequire(urls.profile));
   }
 
   alertUser (customerFirstName, customerLastName, formatted, title, contact) {
@@ -57,7 +57,7 @@ export class Give extends React.Component {
   }
 
   send () {
-    const {navigation, apiExpire} = this.props;
+    const {navigation} = this.props;
     const params = navigation.state.params;
     const {design, customer, contact} = params;
     let customerFirstName = '';
@@ -113,8 +113,14 @@ export class Give extends React.Component {
           }
         }
         if (!(json.error || json.invalid)) {
-          apiExpire(urls.history);
-          apiExpire(urls.profile);
+          const text = {'text': 'Successful send'};
+          post('log-info', this.props.deviceToken, text)
+            .then((response) => response.json())
+            .then((responseJson) => {
+            })
+            .catch(() => {
+              console.log('log error');
+            });
           const resetAction = StackActions.reset({
             index: 0,
             actions: [StackActions.push({routeName: 'Home'})]
@@ -139,10 +145,21 @@ export class Give extends React.Component {
               .catch(() => {
                 navigation.navigate('Home');
               });
+
+            this.props.dispatch(apiExpire(urls.history));
+            this.props.dispatch(apiExpire(urls.profile));
           } else {
             this.alertUser(customerFirstName, customerLastName, formatted, title, contact);
           }
         } else {
+          const text = {'text': 'Unsuccessful send'};
+          post('log-info', this.props.deviceToken, text)
+            .then((response) => response.json())
+            .then((responseJson) => {
+            })
+            .catch(() => {
+              console.log('log error');
+            });
           let invalid;
           if (json.invalid) {
             if (json.invalid.recipient_uid) {
@@ -154,7 +171,7 @@ export class Give extends React.Component {
             } else {
               invalid = 'Invalid Input';
             }
-          } else if (json.error) {
+          } else if (json.error && (typeof (json.error) === 'string')) {
             invalid = json.error;
           } else {
             invalid = 'Unknown Error';
@@ -164,7 +181,15 @@ export class Give extends React.Component {
         }
       })
       .catch(() => {
-        Alert.alert('Error trying to send!');
+        const text = {'text': 'Error in send'};
+        post('log-info', this.props.deviceToken, text)
+          .then((response) => response.json())
+          .then((responseJson) => {
+          })
+          .catch(() => {
+            console.log('log error');
+          });
+        this.props.dispatch(apiRefresh(urls.profile));
         navigation.navigate('Home');
       });
   }
@@ -352,11 +377,10 @@ const styles = StyleSheet.create({
 });
 
 Give.propTypes = {
+  dispatch: PropTypes.func.isRequired,
   email: PropTypes.string,
   phone: PropTypes.string,
   amounts: PropTypes.array,
-  apiExpire: PropTypes.func.isRequired,
-  apiRequire: PropTypes.func.isRequired,
   navigation: PropTypes.object.isRequired,
   deviceToken: PropTypes.string.isRequired
 };
@@ -386,9 +410,4 @@ function mapStateToProps (state) {
   };
 }
 
-const mapDispatchToProps = {
-  apiExpire,
-  apiRequire
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Give);
+export default connect(mapStateToProps)(Give);

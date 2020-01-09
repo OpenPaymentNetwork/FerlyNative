@@ -55,7 +55,7 @@ export const urls = {
   profile: createUrl('profile')
 };
 
-export const retryFetch = async (url, deviceToken, tries = 5, delay = 2000) => {
+export const retryFetch = async (url, deviceToken, tries = 6, delay = 2100) => {
   if (__DEV__) tries = 1;
   try {
     const response = await fetch(url, {
