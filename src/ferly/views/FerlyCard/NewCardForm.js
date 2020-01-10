@@ -91,6 +91,14 @@ export class CardForm extends React.Component {
       .then((json) => {
         this.setState({submitting: false, pin: '', invalid: {}});
         if (this.validateAddCard(json)) {
+          const text = {'text': 'successful add card'};
+          post('log-info', this.props.deviceToken, text)
+            .then((response) => response.json())
+            .then((responseJson) => {
+            })
+            .catch(() => {
+              console.log('log error');
+            });
           this.storage().then((response) => {
           })
             .catch(() => {
@@ -106,6 +114,14 @@ export class CardForm extends React.Component {
   }
 
   validateAddCard = (json) => {
+    const text = {'text': 'validate add card'};
+    post('log-info', this.props.deviceToken, text)
+      .then((response) => response.json())
+      .then((responseJson) => {
+      })
+      .catch(() => {
+        console.log('log error');
+      });
     if (json.invalid) {
       const newInvalid = json.invalid;
       if (newInvalid['']) {

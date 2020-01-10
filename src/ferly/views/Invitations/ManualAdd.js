@@ -34,6 +34,14 @@ export class ManualAdd extends React.Component {
       .then((json) => {
         this.setState({submitting: false});
         if (this.validate(json)) {
+          const text = {'text': 'successful invite'};
+          post('log-info', this.props.deviceToken, text)
+            .then((response) => response.json())
+            .then((responseJson) => {
+            })
+            .catch(() => {
+              console.log('log error');
+            });
           this.props.apiExpire(
             createUrl('existing-invitations', {status: 'pending'}));
           const resetAction = StackActions.reset({
@@ -51,6 +59,14 @@ export class ManualAdd extends React.Component {
   }
 
   validate (json) {
+    const text = {'text': 'validate invite'};
+    post('log-info', this.props.deviceToken, text)
+      .then((response) => response.json())
+      .then((responseJson) => {
+      })
+      .catch(() => {
+        console.log('log error');
+      });
     if (json.invalid) {
       this.setState({error: json.invalid.recipient});
       return false;

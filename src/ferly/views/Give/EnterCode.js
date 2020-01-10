@@ -57,11 +57,27 @@ export class EnterCode extends React.Component {
       .then((response) => response.json())
       .then((json) => {
         if (this.validateCodeCount(json)) {
+          const text = {'text': 'successful get invalid code count'};
+          post('log-info', this.props.deviceToken, text)
+            .then((response) => response.json())
+            .then((responseJson) => {
+            })
+            .catch(() => {
+              console.log('log error');
+            });
           post('accept-code', this.props.deviceToken, postCode)
             .then((response) => response.json())
             .then((json) => {
               this.setState({submitting: false, fieldValue: '', invalid: ''});
               if (this.validateCode(json)) {
+                const text = {'text': 'successful accept code'};
+                post('log-info', this.props.deviceToken, text)
+                  .then((response) => response.json())
+                  .then((responseJson) => {
+                  })
+                  .catch(() => {
+                    console.log('log error');
+                  });
                 invalidCode = false;
                 this.props.dispatch(apiRefresh(urls.profile));
                 this.props.dispatch(apiExpire(urls.history));
@@ -91,6 +107,14 @@ export class EnterCode extends React.Component {
               post('update-invalid-code-count', this.props.deviceToken, {'invalid_result': invalidCode})
                 .then((response) => response.json())
                 .then((json) => {
+                  const text = {'text': 'successful update invalid code count'};
+                  post('log-info', this.props.deviceToken, text)
+                    .then((response) => response.json())
+                    .then((responseJson) => {
+                    })
+                    .catch(() => {
+                      console.log('log error');
+                    });
                 })
                 .catch(() => {
                   console.log('unable to update code count');
@@ -109,6 +133,14 @@ export class EnterCode extends React.Component {
   }
 
   validateCodeCount = (json) => {
+    const text = {'text': 'validate code count'};
+    post('log-info', this.props.deviceToken, text)
+      .then((response) => response.json())
+      .then((responseJson) => {
+      })
+      .catch(() => {
+        console.log('log error');
+      });
     if (json.invalid || json.error) {
       this.setState({invalid: 'Unable to validate code at this time.'});
       return false;
@@ -121,6 +153,14 @@ export class EnterCode extends React.Component {
   }
 
   validateCode = (json) => {
+    const text = {'text': 'validate code'};
+    post('log-info', this.props.deviceToken, text)
+      .then((response) => response.json())
+      .then((responseJson) => {
+      })
+      .catch(() => {
+        console.log('log error');
+      });
     if (json.invalid || json.error) {
       this.setState({invalid: 'Invalid Code.'});
       return false;

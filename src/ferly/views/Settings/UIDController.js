@@ -60,6 +60,14 @@ export class UIDController extends React.Component {
       .then((response) => response.json())
       .then((json) => {
         if (this.validate(json)) {
+          const text = {'text': 'successful add uid'};
+          post('log-info', this.props.deviceToken, text)
+            .then((response) => response.json())
+            .then((responseJson) => {
+            })
+            .catch(() => {
+              console.log('log error');
+            });
           const attemptId = json.attempt_id;
           const codeLength = json.code_length;
           const {secret} = json;
@@ -84,6 +92,14 @@ export class UIDController extends React.Component {
   }
 
   validate (json) {
+    const text = {'text': 'validate add and comfirm uid'};
+    post('log-info', this.props.deviceToken, text)
+      .then((response) => response.json())
+      .then((responseJson) => {
+      })
+      .catch(() => {
+        console.log('log error');
+      });
     if (json.invalid) {
       this.setState({
         invalid: json.invalid[Object.keys(json.invalid)[0]],
@@ -132,6 +148,14 @@ export class UIDController extends React.Component {
       .then((response) => response.json())
       .then((json) => {
         if (this.validate(json)) {
+          const text = {'text': 'successful confirm uid'};
+          post('log-info', this.props.deviceToken, text)
+            .then((response) => response.json())
+            .then((responseJson) => {
+            })
+            .catch(() => {
+              console.log('log error');
+            });
           let title;
           if (type === 'email') {
             title = 'Email Address';

@@ -140,6 +140,8 @@ export class Give extends React.Component {
                     `You gifted ${formatted} ${title} to ${customerName}.`);
                 } else {
                   this.alertUser(customerFirstName, customerLastName, formatted, title, contact);
+                  this.props.dispatch(apiExpire(urls.history));
+                  this.props.dispatch(apiExpire(urls.profile));
                 }
               })
               .catch(() => {
@@ -150,6 +152,8 @@ export class Give extends React.Component {
             this.props.dispatch(apiExpire(urls.profile));
           } else {
             this.alertUser(customerFirstName, customerLastName, formatted, title, contact);
+            this.props.dispatch(apiExpire(urls.history));
+            this.props.dispatch(apiExpire(urls.profile));
           }
         } else {
           const text = {'text': 'Unsuccessful send'};

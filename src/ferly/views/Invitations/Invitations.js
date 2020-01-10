@@ -38,6 +38,14 @@ export class Invitations extends React.Component {
     post('delete-invitation', this.props.deviceToken, {invite_id: invite.id.toString()})
       .then((response) => response.json())
       .then((json) => {
+        const text = {'text': 'successful delete invitation'};
+        post('log-info', this.props.deviceToken, text)
+          .then((response) => response.json())
+          .then((responseJson) => {
+          })
+          .catch(() => {
+            console.log('log error');
+          });
         if (Object.keys(json).length === 0) {
           this.props.apiExpire(this.props.invitationsUrl);
           const resetAction = StackActions.reset({

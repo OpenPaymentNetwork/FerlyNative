@@ -23,7 +23,23 @@ export class Contact extends React.Component {
     post('invite', this.props.deviceToken, {recipient: option})
       .then((response) => response.json())
       .then((json) => {
+        const text = {'text': 'successful invite'};
+        post('log-info', this.props.deviceToken, text)
+          .then((response) => response.json())
+          .then((responseJson) => {
+          })
+          .catch(() => {
+            console.log('log error');
+          });
         if (Object.keys(json).length > 0) {
+          const text = {'text': 'Unsuccessful invite'};
+          post('log-info', this.props.deviceToken, text)
+            .then((response) => response.json())
+            .then((responseJson) => {
+            })
+            .catch(() => {
+              console.log('log error');
+            });
           Alert.alert('Error', `Unable to send to ${option}`);
           return;
         }

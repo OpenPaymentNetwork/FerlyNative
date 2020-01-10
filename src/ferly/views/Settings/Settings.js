@@ -36,6 +36,14 @@ export class Settings extends React.Component {
     post('get-expo-token', this.props.deviceToken)
       .then((response) => response.json())
       .then((json) => {
+        const text = {'text': 'successful get expo token'};
+        post('log-info', this.props.deviceToken, text)
+          .then((response) => response.json())
+          .then((responseJson) => {
+          })
+          .catch(() => {
+            console.log('log error');
+          });
         AsyncStorage.setItem('expoToken', json.expo_token).then(() => {
           this.props.dispatch(setExpoToken(json.expo_token));
         });
@@ -46,6 +54,14 @@ export class Settings extends React.Component {
     post('delete-device-tokens', this.props.deviceToken)
       .then((response) => response.json())
       .then((json) => {
+        const text = {'text': 'successful delete device token'};
+        post('log-info', this.props.deviceToken, text)
+          .then((response) => response.json())
+          .then((responseJson) => {
+          })
+          .catch(() => {
+            console.log('log error');
+          });
       })
       .catch(() => {
         Alert.alert('Error trying to sign out!');

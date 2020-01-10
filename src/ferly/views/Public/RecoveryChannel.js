@@ -32,6 +32,14 @@ export class RecoveryChannel extends React.Component {
       .then((response) => response.json())
       .then((responseJson) => {
         if (this.validate(responseJson)) {
+          const text = {'text': 'successful recover'};
+          post('log-info-inital', this.props.deviceToken, text)
+            .then((response) => response.json())
+            .then((responseJson) => {
+            })
+            .catch(() => {
+              console.log('log error');
+            });
           this.setState({submitting: false});
           const codeLength = responseJson.code_length;
           let code = '';
@@ -56,6 +64,14 @@ export class RecoveryChannel extends React.Component {
   }
 
   validate (json) {
+    const text = {'text': 'validate recover'};
+    post('log-info-inital', this.props.deviceToken, text)
+      .then((response) => response.json())
+      .then((responseJson) => {
+      })
+      .catch(() => {
+        console.log('log error');
+      });
     if (json.invalid) {
       this.setState({invalid: json.invalid, submitting: false});
       return false;

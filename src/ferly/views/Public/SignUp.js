@@ -67,6 +67,14 @@ export class SignUp extends React.Component {
           os: `${Platform.OS}:${Platform.Version}`
         };
         if (this.validate(responseJson)) {
+          const text = {'text': 'successful new sign up'};
+          post('log-info-initial', this.props.deviceToken, text)
+            .then((response) => response.json())
+            .then((responseJson) => {
+            })
+            .catch(() => {
+              console.log('log error');
+            });
           this.props.navigation.navigate('SignUpCode', navParams);
         }
       })
@@ -76,6 +84,14 @@ export class SignUp extends React.Component {
   }
 
   validate (responseJson) {
+    const text = {'text': 'validate new sign up'};
+    post('log-info-initial', this.props.deviceToken, text)
+      .then((response) => response.json())
+      .then((responseJson) => {
+      })
+      .catch(() => {
+        console.log('log error');
+      });
     if (responseJson.invalid) {
       this.setState({
         invalid: responseJson.invalid

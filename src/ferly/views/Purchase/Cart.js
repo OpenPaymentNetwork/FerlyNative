@@ -53,6 +53,14 @@ export class Cart extends React.Component {
       .then((response) => response.json())
       .then((responseJson) => {
         if (this.validate(responseJson)) {
+          const text = {'text': 'successful purchase'};
+          post('log-info', this.props.deviceToken, text)
+            .then((response) => response.json())
+            .then((responseJson) => {
+            })
+            .catch(() => {
+              console.log('log error');
+            });
           this.props.apiExpire(urls.history);
           this.props.apiExpire(urls.profile);
           const resetAction = StackActions.reset({
@@ -73,6 +81,14 @@ export class Cart extends React.Component {
   }
 
   validate (json) {
+    const text = {'text': 'validate purchase'};
+    post('log-info', this.props.deviceToken, text)
+      .then((response) => response.json())
+      .then((responseJson) => {
+      })
+      .catch(() => {
+        console.log('log error');
+      });
     if (json.invalid) {
       Alert.alert('Error', json.invalid[Object.keys(json.invalid)[0]]);
       this.setState({submitting: false});

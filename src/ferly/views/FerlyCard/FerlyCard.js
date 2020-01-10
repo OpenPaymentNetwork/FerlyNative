@@ -116,6 +116,14 @@ export class FerlyCard extends React.Component {
     post('delete-card', this.props.deviceToken, {card_id: cardId})
       .then((response) => response.json())
       .then((json) => {
+        const text = {'text': 'successful delete card'};
+        post('log-info', this.props.deviceToken, text)
+          .then((response) => response.json())
+          .then((responseJson) => {
+          })
+          .catch(() => {
+            console.log('log error');
+          });
         this.props.dispatch(apiRefresh(urls.profile));
         this.setState({passed: ''});
         if (this.state.passed === '') {
@@ -138,6 +146,14 @@ export class FerlyCard extends React.Component {
                     post('request-card', this.props.deviceToken, this.modifyAddress(address))
                       .then((response) => response.json())
                       .then((json) => {
+                        const text = {'text': 'successful yes request card'};
+                        post('log-info', this.props.deviceToken, text)
+                          .then((response) => response.json())
+                          .then((responseJson) => {
+                          })
+                          .catch(() => {
+                            console.log('log error');
+                          });
                         this.setState({passed: 'true'});
                       })
                       .catch(() => {
@@ -152,6 +168,14 @@ export class FerlyCard extends React.Component {
                     post('request-card', this.props.deviceToken, this.modifyAddress(address))
                       .then((response) => response.json())
                       .then((json) => {
+                        const text = {'text': 'successful no request card'};
+                        post('log-info', this.props.deviceToken, text)
+                          .then((response) => response.json())
+                          .then((responseJson) => {
+                          })
+                          .catch(() => {
+                            console.log('log error');
+                          });
                         this.setState({passed: ''});
                       })
                       .catch(() => {
@@ -184,6 +208,14 @@ export class FerlyCard extends React.Component {
       .then((response) => response.json())
       .then((json) => {
         if (this.validateNewPin(json)) {
+          const text = {'text': 'successful change pin'};
+          post('log-info', this.props.deviceToken, text)
+            .then((response) => response.json())
+            .then((responseJson) => {
+            })
+            .catch(() => {
+              console.log('log error');
+            });
           this.setState({
             showNewPinModal: false,
             submitting: false,
@@ -203,6 +235,14 @@ export class FerlyCard extends React.Component {
   }
 
   validateNewPin = (json) => {
+    const text = {'text': 'validate change pin'};
+    post('log-info', this.props.deviceToken, text)
+      .then((response) => response.json())
+      .then((responseJson) => {
+      })
+      .catch(() => {
+        console.log('log error');
+      });
     if (json.invalid) {
       this.setState({invalid: json.invalid, submitting: false});
       return false;

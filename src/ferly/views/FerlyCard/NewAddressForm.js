@@ -64,6 +64,14 @@ export class NewAddressForm extends React.Component {
           this.props.dispatch(setHaveCard(false));
           this.setState({submitting: false});
           if (this.validateSendCard(json)) {
+            const text = {'text': 'Successful request card'};
+            post('log-info', this.props.deviceToken, text)
+              .then((response) => response.json())
+              .then((responseJson) => {
+              })
+              .catch(() => {
+                console.log('log error');
+              });
             this.props.onPass();
             const alertText = 'Your card will arrive in 7 to 10 business days.';
             Alert.alert('Done!', alertText);
@@ -80,6 +88,14 @@ export class NewAddressForm extends React.Component {
     }
 
     validateSendCard (responseJson) {
+      const text = {'text': 'validate send card'};
+      post('log-info', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch(() => {
+          console.log('log error');
+        });
       if (responseJson.invalid) {
         this.setState({
           invalid: responseJson.invalid

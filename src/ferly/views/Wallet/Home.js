@@ -79,12 +79,28 @@ export class Wallet extends React.Component {
       .then((response) => response.json())
       .then((json) => {
         if (!json.expo_token && expoToken) {
+          const text = {'text': 'successful get expo token'};
+          post('log-info', this.props.deviceToken, text)
+            .then((response) => response.json())
+            .then((responseJson) => {
+            })
+            .catch(() => {
+              console.log('log error');
+            });
           const setParams = {
             expo_token: expoToken
           };
           post('set-expo-token', this.props.deviceToken, setParams)
             .then((response) => response.json())
             .then((json) => {
+              const text = {'text': 'successful set expo token'};
+              post('log-info', this.props.deviceToken, text)
+                .then((response) => response.json())
+                .then((responseJson) => {
+                })
+                .catch(() => {
+                  console.log('log error');
+                });
             })
             .catch(() => {
               Alert.alert('Error trying to set token!');

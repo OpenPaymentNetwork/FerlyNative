@@ -63,6 +63,14 @@ export class AddressForm extends React.Component {
         .then((json) => {
           this.setState({submitting: false});
           if (this.validateSendCard(json)) {
+            const text = {'text': 'successful request card'};
+            post('log-info', this.props.deviceToken, text)
+              .then((response) => response.json())
+              .then((responseJson) => {
+              })
+              .catch(() => {
+                console.log('log error');
+              });
             navigation.navigate('SignUpWaiting');
             const alertText = 'Your card will arrive in 7 to 10 business days.';
             Alert.alert('Done!', alertText);
@@ -79,6 +87,14 @@ export class AddressForm extends React.Component {
     }
 
     validateSendCard (responseJson) {
+      const text = {'text': 'validation request card'};
+      post('log-info', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch(() => {
+          console.log('log error');
+        });
       if (responseJson.invalid) {
         this.setState({
           invalid: responseJson.invalid

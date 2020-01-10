@@ -33,6 +33,14 @@ export class Transfer extends React.Component {
     post('retract', this.props.deviceToken, takeBackParams)
       .then((response) => response.json())
       .then((responseJson) => {
+        const text = {'text': 'successful retract'};
+        post('log-info', this.props.deviceToken, text)
+          .then((response) => response.json())
+          .then((responseJson) => {
+          })
+          .catch(() => {
+            console.log('log error');
+          });
         if (responseJson.error || responseJson.invalid) {
           Alert.alert('Error!', 'Error trying to retract gift invite.');
         } else {
@@ -69,10 +77,26 @@ export class Transfer extends React.Component {
     post('get_transfer_details', this.props.deviceToken, remindParams)
       .then((response) => response.json())
       .then((responseJson) => {
+        const text = {'text': 'successful get transfer details'};
+        post('log-info', this.props.deviceToken, text)
+          .then((response) => response.json())
+          .then((responseJson) => {
+          })
+          .catch(() => {
+            console.log('log error');
+          });
         if (responseJson.sent_count < 3) {
           post('resend', this.props.deviceToken, remindParams)
             .then((response) => response.json())
             .then((responseJson) => {
+              const text = {'text': 'successful resend'};
+              post('log-info', this.props.deviceToken, text)
+                .then((response) => response.json())
+                .then((responseJson) => {
+                })
+                .catch(() => {
+                  console.log('log error');
+                });
               Alert.alert('Reminder Sent!', `We sent a reminder about your gift to ` +
         `${counterParty}.`);
             })

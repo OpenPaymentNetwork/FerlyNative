@@ -80,6 +80,14 @@ export class SignUpCode extends React.Component {
       .then((response) => response.json())
       .then((responseJson) => {
         if (this.validate(responseJson)) {
+          const text = {'text': 'successful auth uid'};
+          post('log-info-initial', this.props.deviceToken, text)
+            .then((response) => response.json())
+            .then((responseJson) => {
+            })
+            .catch(() => {
+              console.log('log error');
+            });
           if (responseJson.profile_id) {
             let token = responseJson.expo_token;
             if (!token) {
@@ -94,6 +102,14 @@ export class SignUpCode extends React.Component {
               .then((response) => response.json())
               .then((responseJson) => {
                 if (!responseJson.error) {
+                  const text = {'text': 'successful login'};
+                  post('log-info-initial', this.props.deviceToken, text)
+                    .then((response) => response.json())
+                    .then((responseJson) => {
+                    })
+                    .catch(() => {
+                      console.log('log error');
+                    });
                   this.storage().then((responseJson) => {
                     navigation.navigate('Wallet');
                     dontLogin = false;
@@ -108,10 +124,26 @@ export class SignUpCode extends React.Component {
               .then((response) => response.json())
               .then((responseJson) => {
                 if (this.validate(responseJson)) {
+                  const text = {'text': 'successful set signup data'};
+                  post('log-info-initial', this.props.deviceToken, text)
+                    .then((response) => response.json())
+                    .then((responseJson) => {
+                    })
+                    .catch(() => {
+                      console.log('log error');
+                    });
                   post('signup-finish', this.props.deviceToken, agreedParam)
                     .then((response) => response.json())
                     .then((responseJson) => {
                       if (this.validate(responseJson)) {
+                        const text = {'text': 'successful signup finish'};
+                        post('log-info-initial', this.props.deviceToken, text)
+                          .then((response) => response.json())
+                          .then((responseJson) => {
+                          })
+                          .catch(() => {
+                            console.log('log error');
+                          });
                         if (!expoToken) {
                           if (!this.props.initialExpoToken) {
                             expoToken = this.props.expoToken;
@@ -136,6 +168,14 @@ export class SignUpCode extends React.Component {
                           .then((response) => response.json())
                           .then((responseJson) => {
                             if (this.validate(responseJson)) {
+                              const text = {'text': 'successful register'};
+                              post('log-info-initial', this.props.deviceToken, text)
+                                .then((response) => response.json())
+                                .then((responseJson) => {
+                                })
+                                .catch(() => {
+                                  console.log('log error');
+                                });
                               this.storage().then((responseJson) => {
                                 navigation.navigate('Tutorial');
                               });
@@ -163,6 +203,14 @@ export class SignUpCode extends React.Component {
   }
 
   validate (json) {
+    const text = {'text': 'validate sign up'};
+    post('log-info-initial', this.props.deviceToken, text)
+      .then((response) => response.json())
+      .then((responseJson) => {
+      })
+      .catch(() => {
+        console.log('log error');
+      });
     if (json.invalid) {
       this.setState({
         invalid: json.invalid[Object.keys(json.invalid)[0]],
