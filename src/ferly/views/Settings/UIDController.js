@@ -120,9 +120,10 @@ export class UIDController extends React.Component {
       });
       return false;
     } else if (json.error === 'recaptcha_required') {
-      this.setState({showRecaptcha: true, resubmit: true});
+      this.setState({showRecaptcha: true, resubmit: true, submitting: false});
       return false;
     } else if (json.error) {
+      this.setState({submitting: false});
       Alert.alert(
         'Error', 'Please try again with a new code.');
       return false;

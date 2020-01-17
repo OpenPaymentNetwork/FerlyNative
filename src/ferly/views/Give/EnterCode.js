@@ -212,9 +212,9 @@ export class EnterCode extends React.Component {
                 onChangeText={(text) => {
                   if (text.length === 3) {
                     text += '-';
-                  } else if (text.length === 4) {
+                  } else if (text.length === 4 && text[3] === '-') {
                     text = text.substring(0, 3);
-                  } else if (text.length > 4) {
+                  } else if (text.length > 3) {
                     text = text.replace('-', '');
                     text = text.substring(0, 3) + '-' + text.substr(text.length - (text.length - 3));
                   }

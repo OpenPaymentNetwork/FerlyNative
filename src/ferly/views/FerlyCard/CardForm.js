@@ -1,6 +1,7 @@
 import React from 'react';
 import PrimaryButton from 'ferly/components/PrimaryButton';
 import Theme from 'ferly/utils/theme';
+import Spinner from 'ferly/components/Spinner';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {apiRefresh} from 'ferly/store/api';
@@ -133,6 +134,10 @@ export class CardForm extends React.Component {
     const {pin, pan, invalid, submitting} = this.state;
     const {pin: pinError, pan: panError} = invalid;
 
+    if (submitting) {
+      return <Spinner />;
+    }
+
     const instructions = 'Enter the 16-digit number found on the back of ' +
       'your Ferly Card and set a 4-digit PIN you\'ll remember later.';
     return (
@@ -142,31 +147,35 @@ export class CardForm extends React.Component {
             <Text style={styles.title}>Add Card Information</Text>
             <Text style={styles.instructions}>{instructions}</Text>
           </View>
-          <View style={{paddingHorizontal: 15}} >
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={{fontSize: 18}}
-                placeholder="Card Number"
-                underlineColorAndroid='transparent'
-                keyboardType='numeric'
-                maxLength={19}
-                returnKeyType='done'
-                onChangeText={this.onChangePan}
-                value={pan.replace(/(.{4})/g, '$1 ').trim()} />
-            </View>
-            <Text style={styles.errorText}>{panError}</Text>
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={{fontSize: 18}}
-                placeholder="Pin"
-                underlineColorAndroid='transparent'
-                keyboardType='numeric'
-                maxLength={4}
-                returnKeyType='done'
-                onChangeText={this.onChangePin}
-                value={pin} />
-            </View>
-          </View>
+          {
+            submitting === true ? <Spinner />
+              : <View style={{paddingHorizontal: 15}} >
+                <View style={styles.inputContainer}>
+                  <TextInput
+                    style={{fontSize: 18}}
+                    placeholder="Card Number"
+                    underlineColorAndroid='transparent'
+                    keyboardType='numeric'
+                    maxLength={19}
+                    returnKeyType='done'
+                    onChangeText={this.onChangePan}
+                    value={pan.replace(/(.{4})/g, '$1 ').trim()} />
+                </View>
+                <Text style={styles.errorText}>{panError}</Text>
+                <View style={styles.inputContainer}>
+                  <TextInput
+                    style={{fontSize: 18}}
+                    placeholder="Pin"
+                    underlineColorAndroid='transparent'
+                    keyboardType='numeric'
+                    maxLength={4}
+                    returnKeyType='done'
+                    onChangeText={this.onChangePin}
+                    value={pin} />
+                </View>
+              </View>
+          }
+
           <View style={{width: '100%'}} >
             <Text style={styles.errorText}>{pinError}</Text>
             <PrimaryButton

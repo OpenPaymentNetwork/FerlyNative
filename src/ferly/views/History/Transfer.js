@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Avatar from 'ferly/components/Avatar';
 import Theme from 'ferly/utils/theme';
+import Spinner from 'ferly/components/Spinner';
 import {apiRequire, apiRefresh} from 'ferly/store/api';
 import {connect} from 'react-redux';
 import {createUrl, post, urls} from 'ferly/utils/fetch';
@@ -17,7 +18,8 @@ export class Transfer extends React.Component {
   constructor () {
     super();
     this.state = {
-      click: false
+      click: false,
+      submitting: false
     };
   }
 
@@ -27,12 +29,14 @@ export class Transfer extends React.Component {
 
   confirmTakeBack () {
     const {transferDetails} = this.props;
+    this.setState({submitting: true});
     const takeBackParams = {
       transfer_id: transferDetails.id
     };
     post('retract', this.props.deviceToken, takeBackParams)
       .then((response) => response.json())
       .then((responseJson) => {
+        this.setState({submitting: false});
         const text = {'text': 'successful retract'};
         post('log-info', this.props.deviceToken, text)
           .then((response) => response.json())
@@ -44,7 +48,7 @@ export class Transfer extends React.Component {
         if (responseJson.error || responseJson.invalid) {
           Alert.alert('Error!', 'Error trying to retract gift invite.');
         } else {
-          Alert.alert('Success!', 'You have successfully retracted the cash with invite.');
+          Alert.alert('Success!', 'You have successfully retracted the invite with cash.');
         }
         this.props.dispatch(apiRefresh(urls.history));
         setTimeout(() => {
@@ -70,6 +74,7 @@ export class Transfer extends React.Component {
 
   remind () {
     const {transferDetails} = this.props;
+    this.setState({submitting: true});
     const remindParams = {
       transfer_id: transferDetails.id
     };
@@ -77,6 +82,7 @@ export class Transfer extends React.Component {
     post('get_transfer_details', this.props.deviceToken, remindParams)
       .then((response) => response.json())
       .then((responseJson) => {
+        this.setState({submitting: false});
         const text = {'text': 'successful get transfer details'};
         post('log-info', this.props.deviceToken, text)
           .then((response) => response.json())
@@ -116,6 +122,10 @@ export class Transfer extends React.Component {
   }
 
   render () {
+    const {submitting} = this.state;
+    if (submitting) {
+      return <Spinner />;
+    }
     count++;
     if (count < 2) {
       const text = {'text': 'Transfer'};

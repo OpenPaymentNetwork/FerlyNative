@@ -113,10 +113,12 @@ export class FerlyCard extends React.Component {
   removeCard = () => {
     const {address} = this.state;
     const {card_id: cardId} = this.props.card;
+    this.setState({submitting: true});
     post('delete-card', this.props.deviceToken, {card_id: cardId})
       .then((response) => response.json())
       .then((json) => {
         const text = {'text': 'successful delete card'};
+        this.setState({submitting: false});
         post('log-info', this.props.deviceToken, text)
           .then((response) => response.json())
           .then((responseJson) => {
@@ -207,6 +209,12 @@ export class FerlyCard extends React.Component {
     post('change-pin', this.props.deviceToken, {card_id: cardId, pin: pin})
       .then((response) => response.json())
       .then((json) => {
+        this.setState({
+          showNewPinModal: false,
+          submitting: false,
+          pin: '',
+          invalid: {}
+        });
         if (this.validateNewPin(json)) {
           const text = {'text': 'successful change pin'};
           post('log-info', this.props.deviceToken, text)
@@ -216,12 +224,6 @@ export class FerlyCard extends React.Component {
             .catch(() => {
               console.log('log error');
             });
-          this.setState({
-            showNewPinModal: false,
-            submitting: false,
-            pin: '',
-            invalid: {}
-          });
           // Modal needs time to close, or it'll freeze on ios. Rn bug.
           setTimeout(() => {
             Alert.alert('Saved!', 'Your new pin is ready to use.');
@@ -290,7 +292,7 @@ export class FerlyCard extends React.Component {
     } = this.state;
     const {pin: pinError} = invalid;
 
-    if (!loaded) {
+    if (!loaded || submitting) {
       return <Spinner />;
     }
 

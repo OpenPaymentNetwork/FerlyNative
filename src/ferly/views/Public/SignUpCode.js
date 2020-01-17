@@ -222,13 +222,15 @@ export class SignUpCode extends React.Component {
         'Error', 'This account does not exist. Please go back and try again.');
       return false;
     } else if (json.error === 'recaptcha_required') {
-      this.setState({showRecaptcha: true, resubmit: true});
+      this.setState({showRecaptcha: true, resubmit: true, submitting: false});
       return false;
     } else if (json.error === 'code_expired') {
+      this.setState({submitting: false});
       Alert.alert(
         'Sorry', 'This code has expired. Please try again with a new code.');
       return false;
     } else if (json.error) {
+      this.setState({submitting: false});
       Alert.alert('Unexpected error!', 'Please try again later.');
       return false;
     } else {
