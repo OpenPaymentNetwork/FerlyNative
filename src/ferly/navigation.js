@@ -179,7 +179,7 @@ export const CreateAuthSwitch = (isUser, doneTutorial) => {
       Mid: MidStack
     },
     {
-      initialRouteName: (isUser === 'false') ? 'Pub' : ((doneTutorial === 'false') ? 'Mid' : 'Auth')
+      initialRouteName: (isUser === 'false') ? 'Pub' : ((doneTutorial === 'false') ? 'Auth' : 'Auth')
     });
   return AppLayout;
 };

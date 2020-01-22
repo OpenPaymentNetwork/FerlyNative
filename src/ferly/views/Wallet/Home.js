@@ -154,6 +154,44 @@ export class Wallet extends React.Component {
       });
   }
 
+  onMarketClick () {
+    fetch(createUrl('verify-account'), {
+      headers: {
+        Authorization: 'Bearer ' + this.props.deviceToken
+      }})
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if (responseJson.Verified) {
+          this.props.navigation.navigate('Market');
+        } else {
+          Alert.alert('Feature Unavailable', `This feature is available only for invitees. ` +
+          `Coming soon to all users. In the meantime, enjoy previewing the Ferly App!`);
+        }
+      })
+      .catch(() => {
+        Alert.alert('Error please check internet connection!');
+      });
+  }
+
+  onCardClick () {
+    fetch(createUrl('verify-account'), {
+      headers: {
+        Authorization: 'Bearer ' + this.props.deviceToken
+      }})
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if (responseJson.Verified) {
+          this.props.navigation.navigate('Ferly Card');
+        } else {
+          Alert.alert('Feature Unavailable', `This feature is available only for invitees. ` +
+          `Coming soon to all users. In the meantime, enjoy previewing the Ferly App!`);
+        }
+      })
+      .catch(() => {
+        Alert.alert('Error please check internet connection!');
+      });
+  }
+
   async getToken () {
     const { status: existingStatus } = await Permissions.getAsync(
       Permissions.NOTIFICATIONS
@@ -355,7 +393,7 @@ export class Wallet extends React.Component {
         });
     }
 
-    const {firstName, navigation, checkUidPrompt, updateDownloaded} = this.props;
+    const {firstName, checkUidPrompt, updateDownloaded} = this.props;
     if (!firstName) {
       return <Spinner />;
     }
@@ -471,7 +509,7 @@ export class Wallet extends React.Component {
             parent={TouchableOpacity}
             label='test-id-card-page'
             style={[styles.theCard, {width: this.state.width2 / 3}]}
-            onPress={() => navigation.navigate('Ferly Card')}>
+            onPress={() => this.onCardClick()}>
             <Text style={[styles.cardManager, {fontSize: this.state.width2 < 330 ? 14 : 16}]} >
               {this.cardPage()}
             </Text>
@@ -481,7 +519,7 @@ export class Wallet extends React.Component {
           parent={TouchableOpacity}
           label='test-id-fab'
           style={styles.fab}
-          onPress={() => navigation.navigate('Market')}>
+          onPress={() => this.onMarketClick()}>
           <Icon name="plus" color="white" size={24} />
         </TestElement>
       </View>

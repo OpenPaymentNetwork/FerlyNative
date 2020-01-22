@@ -48,6 +48,8 @@ export class SignUpCode extends React.Component {
         Alert.alert('error', error);
       }
     });
+    AsyncStorage.setItem('codeRedeemed', 'needed').then(() => {
+    });
   }
 
   handleSubmit () {

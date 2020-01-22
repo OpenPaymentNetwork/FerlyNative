@@ -33,6 +33,7 @@ export class FerlyCard extends React.Component {
     super(props);
     this.state = {
       invalid: {},
+      pinError: '',
       submitting: false,
       assumedAbility: null,
       changingAbility: false,
@@ -65,6 +66,21 @@ export class FerlyCard extends React.Component {
       })
       .catch(() => {
         Alert.alert('Error trying to get address!');
+      });
+    fetch(createUrl('verify-account'), {
+      headers: {
+        Authorization: 'Bearer ' + this.props.deviceToken
+      }})
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if (!responseJson.Verified) {
+          Alert.alert('Feature Unavailable', `This feature is available only for invitees. ` +
+          `Coming soon to all users. In the meantime, enjoy previewing the Ferly App!`);
+          this.props.navigation.navigate('Wallet');
+        }
+      })
+      .catch(() => {
+        Alert.alert('Error please check internet connection!');
       });
   }
 
@@ -205,35 +221,39 @@ export class FerlyCard extends React.Component {
   submitNewPin = () => {
     const {card_id: cardId} = this.props.card;
     const {pin} = this.state;
-    this.setState({submitting: true});
-    post('change-pin', this.props.deviceToken, {card_id: cardId, pin: pin})
-      .then((response) => response.json())
-      .then((json) => {
-        this.setState({
-          showNewPinModal: false,
-          submitting: false,
-          pin: '',
-          invalid: {}
+    if (pin.length < 4) {
+      this.setState({submitting: false, pinError: 'Must be 4 digits'});
+    } else {
+      this.setState({submitting: true});
+      post('change-pin', this.props.deviceToken, {card_id: cardId, pin: pin})
+        .then((response) => response.json())
+        .then((json) => {
+          this.setState({
+            showNewPinModal: false,
+            submitting: false,
+            pin: '',
+            invalid: {}
+          });
+          if (this.validateNewPin(json)) {
+            const text = {'text': 'successful change pin'};
+            post('log-info', this.props.deviceToken, text)
+              .then((response) => response.json())
+              .then((responseJson) => {
+              })
+              .catch(() => {
+                console.log('log error');
+              });
+            // Modal needs time to close, or it'll freeze on ios. Rn bug.
+            setTimeout(() => {
+              Alert.alert('Saved!', 'Your new pin is ready to use.');
+            }, 300);
+          }
+        })
+        .catch(() => {
+          Alert.alert('Error trying to change pin!');
+          navigator.navigate('Home');
         });
-        if (this.validateNewPin(json)) {
-          const text = {'text': 'successful change pin'};
-          post('log-info', this.props.deviceToken, text)
-            .then((response) => response.json())
-            .then((responseJson) => {
-            })
-            .catch(() => {
-              console.log('log error');
-            });
-          // Modal needs time to close, or it'll freeze on ios. Rn bug.
-          setTimeout(() => {
-            Alert.alert('Saved!', 'Your new pin is ready to use.');
-          }, 300);
-        }
-      })
-      .catch(() => {
-        Alert.alert('Error trying to change pin!');
-        navigator.navigate('Home');
-      });
+    }
   }
 
   validateNewPin = (json) => {
@@ -286,11 +306,9 @@ export class FerlyCard extends React.Component {
       changingAbility,
       showNewPinModal,
       pin,
-      invalid,
       submitting,
       passed
     } = this.state;
-    const {pin: pinError} = invalid;
 
     if (!loaded || submitting) {
       return <Spinner />;
@@ -384,10 +402,13 @@ export class FerlyCard extends React.Component {
                       autoFocus
                       editable={!submitting}
                       returnKeyType='done'
-                      onChangeText={(text) => this.setState({pin: text})}
+                      onChangeText={(text) => {
+                        text = text.replace(/\D/g, '');
+                        this.setState({pin: text});
+                      }}
                       value={pin} />
                   </View>
-                  <Text style={styles.errorText}>{pinError}</Text>
+                  <Text style={styles.errorText}>{this.state.pinError}</Text>
                 </View>
                 <View style={{flexDirection: 'row-reverse'}}>
                   <TouchableOpacity
@@ -455,6 +476,7 @@ const styles = StyleSheet.create({
 });
 
 FerlyCard.propTypes = {
+  navigation: PropTypes.object.isRequired,
   deviceToken: PropTypes.string,
   onPass: PropTypes.func,
   card: PropTypes.object,
