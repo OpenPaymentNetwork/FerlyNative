@@ -77,7 +77,7 @@ export class Contact extends React.Component {
           flexDirection: 'row',
           alignItems: 'center',
           marginBottom: 32,
-          paddingLeft: 20
+          paddingHorizontal: 20
         }}
         onPress={() => this.confirm(option)}>
         <Icon
