@@ -79,12 +79,20 @@ export class SignUp extends React.Component {
         }
       })
       .catch(() => {
+        const text = {'text': 'Call failed: new signup'};
+        post('log-info-inital', this.props.deviceToken, text)
+          .then((response) => response.json())
+          .then((responseJson) => {
+          })
+          .catch(() => {
+            console.log('log error');
+          });
         Alert.alert('Error trying to sign up!');
       });
   }
 
   validate (responseJson) {
-    const text = {'text': 'validate new sign up'};
+    const text = {'text': 'Unsuccessful new sign up'};
     post('log-info-initial', this.props.deviceToken, text)
       .then((response) => response.json())
       .then((responseJson) => {

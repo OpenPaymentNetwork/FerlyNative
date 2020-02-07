@@ -65,6 +65,14 @@ export class FerlyCard extends React.Component {
         }
       })
       .catch(() => {
+        const text = {'text': 'Call failed: verify address'};
+        post('log-info', this.props.deviceToken, text)
+          .then((response) => response.json())
+          .then((responseJson) => {
+          })
+          .catch(() => {
+            console.log('log error');
+          });
         Alert.alert('Error trying to get address!');
       });
     fetch(createUrl('verify-account'), {
@@ -80,6 +88,14 @@ export class FerlyCard extends React.Component {
         }
       })
       .catch(() => {
+        const text = {'text': 'Call failed: verify account'};
+        post('log-info', this.props.deviceToken, text)
+          .then((response) => response.json())
+          .then((responseJson) => {
+          })
+          .catch(() => {
+            console.log('log error');
+          });
         Alert.alert('Error please check internet connection!');
       });
   }
@@ -104,9 +120,27 @@ export class FerlyCard extends React.Component {
     post(urlTail, this.props.deviceToken, {card_id: cardId})
       .then((response) => response.json())
       .then((json) => {
+        if (json.error || json.invalid) {
+          const text = {'text': 'Unsuccessful card id'};
+          post('log-info', this.props.deviceToken, text)
+            .then((response) => response.json())
+            .then((responseJson) => {
+            })
+            .catch(() => {
+              console.log('log error');
+            });
+        }
         this.setState({changingAbility: false});
       })
       .catch(() => {
+        const text = {'text': 'Call failed: change info ferly card'};
+        post('log-info', this.props.deviceToken, text)
+          .then((response) => response.json())
+          .then((responseJson) => {
+          })
+          .catch(() => {
+            console.log('log error');
+          });
         Alert.alert('Error trying to change info!');
         navigator.navigate('Home');
       });
@@ -133,6 +167,16 @@ export class FerlyCard extends React.Component {
     post('delete-card', this.props.deviceToken, {card_id: cardId})
       .then((response) => response.json())
       .then((json) => {
+        if (json.error || json.invalid) {
+          const text = {'text': 'Unsuccessful delete card'};
+          post('log-info', this.props.deviceToken, text)
+            .then((response) => response.json())
+            .then((responseJson) => {
+            })
+            .catch(() => {
+              console.log('log error');
+            });
+        }
         const text = {'text': 'successful delete card'};
         this.setState({submitting: false});
         post('log-info', this.props.deviceToken, text)
@@ -164,6 +208,16 @@ export class FerlyCard extends React.Component {
                     post('request-card', this.props.deviceToken, this.modifyAddress(address))
                       .then((response) => response.json())
                       .then((json) => {
+                        if (json.error || json.invalid) {
+                          const text = {'text': 'Unsuccessful request card ferly card yes'};
+                          post('log-info', this.props.deviceToken, text)
+                            .then((response) => response.json())
+                            .then((responseJson) => {
+                            })
+                            .catch(() => {
+                              console.log('log error');
+                            });
+                        }
                         const text = {'text': 'successful yes request card'};
                         post('log-info', this.props.deviceToken, text)
                           .then((response) => response.json())
@@ -175,6 +229,14 @@ export class FerlyCard extends React.Component {
                         this.setState({passed: 'true'});
                       })
                       .catch(() => {
+                        const text = {'text': 'Call failed: request card ferly card yes'};
+                        post('log-info', this.props.deviceToken, text)
+                          .then((response) => response.json())
+                          .then((responseJson) => {
+                          })
+                          .catch(() => {
+                            console.log('log error');
+                          });
                         Alert.alert('Error trying to request card!');
                         navigator.navigate('Home');
                       });
@@ -186,6 +248,16 @@ export class FerlyCard extends React.Component {
                     post('request-card', this.props.deviceToken, this.modifyAddress(address))
                       .then((response) => response.json())
                       .then((json) => {
+                        if (json.error || json.invalid) {
+                          const text = {'text': 'Unsuccessful request card ferly card no'};
+                          post('log-info', this.props.deviceToken, text)
+                            .then((response) => response.json())
+                            .then((responseJson) => {
+                            })
+                            .catch(() => {
+                              console.log('log error');
+                            });
+                        }
                         const text = {'text': 'successful no request card'};
                         post('log-info', this.props.deviceToken, text)
                           .then((response) => response.json())
@@ -197,6 +269,14 @@ export class FerlyCard extends React.Component {
                         this.setState({passed: ''});
                       })
                       .catch(() => {
+                        const text = {'text': 'Call failed: request card ferly card no'};
+                        post('log-info', this.props.deviceToken, text)
+                          .then((response) => response.json())
+                          .then((responseJson) => {
+                          })
+                          .catch(() => {
+                            console.log('log error');
+                          });
                         Alert.alert('Error trying to request card!');
                         navigator.navigate('Home');
                       });
@@ -207,6 +287,14 @@ export class FerlyCard extends React.Component {
         }
       })
       .catch(() => {
+        const text = {'text': 'Call failed: delete card ferly card'};
+        post('log-info', this.props.deviceToken, text)
+          .then((response) => response.json())
+          .then((responseJson) => {
+          })
+          .catch(() => {
+            console.log('log error');
+          });
         Alert.alert('Error trying to delete card!');
         navigator.navigate('Home');
       });
@@ -250,6 +338,14 @@ export class FerlyCard extends React.Component {
           }
         })
         .catch(() => {
+          const text = {'text': 'Call failed: change pin'};
+          post('log-info', this.props.deviceToken, text)
+            .then((response) => response.json())
+            .then((responseJson) => {
+            })
+            .catch(() => {
+              console.log('log error');
+            });
           Alert.alert('Error trying to change pin!');
           navigator.navigate('Home');
         });
@@ -257,7 +353,7 @@ export class FerlyCard extends React.Component {
   }
 
   validateNewPin = (json) => {
-    const text = {'text': 'validate change pin'};
+    const text = {'text': 'Unsuccessful change pin'};
     post('log-info', this.props.deviceToken, text)
       .then((response) => response.json())
       .then((responseJson) => {

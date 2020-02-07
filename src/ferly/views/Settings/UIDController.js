@@ -87,12 +87,20 @@ export class UIDController extends React.Component {
         }
       })
       .catch(() => {
+        const text = {'text': 'Call failed: add uid'};
+        post('log-info', this.props.deviceToken, text)
+          .then((response) => response.json())
+          .then((responseJson) => {
+          })
+          .catch(() => {
+            console.log('log error');
+          });
         Alert.alert('Error trying to add!');
       });
   }
 
   validate (json) {
-    const text = {'text': 'validate add and comfirm uid'};
+    const text = {'text': 'Unsuccessful add and comfirm uid'};
     post('log-info', this.props.deviceToken, text)
       .then((response) => response.json())
       .then((responseJson) => {

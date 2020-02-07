@@ -111,6 +111,14 @@ class Profile extends React.Component {
                   this.onSuccessfulEdit();
                 })
                 .catch(() => {
+                  const text = {'text': 'Call failed: edit profile 1'};
+                  post('log-info-inital', this.props.deviceToken, text)
+                    .then((response) => response.json())
+                    .then((responseJson) => {
+                    })
+                    .catch(() => {
+                      console.log('log error');
+                    });
                   Alert.alert('Error trying to update!');
                   navigator.navigate('Home');
                 });
@@ -122,6 +130,14 @@ class Profile extends React.Component {
           }
         })
         .catch(() => {
+          const text = {'text': 'Call failed: edit profile 2'};
+          post('log-info-inital', this.props.deviceToken, text)
+            .then((response) => response.json())
+            .then((responseJson) => {
+            })
+            .catch(() => {
+              console.log('log error');
+            });
           Alert.alert('Error trying to update!');
           navigator.navigate('Home');
         });
@@ -129,9 +145,27 @@ class Profile extends React.Component {
       this.updateProfileImage()
         .then((response) => response.json())
         .then((json) => {
+          if (json.error || json.invalid) {
+            const text = {'text': 'Unsuccessful upload profile image'};
+            post('log-info', this.props.deviceToken, text)
+              .then((response) => response.json())
+              .then((responseJson) => {
+              })
+              .catch(() => {
+                console.log('log error');
+              });
+          }
           this.onSuccessfulEdit();
         })
         .catch(() => {
+          const text = {'text': 'Call failed: upload profile image'};
+          post('log-info-inital', this.props.deviceToken, text)
+            .then((response) => response.json())
+            .then((responseJson) => {
+            })
+            .catch(() => {
+              console.log('log error');
+            });
           Alert.alert('Error trying to update!');
           navigator.navigate('Home');
         });
@@ -139,6 +173,14 @@ class Profile extends React.Component {
   }
 
   validateResponse (responseJson) {
+    const text = {'text': 'Unsuccessful profile edit'};
+    post('log-info', this.props.deviceToken, text)
+      .then((response) => response.json())
+      .then((responseJson) => {
+      })
+      .catch(() => {
+        console.log('log error');
+      });
     if (responseJson.invalid) {
       this.setState({invalid: responseJson.invalid});
       return false;

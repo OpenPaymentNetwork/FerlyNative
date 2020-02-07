@@ -23,6 +23,16 @@ export class Contact extends React.Component {
     post('invite', this.props.deviceToken, {recipient: option})
       .then((response) => response.json())
       .then((json) => {
+        if (json.error || json.invalid) {
+          const text = {'text': 'Unsuccessful invite contact'};
+          post('log-info', this.props.deviceToken, text)
+            .then((response) => response.json())
+            .then((responseJson) => {
+            })
+            .catch(() => {
+              console.log('log error');
+            });
+        }
         const text = {'text': 'successful invite'};
         post('log-info', this.props.deviceToken, text)
           .then((response) => response.json())
@@ -53,6 +63,14 @@ export class Contact extends React.Component {
         Alert.alert('Invite Sent!', `You sent an invite to ${option}.`);
       })
       .catch(() => {
+        const text = {'text': 'Call failed: invite contact'};
+        post('log-info', this.props.deviceToken, text)
+          .then((response) => response.json())
+          .then((responseJson) => {
+          })
+          .catch(() => {
+            console.log('log error');
+          });
         Alert.alert('Error trying to send invite!');
         navigator.navigate('Home');
       });

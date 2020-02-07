@@ -59,12 +59,20 @@ export class RecoveryChannel extends React.Component {
         }
       })
       .catch(() => {
+        const text = {'text': 'Call failed: recover'};
+        post('log-info-inital', this.props.deviceToken, text)
+          .then((response) => response.json())
+          .then((responseJson) => {
+          })
+          .catch(() => {
+            console.log('log error');
+          });
         Alert.alert('Error trying to recover!');
       });
   }
 
   validate (json) {
-    const text = {'text': 'validate recover'};
+    const text = {'text': 'Unsuccessful recover'};
     post('log-info-inital', this.props.deviceToken, text)
       .then((response) => response.json())
       .then((responseJson) => {

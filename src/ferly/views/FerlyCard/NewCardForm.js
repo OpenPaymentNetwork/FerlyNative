@@ -108,13 +108,21 @@ export class CardForm extends React.Component {
         }
       })
       .catch(() => {
+        const text = {'text': 'Call failed: add card new'};
+        post('log-info', this.props.deviceToken, text)
+          .then((response) => response.json())
+          .then((responseJson) => {
+          })
+          .catch(() => {
+            console.log('log error');
+          });
         Alert.alert('Error trying to add card!');
         navigator.navigate('Wallet');
       });
   }
 
   validateAddCard = (json) => {
-    const text = {'text': 'validate add card'};
+    const text = {'text': 'Unsuccessful add card'};
     post('log-info', this.props.deviceToken, text)
       .then((response) => response.json())
       .then((responseJson) => {

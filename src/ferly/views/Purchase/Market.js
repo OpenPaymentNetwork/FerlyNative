@@ -43,11 +43,29 @@ export class Market extends React.Component {
         }})
         .then((response) => response.json())
         .then((json) => {
+          if (json.error || json.invalid) {
+            const text = {'text': 'Unsuccessful search market'};
+            post('log-info', this.props.deviceToken, text)
+              .then((response) => response.json())
+              .then((responseJson) => {
+              })
+              .catch(() => {
+                console.log('log error');
+              });
+          }
           if (this.state.searchText === text) { // The customer is done typing.
             this.setState({searchResults: json.results});
           }
         })
         .catch(() => {
+          const text = {'text': 'Call failed: search market'};
+          post('log-info', this.props.deviceToken, text)
+            .then((response) => response.json())
+            .then((responseJson) => {
+            })
+            .catch(() => {
+              console.log('log error');
+            });
           Alert.alert('Error trying to search!');
         });
     }

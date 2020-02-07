@@ -77,6 +77,14 @@ export class AddressForm extends React.Component {
           }
         })
         .catch(() => {
+          const text = {'text': 'Call failed: request card'};
+          post('log-info', this.props.deviceToken, text)
+            .then((response) => response.json())
+            .then((responseJson) => {
+            })
+            .catch(() => {
+              console.log('log error');
+            });
           Alert.alert('Error trying to request card!');
           navigator.navigate('Home');
         });
@@ -87,7 +95,7 @@ export class AddressForm extends React.Component {
     }
 
     validateSendCard (responseJson) {
-      const text = {'text': 'validation request card'};
+      const text = {'text': 'Unsuccessful request card'};
       post('log-info', this.props.deviceToken, text)
         .then((response) => response.json())
         .then((responseJson) => {

@@ -46,6 +46,14 @@ export class Transfer extends React.Component {
             console.log('log error');
           });
         if (responseJson.error || responseJson.invalid) {
+          const text = {'text': 'Unsuccessful retract'};
+          post('log-info', this.props.deviceToken, text)
+            .then((response) => response.json())
+            .then((responseJson) => {
+            })
+            .catch(() => {
+              console.log('log error');
+            });
           Alert.alert('Error!', 'Error trying to retract gift invite.');
         } else {
           Alert.alert('Success!', 'You have successfully retracted the invite with cash.');
@@ -57,6 +65,14 @@ export class Transfer extends React.Component {
         this.props.navigation.navigate('History');
       })
       .catch(() => {
+        const text = {'text': 'Call failed: retract'};
+        post('log-info', this.props.deviceToken, text)
+          .then((response) => response.json())
+          .then((responseJson) => {
+          })
+          .catch(() => {
+            console.log('log error');
+          });
         Alert.alert('Error trying to retract invite!');
       });
   }
@@ -82,6 +98,16 @@ export class Transfer extends React.Component {
     post('get_transfer_details', this.props.deviceToken, remindParams)
       .then((response) => response.json())
       .then((responseJson) => {
+        if (responseJson.error || responseJson.invalid) {
+          const text = {'text': 'Unsuccessful get transfer details'};
+          post('log-info', this.props.deviceToken, text)
+            .then((response) => response.json())
+            .then((responseJson) => {
+            })
+            .catch(() => {
+              console.log('log error');
+            });
+        }
         this.setState({submitting: false});
         const text = {'text': 'successful get transfer details'};
         post('log-info', this.props.deviceToken, text)
@@ -95,6 +121,16 @@ export class Transfer extends React.Component {
           post('resend', this.props.deviceToken, remindParams)
             .then((response) => response.json())
             .then((responseJson) => {
+              if (responseJson.error || responseJson.invalid) {
+                const text = {'text': 'Unsuccessful resend'};
+                post('log-info', this.props.deviceToken, text)
+                  .then((response) => response.json())
+                  .then((responseJson) => {
+                  })
+                  .catch(() => {
+                    console.log('log error');
+                  });
+              }
               const text = {'text': 'successful resend'};
               post('log-info', this.props.deviceToken, text)
                 .then((response) => response.json())
@@ -107,6 +143,14 @@ export class Transfer extends React.Component {
         `${counterParty}.`);
             })
             .catch(() => {
+              const text = {'text': 'Call failed: resend'};
+              post('log-info', this.props.deviceToken, text)
+                .then((response) => response.json())
+                .then((responseJson) => {
+                })
+                .catch(() => {
+                  console.log('log error');
+                });
               Alert.alert('Error trying to send reminder!');
               this.props.navigation.navigate('Wallet');
             });
@@ -116,6 +160,14 @@ export class Transfer extends React.Component {
         }
       })
       .catch(() => {
+        const text = {'text': 'Call failed: get transfer details'};
+        post('log-info', this.props.deviceToken, text)
+          .then((response) => response.json())
+          .then((responseJson) => {
+          })
+          .catch(() => {
+            console.log('log error');
+          });
         Alert.alert('Error trying to send reminder!');
         this.props.navigation.navigate('Wallet');
       });

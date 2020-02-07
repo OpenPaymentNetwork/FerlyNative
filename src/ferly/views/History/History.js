@@ -28,6 +28,16 @@ export class History extends React.Component {
       }})
       .then((response) => response.json())
       .then((responseJson) => {
+        if (responseJson.error || responseJson.invalid) {
+          const text = {'text': 'Unsuccessful history'};
+          post('log-info', this.props.deviceToken, text)
+            .then((response) => response.json())
+            .then((responseJson) => {
+            })
+            .catch(() => {
+              console.log('log error');
+            });
+        }
         const newHistory = history.concat(responseJson.history);
         this.props.apiInject(urls.history, {
           'history': newHistory,
@@ -35,6 +45,14 @@ export class History extends React.Component {
         });
       })
       .catch(() => {
+        const text = {'text': 'Call failed: history'};
+        post('log-info', this.props.deviceToken, text)
+          .then((response) => response.json())
+          .then((responseJson) => {
+          })
+          .catch(() => {
+            console.log('log error');
+          });
         Alert.alert('Error trying to load!');
       });
   }

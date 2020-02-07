@@ -75,13 +75,21 @@ export class Cart extends React.Component {
         }
       })
       .catch(() => {
+        const text = {'text': 'Call failed: puchase'};
+        post('log-info', this.props.deviceToken, text)
+          .then((response) => response.json())
+          .then((responseJson) => {
+          })
+          .catch(() => {
+            console.log('log error');
+          });
         Alert.alert('Error trying to purchase!');
         navigation.navigate('Home');
       });
   }
 
   validate (json) {
-    const text = {'text': 'validate purchase'};
+    const text = {'text': 'Unsuccessful purchase'};
     post('log-info', this.props.deviceToken, text)
       .then((response) => response.json())
       .then((responseJson) => {

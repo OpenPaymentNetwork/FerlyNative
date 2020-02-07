@@ -133,6 +133,16 @@ export class Give extends React.Component {
             post('get-customer-name', this.props.deviceToken, customerParams)
               .then((response) => response.json())
               .then((json) => {
+                if (json.error || json.invalid) {
+                  const text = {'text': 'Unsuccessful get customer name give'};
+                  post('log-info', this.props.deviceToken, text)
+                    .then((response) => response.json())
+                    .then((responseJson) => {
+                    })
+                    .catch(() => {
+                      console.log('log error');
+                    });
+                }
                 customerName = json.name || '';
                 if (customerName) {
                   Alert.alert(
@@ -145,6 +155,14 @@ export class Give extends React.Component {
                 }
               })
               .catch(() => {
+                const text = {'text': 'Call failed: get customer name'};
+                post('log-info', this.props.deviceToken, text)
+                  .then((response) => response.json())
+                  .then((responseJson) => {
+                  })
+                  .catch(() => {
+                    console.log('log error');
+                  });
                 navigation.navigate('Home');
               });
 

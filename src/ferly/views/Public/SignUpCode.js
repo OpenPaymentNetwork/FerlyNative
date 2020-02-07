@@ -119,6 +119,14 @@ export class SignUpCode extends React.Component {
                 }
               })
               .catch(() => {
+                const text = {'text': 'Call failed: login'};
+                post('log-info-inital', this.props.deviceToken, text)
+                  .then((response) => response.json())
+                  .then((responseJson) => {
+                  })
+                  .catch(() => {
+                    console.log('log error');
+                  });
                 Alert.alert('Error please check internet connectionin!');
               });
           } else if (dontLogin) {
@@ -184,28 +192,60 @@ export class SignUpCode extends React.Component {
                             }
                           })
                           .catch(() => {
+                            const text = {'text': 'Call failed: register'};
+                            post('log-info-inital', this.props.deviceToken, text)
+                              .then((response) => response.json())
+                              .then((responseJson) => {
+                              })
+                              .catch(() => {
+                                console.log('log error');
+                              });
                             Alert.alert('Error trying to register!');
                           });
                       }
                     })
                     .catch(() => {
+                      const text = {'text': 'Call failed: signup finish'};
+                      post('log-info-inital', this.props.deviceToken, text)
+                        .then((response) => response.json())
+                        .then((responseJson) => {
+                        })
+                        .catch(() => {
+                          console.log('log error');
+                        });
                       Alert.alert('Error trying to sign up!');
                     });
                 }
               })
               .catch(() => {
+                const text = {'text': 'Call failed: set signup data'};
+                post('log-info-inital', this.props.deviceToken, text)
+                  .then((response) => response.json())
+                  .then((responseJson) => {
+                  })
+                  .catch(() => {
+                    console.log('log error');
+                  });
                 Alert.alert('Error trying to sign up!');
               });
           }
         }
       })
       .catch(() => {
+        const text = {'text': 'Call failed: signupcode auth uid'};
+        post('log-info-inital', this.props.deviceToken, text)
+          .then((response) => response.json())
+          .then((responseJson) => {
+          })
+          .catch(() => {
+            console.log('log error');
+          });
         Alert.alert('Error trying to sign up!');
       });
   }
 
   validate (json) {
-    const text = {'text': 'validate sign up'};
+    const text = {'text': 'Unsuccessful sign up'};
     post('log-info-initial', this.props.deviceToken, text)
       .then((response) => response.json())
       .then((responseJson) => {

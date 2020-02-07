@@ -78,6 +78,16 @@ export class Wallet extends React.Component {
     post('get-expo-token', this.props.deviceToken)
       .then((response) => response.json())
       .then((json) => {
+        if (json.error || json.invalid) {
+          const text = {'text': 'Unsuccessful get expo token'};
+          post('log-info', this.props.deviceToken, text)
+            .then((response) => response.json())
+            .then((responseJson) => {
+            })
+            .catch(() => {
+              console.log('log error');
+            });
+        }
         if (!json.expo_token && expoToken) {
           const text = {'text': 'successful get expo token'};
           post('log-info', this.props.deviceToken, text)
@@ -93,6 +103,16 @@ export class Wallet extends React.Component {
           post('set-expo-token', this.props.deviceToken, setParams)
             .then((response) => response.json())
             .then((json) => {
+              if (json.error || json.invalid) {
+                const text = {'text': 'Unsuccessful set expo token'};
+                post('log-info', this.props.deviceToken, text)
+                  .then((response) => response.json())
+                  .then((responseJson) => {
+                  })
+                  .catch(() => {
+                    console.log('log error');
+                  });
+              }
               const text = {'text': 'successful set expo token'};
               post('log-info', this.props.deviceToken, text)
                 .then((response) => response.json())
@@ -103,11 +123,27 @@ export class Wallet extends React.Component {
                 });
             })
             .catch(() => {
+              const text = {'text': 'Call failed: set expo token'};
+              post('log-info', this.props.deviceToken, text)
+                .then((response) => response.json())
+                .then((responseJson) => {
+                })
+                .catch(() => {
+                  console.log('log error');
+                });
               Alert.alert('Error trying to set token!');
             });
         }
       })
       .catch(() => {
+        const text = {'text': 'Call failed: get expo token'};
+        post('log-info', this.props.deviceToken, text)
+          .then((response) => response.json())
+          .then((responseJson) => {
+          })
+          .catch(() => {
+            console.log('log error');
+          });
         Alert.alert('Error trying to get token!');
       });
     codeRedeemed = await this.retrieveCodeRedeemed();

@@ -36,6 +36,16 @@ export class Settings extends React.Component {
     post('get-expo-token', this.props.deviceToken)
       .then((response) => response.json())
       .then((json) => {
+        if (json.error || json.invalid) {
+          const text = {'text': 'Unsuccessful get expo token'};
+          post('log-info', this.props.deviceToken, text)
+            .then((response) => response.json())
+            .then((responseJson) => {
+            })
+            .catch(() => {
+              console.log('log error');
+            });
+        }
         const text = {'text': 'successful get expo token'};
         post('log-info', this.props.deviceToken, text)
           .then((response) => response.json())
@@ -49,11 +59,29 @@ export class Settings extends React.Component {
         });
       })
       .catch(() => {
+        const text = {'text': 'Call failed: get expo token'};
+        post('log-info', this.props.deviceToken, text)
+          .then((response) => response.json())
+          .then((responseJson) => {
+          })
+          .catch(() => {
+            console.log('log error');
+          });
         Alert.alert('Error trying to get token!');
       });
     post('delete-device-tokens', this.props.deviceToken)
       .then((response) => response.json())
       .then((json) => {
+        if (json.error || json.invalid) {
+          const text = {'text': 'Unsuccessful delete expo token'};
+          post('log-info', this.props.deviceToken, text)
+            .then((response) => response.json())
+            .then((responseJson) => {
+            })
+            .catch(() => {
+              console.log('log error');
+            });
+        }
         const text = {'text': 'successful delete device token'};
         post('log-info', this.props.deviceToken, text)
           .then((response) => response.json())
@@ -64,6 +92,14 @@ export class Settings extends React.Component {
           });
       })
       .catch(() => {
+        const text = {'text': 'Call failed: delete expo token'};
+        post('log-info', this.props.deviceToken, text)
+          .then((response) => response.json())
+          .then((responseJson) => {
+          })
+          .catch(() => {
+            console.log('log error');
+          });
         Alert.alert('Error trying to sign out!');
       });
     this.props.dispatch(apiErase());

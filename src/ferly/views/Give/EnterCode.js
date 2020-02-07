@@ -107,6 +107,16 @@ export class EnterCode extends React.Component {
               post('update-invalid-code-count', this.props.deviceToken, {'invalid_result': invalidCode})
                 .then((response) => response.json())
                 .then((json) => {
+                  if (json.error || json.invalid) {
+                    const text = {'text': 'Unsuccessful update invalid code count'};
+                    post('log-info', this.props.deviceToken, text)
+                      .then((response) => response.json())
+                      .then((responseJson) => {
+                      })
+                      .catch(() => {
+                        console.log('log error');
+                      });
+                  }
                   const text = {'text': 'successful update invalid code count'};
                   post('log-info', this.props.deviceToken, text)
                     .then((response) => response.json())
@@ -121,19 +131,35 @@ export class EnterCode extends React.Component {
                 });
             })
             .catch(() => {
+              const text = {'text': 'Call failed: accept code'};
+              post('log-info', this.props.deviceToken, text)
+                .then((response) => response.json())
+                .then((responseJson) => {
+                })
+                .catch(() => {
+                  console.log('log error');
+                });
               Alert.alert('Error trying to submit code!');
               navigator.navigate('Wallet');
             });
         }
       })
       .catch(() => {
+        const text = {'text': 'Call failed: get invalid code count'};
+        post('log-info', this.props.deviceToken, text)
+          .then((response) => response.json())
+          .then((responseJson) => {
+          })
+          .catch(() => {
+            console.log('log error');
+          });
         Alert.alert('Error trying to submit code!');
         navigator.navigate('Wallet');
       });
   }
 
   validateCodeCount = (json) => {
-    const text = {'text': 'validate code count'};
+    const text = {'text': 'Unsuccessful code count'};
     post('log-info', this.props.deviceToken, text)
       .then((response) => response.json())
       .then((responseJson) => {
@@ -153,7 +179,7 @@ export class EnterCode extends React.Component {
   }
 
   validateCode = (json) => {
-    const text = {'text': 'validate code'};
+    const text = {'text': 'Unsuccessful code'};
     post('log-info', this.props.deviceToken, text)
       .then((response) => response.json())
       .then((responseJson) => {

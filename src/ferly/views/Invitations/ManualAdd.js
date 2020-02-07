@@ -53,13 +53,21 @@ export class ManualAdd extends React.Component {
         }
       })
       .catch(() => {
+        const text = {'text': 'Call failed: invite manual'};
+        post('log-info-inital', this.props.deviceToken, text)
+          .then((response) => response.json())
+          .then((responseJson) => {
+          })
+          .catch(() => {
+            console.log('log error');
+          });
         Alert.alert('Error trying to invite!');
         navigator.navigate('Home');
       });
   }
 
   validate (json) {
-    const text = {'text': 'validate invite'};
+    const text = {'text': 'Unsuccessful invite'};
     post('log-info', this.props.deviceToken, text)
       .then((response) => response.json())
       .then((responseJson) => {

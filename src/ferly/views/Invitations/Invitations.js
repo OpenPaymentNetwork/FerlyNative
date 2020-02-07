@@ -38,6 +38,16 @@ export class Invitations extends React.Component {
     post('delete-invitation', this.props.deviceToken, {invite_id: invite.id.toString()})
       .then((response) => response.json())
       .then((json) => {
+        if (json.error || json.invalid) {
+          const text = {'text': 'Unsuccessful delete invitation'};
+          post('log-info', this.props.deviceToken, text)
+            .then((response) => response.json())
+            .then((responseJson) => {
+            })
+            .catch(() => {
+              console.log('log error');
+            });
+        }
         const text = {'text': 'successful delete invitation'};
         post('log-info', this.props.deviceToken, text)
           .then((response) => response.json())
@@ -60,6 +70,14 @@ export class Invitations extends React.Component {
         }
       })
       .catch(() => {
+        const text = {'text': 'Call failed: delete invitation'};
+        post('log-info-inital', this.props.deviceToken, text)
+          .then((response) => response.json())
+          .then((responseJson) => {
+          })
+          .catch(() => {
+            console.log('log error');
+          });
         Alert.alert('Error trying to delete invitation!');
         navigator.navigate('Home');
       });
