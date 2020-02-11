@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import ReCaptcha from 'react-native-recaptcha-v3';
+import ConfirmGoogleCaptcha from 'react-native-google-recaptcha-v2';
+import {View} from 'react-native';
 import {apiRequire} from 'ferly/store/api';
 import {connect} from 'react-redux';
 import {createUrl} from 'ferly/utils/fetch';
@@ -25,23 +26,32 @@ export class Recaptcha extends React.Component {
     this.props.onExecute(this.props.bypass || response);
   }
 
+  onMessage = event => {
+    if (event && event.nativeEvent.data) {
+      if (['cancel', 'error', 'expired'].includes(event.nativeEvent.data)) {
+        this.captchaForm.hide();
+      } else {
+        this.onExecute(event.nativeEvent.data);
+      }
+    }
+  };
+
   render () {
-    const {sitekey, action, bypass} = this.props;
+    const {sitekey, bypass} = this.props;
     if (!sitekey || bypass) {
       return null;
     }
     return (
-      <ReCaptcha
-        recaptchaType='invisible'
-        containerStyle={{}} // Empty overrides default style
-        action={action}
-        // On some iOS versions, this opens the url in the browser. Broken.
-        // react-native-recaptcha-v3/index.js line 85. version 0.0.16
-        // the slash at the end prevents this
-        url="http://ferlyapi.com/"
-        siteKey={sitekey}
-        onExecute={(response) => this.onExecute(response)}
-      />
+      <View>
+        <ConfirmGoogleCaptcha
+          // eslint-disable-next-line no-return-assign
+          ref={_ref => this.captchaForm = _ref}
+          siteKey={sitekey}
+          baseUrl='https://ferlyapi.bridge.opn.bank/'
+          languageCode='en'
+          onMessage={this.onMessage}
+        />
+      </View>
     );
   }
 }

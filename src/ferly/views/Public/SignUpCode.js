@@ -281,7 +281,7 @@ export class SignUpCode extends React.Component {
   }
 
   onExecute (response) {
-    this.setState({recaptchaResponse: response});
+    this.setState({recaptchaResponse: response, showRecaptcha: false});
   }
 
   render () {

@@ -85,7 +85,7 @@ export class HistoryEntry extends React.Component {
             <Text style={{fontWeight: 'bold', fontSize: 20}}>
               {`${titleVerb} $${amount}`}
             </Text>
-            <Text style={{color: Theme.lightBlue, fontSize: 13}}>
+            <Text style={{color: Theme.lightBlue, fontSize: 13, marginRight: -100}}>
               {`${designTitle} ${involved}`}
             </Text>
           </View>
@@ -128,7 +128,7 @@ HistoryEntry.propTypes = {
   navigation: PropTypes.object.isRequired
 };
 
-function mapStateToProps (state, ownProps) {
+function mapStateToProps (state) {
   const {refreshHistory} = state.settings;
   return {
     refreshHistory

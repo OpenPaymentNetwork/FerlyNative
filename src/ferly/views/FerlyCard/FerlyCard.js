@@ -201,46 +201,6 @@ export class FerlyCard extends React.Component {
             address['state'] + ' ' +
             address['zip'],
               [
-                {text: 'Yes',
-                  onPress: () => {
-                    address['verified'] = 'yes';
-                    this.props.dispatch(setHaveCard(false));
-                    post('request-card', this.props.deviceToken, this.modifyAddress(address))
-                      .then((response) => response.json())
-                      .then((json) => {
-                        if (json.error || json.invalid) {
-                          const text = {'text': 'Unsuccessful request card ferly card yes'};
-                          post('log-info', this.props.deviceToken, text)
-                            .then((response) => response.json())
-                            .then((responseJson) => {
-                            })
-                            .catch(() => {
-                              console.log('log error');
-                            });
-                        }
-                        const text = {'text': 'successful yes request card'};
-                        post('log-info', this.props.deviceToken, text)
-                          .then((response) => response.json())
-                          .then((responseJson) => {
-                          })
-                          .catch(() => {
-                            console.log('log error');
-                          });
-                        this.setState({passed: 'true'});
-                      })
-                      .catch(() => {
-                        const text = {'text': 'Call failed: request card ferly card yes'};
-                        post('log-info', this.props.deviceToken, text)
-                          .then((response) => response.json())
-                          .then((responseJson) => {
-                          })
-                          .catch(() => {
-                            console.log('log error');
-                          });
-                        Alert.alert('Error trying to request card!');
-                        navigator.navigate('Home');
-                      });
-                  }},
                 {text: 'No',
                   onPress: () => {
                     address['verified'] = 'no';
@@ -270,6 +230,46 @@ export class FerlyCard extends React.Component {
                       })
                       .catch(() => {
                         const text = {'text': 'Call failed: request card ferly card no'};
+                        post('log-info', this.props.deviceToken, text)
+                          .then((response) => response.json())
+                          .then((responseJson) => {
+                          })
+                          .catch(() => {
+                            console.log('log error');
+                          });
+                        Alert.alert('Error trying to request card!');
+                        navigator.navigate('Home');
+                      });
+                  }},
+                {text: 'Yes',
+                  onPress: () => {
+                    address['verified'] = 'yes';
+                    this.props.dispatch(setHaveCard(false));
+                    post('request-card', this.props.deviceToken, this.modifyAddress(address))
+                      .then((response) => response.json())
+                      .then((json) => {
+                        if (json.error || json.invalid) {
+                          const text = {'text': 'Unsuccessful request card ferly card yes'};
+                          post('log-info', this.props.deviceToken, text)
+                            .then((response) => response.json())
+                            .then((responseJson) => {
+                            })
+                            .catch(() => {
+                              console.log('log error');
+                            });
+                        }
+                        const text = {'text': 'successful yes request card'};
+                        post('log-info', this.props.deviceToken, text)
+                          .then((response) => response.json())
+                          .then((responseJson) => {
+                          })
+                          .catch(() => {
+                            console.log('log error');
+                          });
+                        this.setState({passed: 'true'});
+                      })
+                      .catch(() => {
+                        const text = {'text': 'Call failed: request card ferly card yes'};
                         post('log-info', this.props.deviceToken, text)
                           .then((response) => response.json())
                           .then((responseJson) => {

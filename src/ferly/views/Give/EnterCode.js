@@ -7,7 +7,7 @@ import Theme from 'ferly/utils/theme';
 import {connect} from 'react-redux';
 import {post, urls} from 'ferly/utils/fetch';
 import {setRefreshHistory} from 'ferly/store/settings';
-import {AsyncStorage, View, Text, TextInput, StyleSheet, Alert} from 'react-native';
+import {AsyncStorage, View, Text, TextInput, StyleSheet, Alert, Dimensions} from 'react-native';
 import Constants from 'expo-constants';
 const {releaseChannel} = Constants.manifest;
 
@@ -215,11 +215,11 @@ export class EnterCode extends React.Component {
         flex: 1,
         justifyContent: 'space-between',
         backgroundColor: 'white'}}>
-        <View style={{paddingHorizontal: 40, paddingVertical: 30}}>
+        <View style={{paddingHorizontal: width < 330 ? 30 : 40, paddingVertical: 30}}>
           <Text style={{fontSize: 18, textAlign: 'center'}}>
             {`Enter gift code sent to your email or phone to accept a gift.`}
           </Text>
-          <View style={{paddingVertical: 20}}>
+          <View style={{paddingVertical: width < 330 ? 30 : 35}}>
             <View style={{
               borderWidth: 1,
               width: 150,
@@ -265,6 +265,7 @@ export class EnterCode extends React.Component {
 }
 
 let count = 0;
+let {width} = Dimensions.get('window');
 
 EnterCode.propTypes = {
   dispatch: PropTypes.func.isRequired,

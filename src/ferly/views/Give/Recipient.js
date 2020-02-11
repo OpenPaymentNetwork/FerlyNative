@@ -368,7 +368,7 @@ class Recipient extends React.Component {
               value={this.state.searchText}
               placeholder='Search Ferly users'
               onChangeText={this.onChangeText.bind(this)}/>
-            <Text style={{fontSize: 18, color: Theme.lightBlue}}>
+            <Text style={{fontSize: 18, color: Theme.lightBlue, marginHorizontal: 10}}>
               {this.state.searchResults === null ? 'Most Recent Recipients' : null}
             </Text>
             {display}

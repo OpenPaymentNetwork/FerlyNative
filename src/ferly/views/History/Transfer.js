@@ -7,7 +7,15 @@ import Spinner from 'ferly/components/Spinner';
 import {apiRequire, apiRefresh} from 'ferly/store/api';
 import {connect} from 'react-redux';
 import {createUrl, post, urls} from 'ferly/utils/fetch';
-import {Alert, View, Text, ScrollView, StyleSheet, TouchableOpacity} from 'react-native';
+import {
+  Alert,
+  View,
+  Text,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  Dimensions
+} from 'react-native';
 import {format as formatDate} from 'date-fns';
 
 export class Transfer extends React.Component {
@@ -548,11 +556,11 @@ export class Transfer extends React.Component {
           <View style={{
             alignItems: 'center',
             flexDirection: 'row',
-            height: 110,
+            height: width < 330 ? 85 : 110,
             justifyContent: 'center',
             paddingTop: 10
           }}>
-            <Text style={{color: Theme.lightBlue, fontSize: 35}}>
+            <Text style={{color: Theme.lightBlue, fontSize: width < 330 ? 30 : 35}}>
               {symbol}${amount}
             </Text>
           </View>
@@ -561,10 +569,14 @@ export class Transfer extends React.Component {
             marginHorizontal: 20,
             paddingBottom: 10
           }}>
-            <Text style={{textAlign: 'center', fontSize: 18, color: 'white'}}>
+            <Text style={{textAlign: 'center', fontSize: width < 330 ? 16 : 18, color: 'white'}}>
               {`You ${verb} ${designTitle}${cp}.`}
             </Text>
-            <Text style={[styles.sectionText, {paddingTop: 5, paddingBottom: 30}]}>
+            <Text style={[styles.sectionText, {
+              paddingTop: 5,
+              paddingBottom: 30,
+              fontSize: width < 330 ? 12 : 14
+            }]}>
               {dateDisplay}
             </Text>
             <View style={styles.spacer} />
@@ -585,6 +597,7 @@ export class Transfer extends React.Component {
 }
 
 let count = 0;
+let {width} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   functionRow: {flexDirection: 'row', justifyContent: 'space-between'},

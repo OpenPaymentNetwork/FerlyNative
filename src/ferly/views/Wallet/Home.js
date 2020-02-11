@@ -320,11 +320,16 @@ export class Wallet extends React.Component {
         onPress={() => navigation.navigate('Value', design)}
         style={[styles.cardContainer, {borderColor: color}]}>
         <View style={[styles.cardImage, {backgroundColor: color}]}>
-          <Text style={{fontSize: 22, color: text}}>{formatted}</Text>
+          <Text style={{fontSize: this.state.width2 < 330 ? 20 : 22, color: text}}>
+            {formatted}
+          </Text>
         </View>
         <View style={[styles.cardDetails, {borderColor: color}]}>
           <View style={{flex: 1, justifyContent: 'center', paddingHorizontal: 15}}>
-            <Text style={{fontSize: 18, fontWeight: 'bold', color: Theme.darkBlue}}>{title}</Text>
+            <Text style={{
+              fontSize: this.state.width2 < 330 ? 16 : 18,
+              fontWeight: 'bold',
+              color: Theme.darkBlue}}>{title}</Text>
           </View>
           <View style={[styles.buttonRow, {borderColor: color}]}>
             <TestElement
@@ -336,8 +341,12 @@ export class Wallet extends React.Component {
                 style={{paddingRight: 8}}
                 name="gift"
                 color={Theme.darkBlue}
-                size={18} />
-              <Text style={{color: Theme.darkBlue, fontSize: 12, fontWeight: 'bold'}}>
+                size={this.state.width2 < 330 ? 16 : 18} />
+              <Text style={{
+                color: Theme.darkBlue,
+                fontSize: this.state.width2 < 330 ? 11 : 12,
+                fontWeight: 'bold'
+              }}>
                 GIVE
               </Text>
             </TestElement>
@@ -350,8 +359,12 @@ export class Wallet extends React.Component {
                 style={{paddingRight: 8}}
                 name="credit-card"
                 color={Theme.darkBlue}
-                size={18} />
-              <Text style={{color: Theme.darkBlue, fontSize: 12, fontWeight: 'bold'}}>
+                size={this.state.width2 < 330 ? 16 : 18} />
+              <Text style={{
+                color: Theme.darkBlue,
+                fontSize: this.state.width2 < 330 ? 11 : 12,
+                fontWeight: 'bold'
+              }}>
                 BUY
               </Text>
             </TestElement>
@@ -373,7 +386,9 @@ export class Wallet extends React.Component {
       return (
         <ScrollView
           keyboardShouldPersistTaps='handled'
-          style={{marginTop: Platform.OS === 'ios' ? 20 : 240}}
+          style={{
+            marginTop: Platform.OS === 'android' ? 240 : 10 && this.state.width2 < 330 ? -10 : 50
+          }}
           refreshControl={
             <RefreshControl
               style={{position: 'absolute'}}
@@ -473,7 +488,11 @@ export class Wallet extends React.Component {
           barStyle="light-content"
           backgroundColor="rgba(0, 0, 0, 0.251)"
         />
-        <Text style={{padding: 20, fontSize: 18, fontWeight: 'bold', paddingBottom: 40}}>
+        <Text style={{
+          padding: 20,
+          fontSize: this.state.width2 < 330 ? 16 : 18,
+          fontWeight: 'bold',
+          paddingBottom: 40}}>
           Ferly Card
         </Text>
         <Animated.ScrollView
@@ -526,14 +545,14 @@ export class Wallet extends React.Component {
           <Image resizeMode={'contain'}
             style={[
               styles.ferlyImg, {
-                width: this.state.width2 / 2.4,
-                marginLeft: this.state.width < 330 ? 30 : 20}
+                width: this.state.width2 / 2.5,
+                marginLeft: 30}
             ]}
             source={logoHorizontal}/>
           <Text style={{
             padding: 20,
-            marginTop: 17,
-            fontSize: 18,
+            marginTop: this.state.width2 < 330 ? 8 : 17,
+            fontSize: this.state.width2 < 330 ? 16 : 18,
             fontWeight: 'bold',
             backgroundColor: 'white'
           }}>
@@ -546,7 +565,7 @@ export class Wallet extends React.Component {
             label='test-id-card-page'
             style={[styles.theCard, {width: this.state.width2 / 3}]}
             onPress={() => this.onCardClick()}>
-            <Text style={[styles.cardManager, {fontSize: this.state.width2 < 330 ? 14 : 16}]} >
+            <Text style={[styles.cardManager, {fontSize: this.state.width2 < 330 ? 14 : 16}]}>
               {this.cardPage()}
             </Text>
           </TestElement>
@@ -556,12 +575,14 @@ export class Wallet extends React.Component {
           label='test-id-fab'
           style={styles.fab}
           onPress={() => this.onMarketClick()}>
-          <Icon name="plus" color="white" size={24} />
+          <Icon name="plus" color="white" size={width < 330 ? 20 : 24} />
         </TestElement>
       </View>
     );
   }
 }
+
+let {width} = Dimensions.get('window');
 
 let codeRedeemed = '';
 let passed = '';
@@ -578,7 +599,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden'
   },
   bar: {
-    marginTop: 82,
+    marginTop: width < 330 ? 65 : 80,
     height: 50,
     marginRight: 30,
     alignItems: 'flex-end',
@@ -597,11 +618,11 @@ const styles = StyleSheet.create({
     fontSize: 18
   },
   ferlyImg: {
-    height: 57,
-    marginTop: -65
+    height: width < 330 ? 48 : 57,
+    marginTop: width < 330 ? -50 : -65
   },
   backgroundImage: {
-    height: 190,
+    height: width < 330 ? 160 : 190,
     flexDirection: 'row-reverse',
     alignSelf: 'center',
     padding: 10,
@@ -621,7 +642,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginHorizontal: 20,
     marginBottom: 15,
-    height: 100,
+    height: width < 330 ? 90 : 100,
     borderWidth: 1,
     borderRadius: 10,
     backgroundColor: 'white',
@@ -639,7 +660,7 @@ const styles = StyleSheet.create({
   },
   theCard: {
     backgroundColor: Theme.yellow,
-    height: 40,
+    height: width < 330 ? 35 : 40,
     borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center'
@@ -651,8 +672,8 @@ const styles = StyleSheet.create({
     borderLeftWidth: 0.5
   },
   fab: {
-    width: 60,
-    height: 60,
+    width: width < 330 ? 50 : 60,
+    height: width < 330 ? 50 : 60,
     borderRadius: 30,
     backgroundColor: Theme.yellow,
     position: 'absolute',

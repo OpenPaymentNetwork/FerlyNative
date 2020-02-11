@@ -238,7 +238,7 @@ Contacts.propTypes = {
   deviceToken: PropTypes.string.isRequired
 };
 
-function mapStateToProps (state, ownProps) {
+function mapStateToProps (state) {
   const {deviceToken} = state.settings;
   return {
     deviceToken

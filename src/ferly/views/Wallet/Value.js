@@ -80,7 +80,9 @@ export class Value extends React.Component {
         style={{flex: 1, padding: 20, backgroundColor: 'white'}}>
         <View style={styles.headerContainer}>
           <Text style={styles.amount}>${amount}</Text>
-          <Text style={{fontSize: 22, marginBottom: 50, color: Theme.lightBlue}}>{title}</Text>
+          <Text style={{fontSize: width < 330 ? 19 : 22, marginBottom: 50, color: Theme.lightBlue}}>
+            {title}
+          </Text>
         </View>
         <Text style={styles.header}>Redemption Locations</Text>
         <Text style={styles.paragraph}>
@@ -149,7 +151,12 @@ const styles = StyleSheet.create({
     fontSize: 15,
     position: 'absolute'
   },
-  amount: {color: Theme.lightBlue, fontSize: 35, marginBottom: 12, marginTop: 30},
+  amount: {
+    color: Theme.lightBlue,
+    fontSize: width < 330 ? 28 : 35,
+    marginBottom: width < 330 ? 8 : 12,
+    marginTop: width < 330 ? 25 : 30
+  },
   header: {
     color: 'black',
     fontSize: 16,
