@@ -14,7 +14,8 @@ import {
   TouchableOpacity,
   ScrollView,
   StyleSheet,
-  View
+  View,
+  Dimensions
 } from 'react-native';
 
 export class NewAddressForm extends React.Component {
@@ -250,12 +251,12 @@ export class NewAddressForm extends React.Component {
                   flexDirection: 'row',
                   justifyContent: 'center',
                   marginBottom: 30}}>
-                  <Text style={{fontSize: 16}}>Already have a Ferly Card?</Text>
+                  <Text style={{fontSize: width > 600 ? 18 : 16}}>Already have a Ferly Card?</Text>
                   <TouchableOpacity onPress={() => this.props.onPass()}>
                     <Text style={{
                       color: Theme.lightBlue,
                       textDecorationLine: 'underline',
-                      fontSize: 16,
+                      fontSize: width > 600 ? 18 : 16,
                       paddingLeft: 5}}>Activate It</Text>
                   </TouchableOpacity>
                 </View>
@@ -267,6 +268,7 @@ export class NewAddressForm extends React.Component {
     }
 }
 let count = 0;
+const {width} = Dimensions.get('window');
 
 NewAddressForm.propTypes = {
   onPass: PropTypes.func,
@@ -278,15 +280,25 @@ NewAddressForm.propTypes = {
 const styles = StyleSheet.create({
   error: {color: 'red', width: '100%'},
   form: {flex: 1},
-  textField: {borderWidth: 1, height: 35, borderRadius: 5, paddingLeft: 10},
+  textField: {
+    borderWidth: 1,
+    height: width > 600 ? 40 : 35,
+    borderRadius: 5,
+    paddingLeft: 10,
+    fontSize: width > 600 ? 20 : 14
+  },
   labelText: {color: 'gray'},
-  textBox: {paddingHorizontal: 10, paddingLeft: 20, paddingTop: 15},
+  textBox: {
+    paddingHorizontal: width > 600 ? 15 : 10,
+    paddingLeft: width > 600 ? 24 : 20,
+    paddingTop: width > 600 ? 20 : 15
+  },
   iconStyles: {flexDirection: 'row', paddingTop: 15, paddingLeft: 20},
   page: {flex: 1, justifyContent: 'space-between', backgroundColor: 'white'},
   zipField: {
     borderWidth: 1,
-    width: 100,
-    height: 35,
+    width: width > 600 ? 120 : 100,
+    height: width > 600 ? 50 : 35,
     borderRadius: 5,
     paddingLeft: 10
   }

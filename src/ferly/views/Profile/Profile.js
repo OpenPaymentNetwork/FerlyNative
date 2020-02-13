@@ -19,7 +19,8 @@ import {
   TouchableOpacity,
   TextInput,
   KeyboardAvoidingView,
-  ScrollView
+  ScrollView,
+  Dimensions
 } from 'react-native';
 
 class Profile extends React.Component {
@@ -220,7 +221,7 @@ class Profile extends React.Component {
     const {editing, submitting, invalid} = this.state;
 
     const avatarProps = {
-      size: 110,
+      size: width > 600 ? 130 : 110,
       firstWord: firstName,
       secondWord: lastName,
       pictureUrl: profileImage
@@ -363,7 +364,7 @@ class Profile extends React.Component {
           <Icon
             name={editing ? 'times' : 'pencil'}
             color={Theme.lightBlue}
-            size={24} />
+            size={width > 600 ? 28 : 24} />
         </TestElement>
       </View>
     );
@@ -371,12 +372,13 @@ class Profile extends React.Component {
 }
 
 let count = 0;
+const {width} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   avatarContainer: {
-    width: 110,
-    height: 110,
-    borderRadius: 55
+    width: width > 600 ? 150 : 110,
+    height: width > 600 ? 150 : 110,
+    borderRadius: width > 600 ? 65 : 55
   },
   label: {
     color: 'gray',
@@ -400,12 +402,12 @@ const styles = StyleSheet.create({
     backgroundColor: Theme.darkBlue,
     alignItems: 'center'
   },
-  name: {fontSize: 30},
-  username: {fontSize: 20, color: 'gray'},
+  name: {fontSize: width > 600 ? 35 : 30},
+  username: {fontSize: width > 600 ? 25 : 20, color: 'gray'},
   field: {
     borderBottomWidth: 1,
     borderColor: 'gray',
-    fontSize: 18,
+    fontSize: width > 600 ? 20 : 18,
     width: '100%'
   }
 });

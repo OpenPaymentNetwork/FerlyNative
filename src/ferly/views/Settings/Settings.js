@@ -7,7 +7,15 @@ import Theme from 'ferly/utils/theme';
 import {connect} from 'react-redux';
 import {envId, post} from 'ferly/utils/fetch';
 import {Notifications, Updates} from 'expo';
-import {View, Text, TouchableOpacity, StyleSheet, Alert, AsyncStorage} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+  AsyncStorage,
+  Dimensions
+} from 'react-native';
 import {setDeviceToken, setIsCustomer, setExpoToken} from 'ferly/store/settings';
 import {apiErase} from 'ferly/store/api';
 
@@ -205,12 +213,14 @@ export class Settings extends React.Component {
             backgroundColor: Theme.lightBlue,
             justifyContent: 'center',
             alignItems: 'center',
-            width: 90,
-            height: 35,
-            borderRadius: 10
+            width: width > 600 ? 110 : 90,
+            height: width > 600 ? 45 : 35,
+            borderRadius: width > 600 ? 15 : 10
           }}
           onPress={() => this.SignOut()}>
-            <Text style={{color: 'white', fontSize: 18, fontWeight: 'bold'}} >Sign Out</Text>
+            <Text style={{color: 'white', fontSize: width > 600 ? 20 : 18, fontWeight: 'bold'}} >
+              Sign Out
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -219,6 +229,7 @@ export class Settings extends React.Component {
 }
 
 let count = 0;
+const {width} = Dimensions.get('window');
 
 let device = makeid(32);
 function makeid (length) {
@@ -241,10 +252,10 @@ Settings.propTypes = {
 const styles = StyleSheet.create({
   title: {
     fontWeight: 'bold',
-    fontSize: 20
+    fontSize: width > 600 ? 22 : 20
   },
   description: {
-    fontSize: 16,
+    fontSize: width > 600 ? 18 : 16,
     color: 'gray',
     paddingLeft: 20
   },
@@ -257,7 +268,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8
   },
   item: {
-    height: 80
+    height: width > 600 ? 90 : 80
   }
 });
 

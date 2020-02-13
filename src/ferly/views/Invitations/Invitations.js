@@ -13,7 +13,8 @@ import {
   ScrollView,
   TouchableOpacity,
   Alert,
-  StyleSheet
+  StyleSheet,
+  Dimensions
 } from 'react-native';
 import {format as formatDate} from 'date-fns';
 
@@ -137,7 +138,7 @@ export class Invitations extends React.Component {
 
     const addIcon = (
       <View style={styles.addIconContainer}>
-        <Icon name='plus' color="white" size={16} />
+        <Icon name='plus' color="white" size={width > 600 ? 18 : 16} />
       </View>
     );
 
@@ -167,6 +168,7 @@ export class Invitations extends React.Component {
 }
 
 let count = 0;
+const {width} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   invitationContainer: {
@@ -219,8 +221,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 20
   },
   button: {alignItems: 'center', flexDirection: 'row', paddingVertical: 10},
-  buttonText: {color: Theme.lightBlue, fontSize: 18},
-  headerText: {color: Theme.darkBlue, fontSize: 22, paddingLeft: 20},
+  buttonText: {color: Theme.lightBlue, fontSize: width > 600 ? 22 : 18},
+  headerText: {color: Theme.darkBlue, fontSize: width > 600 ? 26 : 22, paddingLeft: 20},
   pendingTitleContainer: {
     borderTopWidth: 1,
     borderColor: 'lightgray',

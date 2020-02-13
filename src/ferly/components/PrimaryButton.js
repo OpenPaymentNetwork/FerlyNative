@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import Theme from 'ferly/utils/theme';
-import {Text, TouchableOpacity} from 'react-native';
+import {Text, TouchableOpacity, Dimensions} from 'react-native';
 
 export default class PrimaryButton extends React.Component {
   render () {
@@ -12,7 +12,7 @@ export default class PrimaryButton extends React.Component {
           alignItems: 'center',
           backgroundColor: disabled ? 'lightgray' : Theme.lightBlue,
           flexDirection: 'row',
-          height: 50,
+          height: width > 600 ? 60 : 50,
           justifyContent: 'center',
           borderRadius: 15,
           marginHorizontal: marginHorizontal || 15,
@@ -20,11 +20,13 @@ export default class PrimaryButton extends React.Component {
         }}
         disabled={disabled}
         onPress={() => onPress()}>
-        <Text style={{color: 'white', fontSize: 20}}>{title}</Text>
+        <Text style={{color: 'white', fontSize: width > 600 ? 24 : 20}}>{title}</Text>
       </TouchableOpacity>
     );
   }
 }
+
+let {width} = Dimensions.get('window');
 
 PrimaryButton.propTypes = {
   disabled: PropTypes.bool,

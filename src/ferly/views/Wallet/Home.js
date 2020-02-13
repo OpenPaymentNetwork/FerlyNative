@@ -320,14 +320,16 @@ export class Wallet extends React.Component {
         onPress={() => navigation.navigate('Value', design)}
         style={[styles.cardContainer, {borderColor: color}]}>
         <View style={[styles.cardImage, {backgroundColor: color}]}>
-          <Text style={{fontSize: this.state.width2 < 330 ? 20 : 22, color: text}}>
+          <Text style={{
+            fontSize: this.state.width2 < 330 ? 20 : 22 && width > 600 ? 26 : 22, color: text
+          }}>
             {formatted}
           </Text>
         </View>
         <View style={[styles.cardDetails, {borderColor: color}]}>
           <View style={{flex: 1, justifyContent: 'center', paddingHorizontal: 15}}>
             <Text style={{
-              fontSize: this.state.width2 < 330 ? 16 : 18,
+              fontSize: this.state.width2 < 330 ? 16 : 18 && width > 600 ? 24 : 18,
               fontWeight: 'bold',
               color: Theme.darkBlue}}>{title}</Text>
           </View>
@@ -341,10 +343,10 @@ export class Wallet extends React.Component {
                 style={{paddingRight: 8}}
                 name="gift"
                 color={Theme.darkBlue}
-                size={this.state.width2 < 330 ? 16 : 18} />
+                size={this.state.width2 < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
               <Text style={{
                 color: Theme.darkBlue,
-                fontSize: this.state.width2 < 330 ? 11 : 12,
+                fontSize: this.state.width2 < 330 ? 11 : 12 && width > 600 ? 16 : 12,
                 fontWeight: 'bold'
               }}>
                 GIVE
@@ -359,10 +361,10 @@ export class Wallet extends React.Component {
                 style={{paddingRight: 8}}
                 name="credit-card"
                 color={Theme.darkBlue}
-                size={this.state.width2 < 330 ? 16 : 18} />
+                size={this.state.width2 < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
               <Text style={{
                 color: Theme.darkBlue,
-                fontSize: this.state.width2 < 330 ? 11 : 12,
+                fontSize: this.state.width2 < 330 ? 11 : 12 && width > 600 ? 16 : 12,
                 fontWeight: 'bold'
               }}>
                 BUY
@@ -387,7 +389,8 @@ export class Wallet extends React.Component {
         <ScrollView
           keyboardShouldPersistTaps='handled'
           style={{
-            marginTop: Platform.OS === 'android' ? 240 : 10 && this.state.width2 < 330 ? -10 : 50
+            marginTop: Platform.OS === 'android' ? 240 : 10 &&
+            this.state.width2 < 330 ? -10 : 50 && width > 600 ? 80 : 40
           }}
           refreshControl={
             <RefreshControl
@@ -490,7 +493,7 @@ export class Wallet extends React.Component {
         />
         <Text style={{
           padding: 20,
-          fontSize: this.state.width2 < 330 ? 16 : 18,
+          fontSize: this.state.width2 < 330 ? 16 : 18 && width > 600 ? 20 : 18,
           fontWeight: 'bold',
           paddingBottom: 40}}>
           Ferly Card
@@ -552,7 +555,7 @@ export class Wallet extends React.Component {
           <Text style={{
             padding: 20,
             marginTop: this.state.width2 < 330 ? 8 : 17,
-            fontSize: this.state.width2 < 330 ? 16 : 18,
+            fontSize: this.state.width2 < 330 ? 16 : 18 && width > 600 ? 20 : 18,
             fontWeight: 'bold',
             backgroundColor: 'white'
           }}>
@@ -565,7 +568,9 @@ export class Wallet extends React.Component {
             label='test-id-card-page'
             style={[styles.theCard, {width: this.state.width2 / 3}]}
             onPress={() => this.onCardClick()}>
-            <Text style={[styles.cardManager, {fontSize: this.state.width2 < 330 ? 14 : 16}]}>
+            <Text style={[styles.cardManager, {
+              fontSize: this.state.width2 < 330 ? 14 : 16 && width > 600 ? 18 : 16
+            }]}>
               {this.cardPage()}
             </Text>
           </TestElement>
@@ -600,7 +605,7 @@ const styles = StyleSheet.create({
   },
   bar: {
     marginTop: width < 330 ? 65 : 80,
-    height: 50,
+    height: width > 600 ? 70 : 50,
     marginRight: 30,
     alignItems: 'flex-end',
     justifyContent: 'center',
@@ -618,11 +623,11 @@ const styles = StyleSheet.create({
     fontSize: 18
   },
   ferlyImg: {
-    height: width < 330 ? 48 : 57,
-    marginTop: width < 330 ? -50 : -65
+    height: width < 330 ? 48 : 57 && width > 600 ? 90 : 57,
+    marginTop: width < 330 ? -50 : -65 && width > 600 ? -100 : -65
   },
   backgroundImage: {
-    height: width < 330 ? 160 : 190,
+    height: width < 330 ? 160 : 190 && width > 600 ? 250 : 190,
     flexDirection: 'row-reverse',
     alignSelf: 'center',
     padding: 10,
@@ -642,7 +647,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginHorizontal: 20,
     marginBottom: 15,
-    height: width < 330 ? 90 : 100,
+    height: width < 330 ? 90 : 100 && width > 600 ? 110 : 100,
     borderWidth: 1,
     borderRadius: 10,
     backgroundColor: 'white',
@@ -652,7 +657,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 1
   },
   cardImage: {
-    width: 130,
+    width: width > 600 ? 170 : 130,
     alignItems: 'center',
     justifyContent: 'center',
     borderTopLeftRadius: 10,
@@ -660,7 +665,7 @@ const styles = StyleSheet.create({
   },
   theCard: {
     backgroundColor: Theme.yellow,
-    height: width < 330 ? 35 : 40,
+    height: width < 330 ? 35 : 40 && width > 600 ? 50 : 40,
     borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center'
@@ -672,9 +677,9 @@ const styles = StyleSheet.create({
     borderLeftWidth: 0.5
   },
   fab: {
-    width: width < 330 ? 50 : 60,
-    height: width < 330 ? 50 : 60,
-    borderRadius: 30,
+    width: width < 330 ? 50 : 60 && width > 600 ? 70 : 60,
+    height: width < 330 ? 50 : 60 && width > 600 ? 70 : 60,
+    borderRadius: width > 600 ? 35 : 30,
     backgroundColor: Theme.yellow,
     position: 'absolute',
     bottom: 20,
@@ -692,9 +697,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    height: 40,
+    height: width > 600 ? 45 : 40,
     flex: 1,
-    maxWidth: 275
+    maxWidth: width > 600 ? 450 : 275
   },
   buttonRow: {
     flexDirection: 'row',

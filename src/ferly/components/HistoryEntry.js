@@ -13,7 +13,7 @@ import {
   pendingBlue,
   cancelBlue
 } from 'ferly/images/index';
-import {Text, View, Image, StyleSheet, TouchableOpacity} from 'react-native';
+import {Text, View, Image, StyleSheet, TouchableOpacity, Dimensions} from 'react-native';
 
 export class HistoryEntry extends React.Component {
   componentDidMount () {
@@ -71,6 +71,20 @@ export class HistoryEntry extends React.Component {
         involved = 'with your Ferly Card';
         break;
     }
+    let all = designTitle + ' ' + involved;
+    if (width < 330) {
+      let total = designTitle.length + involved.length;
+      if (total > 30) {
+        all = all.slice(0, 30);
+        all = all + '...';
+      }
+    } else if (width > 330 && width < 420) {
+      let total = designTitle.length + involved.length;
+      if (total > 40) {
+        all = all.slice(0, 40);
+        all = all + '...';
+      }
+    }
 
     return (
       <TestElement
@@ -82,11 +96,13 @@ export class HistoryEntry extends React.Component {
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <Image style={styles.image} source={iconSource} />
           <View style={{flexDirection: 'column', paddingLeft: 15}}>
-            <Text style={{fontWeight: 'bold', fontSize: 20}}>
+            <Text style={{fontWeight: 'bold', fontSize: width > 600 ? 24 : 20}}>
               {`${titleVerb} $${amount}`}
             </Text>
-            <Text style={{color: Theme.lightBlue, fontSize: 13, marginRight: -100}}>
-              {`${designTitle} ${involved}`}
+            <Text style={{
+              color: Theme.lightBlue, fontSize: width > 600 ? 16 : 13, marginRight: -100
+            }}>
+              {`${all}`}
             </Text>
           </View>
         </View>
@@ -96,12 +112,14 @@ export class HistoryEntry extends React.Component {
   }
 }
 
+let {width} = Dimensions.get('window');
+
 const styles = StyleSheet.create({
   entry: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    height: 90,
+    height: width > 600 ? 110 : 90,
     alignItems: 'center',
     borderWidth: 0.5,
     borderColor: 'black',
@@ -110,8 +128,8 @@ const styles = StyleSheet.create({
   },
   image: {
     resizeMode: 'contain',
-    height: 44,
-    width: 44
+    height: width > 600 ? 50 : 44,
+    width: width > 600 ? 50 : 44
   }
 });
 

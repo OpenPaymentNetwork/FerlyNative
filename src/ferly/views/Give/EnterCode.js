@@ -104,7 +104,9 @@ export class EnterCode extends React.Component {
                   this.props.navigation.navigate('Wallet');
                 }
               }
-              post('update-invalid-code-count', this.props.deviceToken, {'invalid_result': invalidCode})
+              post('update-invalid-code-count', this.props.deviceToken, {
+                'invalid_result': invalidCode
+              })
                 .then((response) => response.json())
                 .then((json) => {
                   if (json.error || json.invalid) {
@@ -215,14 +217,16 @@ export class EnterCode extends React.Component {
         flex: 1,
         justifyContent: 'space-between',
         backgroundColor: 'white'}}>
-        <View style={{paddingHorizontal: width < 330 ? 30 : 40, paddingVertical: 30}}>
-          <Text style={{fontSize: 18, textAlign: 'center'}}>
+        <View style={{
+          paddingHorizontal: width < 330 ? 30 : 40 && width > 600 ? 50 : 40, paddingVertical: 30
+        }}>
+          <Text style={{fontSize: width > 600 ? 22 : 18, textAlign: 'center'}}>
             {`Enter gift code sent to your email or phone to accept a gift.`}
           </Text>
-          <View style={{paddingVertical: width < 330 ? 30 : 35}}>
+          <View style={{paddingVertical: width < 330 ? 30 : 35 && width > 600 ? 40 : 35}}>
             <View style={{
               borderWidth: 1,
-              width: 150,
+              width: width > 600 ? 160 : 150,
               alignSelf: 'center',
               borderColor: invalid ? 'red' : 'gray'}}>
               <TextInput
@@ -230,9 +234,9 @@ export class EnterCode extends React.Component {
                 maxLength={7}
                 autoCapitalize = 'characters'
                 style={{
-                  fontSize: 22,
-                  paddingVertical: 5,
-                  paddingHorizontal: 15,
+                  fontSize: width > 600 ? 24 : 22,
+                  paddingVertical: width > 600 ? 10 : 5,
+                  paddingHorizontal: width > 600 ? 20 : 15,
                   alignSelf: 'center'
                 }}
                 onChangeText={(text) => {
@@ -277,7 +281,7 @@ EnterCode.propTypes = {
 
 const styles = StyleSheet.create({
   error: {
-    fontSize: 16,
+    fontSize: width > 600 ? 18 : 16,
     color: 'red',
     alignSelf: 'center'
   }

@@ -6,7 +6,8 @@ import {
   View,
   Text,
   TextInput,
-  Alert
+  Alert,
+  Dimensions
 } from 'react-native';
 import {apiExpire} from 'ferly/store/api';
 import {StackActions} from 'react-navigation';
@@ -103,7 +104,7 @@ export class ManualAdd extends React.Component {
         backgroundColor: 'white'
       }}>
         <View style={{margin: 20}}>
-          <Text style={{fontSize: 16, marginBottom: 14}}>
+          <Text style={{fontSize: width > 600 ? 20 : 16, marginBottom: 14}}>
             Enter an email address or phone number to send an invitation to.
           </Text>
           <View style={{borderBottomWidth: 1, borderColor: 'gray'}}>
@@ -112,7 +113,7 @@ export class ManualAdd extends React.Component {
               autoFocus
               underlineColorAndroid={'transparent'}
               returnKeyType='done'
-              style={{flexShrink: 1, minWidth: '100%'}}
+              style={{flexShrink: 1, minWidth: '100%', fontSize: width > 600 ? 18 : 14}}
               keyboardType="email-address"
               value={fieldValue} />
           </View>
@@ -130,6 +131,7 @@ export class ManualAdd extends React.Component {
 }
 
 let count = 0;
+const {width} = Dimensions.get('window');
 
 ManualAdd.propTypes = {
   apiExpire: PropTypes.func.isRequired,

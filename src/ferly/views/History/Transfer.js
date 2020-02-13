@@ -260,7 +260,7 @@ export class Transfer extends React.Component {
       counterPartyAvatar = (
         <View style={{marginTop: 5, zIndex: -1}}>
           <Avatar
-            size={50}
+            size={width > 600 ? 55 : 50}
             firstWord={counterParty}
             pictureUrl={counterPartyProfileImageUrl} />
         </View>
@@ -273,7 +273,7 @@ export class Transfer extends React.Component {
           <Text style={styles.sectionHeader}>
             {`${messageTitle}Message`}
           </Text>
-          <Text style={{fontSize: 16, paddingLeft: 20, color: 'darkgray'}}>
+          <Text style={{fontSize: width > 600 ? 18 : 16, paddingLeft: 20, color: 'darkgray'}}>
             {message}
           </Text>
         </View>
@@ -390,7 +390,9 @@ export class Transfer extends React.Component {
             <Text style={styles.sectionHeader} >Gift Value</Text>
           </View>
           <View style={{paddingLeft: 20}} >
-            <Text style={[styles.sectionText, {fontSize: 16}]} >{designTitle}</Text>
+            <Text style={[styles.sectionText, {fontSize: width > 600 ? 18 : 16}]} >
+              {designTitle}
+            </Text>
           </View>
         </View>
       );
@@ -403,7 +405,12 @@ export class Transfer extends React.Component {
           </View>
           <View style={{paddingLeft: 15, flexDirection: 'row'}} >
             {counterPartyAvatar}
-            <Text style={{alignSelf: 'center', paddingLeft: 10, color: 'darkgray', fontSize: 16}} >
+            <Text style={{
+              alignSelf: 'center',
+              paddingLeft: 10,
+              color: 'darkgray',
+              fontSize: width > 600 ? 18 : 16
+            }} >
               {counterParty}
             </Text>
           </View>
@@ -416,7 +423,9 @@ export class Transfer extends React.Component {
             <Text style={styles.sectionHeader} >Gift Value</Text>
           </View>
           <View style={{paddingLeft: 20}} >
-            <Text style={[styles.sectionText, {fontSize: 16}]} >{designTitle}</Text>
+            <Text style={[styles.sectionText, {fontSize: width > 600 ? 18 : 16}]} >
+              {designTitle}
+            </Text>
           </View>
         </View>
       );
@@ -429,7 +438,12 @@ export class Transfer extends React.Component {
           </View>
           <View style={{paddingLeft: 15, flexDirection: 'row'}} >
             {counterPartyAvatar}
-            <Text style={{alignSelf: 'center', paddingLeft: 10, color: 'darkgray', fontSize: 16}} >
+            <Text style={{
+              alignSelf: 'center',
+              paddingLeft: 10,
+              color: 'darkgray',
+              fontSize: width > 600 ? 18 : 16
+            }} >
               {counterParty}
             </Text>
           </View>
@@ -442,7 +456,9 @@ export class Transfer extends React.Component {
             <Text style={styles.sectionHeader} >Gift Value</Text>
           </View>
           <View style={{paddingLeft: 20}} >
-            <Text style={[styles.sectionText, {fontSize: 16}]} >{designTitle}</Text>
+            <Text style={[styles.sectionText, {fontSize: width > 600 ? 18 : 16}]} >
+              {designTitle}
+            </Text>
           </View>
         </View>
       );
@@ -455,7 +471,12 @@ export class Transfer extends React.Component {
           </View>
           <View style={{paddingLeft: 15, flexDirection: 'row'}} >
             {counterPartyAvatar}
-            <Text style={{alignSelf: 'center', paddingLeft: 10, color: 'darkgray', fontSize: 16}} >
+            <Text style={{
+              alignSelf: 'center',
+              paddingLeft: 10,
+              color: 'darkgray',
+              fontSize: width > 600 ? 18 : 16
+            }} >
               {counterParty}
             </Text>
           </View>
@@ -506,7 +527,9 @@ export class Transfer extends React.Component {
             <Text style={styles.sectionHeader} >Gift Value</Text>
           </View>
           <View style={{paddingLeft: 20}} >
-            <Text style={[styles.sectionText, {fontSize: 16}]} >{designTitle}</Text>
+            <Text style={[styles.sectionText, {fontSize: width > 600 ? 18 : 16}]} >
+              {designTitle}
+            </Text>
           </View>
         </View>
       );
@@ -556,11 +579,13 @@ export class Transfer extends React.Component {
           <View style={{
             alignItems: 'center',
             flexDirection: 'row',
-            height: width < 330 ? 85 : 110,
+            height: width < 330 ? 85 : 110 && width > 600 ? 135 : 110,
             justifyContent: 'center',
             paddingTop: 10
           }}>
-            <Text style={{color: Theme.lightBlue, fontSize: width < 330 ? 30 : 35}}>
+            <Text style={{
+              color: Theme.lightBlue, fontSize: width < 330 ? 30 : 35 && width > 600 ? 40 : 35
+            }}>
               {symbol}${amount}
             </Text>
           </View>
@@ -569,13 +594,17 @@ export class Transfer extends React.Component {
             marginHorizontal: 20,
             paddingBottom: 10
           }}>
-            <Text style={{textAlign: 'center', fontSize: width < 330 ? 16 : 18, color: 'white'}}>
+            <Text style={{
+              textAlign: 'center',
+              fontSize: width < 330 ? 16 : 18 && width > 600 ? 20 : 18,
+              color: 'white'
+            }}>
               {`You ${verb} ${designTitle}${cp}.`}
             </Text>
             <Text style={[styles.sectionText, {
               paddingTop: 5,
               paddingBottom: 30,
-              fontSize: width < 330 ? 12 : 14
+              fontSize: width < 330 ? 12 : 14 && width > 600 ? 16 : 14
             }]}>
               {dateDisplay}
             </Text>
@@ -602,8 +631,8 @@ let {width} = Dimensions.get('window');
 const styles = StyleSheet.create({
   functionRow: {flexDirection: 'row', justifyContent: 'space-between'},
   section: {paddingHorizontal: 20, padding: 15},
-  sectionHeader: {fontSize: 18},
-  sectionText: {color: 'darkgray', fontSize: 14}
+  sectionHeader: {fontSize: width > 600 ? 22 : 18},
+  sectionText: {color: 'darkgray', fontSize: width > 600 ? 18 : 14}
 });
 
 Transfer.propTypes = {

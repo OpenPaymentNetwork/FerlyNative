@@ -6,7 +6,16 @@ import Theme from 'ferly/utils/theme';
 import {setIsCustomer} from 'ferly/store/settings';
 import {connect} from 'react-redux';
 import {post} from 'ferly/utils/fetch';
-import {AsyncStorage, View, Text, TextInput, StyleSheet, Alert, Platform} from 'react-native';
+import {
+  AsyncStorage,
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  Alert,
+  Platform,
+  Dimensions
+} from 'react-native';
 
 export class RecoveryCode extends React.Component {
   static navigationOptions = {
@@ -166,7 +175,7 @@ export class RecoveryCode extends React.Component {
         justifyContent: 'space-between',
         backgroundColor: 'white'}}>
         <View style={{paddingHorizontal: 40, paddingVertical: 30}}>
-          <Text style={{fontSize: 18}}>
+          <Text style={{fontSize: width > 600 ? 22 : 18}}>
             {`We sent a unique and temporary code to your ${channelType}. ` +
              `Enter the ${codeLength}-digit code below.`}
           </Text>
@@ -175,7 +184,7 @@ export class RecoveryCode extends React.Component {
             borderColor: 'gray',
             paddingTop: 20}}>
             <TextInput
-              style={{fontSize: 18}}
+              style={{fontSize: width > 600 ? 22 : 18}}
               onChangeText={(text) => this.setState({fieldValue: text})}
               autoFocus
               returnKeyType='done'
@@ -197,6 +206,7 @@ export class RecoveryCode extends React.Component {
 }
 
 let count = 0;
+let {width} = Dimensions.get('window');
 
 RecoveryCode.propTypes = {
   dispatch: PropTypes.func.isRequired,
@@ -208,7 +218,7 @@ RecoveryCode.propTypes = {
 
 const styles = StyleSheet.create({
   error: {
-    fontSize: 16,
+    fontSize: width > 600 ? 20 : 16,
     color: 'red'
   }
 });

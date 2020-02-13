@@ -18,7 +18,8 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
+  Dimensions
 } from 'react-native';
 import {WebView} from 'react-native-webview';
 
@@ -195,7 +196,7 @@ export class Cart extends React.Component {
             key={id}
             style={sourceStyles}
             onPress={() => this.setState({selectedSource: id})}>
-            <Text>{display}</Text>
+            <Text style={{fontSize: width > 600 ? 14 : 12}}>{display}</Text>
             <TouchableOpacity
               style={styles.removeIconContainer}
               onPress={() => this.handleRemoveClick(id, display)}>
@@ -203,7 +204,7 @@ export class Cart extends React.Component {
                 style={{alignSelf: 'flex-start'}}
                 name="times"
                 color="lightcoral"
-                size={18} />
+                size={width > 600 ? 20 : 18} />
             </TouchableOpacity>
           </TestElement>
         );
@@ -212,7 +213,7 @@ export class Cart extends React.Component {
         <TouchableOpacity
           style={styles.source}
           onPress={() => this.setState({selectedSource: 'new'})}>
-          <Text>Pay with a new card</Text>
+          <Text style={{fontSize: width > 600 ? 14 : 12}}>Pay with a new card</Text>
         </TouchableOpacity>
       );
       if (selectedSource === 'new') {
@@ -336,6 +337,7 @@ export class Cart extends React.Component {
 }
 
 let count = 0;
+const {width} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   header: {
@@ -347,13 +349,13 @@ const styles = StyleSheet.create({
     flexShrink: 1,
     fontWeight: 'bold',
     flexWrap: 'wrap',
-    fontSize: 20
+    fontSize: width > 600 ? 24 : 20
   },
-  invalidText: {fontSize: 14, color: 'red', textAlign: 'right'},
+  invalidText: {fontSize: width > 600 ? 18 : 14, color: 'red', textAlign: 'right'},
   page: {flex: 1, flexDirection: 'column'},
   selectedSource: {borderColor: Theme.lightBlue, borderWidth: 2},
   source: {
-    height: 90,
+    height: width > 600 ? 100 : 90,
     marginHorizontal: 20,
     marginVertical: 10,
     backgroundColor: 'white',
@@ -370,14 +372,14 @@ const styles = StyleSheet.create({
   removeIconContainer: {
     alignSelf: 'flex-end',
     position: 'absolute',
-    height: 90,
+    height: width > 600 ? 100 : 90,
     padding: 10
   },
   functionRow: {flexDirection: 'row', justifyContent: 'space-between'},
   section: {marginTop: 10, paddingHorizontal: 20},
   sectionHeader: {fontSize: 22, fontWeight: 'bold', marginVertical: 10, alignSelf: 'center'},
-  sectionText: {color: 'darkgray', fontSize: 16},
-  totalText: {fontSize: 18, fontWeight: 'bold'}
+  sectionText: {color: 'darkgray', fontSize: width > 600 ? 18 : 16},
+  totalText: {fontSize: width > 600 ? 20 : 18, fontWeight: 'bold'}
 });
 
 Cart.propTypes = {

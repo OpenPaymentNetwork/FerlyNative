@@ -11,7 +11,8 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
-  Platform
+  Platform,
+  Dimensions
 } from 'react-native';
 
 export class SignUp extends React.Component {
@@ -197,7 +198,7 @@ export class SignUp extends React.Component {
     };
     return (
       <View style={[styles.row, {marginBottom: 30}]}>
-        <Text style={{fontSize: 16}}>Already have an account?</Text>
+        <Text style={{fontSize: width > 600 ? 20 : 16}}>Already have an account?</Text>
         <TouchableOpacity
           onPress={() => navigation.navigate('RecoveryChannel', signInParams)}>
           <Text style={[styles.recoveryText, {paddingLeft: 5}]}>Sign In</Text>
@@ -221,7 +222,7 @@ export class SignUp extends React.Component {
     }
     return (
       <View style={{flex: 1, backgroundColor: 'white'}}>
-        <View style={{paddingHorizontal: 15}} >
+        <View style={{paddingHorizontal: width > 600 ? 20 : 15}} >
           <TextInput
             style={styles.field}
             underlineColorAndroid={'transparent'}
@@ -320,6 +321,7 @@ export class SignUp extends React.Component {
 }
 
 let count = 0;
+let {width} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
@@ -331,10 +333,10 @@ const styles = StyleSheet.create({
   field: {
     borderWidth: 1,
     borderRadius: 5,
-    fontSize: 18,
-    marginVertical: 15,
+    fontSize: width > 600 ? 22 : 18,
+    marginVertical: width > 600 ? 20 : 15,
     width: '100%',
-    height: 35,
+    height: width > 600 ? 40 : 35,
     paddingLeft: 10
   },
   firstField: {
@@ -352,7 +354,7 @@ const styles = StyleSheet.create({
   recoveryText: {
     color: Theme.lightBlue,
     textDecorationLine: 'underline',
-    fontSize: 16
+    fontSize: width > 600 ? 20 : 16
   },
   row: {width: '100%', flexDirection: 'row', justifyContent: 'center'}
 });

@@ -12,7 +12,8 @@ import {
   Text,
   TextInput,
   Alert,
-  StyleSheet
+  StyleSheet,
+  Dimensions
 } from 'react-native';
 
 export class CardForm extends React.Component {
@@ -169,7 +170,7 @@ export class CardForm extends React.Component {
           <View style={{paddingHorizontal: 15}} >
             <View style={styles.inputContainer}>
               <TextInput
-                style={{fontSize: 18}}
+                style={{fontSize: width > 600 ? 22 : 18}}
                 placeholder="Card Number"
                 underlineColorAndroid='transparent'
                 keyboardType='numeric'
@@ -181,7 +182,7 @@ export class CardForm extends React.Component {
             <Text style={styles.errorText}>{panError}</Text>
             <View style={styles.inputContainer}>
               <TextInput
-                style={{fontSize: 18}}
+                style={{fontSize: width > 600 ? 22 : 18}}
                 placeholder="Pin"
                 underlineColorAndroid='transparent'
                 keyboardType='numeric'
@@ -211,6 +212,7 @@ export class CardForm extends React.Component {
   }
 }
 let count = 0;
+const {width} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   cardContainer: {
@@ -218,20 +220,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 20
   },
-  cardBackground: {height: 190, width: 300, flexDirection: 'row-reverse'},
   panText: {fontSize: 20, padding: 20, color: 'white'},
   inputContainer: {
     borderWidth: 1,
-    height: 35,
+    height: width > 600 ? 40 : 35,
     paddingLeft: 10,
     marginVertical: 15,
     justifyContent: 'center'
   },
-  title: {fontSize: 22, fontWeight: 'bold', color: Theme.darkBlue},
+  title: {fontSize: width > 600 ? 24 : 22, fontWeight: 'bold', color: Theme.darkBlue},
   errorText: {color: 'red'},
   labelText: {color: 'gray'},
   instructions: {
-    fontSize: 16,
+    fontSize: width > 600 ? 18 : 16,
     paddingHorizontal: 6,
     paddingVertical: 10,
     color: Theme.darkBlue

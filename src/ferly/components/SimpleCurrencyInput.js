@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import TestElement from 'ferly/components/TestElement';
-import {Text, View, StyleSheet, TextInput} from 'react-native';
+import {Text, View, StyleSheet, TextInput, Dimensions} from 'react-native';
 
 export default class SimpleCurrencyInput extends React.Component {
   constructor (props) {
@@ -41,14 +41,16 @@ export default class SimpleCurrencyInput extends React.Component {
   }
 }
 
+const {width} = Dimensions.get('window');
+
 const styles = StyleSheet.create({
   input: {
-    fontSize: 22,
+    fontSize: width > 600 ? 24 : 22,
     fontWeight: 'bold',
-    height: 65,
+    height: width > 600 ? 70 : 65,
     marginLeft: 4,
     textAlign: 'right',
-    minWidth: 30
+    minWidth: width > 600 ? 35 : 30
   },
   inputContainer: {
     alignItems: 'flex-start',
@@ -57,9 +59,9 @@ const styles = StyleSheet.create({
   },
   dollarSign: {
     flexGrow: 1,
-    fontSize: 24,
+    fontSize: width > 600 ? 26 : 24,
     fontWeight: 'bold',
-    height: 65,
+    height: width > 600 ? 70 : 65,
     paddingTop: 16,
     textAlign: 'right'
   },

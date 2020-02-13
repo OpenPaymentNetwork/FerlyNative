@@ -14,7 +14,8 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
-  StyleSheet
+  StyleSheet,
+  Dimensions
 } from 'react-native';
 
 export class UIDController extends React.Component {
@@ -292,7 +293,7 @@ export class UIDController extends React.Component {
     } else if (uid) {
       body = (
         <View style={styles.line}>
-          <Text style={{fontSize: 16}}>{uid}</Text>
+          <Text style={{fontSize: width > 600 ? 18 : 16}}>{uid}</Text>
           <Button
             title="CHANGE"
             color={Theme.lightBlue}
@@ -303,12 +304,12 @@ export class UIDController extends React.Component {
     } else {
       body = (
         <TouchableOpacity
-          style={{width: '100%', height: 24, justifyContent: 'center'}}
+          style={{width: '100%', height: width > 600 ? 26 : 24, justifyContent: 'center'}}
           onPress={() => this.setState({showForm: true})}>
           <Icon
             name="plus"
             color={Theme.lightBlue}
-            size={18} />
+            size={width > 600 ? 20 : 18} />
         </TouchableOpacity>
       );
     }
@@ -329,6 +330,7 @@ export class UIDController extends React.Component {
 }
 
 let count = 0;
+const {width} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
@@ -336,12 +338,12 @@ const styles = StyleSheet.create({
   },
   label: {
     color: Theme.lightBlue,
-    fontSize: 16,
+    fontSize: width > 600 ? 18 : 16,
     fontWeight: 'bold',
     paddingBottom: 14
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: width > 600 ? 18 : 16,
     marginBottom: 14
   },
   line: {

@@ -4,7 +4,7 @@ import React from 'react';
 import Theme from 'ferly/utils/theme';
 import {connect} from 'react-redux';
 import {post} from 'ferly/utils/fetch';
-import {Alert, View, Text, TextInput, StyleSheet, TouchableOpacity} from 'react-native';
+import {Alert, View, Text, TextInput, StyleSheet, TouchableOpacity, Dimensions} from 'react-native';
 
 export class RecoveryChannel extends React.Component {
   static navigationOptions = {
@@ -103,13 +103,13 @@ export class RecoveryChannel extends React.Component {
         flexDirection: 'row',
         justifyContent: 'center',
         marginBottom: 30}}>
-        <Text style={{fontSize: 16}}>{`Don't have an account?`}</Text>
+        <Text style={{fontSize: width > 600 ? 20 : 16}}>{`Don't have an account?`}</Text>
         <TouchableOpacity
           onPress={() => navigation.navigate('SignUp', signUpParams)}>
           <Text style={{
             color: Theme.lightBlue,
             textDecorationLine: 'underline',
-            fontSize: 16,
+            fontSize: width > 600 ? 20 : 16,
             paddingLeft: 5}}>Sign Up</Text>
         </TouchableOpacity>
       </View>
@@ -136,15 +136,15 @@ export class RecoveryChannel extends React.Component {
         justifyContent: 'space-between',
         backgroundColor: 'white'}}>
         <View style={{paddingVertical: 30}}>
-          <View style={{paddingHorizontal: 15}} >
+          <View style={{paddingHorizontal: 15, paddingBottom: width > 600 ? 20 : 0}} >
             <TextInput
               style={{
-                fontSize: 18,
+                fontSize: width > 600 ? 22 : 18,
                 borderWidth: 1,
                 borderRadius: 5,
-                marginVertical: 15,
+                marginVertical: width > 600 ? 20 : 15,
                 width: '100%',
-                height: 35,
+                height: width > 600 ? 45 : 35,
                 paddingLeft: 10}}
               onChangeText={(text) => this.setState({fieldValue: text})}
               autoFocus
@@ -172,6 +172,7 @@ export class RecoveryChannel extends React.Component {
 }
 
 let count = 0;
+let {width} = Dimensions.get('window');
 
 RecoveryChannel.propTypes = {
   navigation: PropTypes.object.isRequired,
@@ -181,7 +182,7 @@ RecoveryChannel.propTypes = {
 const styles = StyleSheet.create({
   error: {
     marginBottom: 35,
-    fontSize: 16,
+    fontSize: width > 600 ? 20 : 16,
     color: 'red'
   }
 });

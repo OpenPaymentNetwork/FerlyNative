@@ -7,7 +7,7 @@ import Theme from 'ferly/utils/theme';
 import {connect} from 'react-redux';
 import {Notifications} from 'expo';
 import {setInitialExpoToken} from 'ferly/store/settings';
-import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Text, Image, StyleSheet, TouchableOpacity, Dimensions} from 'react-native';
 import {envId} from 'ferly/utils/fetch';
 import {
   tutorialTwo,
@@ -129,8 +129,7 @@ export class LandingPage extends React.Component {
     return (
       <View style={{flex: 1, justifyContent: 'space-between', backgroundColor: Theme.darkBlue}}>
         <View style={styles.container}>
-          {/* {this.renderSlide()} */}
-          <Text style={[styles.text, {fontSize: 18}]}>
+          <Text style={[styles.text, {fontSize: width > 600 ? 22 : 18}]}>
             {descriptions[page]}
           </Text>
           <Image style={styles.image} source={images[page]} />
@@ -144,11 +143,13 @@ export class LandingPage extends React.Component {
             color={Theme.lightBlue}
             onPress={() => navigation.navigate('SignUp', passParams)} />
           <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-            <Text style={[styles.text, {paddingBottom: 30, fontSize: 18}]}>
+            <Text style={[styles.text, {paddingBottom: 30, fontSize: width > 600 ? 22 : 18}]}>
               Already have an account?
             </Text>
             <TouchableOpacity onPress={() => navigation.navigate('RecoveryChannel', passParams)}>
-              <Text style={{color: Theme.lightBlue, fontSize: 18, paddingLeft: 10}}>
+              <Text style={{
+                color: Theme.lightBlue, fontSize: width > 600 ? 22 : 18, paddingLeft: 10
+              }}>
                 Sign In
               </Text>
             </TouchableOpacity>
@@ -161,6 +162,7 @@ export class LandingPage extends React.Component {
 }
 
 let interval = 0;
+let {width} = Dimensions.get('window');
 
 LandingPage.propTypes = {
   navigation: PropTypes.object.isRequired,
@@ -175,9 +177,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     justifyContent: 'space-around'
   },
-  image: {height: 220, resizeMode: 'contain'},
+  image: {height: width > 600 ? 350 : 220, resizeMode: 'contain'},
   text: {textAlign: 'center', color: 'white'},
-  dots: {flexDirection: 'row', justifyContent: 'space-between', width: 120},
+  dots: {flexDirection: 'row', justifyContent: 'space-between', width: width > 600 ? 140 : 120},
   circle: {width: 12, height: 12, borderRadius: 6}
 });
 

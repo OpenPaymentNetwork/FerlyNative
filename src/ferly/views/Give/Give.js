@@ -16,7 +16,8 @@ import {
   Text,
   TextInput,
   TouchableWithoutFeedback,
-  View
+  View,
+  Dimensions
 } from 'react-native';
 import Constants from 'expo-constants';
 const {releaseChannel} = Constants.manifest;
@@ -226,8 +227,8 @@ export class Give extends React.Component {
     if (!contact) {
       return (
         <View style={styles.recipientRow}>
-          <Text style={{fontSize: 20, fontWeight: 'bold'}}>Send</Text>
-          <Text style={{fontSize: 20, fontWeight: 'bold', paddingLeft: 40}}>
+          <Text style={{fontSize: width > 600 ? 24 : 20, fontWeight: 'bold'}}>Send</Text>
+          <Text style={{fontSize: width > 600 ? 22 : 20, fontWeight: 'bold', paddingLeft: 40}}>
             {`${params.customer.first_name} ${params.customer.last_name}`}
           </Text>
         </View>
@@ -236,12 +237,12 @@ export class Give extends React.Component {
       if (contactName.firstName === undefined) {
         return (
           <View style={styles.recipientRow}>
-            <Text style={{fontSize: 20, fontWeight: 'bold'}}>Send</Text>
+            <Text style={{fontSize: width > 600 ? 24 : 20, fontWeight: 'bold'}}>Send</Text>
             <View style={{flexDirection: 'column'}}>
-              <Text style={{fontSize: 18, fontWeight: 'bold', paddingLeft: 40}}>
+              <Text style={{fontSize: width > 600 ? 20 : 18, fontWeight: 'bold', paddingLeft: 40}}>
                 {`${contactName.lastName}`}
               </Text>
-              <Text style={{fontSize: 14, color: 'gray', paddingLeft: 40}}>
+              <Text style={{fontSize: width > 600 ? 16 : 14, color: 'gray', paddingLeft: 40}}>
                 {`${contact}`}
               </Text>
             </View>
@@ -250,12 +251,12 @@ export class Give extends React.Component {
       } else if (contactName.lastName === undefined) {
         return (
           <View style={styles.recipientRow}>
-            <Text style={{fontSize: 20, fontWeight: 'bold'}}>Send</Text>
+            <Text style={{fontSize: width > 600 ? 24 : 20, fontWeight: 'bold'}}>Send</Text>
             <View style={{flexDirection: 'column'}}>
-              <Text style={{fontSize: 18, fontWeight: 'bold', paddingLeft: 40}}>
+              <Text style={{fontSize: width > 600 ? 20 : 18, fontWeight: 'bold', paddingLeft: 40}}>
                 {`${contactName.firstName}`}
               </Text>
-              <Text style={{fontSize: 14, color: 'gray', paddingLeft: 40}}>
+              <Text style={{fontSize: width > 600 ? 16 : 14, color: 'gray', paddingLeft: 40}}>
                 {`${contact}`}
               </Text>
             </View>
@@ -264,12 +265,12 @@ export class Give extends React.Component {
       } else {
         return (
           <View style={styles.recipientRow}>
-            <Text style={{fontSize: 20, fontWeight: 'bold'}}>Send</Text>
+            <Text style={{fontSize: width > 600 ? 24 : 20, fontWeight: 'bold'}}>Send</Text>
             <View style={{flexDirection: 'column'}}>
-              <Text style={{fontSize: 18, fontWeight: 'bold', paddingLeft: 40}}>
+              <Text style={{fontSize: width > 600 ? 20 : 18, fontWeight: 'bold', paddingLeft: 40}}>
                 {`${contactName.firstName} ${contactName.lastName}`}
               </Text>
-              <Text style={{fontSize: 14, color: 'gray', paddingLeft: 40}}>
+              <Text style={{fontSize: width > 600 ? 16 : 14, color: 'gray', paddingLeft: 40}}>
                 {`${contact}`}
               </Text>
             </View>
@@ -331,7 +332,9 @@ export class Give extends React.Component {
           <View style={styles.designRow}>
             <View style={{flexShrink: 1, paddingVertical: 14}}>
               <Text style={styles.designTitle}>{design.title}</Text>
-              <Text style={{color: 'gray'}}>Available: {formatted}</Text>
+              <Text style={{color: 'gray', fontSize: width > 600 ? 16 : 14}}>
+                Available: {formatted}
+              </Text>
             </View>
             <SimpleCurrencyInput
               onChangeText={this.onChange.bind(this)}
@@ -343,7 +346,7 @@ export class Give extends React.Component {
             </Text>
             <TouchableWithoutFeedback
               onPress={() => this.messageInput.focus()}>
-              <View style={{borderWidth: 0.5, padding: 6, minHeight: 100}}>
+              <View style={{borderWidth: 0.5, padding: 6, minHeight: width > 600 ? 150 : 100}}>
                 <TextInput
                   ref={ref => (this.messageInput = ref)}
                   multiline
@@ -371,11 +374,12 @@ export class Give extends React.Component {
 }
 
 let count = 0;
+const {width} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   recipientRow: {
     flexDirection: 'row',
-    height: 60,
+    height: width > 600 ? 70 : 60,
     paddingHorizontal: 20,
     borderBottomWidth: 0.5,
     borderColor: 'black',
@@ -393,9 +397,9 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     paddingRight: 20,
     fontWeight: 'bold',
-    fontSize: 22
+    fontSize: width > 600 ? 26 : 22
   },
-  messageTitle: {fontSize: 14, color: Theme.lightBlue, marginBottom: 8}
+  messageTitle: {fontSize: width > 600 ? 18 : 14, color: Theme.lightBlue, marginBottom: 8}
 });
 
 Give.propTypes = {

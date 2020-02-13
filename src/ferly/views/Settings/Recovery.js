@@ -6,7 +6,7 @@ import UIDController from 'ferly/views/Settings/UIDController';
 import {apiRequire} from 'ferly/store/api';
 import {connect} from 'react-redux';
 import {urls, post} from 'ferly/utils/fetch';
-import {Alert, View, Text, ScrollView, KeyboardAvoidingView} from 'react-native';
+import {Alert, View, Text, ScrollView, KeyboardAvoidingView, Dimensions} from 'react-native';
 
 export class Recovery extends React.Component {
   static navigationOptions = {
@@ -65,8 +65,8 @@ export class Recovery extends React.Component {
         behavior="padding">
         <ScrollView keyboardShouldPersistTaps='handled' contentContainerStyle={{flexGrow: 1}}>
           <View style={{paddingHorizontal: 20, paddingTop: 20}}>
-            <Text style={{fontSize: 16, marginBottom: 8}}>{message}</Text>
-            <Text style={{fontSize: 16}}>
+            <Text style={{fontSize: width > 600 ? 18 : 16, marginBottom: 8}}>{message}</Text>
+            <Text style={{fontSize: width > 600 ? 18 : 16}}>
               <Text style={{fontWeight: 'bold'}}>NOTE: </Text>
               {note}
             </Text>
@@ -79,6 +79,7 @@ export class Recovery extends React.Component {
 }
 
 let count = 0;
+const {width} = Dimensions.get('window');
 
 Recovery.propTypes = {
   apiRequire: PropTypes.func.isRequired,

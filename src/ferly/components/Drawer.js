@@ -15,7 +15,8 @@ import {
   TouchableOpacity,
   Image,
   Text,
-  View
+  View,
+  Dimensions
 } from 'react-native';
 
 class DrawerContent extends React.Component {
@@ -32,7 +33,7 @@ class DrawerContent extends React.Component {
             <Image source={logoHorizontal} style={styles.image} />
             <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
               <Avatar
-                size={100}
+                size={width > 600 ? 120 : 100}
                 firstWord={firstName}
                 secondWord={lastName}
                 pictureUrl={profileImage} />
@@ -43,6 +44,7 @@ class DrawerContent extends React.Component {
             parent={DrawerItems}
             label='test-id-drawer-items'
             items={filteredItems}
+            style={{fontSize: width > 600 ? 18 : 14}}
             {...otherProps} />
         </SafeAreaView>
       </ScrollView>
@@ -50,12 +52,19 @@ class DrawerContent extends React.Component {
   }
 }
 
+const {width} = Dimensions.get('window');
+
 const styles = StyleSheet.create({
   container: {
     flex: 1
   },
-  image: {width: 90, height: 32, marginTop: 40, marginBottom: 18},
-  text: {color: 'white', fontSize: 24, paddingVertical: 18},
+  image: {
+    width: width > 600 ? 120 : 90,
+    height: width > 600 ? 40 : 32,
+    marginTop: 40,
+    marginBottom: 18
+  },
+  text: {color: 'white', fontSize: width > 600 ? 26 : 24, paddingVertical: 18},
   innerContainer: {backgroundColor: Theme.darkBlue, paddingHorizontal: 18}
 });
 

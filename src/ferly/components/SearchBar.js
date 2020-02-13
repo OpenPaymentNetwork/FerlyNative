@@ -2,7 +2,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import PropTypes from 'prop-types';
 import React from 'react';
 import TestElement from 'ferly/components/TestElement';
-import {TextInput, View, StyleSheet} from 'react-native';
+import {TextInput, View, StyleSheet, Dimensions} from 'react-native';
 
 export default class SearchBar extends React.Component {
   onChangeText (text) {
@@ -35,15 +35,17 @@ export default class SearchBar extends React.Component {
   }
 }
 
+const {width} = Dimensions.get('window');
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'white',
-    maxHeight: 50,
-    minHeight: 50,
-    margin: 14,
+    maxHeight: width > 600 ? 65 : 50,
+    minHeight: width > 600 ? 65 : 50,
+    margin: width > 600 ? 18 : 14,
     borderWidth: 1,
     borderColor: 'lightgray',
     elevation: 2,
@@ -53,7 +55,7 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    fontSize: 18
+    fontSize: width > 600 ? 22 : 18
   }
 });
 

@@ -20,7 +20,8 @@ import {
   TextInput,
   StyleSheet,
   FlatList,
-  Platform
+  Platform,
+  Dimensions
 } from 'react-native';
 
 class Recipient extends React.Component {
@@ -278,15 +279,15 @@ class Recipient extends React.Component {
                   () => navigation.navigate('Amount', {customer, design})}>
                 <View marginVertical={10} style={{flexDirection: 'row'}}>
                   <Avatar
-                    size={68}
+                    size={width > 600 ? 72 : 68}
                     pictureUrl={customer.profile_image_url}
                     firstWord={firstName}
                     secondWord={lastName} />
                   <View style={{justifyContent: 'center', marginLeft: 10}}>
-                    <Text style={{fontSize: 24}}>
+                    <Text style={{fontSize: width > 600 ? 28 : 24}}>
                       {`${firstName} ${lastName}`}
                     </Text>
-                    <Text style={{fontSize: 20, color: 'gray'}}>
+                    <Text style={{fontSize: width > 600 ? 24 : 20, color: 'gray'}}>
                       {'@' + customer.username}
                     </Text>
                   </View>
@@ -339,7 +340,7 @@ class Recipient extends React.Component {
               value={this.state.searchText}
               placeholder='Search Ferly users'
               onChangeText={this.onChangeText.bind(this)}/>
-            <Text style={{fontSize: 18, color: Theme.lightBlue}}>
+            <Text style={{fontSize: width > 600 ? 20 : 18, color: Theme.lightBlue}}>
               {this.state.searchResults === null ? 'Most Recent Recipients' : null}
             </Text>
             {display}
@@ -368,7 +369,9 @@ class Recipient extends React.Component {
               value={this.state.searchText}
               placeholder='Search Ferly users'
               onChangeText={this.onChangeText.bind(this)}/>
-            <Text style={{fontSize: 18, color: Theme.lightBlue, marginHorizontal: 10}}>
+            <Text style={{
+              fontSize: width > 600 ? 20 : 18, color: Theme.lightBlue, marginHorizontal: 10
+            }}>
               {this.state.searchResults === null ? 'Most Recent Recipients' : null}
             </Text>
             {display}
@@ -379,21 +382,21 @@ class Recipient extends React.Component {
       body = (
         <View style={{paddingHorizontal: 10}}>
           <View style={styles.text}>
-            <Text style={{fontSize: 16}}>
+            <Text style={{fontSize: width > 600 ? 18 : 16}}>
               Enter the recipients name and email address or phone number.
             </Text>
           </View>
           <View style={[styles.inputContainer, {marginTop: 25}]}>
             <TextInput
               placeholder="Recipient Name"
-              style={{}}
+              style={{fontSize: width > 600 ? 14 : 12}}
               onChangeText={(text) => this.setState({name: text})}
               maxLength={50}/>
           </View>
           <View style={[styles.inputContainer, {marginBottom: error === '' ? 25 : 5}]}>
             <TextInput
               placeholder="Email Address or Phone Number"
-              style={{}}
+              style={{fontSize: width > 600 ? 14 : 12}}
               returnKeyType='done'
               onChangeText={(text) => this.setState({contact: text})}
               maxLength={50}/>
@@ -439,7 +442,7 @@ class Recipient extends React.Component {
         body = (
           <View>
             <View style={{paddingVertical: 15, paddingHorizontal: 12}}>
-              <Text style={{fontSize: 18}}>
+              <Text style={{fontSize: width > 600 ? 20 : 18}}>
               Enable contacts to easily send a gift to anyone in your contact list.
               </Text>
             </View>
@@ -449,7 +452,7 @@ class Recipient extends React.Component {
         body = (
           <View>
             <View style={{paddingVertical: 15, paddingHorizontal: 12}}>
-              <Text style={{fontSize: 18}}>
+              <Text style={{fontSize: width > 600 ? 20 : 18}}>
                 Go to Settings and allow the Ferly app to access your Contacts to send gift to
                 someone in your contacts list.
               </Text>
@@ -485,13 +488,13 @@ class Recipient extends React.Component {
             style={{
               borderBottomWidth: this.state.page === 'Contacts' ? 4 : 0,
               borderColor: 'white',
-              height: 60,
-              width: 100,
+              height: width > 600 ? 80 : 60,
+              width: width > 600 ? 120 : 100,
               justifyContent: 'center',
               alignItems: 'center'
             }}
             onPress={() => this.changeToContacts()}>
-            <Text style={{color: 'white', fontSize: 16}}>
+            <Text style={{color: 'white', fontSize: width > 600 ? 18 : 16}}>
                 Contacts
             </Text>
           </TouchableOpacity>
@@ -499,13 +502,13 @@ class Recipient extends React.Component {
             style={{
               borderBottomWidth: this.state.page === 'Users' ? 4 : 0,
               borderColor: 'white',
-              height: 60,
-              width: 100,
+              height: width > 600 ? 80 : 60,
+              width: width > 600 ? 120 : 100,
               justifyContent: 'center',
               alignItems: 'center'
             }}
             onPress={() => this.changeToUsers()}>
-            <Text style={{color: 'white', fontSize: 16}}>
+            <Text style={{color: 'white', fontSize: width > 600 ? 18 : 16}}>
               Users
             </Text>
           </TouchableOpacity>
@@ -513,18 +516,18 @@ class Recipient extends React.Component {
             style={{
               borderBottomWidth: this.state.page === 'Other' ? 4 : 0,
               borderColor: 'white',
-              height: 60,
-              width: 100,
+              height: width > 600 ? 80 : 60,
+              width: width > 600 ? 120 : 100,
               justifyContent: 'center',
               alignItems: 'center'
             }}
             onPress={() => this.changeToOther()}>
-            <Text style={{color: 'white', fontSize: 16}}>
+            <Text style={{color: 'white', fontSize: width > 600 ? 18 : 16}}>
               Other
             </Text>
           </TouchableOpacity>
         </TestElement>
-        <View style={{flex: 1, marginHorizontal: 10}}>
+        <View style={{flex: 1, marginHorizontal: width > 600 ? 15 : 10}}>
           {body}
         </View>
       </View>
@@ -534,24 +537,25 @@ class Recipient extends React.Component {
 
 let contacts = [];
 let count = 0;
+const {width} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   inputContainer: {
     borderWidth: 1,
     borderColor: 'gray',
-    height: 35,
-    paddingLeft: 10,
-    marginVertical: 10,
+    height: width > 600 ? 50 : 35,
+    paddingLeft: width > 600 ? 15 : 10,
+    marginVertical: width > 600 ? 15 : 10,
     justifyContent: 'center'
   },
   error: {
-    fontSize: 16,
+    fontSize: width > 600 ? 20 : 16,
     color: 'red',
     alignSelf: 'center',
-    marginBottom: 25
+    marginBottom: width > 600 ? 30 : 25
   },
   text: {
-    marginTop: 20
+    marginTop: width > 600 ? 25 : 20
   }
 });
 

@@ -20,7 +20,8 @@ import {
   TouchableOpacity,
   Switch,
   ScrollView,
-  Modal
+  Modal,
+  Dimensions
 } from 'react-native';
 import { setHaveCard } from '../../store/settings';
 
@@ -442,8 +443,10 @@ export class FerlyCard extends React.Component {
             <Ionicons
               name={abilityValue ? 'md-unlock' : 'md-lock'}
               color={Theme.darkBlue}
-              size={26} />
-            <Text style={{flex: 1, paddingLeft: 20, color: Theme.darkBlue}}>
+              size={width > 600 ? 28 : 26} />
+            <Text style={{
+              flex: 1, paddingLeft: 20, color: Theme.darkBlue, fontSize: width > 600 ? 18 : 14
+            }}>
               {abilityValue ? 'Enabled' : 'Disabled'}
             </Text>
             <Switch
@@ -454,10 +457,12 @@ export class FerlyCard extends React.Component {
           <TouchableOpacity
             onPress={this.handleExpirationClick}
             style={styles.actionRow}>
-            <Ionicons name="md-calendar" color={Theme.darkBlue} size={24} />
+            <Ionicons name="md-calendar" color={Theme.darkBlue} size={width > 600 ? 26 : 24} />
             <View style={{flex: 1, paddingLeft: 20}}>
-              <Text style={{color: Theme.darkBlue}}>Expiration Date</Text>
-              <Text style={{color: Theme.darkBlue, fontSize: 12}}>
+              <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 16 : 12}}>
+                Expiration Date
+              </Text>
+              <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 16 : 12}}>
                 {`${splitExpiration[1]}/${splitExpiration[0]}`}
               </Text>
             </View>
@@ -465,16 +470,20 @@ export class FerlyCard extends React.Component {
           <TouchableOpacity
             onPress={() => this.setState({showNewPinModal: true})}
             style={styles.actionRow}>
-            <Ionicons name="md-keypad" color={Theme.darkBlue} size={26} />
-            <Text style={{flex: 1, paddingLeft: 20, color: Theme.darkBlue}}>
+            <Ionicons name="md-keypad" color={Theme.darkBlue} size={width > 600 ? 28 : 26} />
+            <Text style={{
+              flex: 1, paddingLeft: 20, color: Theme.darkBlue, fontSize: width > 600 ? 18 : 14
+            }}>
               Change PIN
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={this.handleRemoveCardClick}
             style={styles.actionRow}>
-            <Ionicons name="md-trash" color={Theme.darkBlue} size={26} />
-            <Text style={{flex: 1, paddingLeft: 20, color: Theme.darkBlue}}>
+            <Ionicons name="md-trash" color={Theme.darkBlue} size={width > 600 ? 28 : 26} />
+            <Text style={{
+              flex: 1, paddingLeft: 20, color: Theme.darkBlue, fontSize: width > 600 ? 18 : 14
+            }}>
               Remove Card
             </Text>
           </TouchableOpacity>
@@ -485,7 +494,7 @@ export class FerlyCard extends React.Component {
             onRequestClose={this.handleCloseModal}>
             <View style={styles.modalPage}>
               <View style={styles.modalDialog}>
-                <Text style={{color: Theme.darkBlue, fontSize: 22}}>
+                <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 24 : 22}}>
                   Enter a new PIN
                 </Text>
                 <View>
@@ -530,6 +539,7 @@ export class FerlyCard extends React.Component {
 }
 
 let count = 0;
+const {width} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   cardContainer: {
@@ -537,14 +547,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 20
   },
-  cardBackground: {height: 190, width: 300, flexDirection: 'row-reverse'},
-  panText: {fontSize: 20, padding: 20, color: 'white'},
+  cardBackground: {
+    height: width > 600 ? 230 : 190,
+    width: width > 600 ? 360 : 300,
+    flexDirection: 'row-reverse'
+  },
+  panText: {fontSize: width > 600 ? 24 : 20, padding: 20, color: 'white'},
   inputContainer: {borderBottomWidth: 1, borderColor: 'gray'},
-  title: {fontSize: 22, fontWeight: 'bold', color: Theme.darkBlue},
+  title: {fontSize: width > 600 ? 26 : 22, fontWeight: 'bold', color: Theme.darkBlue},
   errorText: {color: 'red'},
   labelText: {color: 'gray'},
   instructions: {
-    fontSize: 16,
+    fontSize: width > 600 ? 20 : 16,
     paddingHorizontal: 6,
     paddingVertical: 10,
     color: Theme.darkBlue
@@ -563,8 +577,8 @@ const styles = StyleSheet.create({
   },
   modalDialog: {
     backgroundColor: 'white',
-    height: 160,
-    width: 260,
+    height: width > 600 ? 180 : 160,
+    width: width > 600 ? 280 : 260,
     justifyContent: 'space-between',
     paddingHorizontal: 20,
     paddingVertical: 10

@@ -104,7 +104,9 @@ export class Purchase extends React.Component {
           <View style={styles.topRow}>
             <View style={{flexShrink: 1, paddingVertical: 14}}>
               <Text style={styles.title}>{title}</Text>
-              <Text style={{color: 'gray'}}>Balance: {formatted}</Text>
+              <Text style={{color: 'gray', fontSize: width > 600 ? 14 : 12}}>
+                Balance: {formatted}
+              </Text>
             </View>
             <View>
               <SimpleCurrencyInput onChangeText={this.onChange.bind(this)} />
@@ -162,8 +164,8 @@ export class Purchase extends React.Component {
 }
 
 let count = 0;
-
 const {width} = Dimensions.get('window');
+
 const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
@@ -182,12 +184,12 @@ const styles = StyleSheet.create({
     flexShrink: 1,
     fontWeight: 'bold',
     flexWrap: 'wrap',
-    fontSize: 22,
+    fontSize: width > 600 ? 24 : 22,
     paddingRight: 20
   },
   header: {
     color: 'black',
-    fontSize: 16,
+    fontSize: width > 600 ? 18 : 16,
     fontWeight: 'bold',
     marginTop: 10,
     marginBottom: 4
@@ -196,11 +198,11 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: 30,
     fontWeight: 'bold',
-    fontSize: 15,
+    fontSize: width > 600 ? 18 : 15,
     position: 'absolute'
   },
-  image: {width: width - 40, height: 80, borderRadius: 10},
-  paragraph: {fontSize: 16, marginBottom: 10, color: 'darkgray'}
+  image: {width: width - 40, height: width > 600 ? 100 : 80, borderRadius: 10},
+  paragraph: {fontSize: width > 600 ? 18 : 16, marginBottom: 10, color: 'darkgray'}
 });
 
 Purchase.propTypes = {

@@ -60,8 +60,10 @@ export class Value extends React.Component {
     const {amount, title, expiring = []} = design;
     const tableHeader = (
       <View style={styles.tableRow}>
-        <Text style={[styles.leftColumn, {fontWeight: 'bold'}]}>Amount</Text>
-        <Text style={{fontWeight: 'bold'}}>Expiration Date</Text>
+        <Text style={[styles.leftColumn, {fontWeight: 'bold', fontSize: width > 600 ? 18 : 12}]}>
+          Amount
+        </Text>
+        <Text style={{fontWeight: 'bold', fontSize: width > 600 ? 18 : 12}}>Expiration Date</Text>
       </View>
     );
 
@@ -80,7 +82,11 @@ export class Value extends React.Component {
         style={{flex: 1, padding: 20, backgroundColor: 'white'}}>
         <View style={styles.headerContainer}>
           <Text style={styles.amount}>${amount}</Text>
-          <Text style={{fontSize: width < 330 ? 19 : 22, marginBottom: 50, color: Theme.lightBlue}}>
+          <Text style={{
+            fontSize: width < 330 ? 19 : 22 && width > 600 ? 24 : 22,
+            marginBottom: 50,
+            color: Theme.lightBlue
+          }}>
             {title}
           </Text>
         </View>
@@ -136,8 +142,8 @@ export class Value extends React.Component {
 }
 
 let count = 0;
-
 const {width} = Dimensions.get('window');
+
 const styles = StyleSheet.create({
   headerContainer: {
     alignItems: 'center',
@@ -148,25 +154,25 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: 30,
     fontWeight: 'bold',
-    fontSize: 15,
+    fontSize: width > 600 ? 18 : 15,
     position: 'absolute'
   },
   amount: {
     color: Theme.lightBlue,
-    fontSize: width < 330 ? 28 : 35,
-    marginBottom: width < 330 ? 8 : 12,
-    marginTop: width < 330 ? 25 : 30
+    fontSize: width < 330 ? 28 : 35 && width > 600 ? 37 : 35,
+    marginBottom: width < 330 ? 8 : 12 && width > 600 ? 14 : 12,
+    marginTop: width < 330 ? 25 : 30 && width > 600 ? 35 : 30
   },
   header: {
     color: 'black',
-    fontSize: 16,
+    fontSize: width > 600 ? 20 : 16,
     fontWeight: 'bold',
     marginTop: 10,
     marginBottom: 10
   },
-  image: {width: width - 40, height: 80, borderRadius: 10},
-  paragraph: {fontSize: 16, marginBottom: 10, color: 'gray'},
-  supportParagraph: {fontSize: 16, color: 'gray'},
+  image: {width: width - 40, height: width > 600 ? 100 : 80, borderRadius: 10},
+  paragraph: {fontSize: width > 600 ? 18 : 16, marginBottom: 10, color: 'gray'},
+  supportParagraph: {fontSize: width > 600 ? 18 : 16, color: 'gray'},
   tableRow: {flexDirection: 'row', paddingLeft: 10},
   leftColumn: {width: 120}
 });

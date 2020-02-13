@@ -13,7 +13,8 @@ import {
   TouchableOpacity,
   ScrollView,
   Text,
-  StyleSheet
+  StyleSheet,
+  Dimensions
 } from 'react-native';
 
 export class Market extends React.Component {
@@ -107,10 +108,10 @@ export class Market extends React.Component {
                   onPress={() => navigation.navigate('Purchase', {design})}>
                   <View style={styles.customer}>
                     <Avatar
-                      size={30}
+                      size={width > 600 ? 40 : 30}
                       pictureUrl={design.logo_image_url}/>
                     <View style={{flex: 1, paddingHorizontal: 10}}>
-                      <Text style={{fontSize: 18, fontWeight: 'bold'}}>
+                      <Text style={{fontSize: width > 600 ? 22 : 18, fontWeight: 'bold'}}>
                         {design.title}
                       </Text>
                     </View>
@@ -135,6 +136,7 @@ export class Market extends React.Component {
 }
 
 let count = 0;
+const {width} = Dimensions.get('window');
 
 Market.propTypes = {
   apiRequire: PropTypes.func.isRequired,
@@ -148,7 +150,7 @@ const styles = StyleSheet.create({
   noResults: {paddingHorizontal: 20},
   customer: {
     flexDirection: 'row',
-    height: 70,
+    height: width > 600 ? 80 : 70,
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 15

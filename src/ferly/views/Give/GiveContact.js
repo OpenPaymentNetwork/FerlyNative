@@ -10,7 +10,8 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
-  Alert
+  Alert,
+  Dimensions
 } from 'react-native';
 
 export class GiveContact extends React.Component {
@@ -46,7 +47,7 @@ export class GiveContact extends React.Component {
           name={option.indexOf('@') > -1 ? 'envelope' : 'phone'}
           color='black'
           size={26} />
-        <Text style={{fontSize: 22, paddingLeft: 20}}>{option}</Text>
+        <Text style={{fontSize: width > 600 ? 24 : 22, paddingLeft: 20}}>{option}</Text>
       </TouchableOpacity>
     );
   }
@@ -80,11 +81,11 @@ export class GiveContact extends React.Component {
             justifyContent: 'center'}}>
           <View style={{alignItems: 'center'}}>
             <Avatar
-              size={100}
+              size={width > 600 ? 110 : 100}
               firstWord={display.firstName}
               secondWord={display.lastName}
               pictureUrl={display.uri} />
-            <Text style={{fontSize: 26, paddingTop: 10}}>{contact.name}</Text>
+            <Text style={{fontSize: width > 600 ? 28 : 26, paddingTop: 10}}>{contact.name}</Text>
           </View>
         </View>
         {options.map((option) => this.renderOption(option))}
@@ -94,6 +95,7 @@ export class GiveContact extends React.Component {
 }
 
 let count = 0;
+let {width} = Dimensions.get('window');
 
 GiveContact.propTypes = {
   apiExpire: PropTypes.func.isRequired,
