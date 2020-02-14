@@ -197,6 +197,9 @@ export class Transfer extends React.Component {
           Alert.alert('Error please check internet connection!');
         });
     }
+    if (count >= 2) {
+      count = 0;
+    }
     const {transferDetails} = this.props;
     const {
       amount,
@@ -357,7 +360,7 @@ export class Transfer extends React.Component {
         </View>
       );
       const d = new Date();
-      d.setDate(d.getDate() + 1825);
+      d.setDate(d.getDate(d) + 1825);
       const expirationDate = formatDate(d, 'MMM D, YYYY');
       feesSection = (
         <View style={styles.section}>
@@ -482,7 +485,7 @@ export class Transfer extends React.Component {
           </View>
         </View>
       );
-      const giftDate = new Date();
+      const giftDate = new Date(date);
       giftDate.setDate(giftDate.getDate() + 30);
       const giftExpiration = formatDate(giftDate, 'MMM D, YYYY');
       status = (
@@ -547,7 +550,7 @@ export class Transfer extends React.Component {
         </View>
       );
       const d = new Date();
-      d.setDate(d.getDate() + 1825);
+      d.setDate(d.getDate(d) + 1825);
       const expirationDate = formatDate(d, 'MMM D, YYYY');
       feesSection = (
         <View style={styles.section}>

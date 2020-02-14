@@ -25,6 +25,9 @@ export class AwaitingCard extends React.Component {
           Alert.alert('Error please check internet connection!');
         });
     }
+    if (count >= 2) {
+      count = 0;
+    }
     const {navigation} = this.props;
     const {width, height} = Dimensions.get('window');
     let imageHeight = height / 2;

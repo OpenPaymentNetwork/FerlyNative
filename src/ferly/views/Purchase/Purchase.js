@@ -74,6 +74,9 @@ export class Purchase extends React.Component {
           Alert.alert('Error please check internet connection!');
         });
     }
+    if (count >= 2) {
+      count = 0;
+    }
     const {params} = this.props.navigation.state;
     const {submitting, text} = this.state;
     const {design} = params;

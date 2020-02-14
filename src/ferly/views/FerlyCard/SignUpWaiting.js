@@ -45,6 +45,9 @@ export class SignUpWaiting extends React.Component {
           Alert.alert('Error please check internet connection!');
         });
     }
+    if (count >= 2) {
+      count = 0;
+    }
     const {width, height} = Dimensions.get('window');
     let imageHeight = height / 2;
     let imageWidth = width / 2;

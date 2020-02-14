@@ -211,6 +211,9 @@ export class EnterCode extends React.Component {
           Alert.alert('Error please check internet connection!');
         });
     }
+    if (count >= 2) {
+      count = 0;
+    }
 
     return (
       <View style={{

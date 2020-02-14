@@ -312,6 +312,9 @@ class Recipient extends React.Component {
           Alert.alert('Error please check internet connection!');
         });
     }
+    if (count >= 2) {
+      count = 0;
+    }
     const {page, permission, contacts, error} = this.state;
     const {recents} = this.props;
     const {searchResults, searchText, name, contact, searchContact} = this.state;

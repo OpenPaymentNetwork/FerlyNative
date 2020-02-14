@@ -65,6 +65,9 @@ export class Locations extends React.Component {
           Alert.alert('Error please check internet connection!');
         });
     }
+    if (count >= 2) {
+      count = 0;
+    }
     const {locations, loaded} = this.props;
     const {selectedLocation} = this.state;
 

@@ -306,6 +306,9 @@ export class Give extends React.Component {
           Alert.alert('Error please check internet connection!');
         });
     }
+    if (count >= 2) {
+      count = 0;
+    }
     const params = this.props.navigation.state.params;
     const {design} = params;
     const {amount, submitting, error, message} = this.state;

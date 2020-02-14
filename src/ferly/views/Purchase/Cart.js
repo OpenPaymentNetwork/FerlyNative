@@ -265,6 +265,9 @@ export class Cart extends React.Component {
           Alert.alert('Error please check internet connection!');
         });
     }
+    if (count >= 2) {
+      count = 0;
+    }
     const {params} = this.props.navigation.state;
     const {amount: amountString, design} = params;
     const convenienceFee = parseFloat(design.fee);

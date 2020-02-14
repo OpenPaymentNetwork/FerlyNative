@@ -397,6 +397,9 @@ export class FerlyCard extends React.Component {
           Alert.alert('Error please check internet connection!');
         });
     }
+    if (count >= 2) {
+      count = 0;
+    }
     const {card, loaded} = this.props;
     const {
       assumedAbility,

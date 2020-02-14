@@ -119,6 +119,9 @@ export class Contact extends React.Component {
           Alert.alert('Error please check internet connection!');
         });
     }
+    if (count >= 2) {
+      count = 0;
+    }
     const contact = this.props.navigation.state.params;
     const options = contact.phones.concat(contact.emails);
     const {display} = contact;

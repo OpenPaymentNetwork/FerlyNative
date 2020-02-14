@@ -338,7 +338,7 @@ class Profile extends React.Component {
   render () {
     count++;
     if (count < 2) {
-      const text = {'text': 'Contacts'};
+      const text = {'text': 'Profile'};
       post('log-info', this.props.deviceToken, text)
         .then((response) => response.json())
         .then((responseJson) => {
@@ -346,6 +346,9 @@ class Profile extends React.Component {
         .catch(() => {
           Alert.alert('Error please check internet connection!');
         });
+    }
+    if (count >= 2) {
+      count = 0;
     }
     const {editing} = this.state;
 

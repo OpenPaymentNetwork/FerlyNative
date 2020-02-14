@@ -96,6 +96,9 @@ export class ManualAdd extends React.Component {
           Alert.alert('Error please check internet connection!');
         });
     }
+    if (count >= 2) {
+      count = 0;
+    }
     const {fieldValue, error, submitting} = this.state;
     return (
       <View style={{

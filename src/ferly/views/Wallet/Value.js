@@ -56,6 +56,9 @@ export class Value extends React.Component {
           Alert.alert('Error please check internet connection!');
         });
     }
+    if (count >= 2) {
+      count = 0;
+    }
     const {params: design} = this.props.navigation.state;
     const {amount, title, expiring = []} = design;
     const tableHeader = (

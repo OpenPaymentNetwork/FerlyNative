@@ -140,6 +140,9 @@ export class CardForm extends React.Component {
           Alert.alert('Error please check internet connection!');
         });
     }
+    if (count >= 2) {
+      count = 0;
+    }
     const {pin, pan, invalid, submitting} = this.state;
     const {pin: pinError, pan: panError} = invalid;
 
