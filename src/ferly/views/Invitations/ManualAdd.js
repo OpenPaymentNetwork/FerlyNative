@@ -68,7 +68,7 @@ export class ManualAdd extends React.Component {
   }
 
   validate (json) {
-    const text = {'text': 'Unsuccessful invite'};
+    const text = {'text': 'Validate invite'};
     post('log-info', this.props.deviceToken, text)
       .then((response) => response.json())
       .then((responseJson) => {
@@ -77,6 +77,14 @@ export class ManualAdd extends React.Component {
         console.log('log error');
       });
     if (json.invalid) {
+      const text = {'text': 'Unsuccessful invite'};
+      post('log-info', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch(() => {
+          console.log('log error');
+        });
       this.setState({error: json.invalid.recipient});
       return false;
     } else {

@@ -161,7 +161,7 @@ export class EnterCode extends React.Component {
   }
 
   validateCodeCount = (json) => {
-    const text = {'text': 'Unsuccessful code count'};
+    const text = {'text': 'Validate code count'};
     post('log-info', this.props.deviceToken, text)
       .then((response) => response.json())
       .then((responseJson) => {
@@ -170,9 +170,25 @@ export class EnterCode extends React.Component {
         console.log('log error');
       });
     if (json.invalid || json.error) {
+      const text = {'text': 'Unsuccessful code count invalid'};
+      post('log-info', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch(() => {
+          console.log('log error');
+        });
       this.setState({invalid: 'Unable to validate code at this time.'});
       return false;
     } else if (parseInt(json.count) > parseInt('5')) {
+      const text = {'text': 'Unsuccessful code count'};
+      post('log-info', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch(() => {
+          console.log('log error');
+        });
       this.setState({invalid: 'Too many failed attempts.', submitting: false});
       return false;
     } else {
@@ -181,7 +197,7 @@ export class EnterCode extends React.Component {
   }
 
   validateCode = (json) => {
-    const text = {'text': 'Unsuccessful code'};
+    const text = {'text': 'Validate code'};
     post('log-info', this.props.deviceToken, text)
       .then((response) => response.json())
       .then((responseJson) => {
@@ -190,6 +206,14 @@ export class EnterCode extends React.Component {
         console.log('log error');
       });
     if (json.invalid || json.error) {
+      const text = {'text': 'Unsuccessful code'};
+      post('log-info', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch(() => {
+          console.log('log error');
+        });
       this.setState({invalid: 'Invalid Code.'});
       return false;
     } else {

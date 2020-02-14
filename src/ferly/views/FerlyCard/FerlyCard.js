@@ -354,7 +354,7 @@ export class FerlyCard extends React.Component {
   }
 
   validateNewPin = (json) => {
-    const text = {'text': 'Unsuccessful change pin'};
+    const text = {'text': 'Validate change pin'};
     post('log-info', this.props.deviceToken, text)
       .then((response) => response.json())
       .then((responseJson) => {
@@ -363,6 +363,14 @@ export class FerlyCard extends React.Component {
         console.log('log error');
       });
     if (json.invalid) {
+      const text = {'text': 'Unsuccessful change pin'};
+      post('log-info', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch(() => {
+          console.log('log error');
+        });
       this.setState({invalid: json.invalid, submitting: false});
       return false;
     } else {

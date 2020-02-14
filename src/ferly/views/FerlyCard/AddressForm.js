@@ -96,7 +96,7 @@ export class AddressForm extends React.Component {
     }
 
     validateSendCard (responseJson) {
-      const text = {'text': 'Unsuccessful request card'};
+      const text = {'text': 'Validate request card'};
       post('log-info', this.props.deviceToken, text)
         .then((response) => response.json())
         .then((responseJson) => {
@@ -105,11 +105,27 @@ export class AddressForm extends React.Component {
           console.log('log error');
         });
       if (responseJson.invalid) {
+        const text = {'text': 'Unsuccessful request card invalid'};
+        post('log-info', this.props.deviceToken, text)
+          .then((response) => response.json())
+          .then((responseJson) => {
+          })
+          .catch(() => {
+            console.log('log error');
+          });
         this.setState({
           invalid: responseJson.invalid
         });
         return false;
       } else if (responseJson.error) {
+        const text = {'text': 'Unsuccessful request card'};
+        post('log-info', this.props.deviceToken, text)
+          .then((response) => response.json())
+          .then((responseJson) => {
+          })
+          .catch(() => {
+            console.log('log error');
+          });
         Alert.alert('Oops!', 'We couldn\'t find that address. ' +
         'Check to make sure it\'s accurate.');
         return false;

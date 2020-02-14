@@ -245,7 +245,7 @@ export class SignUpCode extends React.Component {
   }
 
   validate (json) {
-    const text = {'text': 'Unsuccessful sign up'};
+    const text = {'text': 'Validate sign up'};
     post('log-info-initial', this.props.deviceToken, text)
       .then((response) => response.json())
       .then((responseJson) => {
@@ -254,24 +254,64 @@ export class SignUpCode extends React.Component {
         console.log('log error');
       });
     if (json.invalid) {
+      const text = {'text': 'Unsuccessful sign up invalid'};
+      post('log-info', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch(() => {
+          console.log('log error');
+        });
       this.setState({
         invalid: json.invalid[Object.keys(json.invalid)[0]],
         submitting: false});
       return false;
     } else if (json.error === 'unexpected_auth_attempt') {
+      const text = {'text': 'Unsuccessful sign up unexpected auth'};
+      post('log-info', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch(() => {
+          console.log('log error');
+        });
       this.setState({submitting: false});
       Alert.alert(
         'Error', 'This account does not exist. Please go back and try again.');
       return false;
     } else if (json.error === 'recaptcha_required') {
+      const text = {'text': 'Unsuccessful sign up recaptcha required'};
+      post('log-info', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch(() => {
+          console.log('log error');
+        });
       this.setState({showRecaptcha: true, resubmit: true, submitting: false});
       return false;
     } else if (json.error === 'code_expired') {
+      const text = {'text': 'Unsuccessful sign up code expired'};
+      post('log-info', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch(() => {
+          console.log('log error');
+        });
       this.setState({submitting: false});
       Alert.alert(
         'Sorry', 'This code has expired. Please try again with a new code.');
       return false;
     } else if (json.error) {
+      const text = {'text': 'Unsuccessful sign up'};
+      post('log-info', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch(() => {
+          console.log('log error');
+        });
       this.setState({submitting: false});
       Alert.alert('Unexpected error!', 'Please try again later.');
       return false;

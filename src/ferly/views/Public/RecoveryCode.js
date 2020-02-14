@@ -106,7 +106,7 @@ export class RecoveryCode extends React.Component {
   }
 
   validate (json) {
-    const text = {'text': 'Unsuccessful recover code'};
+    const text = {'text': 'Validate recover code'};
     post('log-info-initial', this.props.deviceToken, text)
       .then((response) => response.json())
       .then((responseJson) => {
@@ -115,20 +115,52 @@ export class RecoveryCode extends React.Component {
         console.log('log error');
       });
     if (json.invalid) {
+      const text = {'text': 'Unsuccessful recover code invalid'};
+      post('log-info', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch(() => {
+          console.log('log error');
+        });
       this.setState({
         invalid: json.invalid[Object.keys(json.invalid)[0]],
         submitting: false});
       return false;
     } else if (json.error === 'unexpected_auth_attempt') {
+      const text = {'text': 'Unsuccessful recover code attempt'};
+      post('log-info', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch(() => {
+          console.log('log error');
+        });
       this.setState({submitting: false});
       Alert.alert(
         'Error', 'This account does not exist. Please go back and try again.');
       return false;
     } else if (json.error === 'recaptcha_required') {
+      const text = {'text': 'Unsuccessful recover code recaptcha required'};
+      post('log-info', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch(() => {
+          console.log('log error');
+        });
       this.setState({submitting: false});
       this.setState({showRecaptcha: true, resubmit: true});
       return false;
     } else if (json.error === 'code_expired') {
+      const text = {'text': 'Unsuccessful recover code expired'};
+      post('log-info', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch(() => {
+          console.log('log error');
+        });
       this.setState({submitting: false});
       Alert.alert(
         'Sorry', 'This code has expired. Please try again with a new code.');

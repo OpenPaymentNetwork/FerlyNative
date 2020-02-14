@@ -72,7 +72,7 @@ export class RecoveryChannel extends React.Component {
   }
 
   validate (json) {
-    const text = {'text': 'Unsuccessful recover'};
+    const text = {'text': 'Validate recover'};
     post('log-info-inital', this.props.deviceToken, text)
       .then((response) => response.json())
       .then((responseJson) => {
@@ -81,9 +81,25 @@ export class RecoveryChannel extends React.Component {
         console.log('log error');
       });
     if (json.invalid) {
+      const text = {'text': 'Unsuccessful recover invalid'};
+      post('log-info', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch(() => {
+          console.log('log error');
+        });
       this.setState({invalid: json.invalid, submitting: false});
       return false;
     } else if (json.error) {
+      const text = {'text': 'Unsuccessful recover'};
+      post('log-info', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch(() => {
+          console.log('log error');
+        });
       this.setState({invalid: {'login': 'Error occured please try again'}, submitting: false});
       return false;
     }

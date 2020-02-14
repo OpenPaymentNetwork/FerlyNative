@@ -123,7 +123,7 @@ export class CardForm extends React.Component {
   }
 
   validateAddCard = (json) => {
-    const text = {'text': 'Unsuccessful add card'};
+    const text = {'text': 'Validate add card'};
     post('log-info', this.props.deviceToken, text)
       .then((response) => response.json())
       .then((responseJson) => {
@@ -132,6 +132,14 @@ export class CardForm extends React.Component {
         console.log('log error');
       });
     if (json.invalid) {
+      const text = {'text': 'Unsuccessful add card'};
+      post('log-info', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch(() => {
+          console.log('log error');
+        });
       const newInvalid = json.invalid;
       if (newInvalid['']) {
         newInvalid.pan = newInvalid[''];

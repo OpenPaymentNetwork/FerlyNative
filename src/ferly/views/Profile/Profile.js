@@ -174,7 +174,7 @@ class Profile extends React.Component {
   }
 
   validateResponse (responseJson) {
-    const text = {'text': 'Unsuccessful profile edit'};
+    const text = {'text': 'Validate profile edit'};
     post('log-info', this.props.deviceToken, text)
       .then((response) => response.json())
       .then((responseJson) => {
@@ -183,9 +183,25 @@ class Profile extends React.Component {
         console.log('log error');
       });
     if (responseJson.invalid) {
+      const text = {'text': 'Unsuccessful profile edit invalid'};
+      post('log-info', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch(() => {
+          console.log('log error');
+        });
       this.setState({invalid: responseJson.invalid});
       return false;
     } else if (responseJson.error === 'existing_username') {
+      const text = {'text': 'Unsuccessful profile edit'};
+      post('log-info', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch(() => {
+          console.log('log error');
+        });
       this.setState({invalid: {username: 'Username already taken'}});
       return false;
     } else {

@@ -101,7 +101,7 @@ export class UIDController extends React.Component {
   }
 
   validate (json) {
-    const text = {'text': 'Unsuccessful add and comfirm uid'};
+    const text = {'text': 'Validate add and confirm uid'};
     post('log-info', this.props.deviceToken, text)
       .then((response) => response.json())
       .then((responseJson) => {

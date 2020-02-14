@@ -90,7 +90,7 @@ export class Cart extends React.Component {
   }
 
   validate (json) {
-    const text = {'text': 'Unsuccessful purchase'};
+    const text = {'text': 'Validate purchase'};
     post('log-info', this.props.deviceToken, text)
       .then((response) => response.json())
       .then((responseJson) => {
@@ -99,6 +99,14 @@ export class Cart extends React.Component {
         console.log('log error');
       });
     if (json.invalid) {
+      const text = {'text': 'Unsuccessful puchase invalid'};
+      post('log-info', this.props.deviceToken, text)
+        .then((response) => response.json())
+        .then((responseJson) => {
+        })
+        .catch(() => {
+          console.log('log error');
+        });
       Alert.alert('Error', json.invalid[Object.keys(json.invalid)[0]]);
       this.setState({submitting: false});
       return false;
