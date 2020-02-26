@@ -103,7 +103,7 @@ export class CardForm extends React.Component {
             console.log('log error');
           });
         Alert.alert('Error trying to add card!');
-        navigator.navigate('Home');
+        this.props.navigation.navigate('Home');
       });
   }
 
@@ -259,6 +259,7 @@ const styles = StyleSheet.create({
 });
 
 CardForm.propTypes = {
+  navigation: PropTypes.object.isRequired,
   apiRefresh: PropTypes.func.isRequired,
   deviceToken: PropTypes.string.isRequired
 };

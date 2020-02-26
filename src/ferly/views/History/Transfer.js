@@ -359,7 +359,7 @@ export class Transfer extends React.Component {
           </View>
         </View>
       );
-      const d = new Date();
+      const d = new Date(date);
       d.setDate(d.getDate(d) + 1825);
       const expirationDate = formatDate(d, 'MMM D, YYYY');
       feesSection = (
@@ -549,7 +549,7 @@ export class Transfer extends React.Component {
           </View>
         </View>
       );
-      const d = new Date();
+      const d = new Date(date);
       d.setDate(d.getDate(d) + 1825);
       const expirationDate = formatDate(d, 'MMM D, YYYY');
       feesSection = (

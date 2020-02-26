@@ -99,7 +99,7 @@ export class Cart extends React.Component {
         console.log('log error');
       });
     if (json.invalid) {
-      const text = {'text': 'Unsuccessful puchase invalid'};
+      const text = {'text': 'Unsuccessful purchase invalid'};
       post('log-info', this.props.deviceToken, text)
         .then((response) => response.json())
         .then((responseJson) => {
