@@ -1,27 +1,21 @@
 import AddressForm from 'ferly/views/FerlyCard/AddressForm';
-import Contact from 'ferly/views/Invitations/Contact';
-import Contacts from 'ferly/views/Invitations/Contacts';
 import EnterCode from 'ferly/views/Give/EnterCode';
 import FerlyCard from 'ferly/views/FerlyCard/FerlyCard';
 import Give from 'ferly/views/Give/Give';
 import GiveContact from 'ferly/views/Give/GiveContact';
 import Recipient from 'ferly/views/Give/Recipient';
 import History from 'ferly/views/History/History';
-import Invitations from 'ferly/views/Invitations/Invitations';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import ManualAdd from 'ferly/views/Invitations/ManualAdd';
 import NewCardForm from 'ferly/views/FerlyCard/NewCardForm';
 import Profile from 'ferly/views/Profile/Profile';
-import React from 'react';
 import RecoveryChannel from 'ferly/views/Public/RecoveryChannel';
 import RecoveryCode from 'ferly/views/Public/RecoveryCode';
 import Settings from 'ferly/views/Settings/Settings';
 import SignUp from 'ferly/views/Public/SignUp';
 import SignUpCode from 'ferly/views/Public/SignUpCode';
 import SignUpWaiting from 'ferly/views/FerlyCard/SignUpWaiting';
-import TestElement from 'ferly/components/TestElement';
 import Transfer from 'ferly/views/History/Transfer';
 import Home from 'ferly/views/Wallet/Home';
+import Menu from 'ferly/views/Settings/Menu';
 import Value from 'ferly/views/Wallet/Value';
 import LandingPage from 'ferly/views/Public/LandingPage';
 import Cart from 'ferly/views/Purchase/Cart';
@@ -34,28 +28,13 @@ import {
   createStackNavigator,
   createSwitchNavigator
 } from 'react-navigation';
-import DrawerContent from 'ferly/components/Drawer';
 import Theme from 'ferly/utils/theme';
 
 const drawerOptions = ({navigation}) => ({
-  headerRight: (
-    <TestElement
-      parent={Icon}
-      label='test-id-drawer-icon'
-      name="bars"
-      color="white"
-      style={{padding: 12}}
-      size={26}
-      onPress={() => navigation.toggleDrawer()} />
-  ),
   headerStyle: {
     backgroundColor: Theme.darkBlue
   },
   headerTintColor: 'white'
-});
-
-const ProfileStack = createStackNavigator({
-  Profile: {screen: Profile, navigationOptions: drawerOptions}
 });
 
 const WalletStack = createStackNavigator(
@@ -65,35 +44,37 @@ const WalletStack = createStackNavigator(
     Give: {screen: Recipient, navigationOptions: drawerOptions},
     GiveContact: {screen: GiveContact, navigationOptions: drawerOptions},
     Amount: {screen: Give, navigationOptions: drawerOptions},
-    Market: {screen: Market, navigationOptions: drawerOptions},
     Purchase: {screen: Purchase, navigationOptions: drawerOptions},
-    Cart: {screen: Cart, navigationOptions: drawerOptions},
-    EnterCode: {screen: EnterCode, navigationOptions: drawerOptions}
+    Cart: {screen: Cart, navigationOptions: drawerOptions}
   },
   {
     initialRouteName: 'Home'
   }
 );
 
-const SettingsStack = createStackNavigator(
+const MenuStack = createStackNavigator(
   {
+    Menu: {screen: Menu, navigationOptions: drawerOptions},
+    Recovery: {screen: Recovery, navigationOptions: drawerOptions},
+    EnterCode: {screen: EnterCode, navigationOptions: drawerOptions},
+    FerlyCard: {screen: FerlyCard, navigationOptions: drawerOptions},
+    Profile: {screen: Profile, navigationOptions: drawerOptions},
     Settings: {screen: Settings, navigationOptions: drawerOptions},
-    Recovery: {screen: Recovery, navigationOptions: drawerOptions}
+    Recipient: {screen: Recipient, navigationOptions: drawerOptions}
   },
   {
-    initialRouteName: 'Settings'
+    initialRouteName: 'Menu'
   }
 );
 
-const InvitationsStack = createStackNavigator(
+const MarketStack = createStackNavigator(
   {
-    Invitations: {screen: Invitations, navigationOptions: drawerOptions},
-    Contacts: {screen: Contacts, navigationOptions: drawerOptions},
-    ManualAdd: {screen: ManualAdd, navigationOptions: drawerOptions},
-    Contact: {screen: Contact, navigationOptions: drawerOptions}
+    Market: {screen: Market, navigationOptions: drawerOptions},
+    Purchase: {screen: Purchase, navigationOptions: drawerOptions},
+    Cart: {screen: Cart, navigationOptions: drawerOptions}
   },
   {
-    initialRouteName: 'Invitations'
+    initialRouteName: 'Market'
   }
 );
 
@@ -104,15 +85,6 @@ const HistoryStack = createStackNavigator(
   },
   {
     initialRouteName: 'History'
-  }
-);
-
-const CodeStack = createStackNavigator(
-  {
-    EnterCode: {screen: EnterCode, navigationOptions: drawerOptions}
-  },
-  {
-    initialRouteName: 'EnterCode'
   }
 );
 
@@ -130,18 +102,12 @@ const publicHeader = {
 const AuthDrawer = createDrawerNavigator(
   {
     Wallet: WalletStack,
-    Profile: ProfileStack,
-    'Ferly Card': createStackNavigator(
-      {Card: {screen: FerlyCard, navigationOptions: drawerOptions}}),
+    Market: MarketStack,
     History: HistoryStack,
-    Invitations: InvitationsStack,
-    'Gift Code': CodeStack,
-    Settings: SettingsStack
+    Menu: MenuStack
   },
   {
     initialRouteName: 'Wallet',
-    drawerPosition: 'right',
-    contentComponent: DrawerContent,
     contentOptions: {activeTintColor: Theme.lightBlue}
   }
 );

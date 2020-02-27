@@ -7,10 +7,10 @@ import React from 'react';
 import Spinner from 'ferly/components/Spinner';
 import TestElement from 'ferly/components/TestElement';
 import Theme from 'ferly/utils/theme';
-import {apiRequire, apiExpire} from 'ferly/store/api';
+import {apiRequire, apiRefresh} from 'ferly/store/api';
 import {connect} from 'react-redux';
 import {createUrl, post, urls} from 'ferly/utils/fetch';
-import {StackActions} from 'react-navigation';
+// import {StackActions} from 'react-navigation';
 import {
   Alert,
   View,
@@ -77,13 +77,9 @@ class Profile extends React.Component {
   }
 
   onSuccessfulEdit () {
-    const {apiExpire, navigation} = this.props;
-    apiExpire(urls.profile);
-    const resetAction = StackActions.reset({
-      index: 0,
-      actions: [StackActions.push({routeName: 'Profile'})]
-    });
-    navigation.dispatch(resetAction);
+    const {apiRefresh, navigation} = this.props;
+    apiRefresh(urls.profile);
+    navigation.navigate('Menu');
   }
 
   formSubmit () {
@@ -432,7 +428,7 @@ const styles = StyleSheet.create({
 });
 
 Profile.propTypes = {
-  apiExpire: PropTypes.func.isRequired,
+  apiRefresh: PropTypes.func.isRequired,
   apiRequire: PropTypes.func.isRequired,
   firstName: PropTypes.string,
   lastName: PropTypes.string,
@@ -464,7 +460,7 @@ function mapStateToProps (state) {
 }
 
 const mapDispatchToProps = {
-  apiExpire,
+  apiRefresh,
   apiRequire
 };
 

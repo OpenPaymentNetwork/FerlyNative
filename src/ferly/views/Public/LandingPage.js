@@ -21,7 +21,7 @@ export class LandingPage extends React.Component {
     this.state = {
       time: 0,
       page: 0,
-      expoToken: '',
+      // expoToken: '',
       dataSource: [
         {
           title: 1
@@ -69,7 +69,7 @@ export class LandingPage extends React.Component {
 
       if (finalStatus === 'granted') {
         let token = await Notifications.getExpoPushTokenAsync();
-        this.setState({expoToken: token});
+        expoToken = token;
         return token;
       }
     } catch (error) {
@@ -108,7 +108,7 @@ export class LandingPage extends React.Component {
 
   render () {
     const {navigation} = this.props;
-    const {page, expoToken} = this.state;
+    const {page} = this.state;
 
     const passParams = {
       expoToken: expoToken
@@ -163,6 +163,7 @@ export class LandingPage extends React.Component {
 
 let interval = 0;
 let {width} = Dimensions.get('window');
+let expoToken = '';
 
 LandingPage.propTypes = {
   navigation: PropTypes.object.isRequired,

@@ -3,6 +3,10 @@ import Avatar from 'ferly/components/Avatar';
 import SearchBar from 'ferly/components/SearchBar';
 import PropTypes from 'prop-types';
 import React from 'react';
+import Theme from 'ferly/utils/theme';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import I from 'react-native-vector-icons/Ionicons';
+import Icons from 'react-native-vector-icons/FontAwesome5';
 import TestElement from 'ferly/components/TestElement';
 import {apiRequire} from 'ferly/store/api';
 import {connect} from 'react-redux';
@@ -130,6 +134,93 @@ export class Market extends React.Component {
           placeholder='Search for gift value'
           onChangeText={this.onChangeText.bind(this)} />
         {body}
+        <View style={{height: 75, width: width}}>
+          <TestElement
+            parent={View}
+            label='test-id-navbar'
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center'
+            }}>
+            <TouchableOpacity
+              style={{
+                borderColor: 'white',
+                height: width > 600 ? 100 : 80,
+                paddingHorizontal: 20,
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: 'white'
+              }}
+              onPress={() => this.props.navigation.navigate('Home')}>
+              <I
+                style={{paddingRight: 8}}
+                name="md-wallet"
+                color={Theme.darkBlue}
+                size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
+              <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
+                Wallet
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                borderColor: 'white',
+                height: width > 600 ? 100 : 80,
+                paddingHorizontal: 20,
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: '#C7EAEA'
+              }}
+              onPress={() => this.props.navigation.navigate('Market')}>
+              <Icons
+                style={{paddingRight: 8}}
+                name="store-alt"
+                color={Theme.darkBlue}
+                size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
+              <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
+                Shop
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                borderColor: 'white',
+                height: width > 600 ? 100 : 80,
+                paddingHorizontal: 20,
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: 'white'
+              }}
+              onPress={() => this.props.navigation.navigate('History')}>
+              <Icon
+                style={{paddingRight: 8}}
+                name="history"
+                color={Theme.darkBlue}
+                size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
+              <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
+                History
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                borderColor: 'white',
+                height: width > 600 ? 100 : 80,
+                paddingHorizontal: 20,
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: 'white'
+              }}
+              onPress={() => this.props.navigation.navigate('Menu')}>
+              <Icon
+                style={{paddingRight: 8}}
+                name="bars"
+                color={Theme.darkBlue}
+                size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
+              <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
+                Menu
+              </Text>
+            </TouchableOpacity>
+          </TestElement>
+        </View>
       </View>
     );
   }

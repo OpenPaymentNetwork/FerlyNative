@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
 });
 
 CardForm.propTypes = {
-  navigation: PropTypes.object.isRequired,
+  navigation: PropTypes.object,
   apiRefresh: PropTypes.func.isRequired,
   deviceToken: PropTypes.string.isRequired
 };

@@ -1,6 +1,9 @@
 import * as Permissions from 'expo-permissions';
 import accounting from 'ferly/utils/accounting';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import I from 'react-native-vector-icons/Ionicons';
+import Icons from 'react-native-vector-icons/FontAwesome5';
+import Ico from 'react-native-vector-icons/MaterialIcons';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Spinner from 'ferly/components/Spinner';
@@ -339,11 +342,11 @@ export class Wallet extends React.Component {
               label='test-id-give-button'
               style={styles.cashButton}
               onPress={() => navigation.navigate('Give', design)}>
-              <Icon
+              <Ico
                 style={{paddingRight: 8}}
-                name="gift"
+                name="card-giftcard"
                 color={Theme.darkBlue}
-                size={this.state.width2 < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
+                size={this.state.width2 < 330 ? 18 : 20 && width > 600 ? 26 : 20} />
               <Text style={{
                 color: Theme.darkBlue,
                 fontSize: this.state.width2 < 330 ? 11 : 12 && width > 600 ? 16 : 12,
@@ -575,13 +578,93 @@ export class Wallet extends React.Component {
             </Text>
           </TestElement>
         </Animated.View>
-        <TestElement
-          parent={TouchableOpacity}
-          label='test-id-fab'
-          style={styles.fab}
-          onPress={() => this.onMarketClick()}>
-          <Icon name="plus" color="white" size={width < 330 ? 20 : 24} />
-        </TestElement>
+        <View style={{height: 75, width: width}}>
+          <TestElement
+            parent={View}
+            label='test-id-navbar'
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center'
+            }}>
+            <TouchableOpacity
+              style={{
+                borderColor: 'white',
+                height: 80,
+                paddingHorizontal: 20,
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: '#C7EAEA'
+              }}
+              onPress={() => this.props.navigation.navigate('Home')}>
+              <I
+                style={{paddingRight: 8}}
+                name="md-wallet"
+                color={Theme.darkBlue}
+                size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
+              <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
+                Wallet
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                borderColor: 'white',
+                height: width > 600 ? 80 : 60,
+                paddingHorizontal: 20,
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: 'white'
+              }}
+              onPress={() => this.props.navigation.navigate('Market')}>
+              <Icons
+                style={{paddingRight: 8}}
+                name="store-alt"
+                color={Theme.darkBlue}
+                size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
+              <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
+                Shop
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                borderColor: 'white',
+                height: width > 600 ? 80 : 60,
+                paddingHorizontal: 20,
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: 'white'
+              }}
+              onPress={() => this.props.navigation.navigate('History')}>
+              <Icon
+                style={{paddingRight: 8}}
+                name="history"
+                color={Theme.darkBlue}
+                size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
+              <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
+                History
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                borderColor: 'white',
+                height: width > 600 ? 80 : 60,
+                paddingHorizontal: 20,
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: 'white'
+              }}
+              onPress={() => this.props.navigation.navigate('Menu')}>
+              <Icon
+                style={{paddingRight: 8}}
+                name="bars"
+                color={Theme.darkBlue}
+                size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
+              <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
+                Menu
+              </Text>
+            </TouchableOpacity>
+          </TestElement>
+        </View>
       </View>
     );
   }
