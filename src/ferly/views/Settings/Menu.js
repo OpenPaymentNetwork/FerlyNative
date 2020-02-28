@@ -264,7 +264,7 @@ export class Settings extends React.Component {
           </Text>
           <TouchableOpacity
             style={styles.items}
-            onPress={() => navigation.navigate('Recipient')}>
+            onPress={() => navigation.navigate('Invitations')}>
             <View style={styles.sectionContainer}>
               <View style={{flexDirection: 'row'}}>
                 <Icon
@@ -311,27 +311,27 @@ export class Settings extends React.Component {
             </View>
           </TouchableOpacity>
         </ScrollView>
-        <View style={{height: 75, width: width}}>
+        <View style={{height: width > 600 ? 95 : 75, width: width}}>
           <TestElement
             parent={View}
             label='test-id-navbar'
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
-              alignItems: 'center'
+              alignItems: 'center',
+              paddingHorizontal: 10
             }}>
             <TouchableOpacity
               style={{
                 borderColor: 'white',
                 height: width > 600 ? 100 : 80,
-                paddingHorizontal: 20,
+                paddingHorizontal: 15,
                 justifyContent: 'center',
                 alignItems: 'center',
                 backgroundColor: 'white'
               }}
               onPress={() => this.props.navigation.navigate('Home')}>
               <I
-                style={{paddingRight: 8}}
                 name="md-wallet"
                 color={Theme.darkBlue}
                 size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
@@ -343,14 +343,13 @@ export class Settings extends React.Component {
               style={{
                 borderColor: 'white',
                 height: width > 600 ? 100 : 80,
-                paddingHorizontal: 20,
+                paddingHorizontal: 15,
                 justifyContent: 'center',
                 alignItems: 'center',
                 backgroundColor: 'white'
               }}
               onPress={() => this.props.navigation.navigate('Market')}>
               <Icons
-                style={{paddingRight: 8}}
                 name="store-alt"
                 color={Theme.darkBlue}
                 size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
@@ -362,14 +361,13 @@ export class Settings extends React.Component {
               style={{
                 borderColor: 'white',
                 height: width > 600 ? 100 : 80,
-                paddingHorizontal: 20,
+                paddingHorizontal: 15,
                 justifyContent: 'center',
                 alignItems: 'center',
                 backgroundColor: 'white'
               }}
               onPress={() => this.props.navigation.navigate('History')}>
               <Icon
-                style={{paddingRight: 8}}
                 name="history"
                 color={Theme.darkBlue}
                 size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
@@ -381,14 +379,13 @@ export class Settings extends React.Component {
               style={{
                 borderColor: 'white',
                 height: width > 600 ? 100 : 80,
-                paddingHorizontal: 20,
+                paddingHorizontal: 15,
                 justifyContent: 'center',
                 alignItems: 'center',
                 backgroundColor: '#C7EAEA'
               }}
               onPress={() => this.props.navigation.navigate('Menu')}>
               <Icon
-                style={{paddingRight: 8}}
                 name="bars"
                 color={Theme.darkBlue}
                 size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />

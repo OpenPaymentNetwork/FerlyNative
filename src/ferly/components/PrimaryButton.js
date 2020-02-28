@@ -20,7 +20,7 @@ export default class PrimaryButton extends React.Component {
         }}
         disabled={disabled}
         onPress={() => onPress()}>
-        <Text style={{color: 'white', fontSize: width > 600 ? 24 : 20}}>{title}</Text>
+        <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 24 : 20}}>{title}</Text>
       </TouchableOpacity>
     );
   }

@@ -1,8 +1,10 @@
 import * as Permissions from 'expo-permissions';
 import Constants from 'expo-constants';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import I from 'react-native-vector-icons/Ionicons';
 import PropTypes from 'prop-types';
 import React from 'react';
+import Theme from 'ferly/utils/theme';
 import {connect} from 'react-redux';
 import {envId, post} from 'ferly/utils/fetch';
 import {Notifications, Updates} from 'expo';
@@ -92,28 +94,36 @@ export class Settings extends React.Component {
 
     return (
       <View style={{flex: 1, backgroundColor: 'white'}}>
+        <Text style={styles.title}>{'Account Recovery'}</Text>
         <TouchableOpacity
           style={styles.item}
           onPress={() => navigation.navigate('Recovery')}>
           <View style={styles.sectionContainer}>
-            <View>
-              <Text style={styles.title}>{'Account Recovery'}</Text>
+            <View style={{flexDirection: 'row'}}>
+              <I
+                name="md-person"
+                color={Theme.darkBlue}
+                size={20} />
               <Text style={styles.description}>
-                {'Because you don\'t want to lose anything.'}
+                {'Edit Email/Phone'}
               </Text>
             </View>
             {arrowIcon}
           </View>
         </TouchableOpacity>
+        <Text style={styles.title}>{'About'}</Text>
         <TouchableOpacity
           style={styles.item}
           disabled={!updateDownloaded}
           onPress={this.handleUpdateClick.bind(this)}>
           <View style={styles.sectionContainer}>
-            <View>
-              <Text style={styles.title}>{'About'}</Text>
+            <View style={{flexDirection: 'row'}}>
+              <I
+                name="md-information-circle-outline"
+                color={Theme.darkBlue}
+                size={22} />
               <Text style={styles.description}>
-                {`Version ${version}/${envId}`}
+                {`Version: ${version}/${envId}`}
               </Text>
             </View>
             {updateDownloaded ? updateIcon : null}
@@ -136,24 +146,26 @@ Settings.propTypes = {
 
 const styles = StyleSheet.create({
   title: {
-    fontWeight: 'bold',
-    fontSize: width > 600 ? 22 : 20
+    fontSize: width > 600 ? 20 : 18,
+    color: Theme.darkBlue,
+    paddingHorizontal: 20,
+    paddingTop: 15,
+    paddingBottom: 8
   },
   description: {
-    fontSize: width > 600 ? 18 : 16,
-    color: 'gray',
-    paddingLeft: 20
+    fontSize: width > 600 ? 20 : 18,
+    color: Theme.darkBlue,
+    fontWeight: 'bold',
+    paddingLeft: 10
   },
   sectionContainer: {
     flex: 1,
     justifyContent: 'space-between',
     flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 8
+    paddingHorizontal: 20
   },
   item: {
-    height: width > 600 ? 90 : 80
+    height: width > 600 ? 40 : 30
   }
 });
 

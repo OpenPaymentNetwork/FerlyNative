@@ -38,10 +38,8 @@ class EventListener extends React.Component {
   }
 
   _handleNotification = (notification) => {
-    if (notification.origin === 'received') {
-      this.props.apiRefresh(urls.profile);
-      this.props.apiRefresh(urls.history);
-    }
+    this.props.apiRefresh(urls.profile);
+    this.props.apiRefresh(urls.history);
   };
 
   _handleUpdates = (event) => {

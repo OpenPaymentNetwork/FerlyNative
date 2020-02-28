@@ -5,7 +5,6 @@ import React from 'react';
 import {apiExpire} from 'ferly/store/api';
 import {connect} from 'react-redux';
 import {createUrl, post} from 'ferly/utils/fetch';
-import {StackActions} from 'react-navigation';
 import {
   View,
   Text,
@@ -55,11 +54,7 @@ export class Contact extends React.Component {
         }
         this.props.apiExpire(
           createUrl('existing-invitations', {status: 'pending'}));
-        const resetAction = StackActions.reset({
-          index: 0,
-          actions: [StackActions.push({routeName: 'Invitations'})]
-        });
-        this.props.navigation.dispatch(resetAction);
+        this.props.navigation.navigate('Invitations');
         Alert.alert('Invite Sent!', `You sent an invite to ${option}.`);
       })
       .catch(() => {

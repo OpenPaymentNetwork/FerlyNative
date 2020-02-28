@@ -23,6 +23,10 @@ import Purchase from 'ferly/views/Purchase/Purchase';
 import Market from 'ferly/views/Purchase/Market';
 import Recovery from 'ferly/views/Settings/Recovery';
 import Tutorial from 'ferly/views/Public/Tutorial';
+import Invitations from 'ferly/views/Invitations/Invitations';
+import ManualAdd from 'ferly/views/Invitations/ManualAdd';
+import Contacts from 'ferly/views/Invitations/Contacts';
+import Contact from 'ferly/views/Invitations/Contact';
 import {
   createDrawerNavigator,
   createStackNavigator,
@@ -60,7 +64,10 @@ const MenuStack = createStackNavigator(
     FerlyCard: {screen: FerlyCard, navigationOptions: drawerOptions},
     Profile: {screen: Profile, navigationOptions: drawerOptions},
     Settings: {screen: Settings, navigationOptions: drawerOptions},
-    Recipient: {screen: Recipient, navigationOptions: drawerOptions}
+    Invitations: {screen: Invitations, navigationOptions: drawerOptions},
+    ManualAdd: {screen: ManualAdd, navigationOptions: drawerOptions},
+    Contacts: {screen: Contacts, navigationOptions: drawerOptions},
+    Contact: {screen: Contact, navigationOptions: drawerOptions}
   },
   {
     initialRouteName: 'Menu'

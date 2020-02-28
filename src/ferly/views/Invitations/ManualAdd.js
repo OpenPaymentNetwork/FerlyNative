@@ -10,7 +10,6 @@ import {
   Dimensions
 } from 'react-native';
 import {apiExpire} from 'ferly/store/api';
-import {StackActions} from 'react-navigation';
 import {connect} from 'react-redux';
 import {createUrl, post} from 'ferly/utils/fetch';
 
@@ -45,11 +44,7 @@ export class ManualAdd extends React.Component {
             });
           this.props.apiExpire(
             createUrl('existing-invitations', {status: 'pending'}));
-          const resetAction = StackActions.reset({
-            index: 0,
-            actions: [StackActions.push({routeName: 'Invitations'})]
-          });
-          this.props.navigation.dispatch(resetAction);
+          this.props.navigation.navigate('Invitations');
           Alert.alert('Invite Sent!', `You sent an invite to ${option}.`);
         }
       })
