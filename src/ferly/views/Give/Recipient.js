@@ -161,6 +161,7 @@ class Recipient extends React.Component {
     const {name, id, display} = contact;
     const {firstName, lastName, uri} = display;
     const passParams = {
+      name: name,
       contact: contact,
       design: design
     };
@@ -272,11 +273,12 @@ class Recipient extends React.Component {
           customers.map((customer) => {
             const firstName = customer.first_name;
             const lastName = customer.last_name;
+            let name = firstName + ' ' + lastName;
             return (
               <TouchableOpacity
                 key={customer.id}
                 onPress={
-                  () => navigation.navigate('Amount', {customer, design})}>
+                  () => navigation.navigate('Amount', {customer, design, name})}>
                 <View marginVertical={10} style={{flexDirection: 'row'}}>
                   <Avatar
                     size={width > 600 ? 72 : 68}
@@ -285,7 +287,7 @@ class Recipient extends React.Component {
                     secondWord={lastName} />
                   <View style={{justifyContent: 'center', marginLeft: 10}}>
                     <Text style={{fontSize: width > 600 ? 28 : 24}}>
-                      {`${firstName} ${lastName}`}
+                      {`${name}`}
                     </Text>
                     <Text style={{fontSize: width > 600 ? 24 : 20, color: 'gray'}}>
                       {'@' + customer.username}

@@ -4,6 +4,7 @@ import React from 'react';
 import Avatar from 'ferly/components/Avatar';
 import Theme from 'ferly/utils/theme';
 import Spinner from 'ferly/components/Spinner';
+import Icon from 'react-native-vector-icons/EvilIcons';
 import {apiRequire, apiRefresh} from 'ferly/store/api';
 import {connect} from 'react-redux';
 import {createUrl, post, urls} from 'ferly/utils/fetch';
@@ -27,7 +28,8 @@ export class Transfer extends React.Component {
     super();
     this.state = {
       click: false,
-      submitting: false
+      submitting: false,
+      theDate: false
     };
   }
 
@@ -202,6 +204,7 @@ export class Transfer extends React.Component {
     }
     const {transferDetails} = this.props;
     const {
+      name,
       amount,
       message,
       timestamp,
@@ -213,50 +216,150 @@ export class Transfer extends React.Component {
       cc_last4: lastFour = '****',
       cc_brand: lowerBrand = ''
     } = transferDetails;
+    const remindParams = {
+      transfer_id: transferDetails.id
+    };
+    if (transferType === 'pending') {
+      if (!this.state.theDate) {
+        post('get_transfer_details', this.props.deviceToken, remindParams)
+          .then((response) => response.json())
+          .then((responseJson) => {
+            if (responseJson.alarms) {
+              responseJson.alarms.forEach(item => {
+                if (item.name === 'alarm.expire_invitation' && item.timestamp) {
+                  expireDate = item.timestamp;
+                }
+              });
+            }
+            this.setState({theDate: true});
+          })
+          .catch(() => {
+            const text = {'text': 'Call failed: get transfer details'};
+            post('log-info', this.props.deviceToken, text)
+              .then((response) => response.json())
+              .then((responseJson) => {
+              })
+              .catch(() => {
+                console.log('log error');
+              });
+          });
+        return <Spinner />;
+      }
+    }
     const total = parseFloat(amount) + parseFloat(convenienceFee);
     const brand = lowerBrand.charAt(0).toUpperCase() + lowerBrand.substring(1);
     const b = timestamp.split(/\D+/);
+    if (expireDate) {
+      const e = expireDate.split(/\D+/);
+      const expire = new Date(Date.UTC(e[0], --e[1], e[2], e[3], e[4], e[5]));
+      expiringDate = formatDate(expire, 'MMM D, YYYY h:mm A');
+    }
     const date = new Date(Date.UTC(b[0], --b[1], b[2], b[3], b[4], b[5]));
     // React Native doesn't fully support Date.toLocaleString() on Android
     // use date-fns. Expect the JavaScriptCore to be updated in SDK 31.
     const dateDisplay = formatDate(date, 'MMM D, YYYY h:mm A');
-
     let verb = '';
     let cp = '';
+    let sender = '';
     let messageTitle = '';
     let symbol = '';
-    switch (transferType) {
-      case 'purchase':
-        verb = 'added';
-        symbol = '+';
-        cp = ' to your account';
-        break;
-      case 'pending':
-        verb = 'gifted';
-        symbol = '-';
-        cp = ` to ${counterParty}`;
-        break;
-      case 'send':
-        verb = 'gifted';
-        symbol = '-';
-        cp = ` to ${counterParty}`;
-        messageTitle = 'Your ';
-        break;
-      case 'canceled':
-        verb = 'canceled';
-        symbol = '+';
-        cp = ` to ${counterParty}`;
-        break;
-      case 'receive':
-        verb = 'received';
-        symbol = '+';
-        cp = ` from ${counterParty}`;
-        messageTitle = 'Their ';
-        break;
-      case 'redeem':
-        verb = 'paid';
-        symbol = '-';
-        break;
+    if (name) {
+      switch (transferType) {
+        case 'purchase':
+          verb = 'added';
+          symbol = '+';
+          cp = ' to your account';
+          sender = 'You';
+          break;
+        case 'pending':
+          verb = 'gifted';
+          symbol = '-';
+          cp = ` to ${name}`;
+          sender = 'You';
+          break;
+        case 'send':
+          verb = 'gifted';
+          symbol = '-';
+          cp = ` to ${name}`;
+          messageTitle = 'Your ';
+          sender = 'You';
+          break;
+        case 'canceled':
+          verb = 'canceled';
+          symbol = <Icon
+            name="refresh"
+            color={Theme.darkBlue}
+            size={width < 330 ? 30 : 35 && width > 600 ? 40 : 35} />;
+          cp = ` to ${name}`;
+          sender = 'You';
+          break;
+        case 'receive':
+          verb = 'received';
+          symbol = '+';
+          cp = ` from ${name}`;
+          messageTitle = 'Their ';
+          sender = 'You';
+          break;
+        case 'redeem':
+          verb = 'paid';
+          symbol = '-';
+          break;
+        case 'expired':
+          verb = 'Expired Gift';
+          symbol = '';
+          cp = ` to ${name}`;
+          sender = 'You';
+          break;
+      }
+    } else {
+      switch (transferType) {
+        case 'purchase':
+          verb = 'added';
+          symbol = '+';
+          cp = ' to your account';
+          sender = 'You';
+          break;
+        case 'pending':
+          verb = 'gifted';
+          symbol = '-';
+          cp = ` to ${counterParty}`;
+          sender = 'You';
+          break;
+        case 'send':
+          verb = 'gifted';
+          symbol = '-';
+          cp = ` to ${counterParty}`;
+          messageTitle = 'Your ';
+          sender = 'You';
+          break;
+        case 'canceled':
+          verb = 'canceled';
+          symbol = <Icon
+            name="refresh"
+            color={Theme.darkBlue}
+            size={width < 330 ? 30 : 35 && width > 600 ? 40 : 35} />;
+          cp = ` to ${counterParty}`;
+          sender = 'You';
+          break;
+        case 'receive':
+          verb = 'received';
+          symbol = '+';
+          cp = ` from ${counterParty}`;
+          messageTitle = 'Their ';
+          sender = 'You';
+          break;
+        case 'redeem':
+          verb = 'paid';
+          symbol = '-';
+          sender = 'You';
+          break;
+        case 'expired':
+          verb = 'Expired Gift';
+          symbol = '';
+          cp = ` to ${counterParty}`;
+          sender = 'Your';
+          break;
+      }
     }
     let counterPartyAvatar;
     if (transferType === 'send' || transferType === 'receive') {
@@ -418,9 +521,9 @@ export class Transfer extends React.Component {
           </View>
         </View>
       );
-      const d = new Date(date);
-      d.setDate(d.getDate(d) + 1825);
-      const expirationDate = formatDate(d, 'MMM D, YYYY');
+      // const d = new Date(date);
+      // d.setDate(d.getDate(d) + 1825);
+      // const expirationDate = formatDate(d, 'MMM D, YYYY');
       feesSection = (
         <View style={styles.section}>
           <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 1}}>
@@ -435,7 +538,7 @@ export class Transfer extends React.Component {
               paddingBottom: 0,
               paddingTop: 10
             }]}>
-              {expirationDate}
+              {expiringDate}
             </Text>
           </View>
           <View style={[styles.functionRow, {paddingLeft: 20}]}>
@@ -498,7 +601,7 @@ export class Transfer extends React.Component {
               color: Theme.darkBlue,
               fontSize: width > 600 ? 18 : 16
             }} >
-              {counterParty}
+              {!name ? counterParty : name}
             </Text>
           </View>
         </View>
@@ -523,17 +626,62 @@ export class Transfer extends React.Component {
               Recipient
             </Text>
           </View>
-          <View style={{paddingLeft: 15, flexDirection: 'row'}} >
+          <View style={{paddingLeft: 15, flexDirection: 'column'}} >
             {counterPartyAvatar}
             <Text style={{
-              alignSelf: 'center',
-              paddingLeft: 10,
+              alignSelf: 'flex-start',
               color: Theme.darkBlue,
               fontSize: width > 600 ? 18 : 16,
-              paddingBottom: 10,
               paddingTop: 10
             }} >
-              {counterParty}
+              {!name ? counterParty : name}
+            </Text>
+            <Text style={{
+              alignSelf: 'flex-start',
+              color: Theme.darkBlue,
+              fontSize: width > 600 ? 16 : 14
+            }} >
+              {!name ? null : counterParty}
+            </Text>
+          </View>
+        </View>
+      );
+    } else if (transferType === 'expired') {
+      giftValue = (
+        <View style={styles.section} >
+          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 1}}>
+            <Text style={styles.sectionHeader} >Gift Value</Text>
+          </View>
+          <View style={{paddingLeft: 20}} >
+            <Text style={[styles.sectionText, {fontSize: width > 600 ? 18 : 16}]} >
+              {designTitle}
+            </Text>
+          </View>
+        </View>
+      );
+      recipient = (
+        <View style={styles.section} >
+          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 1}}>
+            <Text style={styles.sectionHeader} >
+              Recipient
+            </Text>
+          </View>
+          <View style={{paddingLeft: 15, flexDirection: 'column'}} >
+            {counterPartyAvatar}
+            <Text style={{
+              alignSelf: 'flex-start',
+              color: Theme.darkBlue,
+              fontSize: width > 600 ? 18 : 16,
+              paddingTop: 10
+            }} >
+              {!name ? counterParty : name}
+            </Text>
+            <Text style={{
+              alignSelf: 'flex-start',
+              color: Theme.darkBlue,
+              fontSize: width > 600 ? 16 : 14
+            }} >
+              {!name ? null : counterParty}
             </Text>
           </View>
         </View>
@@ -558,24 +706,29 @@ export class Transfer extends React.Component {
               Recipient
             </Text>
           </View>
-          <View style={{paddingLeft: 15, flexDirection: 'row'}} >
+          <View style={{paddingLeft: 15, flexDirection: 'column', paddingBottom: 10}} >
             {counterPartyAvatar}
             <Text style={{
-              alignSelf: 'center',
-              paddingLeft: 10,
+              alignSelf: 'flex-start',
               color: Theme.darkBlue,
               fontSize: width > 600 ? 18 : 16,
-              paddingBottom: 20,
               paddingTop: 10
             }} >
-              {counterParty}
+              {!name ? counterParty : name}
+            </Text>
+            <Text style={{
+              alignSelf: 'flex-start',
+              color: Theme.darkBlue,
+              fontSize: width > 600 ? 16 : 14
+            }} >
+              {!name ? null : counterParty}
             </Text>
           </View>
         </View>
       );
-      const giftDate = new Date(date);
-      giftDate.setDate(giftDate.getDate() + 30);
-      const giftExpiration = formatDate(giftDate, 'MMM D, YYYY');
+      // const giftDate = new Date(date);
+      // giftDate.setDate(giftDate.getDate() + 30);
+      // const giftExpiration = formatDate(giftDate, 'MMM D, YYYY');
       status = (
         <View style={styles.section} >
           <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 1}}>
@@ -585,13 +738,13 @@ export class Transfer extends React.Component {
           </View>
           <View style={{paddingLeft: 15, flexDirection: 'column'}} >
             <Text style={{
-              paddingLeft: 10,
+              paddingHorizontal: 10,
               color: Theme.darkBlue,
               fontSize: 16,
               paddingTop: 10,
               paddingBottom: 5
             }} >
-              {counterParty} hasnt accepted your gift yet.
+              {!name ? counterParty : name} hasnt accepted your gift yet.
             </Text>
             <Text style={{
               paddingLeft: 10,
@@ -599,7 +752,7 @@ export class Transfer extends React.Component {
               color: Theme.darkBlue,
               fontSize: 16
             }} >
-              The gift expires {giftExpiration}.
+              The gift expires {expiringDate}.
             </Text>
             <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
               <TouchableOpacity
@@ -648,7 +801,7 @@ export class Transfer extends React.Component {
               color: Theme.darkBlue,
               fontSize: 16
             }} >
-              {counterParty}
+              {!name ? counterParty : name}
             </Text>
           </View>
         </View>
@@ -714,7 +867,7 @@ export class Transfer extends React.Component {
               fontSize: width < 330 ? 16 : 18 && width > 600 ? 20 : 18,
               color: Theme.darkBlue
             }}>
-              {`You ${verb} ${designTitle}${cp}.`}
+              {`${sender} ${verb} ${designTitle}${cp}.`}
             </Text>
             <Text style={[styles.sectionText, {
               paddingTop: 5,
@@ -740,6 +893,8 @@ export class Transfer extends React.Component {
   }
 }
 
+let expireDate = '';
+let expiringDate = '';
 let count = 0;
 let {width} = Dimensions.get('window');
 

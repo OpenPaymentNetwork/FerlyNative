@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import I from 'react-native-vector-icons/Ionicons';
 import PropTypes from 'prop-types';
 import React from 'react';
+import TestElement from 'ferly/components/TestElement';
 import Theme from 'ferly/utils/theme';
 import {connect} from 'react-redux';
 import {envId, post} from 'ferly/utils/fetch';
@@ -93,7 +94,11 @@ export class Settings extends React.Component {
     );
 
     return (
-      <View style={{flex: 1, backgroundColor: 'white'}}>
+      <TestElement
+        parent={View}
+        label='test-id-settings-page'
+        style={{flex: 1, backgroundColor: 'white'}}
+      >
         <Text style={styles.title}>{'Account Recovery'}</Text>
         <TouchableOpacity
           style={styles.item}
@@ -129,7 +134,7 @@ export class Settings extends React.Component {
             {updateDownloaded ? updateIcon : null}
           </View>
         </TouchableOpacity>
-      </View>
+      </TestElement>
     );
   }
 }

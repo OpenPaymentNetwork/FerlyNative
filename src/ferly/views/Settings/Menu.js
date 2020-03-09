@@ -311,90 +311,89 @@ export class Settings extends React.Component {
             </View>
           </TouchableOpacity>
         </ScrollView>
-        <View style={{height: width > 600 ? 95 : 75, width: width}}>
-          <TestElement
-            parent={View}
-            label='test-id-navbar'
+        <TestElement
+          parent={View}
+          label='test-id-navbar'
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            height: width > 600 ? 95 : 75,
+            width: width
+          }}>
+          <TouchableOpacity
             style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
+              borderColor: 'white',
+              height: width > 600 ? 95 : 75,
+              justifyContent: 'center',
               alignItems: 'center',
-              paddingHorizontal: 10
-            }}>
-            <TouchableOpacity
-              style={{
-                borderColor: 'white',
-                height: width > 600 ? 100 : 80,
-                paddingHorizontal: 15,
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: 'white'
-              }}
-              onPress={() => this.props.navigation.navigate('Home')}>
-              <I
-                name="md-wallet"
-                color={Theme.darkBlue}
-                size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
-              <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
+              backgroundColor: 'white',
+              width: width / 4
+            }}
+            onPress={() => this.props.navigation.navigate('Home')}>
+            <I
+              name="md-wallet"
+              color={Theme.darkBlue}
+              size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
+            <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
                 Wallet
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                borderColor: 'white',
-                height: width > 600 ? 100 : 80,
-                paddingHorizontal: 15,
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: 'white'
-              }}
-              onPress={() => this.props.navigation.navigate('Market')}>
-              <Icons
-                name="store-alt"
-                color={Theme.darkBlue}
-                size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
-              <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              borderColor: 'white',
+              height: width > 600 ? 95 : 75,
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: 'white',
+              width: width / 4
+            }}
+            onPress={() => this.props.navigation.navigate('Market')}>
+            <Icons
+              name="store-alt"
+              color={Theme.darkBlue}
+              size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
+            <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
                 Shop
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                borderColor: 'white',
-                height: width > 600 ? 100 : 80,
-                paddingHorizontal: 15,
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: 'white'
-              }}
-              onPress={() => this.props.navigation.navigate('History')}>
-              <Icon
-                name="history"
-                color={Theme.darkBlue}
-                size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
-              <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              borderColor: 'white',
+              height: width > 600 ? 95 : 75,
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: 'white',
+              width: width / 4
+            }}
+            onPress={() => this.props.navigation.navigate('History')}>
+            <Icon
+              name="history"
+              color={Theme.darkBlue}
+              size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
+            <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
                 History
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                borderColor: 'white',
-                height: width > 600 ? 100 : 80,
-                paddingHorizontal: 15,
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: '#C7EAEA'
-              }}
-              onPress={() => this.props.navigation.navigate('Menu')}>
-              <Icon
-                name="bars"
-                color={Theme.darkBlue}
-                size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
-              <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              borderColor: 'white',
+              height: width > 600 ? 95 : 75,
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: '#C7EAEA',
+              width: width / 4
+            }}
+            onPress={() => this.props.navigation.navigate('Menu')}>
+            <Icon
+              name="bars"
+              color={Theme.darkBlue}
+              size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
+            <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
                 Menu
-              </Text>
-            </TouchableOpacity>
-          </TestElement>
-        </View>
+            </Text>
+          </TouchableOpacity>
+        </TestElement>
       </View>
     );
   }

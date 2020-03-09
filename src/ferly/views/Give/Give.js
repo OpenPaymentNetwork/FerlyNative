@@ -60,10 +60,10 @@ export class Give extends React.Component {
   send () {
     const {navigation} = this.props;
     const params = navigation.state.params;
-    const {design, customer, contact} = params;
+    const {design, customer, contact, name} = params;
     let customerFirstName = '';
     let customerLastName = '';
-    let customerName = '';
+    let customerName = name;
     let id = '';
     let sender = '';
     const {title} = design;
@@ -83,6 +83,7 @@ export class Give extends React.Component {
         }
         id = id.replace(/\D/g, '');
         if (id.length === 10 && !country) {
+          console.log('here2');
           id = 'phone:+1' + id.toString();
         } else {
           id = 'phone:+' + id.toString();
@@ -94,6 +95,7 @@ export class Give extends React.Component {
     const formatted = accounting.formatMoney(parseFloat(amount));
 
     const postParams = {
+      name: name,
       sender: sender,
       recipient_id: id,
       amount: amount,
@@ -234,7 +236,18 @@ export class Give extends React.Component {
         </View>
       );
     } else if (contactName) {
-      if (contactName.firstName === undefined) {
+      if (contactName.firstName === undefined && contactName.firstName === undefined) {
+        return (
+          <View style={styles.recipientRow}>
+            <Text style={{fontSize: width > 600 ? 24 : 20, fontWeight: 'bold'}}>Send</Text>
+            <View style={{flexDirection: 'column'}}>
+              <Text style={{fontSize: width > 600 ? 20 : 18, fontWeight: 'bold', paddingLeft: 40}}>
+                {`${contact}`}
+              </Text>
+            </View>
+          </View>
+        );
+      } else if (contactName.firstName === undefined) {
         return (
           <View style={styles.recipientRow}>
             <Text style={{fontSize: width > 600 ? 24 : 20, fontWeight: 'bold'}}>Send</Text>

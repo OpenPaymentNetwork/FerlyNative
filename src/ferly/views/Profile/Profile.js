@@ -10,7 +10,6 @@ import Theme from 'ferly/utils/theme';
 import {apiRequire, apiRefresh} from 'ferly/store/api';
 import {connect} from 'react-redux';
 import {createUrl, post, urls} from 'ferly/utils/fetch';
-// import {StackActions} from 'react-navigation';
 import {
   Alert,
   View,
