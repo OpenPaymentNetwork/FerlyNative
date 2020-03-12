@@ -16,6 +16,7 @@ import SignUpWaiting from 'ferly/views/FerlyCard/SignUpWaiting';
 import Transfer from 'ferly/views/History/Transfer';
 import Home from 'ferly/views/Wallet/Home';
 import Menu from 'ferly/views/Settings/Menu';
+import LoadingInstructions from 'ferly/views/Settings/LoadingInstructions';
 import Value from 'ferly/views/Wallet/Value';
 import LandingPage from 'ferly/views/Public/LandingPage';
 import Cart from 'ferly/views/Purchase/Cart';
@@ -23,10 +24,6 @@ import Purchase from 'ferly/views/Purchase/Purchase';
 import Market from 'ferly/views/Purchase/Market';
 import Recovery from 'ferly/views/Settings/Recovery';
 import Tutorial from 'ferly/views/Public/Tutorial';
-import Invitations from 'ferly/views/Invitations/Invitations';
-import ManualAdd from 'ferly/views/Invitations/ManualAdd';
-import Contacts from 'ferly/views/Invitations/Contacts';
-import Contact from 'ferly/views/Invitations/Contact';
 import {
   createDrawerNavigator,
   createStackNavigator,
@@ -60,14 +57,14 @@ const MenuStack = createStackNavigator(
   {
     Menu: {screen: Menu, navigationOptions: drawerOptions},
     Recovery: {screen: Recovery, navigationOptions: drawerOptions},
-    EnterCode: {screen: EnterCode, navigationOptions: drawerOptions},
     FerlyCard: {screen: FerlyCard, navigationOptions: drawerOptions},
     Profile: {screen: Profile, navigationOptions: drawerOptions},
     Settings: {screen: Settings, navigationOptions: drawerOptions},
-    Invitations: {screen: Invitations, navigationOptions: drawerOptions},
-    ManualAdd: {screen: ManualAdd, navigationOptions: drawerOptions},
-    Contacts: {screen: Contacts, navigationOptions: drawerOptions},
-    Contact: {screen: Contact, navigationOptions: drawerOptions}
+    Recipient: {screen: Recipient, navigationOptions: drawerOptions},
+    Amount: {screen: Give, navigationOptions: drawerOptions},
+    GiveContact: {screen: GiveContact, navigationOptions: drawerOptions},
+    EnterCode: {screen: EnterCode, navigationOptions: drawerOptions},
+    LoadingInstructions: {screen: LoadingInstructions, navigationOptions: drawerOptions}
   },
   {
     initialRouteName: 'Menu'
@@ -78,7 +75,8 @@ const MarketStack = createStackNavigator(
   {
     Market: {screen: Market, navigationOptions: drawerOptions},
     Purchase: {screen: Purchase, navigationOptions: drawerOptions},
-    Cart: {screen: Cart, navigationOptions: drawerOptions}
+    Cart: {screen: Cart, navigationOptions: drawerOptions},
+    Home: {screen: Home, navigationOptions: drawerOptions}
   },
   {
     initialRouteName: 'Market'
