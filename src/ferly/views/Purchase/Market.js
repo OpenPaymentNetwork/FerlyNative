@@ -94,9 +94,11 @@ export class Market extends React.Component {
     let body;
     if (searchResults && searchResults.length === 0) {
       body = (
-        <Text style={styles.noResults}>
-          We're sorry, no results found.
-        </Text>
+        <View style={{flex: 1}}>
+          <Text style={styles.noResults}>
+            We're sorry, no results found.
+          </Text>
+        </View>
       );
     } else {
       const display = searchResults || designs;
@@ -129,7 +131,7 @@ export class Market extends React.Component {
     }
 
     return (
-      <View style={{flex: 1, backgroundColor: 'white'}}>
+      <View style={{flex: 1, backgroundColor: 'white', justifyContent: 'space-between'}}>
         <SearchBar
           placeholder='Search for gift value'
           onChangeText={this.onChangeText.bind(this)} />

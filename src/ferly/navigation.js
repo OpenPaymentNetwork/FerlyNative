@@ -46,7 +46,8 @@ const WalletStack = createStackNavigator(
     GiveContact: {screen: GiveContact, navigationOptions: drawerOptions},
     Amount: {screen: Give, navigationOptions: drawerOptions},
     Purchase: {screen: Purchase, navigationOptions: drawerOptions},
-    Cart: {screen: Cart, navigationOptions: drawerOptions}
+    Cart: {screen: Cart, navigationOptions: drawerOptions},
+    FerlyCard: {screen: FerlyCard, navigationOptions: drawerOptions}
   },
   {
     initialRouteName: 'Home'

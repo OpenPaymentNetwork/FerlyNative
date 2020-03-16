@@ -83,7 +83,6 @@ export class Give extends React.Component {
         }
         id = id.replace(/\D/g, '');
         if (id.length === 10 && !country) {
-          console.log('here2');
           id = 'phone:+1' + id.toString();
         } else {
           id = 'phone:+' + id.toString();

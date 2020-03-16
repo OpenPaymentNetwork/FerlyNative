@@ -23,7 +23,6 @@ export class GiveContact extends React.Component {
     const {navigation} = this.props;
     const params = navigation.state.params;
     let {contact, design, name} = params;
-    console.log('name', name);
     const {display} = contact;
     const moreParams = {
       name: name,
