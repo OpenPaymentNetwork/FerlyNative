@@ -18,6 +18,8 @@ export class HistoryEntry extends React.Component {
     const {entry, navigation} = this.props;
     const {amount} = entry;
     const transferType = entry.transfer_type;
+    const reason = entry.reason;
+    const expired = entry.expired;
 
     let titleVerb;
     let symbol = '';
@@ -46,10 +48,12 @@ export class HistoryEntry extends React.Component {
         titleVerb = 'Spend';
         symbol = '-';
         break;
-      case 'expired':
-        titleVerb = 'Expired Gift';
-        symbol = '';
-        break;
+    }
+    if (reason) {
+      titleVerb = 'Spend Error';
+    }
+    if (expired) {
+      titleVerb = 'Expired Gift';
     }
     const b = entry.timestamp.split(/\D+/);
     const date = new Date(Date.UTC(b[0], --b[1], b[2], b[3], b[4], b[5]));
@@ -126,7 +130,9 @@ HistoryEntry.propTypes = {
     counter_party: PropTypes.string.isRequired,
     timestamp: PropTypes.string.isRequired,
     design_title: PropTypes.string.isRequired,
-    transfer_type: PropTypes.string.isRequired
+    transfer_type: PropTypes.string.isRequired,
+    reason: PropTypes.string,
+    expired: PropTypes.bool
   }),
   navigation: PropTypes.object.isRequired
 };

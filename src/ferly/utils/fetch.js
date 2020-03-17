@@ -51,7 +51,7 @@ export function post (urlTail, deviceToken, params = {}) {
 }
 
 export const urls = {
-  history: createUrl('history', {limit: 30}),
+  history: createUrl('history', {limit: 300}),
   profile: createUrl('profile')
 };
 

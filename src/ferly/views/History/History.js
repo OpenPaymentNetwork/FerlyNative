@@ -12,7 +12,7 @@ import {format as formatDate} from 'date-fns';
 import {Alert, View, FlatList, Text, TouchableOpacity, Dimensions} from 'react-native';
 import {apiRequire, apiInject, apiRefresh} from 'ferly/store/api';
 import {connect} from 'react-redux';
-import {urls, post} from 'ferly/utils/fetch';
+import {urls, post, createUrl} from 'ferly/utils/fetch';
 
 export class History extends React.Component {
   static navigationOptions = {
@@ -22,10 +22,9 @@ export class History extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
+      page: 'Completed',
       type: '',
-      searchText: '',
-      pendingToggle: false,
-      otherToggle: true
+      searchText: ''
     };
   }
 
@@ -74,18 +73,37 @@ export class History extends React.Component {
       });
   }
 
-  toggle () {
-    testBool = !testBool;
-    this.setState({pendingToggle: !this.state.pendingToggle});
-  }
-
-  toggleOther () {
-    testingBool = !testingBool;
-    this.setState({otherToggle: !this.state.otherToggle});
-  }
-
   onChangeText (text) {
     this.setState({searchText: text.toLowerCase()});
+  }
+
+  onMarketClick () {
+    fetch(createUrl('verify-account'), {
+      headers: {
+        Authorization: 'Bearer ' + this.props.deviceToken
+      }})
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if (responseJson.Verified) {
+          this.props.navigation.navigate('Market');
+        } else {
+          Alert.alert('Feature Unavailable', `This feature is available only for invitees. ` +
+          `Coming soon to all users. In the meantime, enjoy previewing the Ferly App!`);
+        }
+      })
+      .catch(() => {
+        Alert.alert('Error please check internet connection!');
+      });
+  }
+
+  changeToCompleted () {
+    this.onChangeText('');
+    this.setState({page: 'Completed'});
+  }
+
+  changeToPending () {
+    this.onChangeText('');
+    this.setState({page: 'Pending'});
   }
 
   render () {
@@ -139,240 +157,187 @@ export class History extends React.Component {
       }
     });
 
-    let otherList;
-    if (!testingBool) {
-      otherList = (
-        <View style={{flex: 1}}>
-          <TouchableOpacity onPress={() => this.toggleOther()} style={{
-            backgroundColor: Theme.lightBlue,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            paddingHorizontal: 15,
-            height: 30
-          }}>
-            <Text>
-              Completed
-            </Text>
-            <Icon
-              name="angle-right"
-              color="black"
-              size={24} />
-          </TouchableOpacity>
-        </View>
-      );
-    } else if (othList.length > 0) {
-      otherList = (
-        <View style={{flex: 1}}>
-          <TouchableOpacity onPress={() => this.toggleOther()} style={{
-            backgroundColor: Theme.lightBlue,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            paddingHorizontal: 15,
-            height: 30
-          }}>
-            <Text>
-              Completed
-            </Text>
-            <Icon
-              name="angle-down"
-              color="black"
-              size={24} />
-          </TouchableOpacity>
-          <View style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            paddingHorizontal: 15
-          }}>
-            <Text style={{
-              color: Theme.darkBlue,
-              fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
-              fontWeight: 'bold',
-              paddingTop: 10
+    let list;
+    if (this.state.page === 'Completed') {
+      if (othList.length > 0) {
+        list = (
+          <View style={{flex: 1}}>
+            <View style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              paddingHorizontal: 15
             }}>
+              <Text style={{
+                color: Theme.darkBlue,
+                fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
+                fontWeight: 'bold',
+                paddingTop: 10
+              }}>
               Date
-            </Text>
-            <Text style={{
-              color: Theme.darkBlue,
-              fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
-              fontWeight: 'bold',
-              paddingTop: 10
-            }}>
+              </Text>
+              <Text style={{
+                color: Theme.darkBlue,
+                fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
+                fontWeight: 'bold',
+                paddingTop: 10
+              }}>
               Type
-            </Text>
-            <Text style={{
-              color: Theme.darkBlue,
-              fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
-              fontWeight: 'bold',
-              paddingTop: 10
-            }}>
+              </Text>
+              <Text style={{
+                color: Theme.darkBlue,
+                fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
+                fontWeight: 'bold',
+                paddingTop: 10
+              }}>
               Amount
-            </Text>
+              </Text>
+            </View>
+            <FlatList
+              keyboardShouldPersistTaps='handled'
+              onRefresh={() => this.props.apiRefresh(urls.history)}
+              refreshing={false}
+              ListEmptyComponent={<Text style={{padding: 15}}>No transactions.</Text>}
+              initialNumToRender={10}
+              getItemLayout={(data, index) => (
+                {length: 90, offset: index * 90, index})}
+              onEndReached={(info) => this.loadMore()}
+              onEndReachedThreshold={8}
+              keyExtractor={(entry) => entry.timestamp}
+              data={othList}
+              renderItem={
+                (entry) => (
+                  <HistoryEntry navigation={navigation} entry={entry.item} />
+                )} />
           </View>
-          <FlatList
-            keyboardShouldPersistTaps='handled'
-            onRefresh={() => this.props.apiRefresh(urls.history)}
-            refreshing={false}
-            ListEmptyComponent={<Text style={{padding: 15}}>No transactions.</Text>}
-            initialNumToRender={6}
-            getItemLayout={(data, index) => (
-              {length: 90, offset: index * 90, index})}
-            onEndReached={(info) => this.loadMore()}
-            onEndReachedThreshold={5}
-            keyExtractor={(entry) => entry.timestamp}
-            data={othList}
-            renderItem={
-              (entry) => (
-                <HistoryEntry navigation={navigation} entry={entry.item} />
-              )} />
-        </View>
-      );
-    } else {
-      otherList = (
-        <View style={{flex: 1}}>
-          <TouchableOpacity onPress={() => this.toggleOther()} style={{
-            backgroundColor: Theme.lightBlue,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            paddingHorizontal: 15,
-            height: 30
-          }}>
-            <Text>
-              Completed
-            </Text>
-            <Icon
-              name="angle-down"
-              color="black"
-              size={24} />
-          </TouchableOpacity>
-          <Text style={{padding: 10}}>No complete transactions at this time.</Text>
-        </View>
-      );
-    }
-
-    let pendingList;
-    if (!testBool) {
-      pendingList = (
-        <View style={{flex: 0.2}}>
-          <TouchableOpacity onPress={() => this.toggle()} style={{
-            backgroundColor: Theme.lightBlue,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            paddingHorizontal: 15,
-            height: 30
-          }}>
-            <Text>
-              Pending
-            </Text>
-            <Icon
-              name="angle-right"
-              color="black"
-              size={24} />
-          </TouchableOpacity>
-        </View>
-      );
-    } else if (pendList.length > 0) {
-      pendingList = (
-        <View style={{flex: pendList.length > 1 ? 1 : 0.5}}>
-          <TouchableOpacity onPress={() => this.toggle()} style={{
-            backgroundColor: Theme.lightBlue,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            paddingHorizontal: 15,
-            height: 30
-          }}>
-            <Text>
-              Pending
-            </Text>
-            <Icon
-              name="angle-down"
-              color="black"
-              size={24} />
-          </TouchableOpacity>
-          <View style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            paddingHorizontal: 15
-          }}>
-            <Text style={{
-              color: Theme.darkBlue,
-              fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
-              fontWeight: 'bold',
-              paddingTop: 10
+        );
+      } else {
+        list = (
+          <View style={{flex: 1}}>
+            <Text style={{padding: 10}}>No complete transactions at this time.</Text>
+          </View>
+        );
+      }
+    } else if (this.state.page === 'Pending') {
+      if (pendList.length > 0) {
+        list = (
+          <View style={{flex: 1}}>
+            <View style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              paddingHorizontal: 15
             }}>
+              <Text style={{
+                color: Theme.darkBlue,
+                fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
+                fontWeight: 'bold',
+                paddingTop: 10
+              }}>
               Date
-            </Text>
-            <Text style={{
-              color: Theme.darkBlue,
-              fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
-              fontWeight: 'bold',
-              paddingTop: 10
-            }}>
+              </Text>
+              <Text style={{
+                color: Theme.darkBlue,
+                fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
+                fontWeight: 'bold',
+                paddingTop: 10
+              }}>
               Type
-            </Text>
-            <Text style={{
-              color: Theme.darkBlue,
-              fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
-              fontWeight: 'bold',
-              paddingTop: 10
-            }}>
+              </Text>
+              <Text style={{
+                color: Theme.darkBlue,
+                fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
+                fontWeight: 'bold',
+                paddingTop: 10
+              }}>
               Amount
-            </Text>
+              </Text>
+            </View>
+            <FlatList
+              keyboardShouldPersistTaps='handled'
+              onRefresh={() => this.props.apiRefresh(urls.history)}
+              refreshing={false}
+              ListEmptyComponent={<Text style={{padding: 15}}>No pending transactions.</Text>}
+              initialNumToRender={10}
+              getItemLayout={(data, index) => (
+                {length: 90, offset: index * 90, index})}
+              onEndReached={(info) => this.loadMore()}
+              onEndReachedThreshold={8}
+              keyExtractor={(entry) => entry.timestamp}
+              data={pendList}
+              renderItem={
+                (entry) => (
+                  <HistoryEntry navigation={navigation} entry={entry.item} />
+                )} />
           </View>
-          <FlatList
-            keyboardShouldPersistTaps='handled'
-            onRefresh={() => this.props.apiRefresh(urls.history)}
-            refreshing={false}
-            ListEmptyComponent={<Text style={{padding: 15}}>No pending transactions.</Text>}
-            initialNumToRender={10}
-            getItemLayout={(data, index) => (
-              {length: 90, offset: index * 90, index})}
-            onEndReached={(info) => this.loadMore()}
-            onEndReachedThreshold={10}
-            keyExtractor={(entry) => entry.timestamp}
-            data={pendList}
-            renderItem={
-              (entry) => (
-                <HistoryEntry navigation={navigation} entry={entry.item} />
-              )} />
-        </View>
-      );
-    } else {
-      pendingList = (
-        <View style={{flex: 0.3}}>
-          <TouchableOpacity onPress={() => this.toggle()} style={{
-            backgroundColor: Theme.lightBlue,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            paddingHorizontal: 15,
-            height: 30
-          }}>
-            <Text>
-              Pending
-            </Text>
-            <Icon
-              name="angle-down"
-              color="black"
-              size={24} />
-          </TouchableOpacity>
-          <Text style={{padding: 10}}>No pending transactions at this time.</Text>
-        </View>
-      );
+        );
+      } else {
+        list = (
+          <View style={{flex: 1}}>
+            <FlatList
+              keyboardShouldPersistTaps='handled'
+              onRefresh={() => this.props.apiRefresh(urls.history)}
+              refreshing={false}
+              ListEmptyComponent={<Text style={{padding: 15}}>No pending transactions.</Text>}
+              initialNumToRender={10}
+              getItemLayout={(data, index) => (
+                {length: 90, offset: index * 90, index})}
+              onEndReached={(info) => this.loadMore()}
+              onEndReachedThreshold={8}
+              keyExtractor={(entry) => entry.timestamp}
+              data={pendList}
+              renderItem={
+                (entry) => (
+                  <HistoryEntry navigation={navigation} entry={entry.item} />
+                )} />
+          </View>
+        );
+      }
     }
 
     return (
       <View style={{flex: 1, backgroundColor: 'white', justifyContent: 'space-between'}}>
+        <TestElement
+          parent={View}
+          label='test-id-recipient-navbar'
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            alignItems: 'center',
+            backgroundColor: Theme.darkBlue
+          }}>
+          <TouchableOpacity
+            style={{
+              borderBottomWidth: this.state.page === 'Pending' ? 4 : 0,
+              borderColor: 'white',
+              height: width > 600 ? 70 : 50,
+              width: width > 600 ? 190 : 170 && width < 350 ? 150 : 170,
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}
+            onPress={() => this.changeToPending()}>
+            <Text style={{color: 'white', fontSize: width > 600 ? 18 : 16}}>
+              Pending
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              borderBottomWidth: this.state.page === 'Completed' ? 4 : 0,
+              borderColor: 'white',
+              height: width > 600 ? 70 : 50,
+              width: width > 600 ? 190 : 170 && width < 350 ? 150 : 170,
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}
+            onPress={() => this.changeToCompleted()}>
+            <Text style={{color: 'white', fontSize: width > 600 ? 18 : 16}}>
+              Completed
+            </Text>
+          </TouchableOpacity>
+        </TestElement>
         <SearchBar
           value={this.state.searchText}
           placeholder='Search'
           onChangeText={this.onChangeText.bind(this)}/>
-        {pendingList}
-        {otherList}
+        {list}
         <TestElement
           parent={View}
           label='test-id-navbar'
@@ -410,7 +375,7 @@ export class History extends React.Component {
               backgroundColor: 'white',
               width: width / 4
             }}
-            onPress={() => this.props.navigation.navigate('Market')}>
+            onPress={() => this.onMarketClick()}>
             <Icons
               name="store-alt"
               color={Theme.darkBlue}
@@ -464,8 +429,6 @@ export class History extends React.Component {
 let fullHistory = [];
 let pendList = [];
 let othList = [];
-let testBool = false;
-let testingBool = true;
 let count = 0;
 let {width} = Dimensions.get('window');
 

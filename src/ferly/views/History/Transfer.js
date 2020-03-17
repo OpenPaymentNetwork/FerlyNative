@@ -204,10 +204,15 @@ export class Transfer extends React.Component {
     }
     const {transferDetails} = this.props;
     const {
+      expiration,
       name,
       amount,
+      reason,
       message,
       timestamp,
+      card_acceptor: cardAcceptor,
+      pan_redacted: panNumber,
+      available_amount: availableAmount,
       design_title: designTitle,
       counter_party: counterParty,
       counter_party_profile_image_url: counterPartyProfileImageUrl,
@@ -216,36 +221,20 @@ export class Transfer extends React.Component {
       cc_last4: lastFour = '****',
       cc_brand: lowerBrand = ''
     } = transferDetails;
-    const remindParams = {
-      transfer_id: transferDetails.id
-    };
-    if (transferType === 'pending') {
-      if (!this.state.theDate) {
-        post('get_transfer_details', this.props.deviceToken, remindParams)
-          .then((response) => response.json())
-          .then((responseJson) => {
-            if (responseJson.alarms) {
-              responseJson.alarms.forEach(item => {
-                if (item.name === 'alarm.expire_invitation' && item.timestamp) {
-                  expireDate = item.timestamp;
-                }
-              });
-            }
-            this.setState({theDate: true});
-          })
-          .catch(() => {
-            const text = {'text': 'Call failed: get transfer details'};
-            post('log-info', this.props.deviceToken, text)
-              .then((response) => response.json())
-              .then((responseJson) => {
-              })
-              .catch(() => {
-                console.log('log error');
-              });
-          });
-        return <Spinner />;
-      }
+    let expireDate = '';
+    let expiringDate = '';
+    if (expiration) {
+      expiration.forEach(item => {
+        if (item.name && item.name === 'alarm.expire_invitation') {
+          if (item.timestamp) {
+            expireDate = item.timestamp;
+          }
+        }
+      });
+    } else if (transferType === 'pending') {
+      return <Spinner />;
     }
+
     const total = parseFloat(amount) + parseFloat(convenienceFee);
     const brand = lowerBrand.charAt(0).toUpperCase() + lowerBrand.substring(1);
     const b = timestamp.split(/\D+/);
@@ -296,12 +285,12 @@ export class Transfer extends React.Component {
         case 'receive':
           verb = 'received';
           symbol = '+';
-          cp = ` from ${name}`;
+          cp = ` from ${counterParty}`;
           messageTitle = 'Their ';
           sender = 'You';
           break;
         case 'redeem':
-          verb = 'paid';
+          verb = 'spent';
           symbol = '-';
           break;
         case 'expired':
@@ -349,7 +338,7 @@ export class Transfer extends React.Component {
           sender = 'You';
           break;
         case 'redeem':
-          verb = 'paid';
+          verb = 'spent';
           symbol = '-';
           sender = 'You';
           break;
@@ -360,6 +349,61 @@ export class Transfer extends React.Component {
           sender = 'Your';
           break;
       }
+    }
+    let errorMessage = 'An attempt to use your Ferly Card was unsuccessful.';
+    let errorReason = '';
+    let errorFix = '';
+    switch (reason) {
+      case 'denied_externally':
+        errorReason = 'The payment was denied by the merchant or card network.';
+        errorFix = `Next time make sure you have enough ${designTitle} value and ask the cashier ` +
+        `for a split payment if needed.`;
+        break;
+      case 'card_suspended':
+        errorReason = 'The Ferly Card used is suspended.';
+        errorFix = 'Go to the Ferly Card page in the menu to make sure its not suspended.';
+        break;
+      case 'card_holder_not_found':
+        errorReason = 'The Ferly Card used is not linked to a Wallet.';
+        errorFix = 'In the app go to the Ferly Card page in the Menu to add the card to your wallet.';
+        break;
+      case 'merchant_not_found':
+        errorReason = 'The Ferly Card was used at a non-participating merchant.';
+        errorFix = 'Check the Shop to find participating merchants.';
+        break;
+      case 'preauth_not_allowed':
+        errorReason = 'The Merchant does not allow pre-authorized transactions.';
+        break;
+      case 'transaction_type_not_supported':
+        errorReason = 'The Transaction type is not supported.';
+        errorFix = 'Make sure to run the card as debit and use your pin.';
+        break;
+      case 'cash_back_not_supported':
+        errorReason = 'Cash back is not supported.';
+        errorFix = 'You cannot get cash back from Ferly.';
+        break;
+      case 'no_funds':
+        errorReason = `Total amount charged was ${amount} but you held no ${designTitle} value.`;
+        errorFix = `Next time buy ${designTitle} value before using you Ferly Card.`;
+        break;
+      case 'insufficient_funds':
+        errorReason = `The amount charged was ${amount} but you held only ${availableAmount} in ` +
+        `${designTitle} value.`;
+        errorFix = `Next time tell the cashier to charge ${availableAmount} to your Ferly Card ` +
+        `and use another payment method for the remaining amount.`;
+        break;
+      case 'reversal_original_not_found':
+        errorReason = 'Original transfer could not be found.';
+        errorFix = '';
+        break;
+      case 'reversal_system_error':
+        errorReason = 'Internal error while reversing the transfer.';
+        errorFix = '';
+        break;
+    }
+    let locationName;
+    if (cardAcceptor && cardAcceptor.location_name) {
+      locationName = cardAcceptor.location_name;
     }
     let counterPartyAvatar;
     if (transferType === 'send' || transferType === 'receive') {
@@ -411,6 +455,8 @@ export class Transfer extends React.Component {
       );
     }
     let giftValue;
+    let theReason;
+    let cardLocationDetails;
     let recipient;
     let received;
     let status;
@@ -418,7 +464,72 @@ export class Transfer extends React.Component {
     let termsSection;
     let paymentSection;
     let feesSection;
-    if (transferType === 'purchase') {
+    if (reason) {
+      theReason = (
+        <View style={styles.section} >
+          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 1}}>
+            <Text style={styles.sectionHeader} >Error Reason</Text>
+          </View>
+          <View style={{paddingLeft: 20}} >
+            <Text style={[styles.sectionText, {paddingBottom: 0, fontSize: width > 600 ? 18 : 16}]}>
+              {errorReason}
+            </Text>
+            <Text style={[styles.sectionText, {fontSize: width > 600 ? 18 : 16}]} >
+              {errorFix}
+            </Text>
+          </View>
+        </View>
+      );
+      giftValue = (
+        <View style={styles.section} >
+          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 1}}>
+            <Text style={styles.sectionHeader} >Merchant</Text>
+          </View>
+          <View style={{paddingLeft: 20}} >
+            <Text style={[styles.sectionText, {fontSize: width > 600 ? 18 : 16}]} >
+              {designTitle}
+            </Text>
+          </View>
+        </View>
+      );
+      cardLocationDetails = (
+        <View style={styles.section} >
+          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 1}}>
+            <Text style={styles.sectionHeader} >Details</Text>
+          </View>
+          <View style={{paddingLeft: 20, flexDirection: 'row'}} >
+            <Text style={[styles.sectionText, {
+              fontSize: width > 600 ? 18 : 16,
+              paddingBottom: 0,
+              justifyContent: 'flex-start'
+            }]} >
+              Ferly Card
+            </Text>
+            <Text style={[styles.sectionText, {
+              fontSize: width > 600 ? 18 : 16,
+              paddingBottom: 0,
+              justifyContent: 'flex-end'
+            }]} >
+              {panNumber}
+            </Text>
+          </View>
+          <View style={{paddingLeft: 20, flexDirection: 'row'}} >
+            <Text style={[styles.sectionText, {
+              fontSize: width > 600 ? 18 : 16,
+              justifyContent: 'flex-start'
+            }]} >
+              Location
+            </Text>
+            <Text style={[styles.sectionText, {
+              fontSize: width > 600 ? 18 : 16,
+              justifyContent: 'flex-end'
+            }]} >
+              {locationName}
+            </Text>
+          </View>
+        </View>
+      );
+    } else if (transferType === 'purchase') {
       termsSection = (
         <View style={styles.section}>
           <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 1}}>
@@ -521,9 +632,9 @@ export class Transfer extends React.Component {
           </View>
         </View>
       );
-      // const d = new Date(date);
-      // d.setDate(d.getDate(d) + 1825);
-      // const expirationDate = formatDate(d, 'MMM D, YYYY');
+      const d = new Date(date);
+      d.setDate(d.getDate(d) + 1825);
+      const expirationDate = formatDate(d, 'MMM D, YYYY');
       feesSection = (
         <View style={styles.section}>
           <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 1}}>
@@ -538,7 +649,7 @@ export class Transfer extends React.Component {
               paddingBottom: 0,
               paddingTop: 10
             }]}>
-              {expiringDate}
+              {expirationDate}
             </Text>
           </View>
           <View style={[styles.functionRow, {paddingLeft: 20}]}>
@@ -726,9 +837,9 @@ export class Transfer extends React.Component {
           </View>
         </View>
       );
-      // const giftDate = new Date(date);
-      // giftDate.setDate(giftDate.getDate() + 30);
-      // const giftExpiration = formatDate(giftDate, 'MMM D, YYYY');
+      const giftDate = new Date(date);
+      giftDate.setDate(giftDate.getDate() + 30);
+      const giftExpiration = formatDate(giftDate, 'MMM D, YYYY');
       status = (
         <View style={styles.section} >
           <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 1}}>
@@ -752,7 +863,7 @@ export class Transfer extends React.Component {
               color: Theme.darkBlue,
               fontSize: 16
             }} >
-              The gift expires {expiringDate}.
+              The gift expires {!expiringDate ? giftExpiration : expiringDate}.
             </Text>
             <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
               <TouchableOpacity
@@ -801,7 +912,7 @@ export class Transfer extends React.Component {
               color: Theme.darkBlue,
               fontSize: 16
             }} >
-              {!name ? counterParty : name}
+              {counterParty}
             </Text>
           </View>
         </View>
@@ -816,7 +927,7 @@ export class Transfer extends React.Component {
           </View>
           <View style={[styles.functionRow, {paddingLeft: 20}]}>
             <Text style={[styles.sectionText, {paddingBottom: 0}]}>Expiration Date</Text>
-            <Text style={[styles.sectionText, {color: Theme.lightBlue, paddingBottom: 0}]}>
+            <Text style={[styles.sectionText, {color: Theme.darkBlue, paddingBottom: 0}]}>
               {expirationDate}
             </Text>
           </View>
@@ -825,7 +936,7 @@ export class Transfer extends React.Component {
               Inactivity Fee
             </Text>
             <Text style={[styles.sectionText, {
-              color: Theme.lightBlue,
+              color: Theme.darkBlue,
               paddingTop: 5,
               paddingBottom: 0
             }]}>
@@ -834,8 +945,58 @@ export class Transfer extends React.Component {
           </View>
           <View style={[styles.functionRow, {paddingLeft: 20}]}>
             <Text style={[styles.sectionText, {paddingTop: 5}]}>Service Fee</Text>
-            <Text style={[styles.sectionText, {color: Theme.lightBlue, paddingTop: 5}]}>
+            <Text style={[styles.sectionText, {color: Theme.darkBlue, paddingTop: 5}]}>
               None
+            </Text>
+          </View>
+        </View>
+      );
+    } else if (transferType === 'redeem') {
+      giftValue = (
+        <View style={styles.section} >
+          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 1}}>
+            <Text style={styles.sectionHeader} >Merchant</Text>
+          </View>
+          <View style={{paddingLeft: 20}} >
+            <Text style={[styles.sectionText, {fontSize: width > 600 ? 18 : 16}]} >
+              {designTitle}
+            </Text>
+          </View>
+        </View>
+      );
+      cardLocationDetails = (
+        <View style={styles.section} >
+          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 1}}>
+            <Text style={styles.sectionHeader} >Details</Text>
+          </View>
+          <View style={{paddingLeft: 20, flexDirection: 'row'}} >
+            <Text style={[styles.sectionText, {
+              fontSize: width > 600 ? 18 : 16,
+              paddingBottom: 0,
+              justifyContent: 'flex-start'
+            }]} >
+              Ferly Card
+            </Text>
+            <Text style={[styles.sectionText, {
+              fontSize: width > 600 ? 18 : 16,
+              paddingBottom: 0,
+              justifyContent: 'flex-end'
+            }]} >
+              {panNumber}
+            </Text>
+          </View>
+          <View style={{paddingLeft: 20, flexDirection: 'row'}} >
+            <Text style={[styles.sectionText, {
+              fontSize: width > 600 ? 18 : 16,
+              justifyContent: 'flex-start'
+            }]} >
+              Location
+            </Text>
+            <Text style={[styles.sectionText, {
+              fontSize: width > 600 ? 18 : 16,
+              justifyContent: 'flex-end'
+            }]} >
+              {locationName}
             </Text>
           </View>
         </View>
@@ -867,7 +1028,7 @@ export class Transfer extends React.Component {
               fontSize: width < 330 ? 16 : 18 && width > 600 ? 20 : 18,
               color: Theme.darkBlue
             }}>
-              {`${sender} ${verb} ${designTitle}${cp}.`}
+              {reason ? `${errorMessage}` : `${sender} ${verb} ${designTitle}${cp}.`}
             </Text>
             <Text style={[styles.sectionText, {
               paddingTop: 5,
@@ -879,8 +1040,10 @@ export class Transfer extends React.Component {
             <View style={styles.spacer} />
           </View>
         </View>
+        {theReason}
         {giftValue}
         {recipient}
+        {cardLocationDetails}
         {received}
         {status}
         {termsSection}
@@ -893,8 +1056,6 @@ export class Transfer extends React.Component {
   }
 }
 
-let expireDate = '';
-let expiringDate = '';
 let count = 0;
 let {width} = Dimensions.get('window');
 
