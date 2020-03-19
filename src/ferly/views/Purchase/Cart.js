@@ -10,7 +10,6 @@ import Theme from 'ferly/utils/theme';
 import {apiRequire, apiExpire, apiRefresh} from 'ferly/store/api';
 import {connect} from 'react-redux';
 import {createUrl, post, urls} from 'ferly/utils/fetch';
-import {StackActions} from 'react-navigation';
 import {
   Alert,
   KeyboardAvoidingView,
@@ -64,11 +63,7 @@ export class Cart extends React.Component {
             });
           this.props.apiExpire(urls.history);
           this.props.apiExpire(urls.profile);
-          const resetAction = StackActions.reset({
-            index: 0,
-            actions: [StackActions.push({routeName: 'Home'})]
-          });
-          navigation.dispatch(resetAction);
+          navigation.navigate('Home');
           const formatted = accounting.formatMoney(parseFloat(amount));
           const desc = `You added ${formatted} ${design.title} to your wallet.`;
           Alert.alert('Complete!', desc);

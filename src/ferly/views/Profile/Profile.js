@@ -7,7 +7,7 @@ import React from 'react';
 import Spinner from 'ferly/components/Spinner';
 import TestElement from 'ferly/components/TestElement';
 import Theme from 'ferly/utils/theme';
-import {apiRequire, apiRefresh} from 'ferly/store/api';
+import {apiRequire, apiRefresh, apiExpire} from 'ferly/store/api';
 import {connect} from 'react-redux';
 import {createUrl, post, urls} from 'ferly/utils/fetch';
 import {
@@ -76,9 +76,14 @@ class Profile extends React.Component {
   }
 
   onSuccessfulEdit () {
-    const {apiRefresh, navigation} = this.props;
+    const {apiExpire, apiRefresh, navigation} = this.props;
+    const {editing} = this.state;
+    const {firstName, lastName, username} = this.props;
+    const refreshedFormState = {firstName, lastName, username};
+    this.setState({submitting: false, editing: !editing, form: refreshedFormState, invalid: {}});
+    apiExpire(urls.profile);
     apiRefresh(urls.profile);
-    navigation.navigate('Menu');
+    navigation.navigate('Profile');
   }
 
   formSubmit () {
@@ -238,6 +243,10 @@ class Profile extends React.Component {
       pictureUrl: profileImage
     };
 
+    if (submitting) {
+      return <Spinner />;
+    }
+
     if (!editing) {
       return (
         <View style={{alignItems: 'center', paddingTop: 20}}>
@@ -363,7 +372,7 @@ class Profile extends React.Component {
     }
     const {editing} = this.state;
 
-    if (!this.props.firstName) {
+    if (!this.props.firstName || this.state.submitting) {
       return <Spinner />;
     }
 
@@ -427,6 +436,7 @@ const styles = StyleSheet.create({
 });
 
 Profile.propTypes = {
+  apiExpire: PropTypes.func.isRequired,
   apiRefresh: PropTypes.func.isRequired,
   apiRequire: PropTypes.func.isRequired,
   firstName: PropTypes.string,
@@ -460,7 +470,8 @@ function mapStateToProps (state) {
 
 const mapDispatchToProps = {
   apiRefresh,
-  apiRequire
+  apiRequire,
+  apiExpire
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);

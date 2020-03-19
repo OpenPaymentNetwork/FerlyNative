@@ -40,6 +40,7 @@ export class Wallet extends React.Component {
     super();
     this.array = [];
     this.state = {
+      loaded: false,
       width2: this.getDimensions(),
       scrollY: new Animated.Value(
         Platform.OS === 'ios' ? -HEADER_MAX_HEIGHT : 0
@@ -220,7 +221,7 @@ export class Wallet extends React.Component {
       .then((response) => response.json())
       .then((responseJson) => {
         if (responseJson.Verified) {
-          this.props.navigation.navigate('Ferly Card');
+          this.props.navigation.navigate('FerlyCard');
         } else {
           Alert.alert('Feature Unavailable', `This feature is available only for invitees. ` +
           `Coming soon to all users. In the meantime, enjoy previewing the Ferly App!`);
@@ -253,6 +254,7 @@ export class Wallet extends React.Component {
 
   componentWillUnmount () {
     Dimensions.removeEventListener('change', this.theWidth);
+    clearInterval(interval);
   }
 
   renderScrollViewContent () {
@@ -452,6 +454,17 @@ export class Wallet extends React.Component {
 
     const {firstName, checkUidPrompt, updateDownloaded} = this.props;
     if (!firstName) {
+      if (!this.state.loaded) {
+        interval = setTimeout(() => {
+          this.setState({
+            loaded: true
+          });
+        }, 5000);
+      }
+      if (this.state.loaded) {
+        Alert.alert('Error', `Unable to get profile information. Please check internet ` +
+        `connection and try again.`);
+      }
       return <Spinner />;
     }
 
@@ -615,7 +628,7 @@ export class Wallet extends React.Component {
               backgroundColor: 'white',
               width: width / 4
             }}
-            onPress={() => this.props.navigation.navigate('Market')}>
+            onPress={() => this.onMarketClick()}>
             <Icons
               name="store-alt"
               color={Theme.darkBlue}
@@ -667,6 +680,7 @@ export class Wallet extends React.Component {
 }
 
 let {width} = Dimensions.get('window');
+let interval = 0;
 
 let codeRedeemed = '';
 let passed = '';

@@ -179,8 +179,9 @@ export class UIDController extends React.Component {
           this.props.apiExpire(urls.profile);
 
           const resetAction = StackActions.reset({
-            index: 1,
+            index: 2,
             actions: [
+              StackActions.push({routeName: 'Menu'}),
               StackActions.push({routeName: 'Settings'}),
               StackActions.push({routeName: 'Recovery'})
             ]

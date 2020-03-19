@@ -23,6 +23,7 @@ import Cart from 'ferly/views/Purchase/Cart';
 import Purchase from 'ferly/views/Purchase/Purchase';
 import Market from 'ferly/views/Purchase/Market';
 import Recovery from 'ferly/views/Settings/Recovery';
+import EventListener from 'ferly/components/EventListener';
 import Tutorial from 'ferly/views/Public/Tutorial';
 import {
   createDrawerNavigator,
@@ -47,7 +48,8 @@ const WalletStack = createStackNavigator(
     Amount: {screen: Give, navigationOptions: drawerOptions},
     Purchase: {screen: Purchase, navigationOptions: drawerOptions},
     Cart: {screen: Cart, navigationOptions: drawerOptions},
-    FerlyCard: {screen: FerlyCard, navigationOptions: drawerOptions}
+    FerlyCard: {screen: FerlyCard, navigationOptions: drawerOptions},
+    EventListener: {screen: EventListener, navigationOptions: drawerOptions}
   },
   {
     initialRouteName: 'Home'
@@ -76,8 +78,7 @@ const MarketStack = createStackNavigator(
   {
     Market: {screen: Market, navigationOptions: drawerOptions},
     Purchase: {screen: Purchase, navigationOptions: drawerOptions},
-    Cart: {screen: Cart, navigationOptions: drawerOptions},
-    Home: {screen: Home, navigationOptions: drawerOptions}
+    Cart: {screen: Cart, navigationOptions: drawerOptions}
   },
   {
     initialRouteName: 'Market'

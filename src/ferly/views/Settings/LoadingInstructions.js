@@ -192,7 +192,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     justifyContent: 'space-between'
   },
-  image: {height: width > 600 ? 350 : 220, resizeMode: 'contain', paddingBottom: 10},
+  image: {
+    height: width > 600 ? 300 : 200 && width < 350 ? 170 : 200,
+    resizeMode: 'contain',
+    paddingBottom: 15
+  },
   text: {textAlign: 'center', color: Theme.darkBlue},
   dots: {
     flexDirection: 'row',

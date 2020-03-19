@@ -4,12 +4,13 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import I from 'react-native-vector-icons/Ionicons';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 import Ic from 'react-native-vector-icons/MaterialCommunityIcons';
+import Ico from 'react-native-vector-icons/Feather';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Theme from 'ferly/utils/theme';
 import TestElement from 'ferly/components/TestElement';
 import {connect} from 'react-redux';
-import {post, urls} from 'ferly/utils/fetch';
+import {post, urls, createUrl} from 'ferly/utils/fetch';
 import {Notifications, Updates} from 'expo';
 import {
   View,
@@ -155,6 +156,44 @@ export class Settings extends React.Component {
     );
   }
 
+  onMarketClick () {
+    fetch(createUrl('verify-account'), {
+      headers: {
+        Authorization: 'Bearer ' + this.props.deviceToken
+      }})
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if (responseJson.Verified) {
+          this.props.navigation.navigate('Market');
+        } else {
+          Alert.alert('Feature Unavailable', `This feature is available only for invitees. ` +
+          `Coming soon to all users. In the meantime, enjoy previewing the Ferly App!`);
+        }
+      })
+      .catch(() => {
+        Alert.alert('Error please check internet connection!');
+      });
+  }
+
+  onCardClick () {
+    fetch(createUrl('verify-account'), {
+      headers: {
+        Authorization: 'Bearer ' + this.props.deviceToken
+      }})
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if (responseJson.Verified) {
+          this.props.navigation.navigate('FerlyCard');
+        } else {
+          Alert.alert('Feature Unavailable', `This feature is available only for invitees. ` +
+          `Coming soon to all users. In the meantime, enjoy previewing the Ferly App!`);
+        }
+      })
+      .catch(() => {
+        Alert.alert('Error please check internet connection!');
+      });
+  }
+
   render () {
     const {navigation, firstName, lastName, profileImage, username} = this.props;
     count++;
@@ -211,7 +250,7 @@ export class Settings extends React.Component {
           </Text>
           <TouchableOpacity
             style={styles.items}
-            onPress={() => navigation.navigate('FerlyCard')}>
+            onPress={() => this.onCardClick()}>
             <View style={styles.sectionContainer}>
               <View style={{flexDirection: 'row'}}>
                 <I
@@ -234,16 +273,21 @@ export class Settings extends React.Component {
           <Text style={{fontSize: 18, paddingTop: width > 330 ? 20 : 15, color: Theme.darkBlue}}>
             Add Funds
           </Text>
-          {/* <TouchableOpacity
-            style={styles.items}
-            onPress={() => navigation.navigate('EnterCode')}>
-            <View style={styles.sectionContainer}>
-              <View>
+          <TouchableOpacity
+            style={[styles.items, {paddingLeft: 0.9}]}
+            onPress={() => navigation.navigate('LoadingInstructions')}>
+            <View style={[styles.sectionContainer, {marginLeft: -2}]}>
+              <View style={{flexDirection: 'row'}}>
+                <Ico
+                  style={{paddingRight: 10}}
+                  name="plus-circle"
+                  color={Theme.darkBlue}
+                  size={width < 330 ? 18 : 20 && width > 600 ? 26 : 20} />
                 <Text style={styles.title}>{'Add Ferly Cash'}</Text>
               </View>
               {arrowIcon}
             </View>
-          </TouchableOpacity> */}
+          </TouchableOpacity>
           <TouchableOpacity
             style={styles.items}
             onPress={() => navigation.navigate('EnterCode')}>
@@ -255,24 +299,6 @@ export class Settings extends React.Component {
                   color={Theme.darkBlue}
                   size={width < 330 ? 20 : 22 && width > 600 ? 28 : 22} />
                 <Text style={styles.title}>{'Redeem gift code'}</Text>
-              </View>
-              {arrowIcon}
-            </View>
-          </TouchableOpacity>
-          <Text style={{fontSize: 18, paddingTop: width > 330 ? 20 : 15, color: Theme.darkBlue}}>
-            Friends
-          </Text>
-          <TouchableOpacity
-            style={styles.items}
-            onPress={() => navigation.navigate('Invitations')}>
-            <View style={styles.sectionContainer}>
-              <View style={{flexDirection: 'row'}}>
-                <Icon
-                  style={{paddingRight: 15}}
-                  name="envelope"
-                  color={Theme.darkBlue}
-                  size={width < 330 ? 18 : 20 && width > 600 ? 26 : 20} />
-                <Text style={styles.title}>{'Send Invite'}</Text>
               </View>
               {arrowIcon}
             </View>
@@ -348,7 +374,7 @@ export class Settings extends React.Component {
               backgroundColor: 'white',
               width: width / 4
             }}
-            onPress={() => this.props.navigation.navigate('Market')}>
+            onPress={() => this.onMarketClick()}>
             <Icons
               name="store-alt"
               color={Theme.darkBlue}

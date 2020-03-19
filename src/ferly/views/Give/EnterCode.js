@@ -6,7 +6,8 @@ import Spinner from 'ferly/components/Spinner';
 import Theme from 'ferly/utils/theme';
 import {connect} from 'react-redux';
 import {post, urls} from 'ferly/utils/fetch';
-import {setRefreshHistory} from 'ferly/store/settings';
+import {StackActions} from 'react-navigation';
+import { ConfirmDialog } from 'react-native-simple-dialogs';
 import {AsyncStorage, View, Text, TextInput, StyleSheet, Alert, Dimensions} from 'react-native';
 import Constants from 'expo-constants';
 const {releaseChannel} = Constants.manifest;
@@ -22,7 +23,8 @@ export class EnterCode extends React.Component {
       code: '',
       fieldValue: '',
       invalid: '',
-      submitting: false
+      submitting: false,
+      showDialog: false
     };
   }
 
@@ -84,21 +86,35 @@ export class EnterCode extends React.Component {
                 this.props.dispatch(apiRefresh(urls.history));
                 const buttons = [
                   {text: 'OK',
-                    onPress: () => this.props.navigation.navigate('Wallet'),
-                    style: 'cancel'
-                  },
+                    onPress: () => {
+                      const resetAction = StackActions.reset({
+                        index: 0,
+                        actions: [
+                          StackActions.push({routeName: 'Menu'})
+                        ]
+                      });
+                      this.props.navigation.dispatch(resetAction);
+                      this.props.navigation.navigate('Wallet');
+                    }},
                   {text: 'VIEW',
                     onPress: () => {
-                      this.props.dispatch(setRefreshHistory(true));
+                      const resetAction = StackActions.reset({
+                        index: 0,
+                        actions: [
+                          StackActions.push({routeName: 'Menu'})
+                        ]
+                      });
+                      this.props.navigation.dispatch(resetAction);
                       this.props.navigation.navigate('History');
                     }}
                 ];
                 try {
-                  let title = json.transfer;
-                  title = title['appdata.ferly.title'];
-                  Alert.alert('Gift Accepted', `You accepted $${json.transfer.amount} of ` +
-                    `${title} from ${json.transfer.sender_info.title}. Click View to see details.`,
-                  buttons);
+                  // let title = json.transfer;
+                  // title = title['appdata.ferly.title'];
+                  this.setState({showDialog: true});
+                  // Alert.alert('Gift Accepted', `You accepted $${json.transfer.amount} of ` +
+                  //   `${title} from ${json.transfer.sender_info.title}. Click View to see details.`,
+                  // buttons);
                 } catch (error) {
                   Alert.alert('Gift Accepted', `You successfully accepted gift value.`, buttons);
                   this.props.navigation.navigate('Wallet');
@@ -290,6 +306,23 @@ export class EnterCode extends React.Component {
             onPress={() => this.submitForm()} />
         </View>
         {submitting ? <Spinner /> : null}
+        <ConfirmDialog
+          visible={this.state.showDialog}
+          title="Custom Dialog"
+          onTouchOutside={() => this.setState({showDialog: false})}
+          positiveButton={{
+            title: 'OK',
+            onPress: () => this.setState({showDialog: false})
+          }} negativeButton={{
+            title: 'NO',
+            onPress: () => this.props.navigation.navigate('Home')
+          }}>
+          <View>
+            <Text>
+              test
+            </Text>
+          </View>
+        </ConfirmDialog>
       </View>
     );
   }
