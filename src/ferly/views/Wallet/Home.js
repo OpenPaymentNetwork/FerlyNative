@@ -1,6 +1,7 @@
 import * as Permissions from 'expo-permissions';
 import accounting from 'ferly/utils/accounting';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Icones from 'react-native-vector-icons/Feather';
 import I from 'react-native-vector-icons/Ionicons';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 import Ico from 'react-native-vector-icons/MaterialIcons';
@@ -14,7 +15,6 @@ import {apiRequire, apiRefresh} from 'ferly/store/api';
 import {checkedUidPrompt} from 'ferly/store/settings';
 import {connect} from 'react-redux';
 import {urls, createUrl, post} from 'ferly/utils/fetch';
-import {blankCard, logoHorizontal} from 'ferly/images/index';
 import {
   Animated,
   AsyncStorage,
@@ -22,11 +22,9 @@ import {
   Dimensions,
   TouchableOpacity,
   Text,
-  Image,
   Platform,
   RefreshControl,
   ScrollView,
-  StatusBar,
   Alert,
   StyleSheet
 } from 'react-native';
@@ -38,13 +36,13 @@ export class Wallet extends React.Component {
 
   constructor () {
     super();
+    this.scrollYAnimatedValue = new Animated.Value(0);
     this.array = [];
     this.state = {
+      refresh: false,
+      isScrolled: false,
       loaded: false,
       width2: this.getDimensions(),
-      scrollY: new Animated.Value(
-        Platform.OS === 'ios' ? -HEADER_MAX_HEIGHT : 0
-      ),
       refreshing: false
     };
     this.theWidth = this.theWidth.bind(this);
@@ -173,44 +171,6 @@ export class Wallet extends React.Component {
     } catch (error) {
       Alert.alert('Failed to refresh profile!');
     }
-    fetch(createUrl('verify-address'), {
-      headers: {
-        Authorization: 'Bearer ' + this.props.deviceToken
-      }})
-      .then((response) => response.json())
-      .then((json) => {
-        if (json['verified'] === 'yes') {
-          passed = 'true';
-        } else if (json['verified'] === 'no') {
-          passed = 'false';
-        } else if (json['error']) {
-          passed = 'false';
-        } else {
-          passed = '';
-        }
-      })
-      .catch(() => {
-        Alert.alert('Error', 'Trying to get address!');
-      });
-  }
-
-  onMarketClick () {
-    fetch(createUrl('verify-account'), {
-      headers: {
-        Authorization: 'Bearer ' + this.props.deviceToken
-      }})
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (responseJson.Verified) {
-          this.props.navigation.navigate('Market');
-        } else {
-          Alert.alert('Feature Unavailable', `This feature is available only for invitees. ` +
-          `Coming soon to all users. In the meantime, enjoy previewing the Ferly App!`);
-        }
-      })
-      .catch(() => {
-        Alert.alert('Error please check internet connection!');
-      });
   }
 
   onCardClick () {
@@ -270,132 +230,209 @@ export class Wallet extends React.Component {
     );
   }
 
-  cardPage () {
-    const {card} = this.props;
-    if (!card) {
-      if (passed === 'true') {
-        return (
-          'Activate Card'
-        );
-      } else if (passed === 'false' || passed === '') {
-        return (
-          'Request Card'
-        );
-      }
-    } else {
-      return (
-        'Manage Card'
-      );
-    }
-  }
-
   renderCard (design, count) {
     const {navigation} = this.props;
     const {amount, id, title} = design;
-    const formatted = accounting.formatMoney(parseFloat(amount));
-    let color = 'white';
-    let text = 'white';
-    switch ((count % 6) + 1) {
-      case 1: color = '#8FD6D6';
-        text = '#1D3A54';
-        break;
-      case 2: color = '#5CB5B5';
-        text = '#FFFFFF';
-        break;
-      case 3: color = '#C7EAEA';
-        text = '#1D3A54';
-        break;
-      case 4: color = '#73CCCC';
-        text = '#1D3A54';
-        break;
-      case 5: color = '#9DDBDB';
-        text = '#1D3A54';
-        break;
-      case 6: color = '#4A9191';
-        text = '#FFFFFF';
-        break;
-      default:break;
+    if (cash.title === 'Ferly Cash') {
+      cashDesign = design;
+    } else if (rewards.title === 'Ferly Rewards') {
+      rewardsDesign = design;
     }
-    return (
-      <TestElement
-        parent={TouchableOpacity}
-        label='test-id-cash-card'
-        key={id}
-        accessible={false}
-        onPress={() => navigation.navigate('Value', design)}
-        style={[styles.cardContainer, {borderColor: color}]}>
-        <View style={[styles.cardImage, {backgroundColor: color}]}>
-          <Text style={{
-            fontSize: this.state.width2 < 330 ? 20 : 22 && width > 600 ? 26 : 22, color: text
-          }}>
-            {formatted}
-          </Text>
-        </View>
-        <View style={[styles.cardDetails, {borderColor: color}]}>
-          <View style={{flex: 1, justifyContent: 'center', paddingHorizontal: 15}}>
+    if (title !== 'Ferly Cash' && title !== 'Ferly Rewards') {
+      let loyal = design.loyaltyAmount;
+      let formatted;
+      if (design.loyaltyAmount) {
+        formatted = accounting.formatMoney(parseFloat(amount) + parseFloat(loyal));
+      } else {
+        formatted = accounting.formatMoney(parseFloat(amount));
+      }
+      let color = 'white';
+      let text = 'white';
+      switch ((count % 6) + 1) {
+        case 1: color = '#8FD6D6';
+          text = '#1D3A54';
+          break;
+        case 2: color = '#5CB5B5';
+          text = '#FFFFFF';
+          break;
+        case 3: color = '#C7EAEA';
+          text = '#1D3A54';
+          break;
+        case 4: color = '#73CCCC';
+          text = '#1D3A54';
+          break;
+        case 5: color = '#9DDBDB';
+          text = '#1D3A54';
+          break;
+        case 6: color = '#4A9191';
+          text = '#FFFFFF';
+          break;
+        default:break;
+      }
+      return (
+        <TestElement
+          parent={TouchableOpacity}
+          label='test-id-cash-card'
+          key={id}
+          accessible={false}
+          onPress={() => navigation.navigate('Value', {design, cashDesign, rewardsDesign})}
+          style={[styles.cardContainer, {borderColor: color}]}>
+          <View style={[styles.cardImage, {backgroundColor: color}]}>
             <Text style={{
-              fontSize: this.state.width2 < 330 ? 16 : 18 && width > 600 ? 24 : 18,
-              fontWeight: 'bold',
-              color: Theme.darkBlue}}>{title}</Text>
+              fontSize: width < 350 ? 20 : 22 && width > 600 ? 26 : 22, color: text
+            }}>
+              {formatted}
+            </Text>
           </View>
-          <View style={[styles.buttonRow, {borderColor: color}]}>
-            <TestElement
-              parent={TouchableOpacity}
-              label='test-id-give-button'
-              style={styles.cashButton}
-              onPress={() => navigation.navigate('Give', design)}>
-              <Ico
-                style={{paddingRight: 8}}
-                name="card-giftcard"
-                color={Theme.darkBlue}
-                size={this.state.width2 < 330 ? 18 : 20 && width > 600 ? 26 : 20} />
+          <View style={[styles.cardDetails, {borderColor: color}]}>
+            <View style={{flex: 1, justifyContent: 'center', paddingHorizontal: 15}}>
               <Text style={{
-                color: Theme.darkBlue,
-                fontSize: this.state.width2 < 330 ? 11 : 12 && width > 600 ? 16 : 12,
-                fontWeight: 'bold'
-              }}>
+                fontSize: width < 350 ? 16 : 18 && width > 600 ? 24 : 18,
+                fontWeight: 'bold',
+                color: Theme.darkBlue}}>{title}</Text>
+            </View>
+            <View style={[styles.buttonRow, {borderColor: color}]}>
+              <TestElement
+                parent={TouchableOpacity}
+                label='test-id-give-button'
+                style={styles.cashButton}
+                onPress={() => navigation.navigate('Recipient', design)}>
+                <Ico
+                  style={{paddingRight: 8}}
+                  name="card-giftcard"
+                  color={Theme.darkBlue}
+                  size={width < 350 ? 18 : 20 && width > 600 ? 26 : 20} />
+                <Text style={{
+                  color: Theme.darkBlue,
+                  fontSize: width < 350 ? 11 : 12 && width > 600 ? 16 : 12,
+                  fontWeight: 'bold'
+                }}>
                 GIVE
-              </Text>
-            </TestElement>
-            <TestElement
-              parent={TouchableOpacity}
-              label='test-id-buy-button'
-              style={[styles.cashButton, {borderLeftWidth: 1, borderColor: color}]}
-              onPress={() => navigation.navigate('Purchase', {design})}>
-              <Icon
-                style={{paddingRight: 8}}
-                name="credit-card"
-                color={Theme.darkBlue}
-                size={this.state.width2 < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
-              <Text style={{
-                color: Theme.darkBlue,
-                fontSize: this.state.width2 < 330 ? 11 : 12 && width > 600 ? 16 : 12,
-                fontWeight: 'bold'
-              }}>
+                </Text>
+              </TestElement>
+              <TestElement
+                parent={TouchableOpacity}
+                label='test-id-buy-button'
+                style={[styles.cashButton, {borderLeftWidth: 1, borderColor: color}]}
+                onPress={
+                  () => navigation.navigate('Purchase', {design})
+                }>
+                <Icones
+                  style={{paddingRight: 8}}
+                  name="plus-circle"
+                  color={Theme.darkBlue}
+                  size={width < 350 ? 16 : 18 && width > 600 ? 24 : 18} />
+                <Text style={{
+                  color: Theme.darkBlue,
+                  fontSize: width < 350 ? 11 : 12 && width > 600 ? 16 : 12,
+                  fontWeight: 'bold'
+                }}>
                 BUY
-              </Text>
-            </TestElement>
+                </Text>
+              </TestElement>
+            </View>
           </View>
-        </View>
-      </TestElement>
-    );
+        </TestElement>
+      );
+    }
   }
 
   renderAmounts () {
     const amounts = this.props.amounts || [];
     if (amounts.length === 0) {
       return (
-        <Text style={{marginTop: Platform.OS === 'ios' ? 20 : 235, margin: 20, fontSize: 18}}>
-          There’s nothing here! Click ‘+’ below to purchase your first gift.
-        </Text>
+        <View style={{alignItems: 'center'}}>
+          <Text style={{
+            marginTop: Platform.OS === 'ios' ? -20 : 235,
+            marginHorizontal: 20,
+            marginBottom: 20,
+            fontSize: 18
+          }}>
+          There’s nothing here! Visit the Shop to browse your favorite brands.
+          </Text>
+          <TestElement
+            parent={TouchableOpacity}
+            label='test-id-add'
+            style={[styles.theCard, {
+              width: width / 3,
+              flexDirection: 'row',
+              height: 30
+            }]}
+            onPress={() => this.props.navigation.navigate('Market')}>
+            <Icons
+              style={{paddingRight: 8}}
+              name="store-alt"
+              color={Theme.darkBlue}
+              size={width < 350 ? 14 : 16 && width > 600 ? 20 : 18} />
+            <Text style={[styles.cardManager, {
+              fontSize: width < 350 || Platform.OS === 'ios' ? 14 : 16 && width > 600 ? 18 : 16
+            }]}>
+              {`Shop`}
+            </Text>
+          </TestElement>
+        </View>
       );
+    } else if (amounts.length < 2) {
+      if (amounts[0].title === 'Ferly Cash' || amounts[0].title === 'Ferly Rewards') {
+        return (
+          <View style={{alignItems: 'center'}}>
+            <Text style={{
+              marginTop: Platform.OS === 'ios' ? -20 : 235,
+              marginHorizontal: 20,
+              marginBottom: 20,
+              fontSize: 18
+            }}>
+            There’s nothing here! Visit the Shop to browse your favorite brands.
+            </Text>
+            <TestElement
+              parent={TouchableOpacity}
+              label='test-id-add'
+              style={[styles.theCard, {
+                width: width / 3,
+                flexDirection: 'row',
+                height: 30
+              }]}
+              onPress={() => this.props.navigation.navigate('Market')}>
+              <Icons
+                style={{paddingRight: 8}}
+                name="store-alt"
+                color={Theme.darkBlue}
+                size={width < 350 ? 14 : 16 && width > 600 ? 20 : 18} />
+              <Text style={[styles.cardManager, {
+                fontSize: width < 350 || Platform.OS === 'ios' ? 14 : 16 && width > 600 ? 18 : 16
+              }]}>
+                {`Shop`}
+              </Text>
+            </TestElement>
+          </View>
+        );
+      } else {
+        return (
+          <ScrollView
+            keyboardShouldPersistTaps='handled'
+            style={{
+              marginTop: Platform.OS === 'android' ? 150 : 10 &&
+              width < 350 ? -20 : 50 && width > 600 ? 80 : 40
+            }}
+            refreshControl={
+              <RefreshControl
+                style={{position: 'absolute'}}
+                refreshing={false}
+                onRefresh={() => this.props.apiRefresh(urls.profile)}
+              />
+            }>
+            {amounts.map((cashRow, index) => this.renderCard(cashRow, index))}
+            <View style={{height: 80}} />
+          </ScrollView>
+        );
+      }
     } else {
       return (
         <ScrollView
           keyboardShouldPersistTaps='handled'
           style={{
-            marginTop: Platform.OS === 'android' ? 240 : 10 &&
-            this.state.width2 < 330 ? -10 : 50 && width > 600 ? 80 : 40
+            marginTop: Platform.OS === 'android' ? 150 : 10 &&
+            width < 350 ? -20 : 50 && width > 600 ? 80 : 40
           }}
           refreshControl={
             <RefreshControl
@@ -426,10 +463,12 @@ export class Wallet extends React.Component {
     const buttons = [
       {
         text: 'Close',
+        keyboardShouldPersistTaps: 'handled',
         onPress: () => checkedUidPrompt()
       },
       {
         text: 'Add',
+        keyboardShouldPersistTaps: 'handled',
         onPress: () => {
           checkedUidPrompt();
           navigation.navigate('Recovery');
@@ -440,6 +479,24 @@ export class Wallet extends React.Component {
   }
 
   render () {
+    cash = {};
+    if (this.props.amounts) {
+      this.props.amounts.forEach(function (item) {
+        if (item) {
+          if (item.title === 'Ferly Cash') {
+            cash = item;
+          } else if (item.title === 'Ferly Rewards') {
+            rewards = item;
+          }
+        }
+      });
+    }
+    if (this.props.deviceToken !== deviceId) {
+      deviceId = this.props.deviceToken;
+      cashDesign = [];
+      rewardsDesign = [];
+      deviceId = 0;
+    }
     count++;
     if (count < 2) {
       const text = {'text': 'Wallet'};
@@ -484,113 +541,310 @@ export class Wallet extends React.Component {
       this.showAddAccountRecoveryDialog();
     }
 
-    const scrollY = Animated.add(
-      this.state.scrollY,
-      Platform.OS === 'ios' ? HEADER_MAX_HEIGHT : 0
-    );
+    const headerHeight = this.scrollYAnimatedValue.interpolate(
+      {
+        inputRange: [0, (HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT)],
+        outputRange: [HEADER_MAX_HEIGHT, HEADER_MIN_HEIGHT],
+        extrapolate: 'clamp'
+      });
 
-    const headerTranslate = scrollY.interpolate({
-      inputRange: [0, HEADER_SCROLL_DISTANCE],
-      outputRange: [0, -HEADER_SCROLL_DISTANCE],
+    const headerBackgroundColor = this.scrollYAnimatedValue.interpolate(
+      {
+        inputRange: [0, (HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT)],
+        outputRange: [Theme.darkBlue, Theme.darkBlue],
+        extrapolate: 'clamp'
+      });
+
+    const titleTranslateY = this.scrollYAnimatedValue.interpolate({
+      inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
+      outputRange: [34, 30, 26],
       extrapolate: 'clamp'
     });
-    const imageTranslate = scrollY.interpolate({
-      inputRange: [0, HEADER_SCROLL_DISTANCE],
-      outputRange: [0, 100],
+
+    const titleMiddleTranslateY = this.scrollYAnimatedValue.interpolate({
+      inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
+      outputRange: [38, 34, 30],
       extrapolate: 'clamp'
     });
 
-    return (
-      <View style={{flex: 1, backgroundColor: 'white'}}>
-        <StatusBar
-          translucent
-          barStyle="light-content"
-          backgroundColor="rgba(0, 0, 0, 0.251)"
-        />
-        <Text style={{
-          padding: 20,
-          fontSize: this.state.width2 < 330 ? 16 : 18 && width > 600 ? 20 : 18,
-          fontWeight: 'bold',
-          paddingBottom: 40}}>
-          Ferly Card
-        </Text>
-        <Animated.ScrollView
-          scrollEventThrottle={1}
-          onScroll={Animated.event(
-            [{ nativeEvent: { contentOffset: { y: this.state.scrollY } } }],
-            { useNativeDriver: true }
-          )}
-          refreshControl={
-            <RefreshControl
-              refreshing={this.state.refreshing}
-              onRefresh={() => {
-                this.setState({ refreshing: true });
-                setTimeout(
-                  () => this.props.apiRefresh(urls.profile), this.setState({ refreshing: false }),
-                  1000);
-              }}
-              // Android offset for RefreshControl
-              progressViewOffset={250}
-            />
-          }
-          // iOS offset for RefreshControl
-          contentInset={{
-            top: 220
-          }}
-          contentOffset={{
-            y: -220
-          }}
-        >
-          {this.renderAmounts()}
-        </Animated.ScrollView>
-        <Animated.View
-          pointerEvents="none"
-          style={[
-            styles.header,
-            { transform: [{ translateY: headerTranslate }] }
-          ]}
-        >
-          <Animated.Image
-            style={[
-              styles.backgroundImage,
-              {
+    const rewardsTranslateY = this.scrollYAnimatedValue.interpolate({
+      inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
+      outputRange: [18, 16, 14],
+      extrapolate: 'clamp'
+    });
 
-                width: this.state.width2 - 35,
-                transform: [{ translateY: imageTranslate }]
-              }
-            ]}
-            source={blankCard}
-          />
-          <Image resizeMode={'contain'}
-            style={[
-              styles.ferlyImg, {
-                width: this.state.width2 / 2.5,
-                marginLeft: 30}
-            ]}
-            source={logoHorizontal}/>
-          <Text style={{
-            padding: 20,
-            marginTop: this.state.width2 < 330 ? 8 : 17,
-            fontSize: this.state.width2 < 330 ? 16 : 18 && width > 600 ? 20 : 18,
-            fontWeight: 'bold',
-            backgroundColor: 'white'
+    const cashDistanceY = this.scrollYAnimatedValue.interpolate({
+      inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
+      outputRange: [-5, -20, -35],
+      extrapolate: 'clamp'
+    });
+
+    const rewardsDistanceY = this.scrollYAnimatedValue.interpolate({
+      inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
+      outputRange: [38, 17, 0],
+      extrapolate: 'clamp'
+    });
+
+    const iosRewardsDistanceY = this.scrollYAnimatedValue.interpolate({
+      inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
+      outputRange: [60, 25, 0],
+      extrapolate: 'clamp'
+    });
+
+    const merchantDistanceY = this.scrollYAnimatedValue.interpolate({
+      inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
+      outputRange: [110, 70, 30],
+      extrapolate: 'clamp'
+    });
+
+    const iosMerchantDistanceY = this.scrollYAnimatedValue.interpolate({
+      inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
+      outputRange: [170, 70, 30],
+      extrapolate: 'clamp'
+    });
+
+    const buttonDistanceY = this.scrollYAnimatedValue.interpolate({
+      inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
+      outputRange: [15, 0, -15],
+      extrapolate: 'clamp'
+    });
+
+    const cashMiddleDistanceY = this.scrollYAnimatedValue.interpolate({
+      inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
+      outputRange: [20, 10, 0],
+      extrapolate: 'clamp'
+    });
+
+    const rewardsMiddleDistanceY = this.scrollYAnimatedValue.interpolate({
+      inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
+      outputRange: [80, 65, 50],
+      extrapolate: 'clamp'
+    });
+
+    const buttonMiddleDistanceY = this.scrollYAnimatedValue.interpolate({
+      inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
+      outputRange: [35, 37, 30],
+      extrapolate: 'clamp'
+    });
+
+    const iosbuttonMiddleDistanceY = this.scrollYAnimatedValue.interpolate({
+      inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
+      outputRange: [20, -20, -40],
+      extrapolate: 'clamp'
+    });
+
+    const merchantMiddleDistanceY = this.scrollYAnimatedValue.interpolate({
+      inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
+      outputRange: [160, 120, 90],
+      extrapolate: 'clamp'
+    });
+
+    const iconDistanceY = this.scrollYAnimatedValue.interpolate({
+      inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
+      outputRange: [-43, -46, -49],
+      extrapolate: 'clamp'
+    });
+
+    const iconMiddleDistanceY = this.scrollYAnimatedValue.interpolate({
+      inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
+      outputRange: [-40, -43, -46],
+      extrapolate: 'clamp'
+    });
+
+    let renderPad;
+    if (width < 350 && Platform.OS === 'ios') {
+      renderPad = HEADER_MAX_HEIGHT + 30;
+    } else if (width > 600 && Platform.OS === 'ios') {
+      renderPad = HEADER_MAX_HEIGHT - 20;
+    } else if (width > 350 && Platform.OS === 'ios') {
+      renderPad = HEADER_MAX_HEIGHT - 10;
+    } else if (width < 600 && Platform.OS === 'android') {
+      renderPad = HEADER_MAX_HEIGHT - 120;
+    }
+
+    let body;
+    if (cash.amount) {
+      body = (
+        <View style={{flexDirection: 'row'}}>
+          <Animated.View style={{
+            paddingRight: 20,
+            marginTop: width < 350 ? buttonDistanceY : buttonMiddleDistanceY &&
+            Platform.OS === 'ios' ? iosbuttonMiddleDistanceY : buttonMiddleDistanceY
           }}>
-            Other Cards
-          </Text>
-        </Animated.View>
-        <Animated.View style={styles.bar}>
+            <TestElement
+              parent={TouchableOpacity}
+              label='test-id-give'
+              style={[styles.theCard, {
+                width: width / 4,
+                flexDirection: 'row'
+              }]}
+              onPress={() => this.props.navigation.navigate('Recipient', cash, rewards)}>
+              <Ico
+                style={{paddingRight: 8}}
+                name="card-giftcard"
+                color={Theme.darkBlue}
+                size={width < 350 ? 18 : 20 && width > 600 ? 26 : 20} />
+              <Text style={[styles.cardManager, {
+                fontSize: width < 350 && Platform.OS === 'ios' ? 14 : 16 &&
+                width > 600 && Platform.OS === 'ios' ? 24 : 16
+              }]}>
+                {`Give`}
+              </Text>
+            </TestElement>
+          </Animated.View>
+          <Animated.View style={{
+            marginTop: width < 350 ? buttonDistanceY : buttonMiddleDistanceY &&
+            Platform.OS === 'ios' ? iosbuttonMiddleDistanceY : buttonMiddleDistanceY
+          }}>
+            <TestElement
+              parent={TouchableOpacity}
+              label='test-id-add'
+              style={[styles.theCard, {
+                width: width / 4,
+                flexDirection: 'row'
+              }]}
+              onPress={() => this.props.navigation.navigate('LoadingInstructions')}>
+              <Icones
+                style={{paddingRight: 8}}
+                name="plus-circle"
+                color={Theme.darkBlue}
+                size={width < 350 ? 16 : 18 && width > 600 ? 24 : 18} />
+              <Text style={[styles.cardManager, {
+                fontSize: width < 350 && Platform.OS === 'ios' ? 14 : 16 &&
+                width > 600 && Platform.OS === 'ios' ? 24 : 16
+              }]}>
+                {`Add`}
+              </Text>
+            </TestElement>
+          </Animated.View>
+        </View>
+      );
+    } else {
+      body = (
+        <Animated.View style={{
+          marginTop: width < 350 ? buttonDistanceY : buttonMiddleDistanceY &&
+          Platform.OS === 'ios' ? iosbuttonMiddleDistanceY : buttonMiddleDistanceY
+        }}>
           <TestElement
             parent={TouchableOpacity}
             label='test-id-card-page'
-            style={[styles.theCard, {width: this.state.width2 / 3}]}
-            onPress={() => this.onCardClick()}>
+            style={[styles.theCard, {width: width / 3, flexDirection: 'row'}]}
+            onPress={() => this.props.navigation.navigate('LoadingInstructions')}>
             <Text style={[styles.cardManager, {
-              fontSize: this.state.width2 < 330 ? 14 : 16 && width > 600 ? 18 : 16
+              marginLeft: 10,
+              fontSize: width < 350 ? 14 : 16 && width > 600 ? 18 : 16
             }]}>
-              {this.cardPage()}
+              {'Learn More'}
             </Text>
+            <Icones
+              style={{paddingRight: 8}}
+              name="arrow-right"
+              color={Theme.darkBlue}
+              size={width < 350 ? 16 : 18 && width > 600 ? 24 : 18} />
           </TestElement>
         </Animated.View>
+      );
+    }
+
+    return (
+      <View keyboardShouldPersistTaps='handled' style={{flex: 1, backgroundColor: 'white'}}>
+        <View>
+          <Text style={{
+            position: 'relative',
+            backgroundColor: Theme.darkBlue,
+            color: 'white',
+            paddingHorizontal: 20,
+            paddingVertical: 20,
+            fontSize: width < 350 && Platform.OS === 'ios' ? 16 : 18 &&
+            width < 350 && Platform.OS === 'android' ? 16 : 18
+          }}>
+          Ferly Cash
+          </Text>
+        </View>
+        <ScrollView
+          contentContainerStyle={{
+            paddingTop: renderPad
+          }}
+          scrollEventThrottle={16}
+          onScroll={Animated.event(
+            [{ nativeEvent: { contentOffset: { y: this.scrollYAnimatedValue } } }]
+          )}>
+          {this.renderAmounts()}
+        </ScrollView>
+        <TestElement
+          parent={Animated.View}
+          label='test-id-ferly-cash'
+          style={[styles.animatedHeaderContainer, {
+            height: headerHeight, backgroundColor: headerBackgroundColor
+          }]}>
+          <Animated.View style={{
+            flexDirection: 'row',
+            position: 'absolute',
+            justifyContent: 'center',
+            alignSelf: 'center',
+            marginBottom: 50
+          }}>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate('FerlyValue')}>
+              <Animated.Text style={{
+                marginTop: width < 350 || Platform.OS === 'ios' ? cashDistanceY : cashMiddleDistanceY &&
+                width > 600 ? 160 : cashMiddleDistanceY,
+                justifyContent: 'center',
+                alignSelf: 'center',
+                height: 50,
+                color: 'white',
+                fontSize: width < 350 ? titleTranslateY : titleMiddleTranslateY
+              }}>
+                {!cash.amount ? '$0.00' : `$${cash.amount}`}
+              </Animated.Text>
+              <Animated.View style={{
+                marginTop: width < 350 || Platform.OS === 'ios' ? iconDistanceY : iconMiddleDistanceY,
+                width: width / 2,
+                alignItems: 'flex-end',
+                marginLeft: 100
+              }}>
+                <Icon
+                  name="angle-right"
+                  color="white"
+                  size={width < 350 ? 22 : 26} />
+              </Animated.View>
+            </TouchableOpacity>
+          </Animated.View>
+          <View>
+            <Animated.Text style={{
+              marginTop: width < 350 ? rewardsDistanceY : rewardsMiddleDistanceY &&
+              Platform.OS === 'ios' ? iosRewardsDistanceY : rewardsMiddleDistanceY,
+              position: 'absolute',
+              alignSelf: 'center',
+              color: 'white',
+              fontSize: rewardsTranslateY
+            }}>
+              {
+                !rewards.amount ? '+ Rewards: $0.00' : `+ Rewards: $${rewards.amount}`
+              }
+            </Animated.Text>
+          </View>
+          <View style={styles.bar}>
+            {body}
+          </View>
+          <Animated.View style={{
+            width: width,
+            marginTop: width < 350 ? merchantDistanceY : merchantMiddleDistanceY &&
+            Platform.OS === 'ios' ? iosMerchantDistanceY : merchantMiddleDistanceY,
+            height: 60
+          }}>
+            <Text style={{
+              paddingHorizontal: 20,
+              paddingVertical: 15,
+              marginTop: width < 330 ? 8 : 17,
+              fontSize: width < 350 ? 16 : 18 && width > 600 ? 20 : 18,
+              backgroundColor: 'white',
+              color: Theme.darkBlue
+            }}>
+            Merchant Balances
+            </Text>
+          </Animated.View>
+        </TestElement>
         <TestElement
           parent={View}
           label='test-id-navbar'
@@ -614,7 +868,7 @@ export class Wallet extends React.Component {
             <I
               name="md-wallet"
               color={Theme.darkBlue}
-              size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
+              size={width < 350 ? 16 : 18 && width > 600 ? 24 : 18} />
             <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
                 Wallet
             </Text>
@@ -628,11 +882,11 @@ export class Wallet extends React.Component {
               backgroundColor: 'white',
               width: width / 4
             }}
-            onPress={() => this.onMarketClick()}>
+            onPress={() => this.props.navigation.navigate('Market')}>
             <Icons
               name="store-alt"
               color={Theme.darkBlue}
-              size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
+              size={width < 350 ? 16 : 18 && width > 600 ? 24 : 18} />
             <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
                 Shop
             </Text>
@@ -650,7 +904,7 @@ export class Wallet extends React.Component {
             <Icon
               name="history"
               color={Theme.darkBlue}
-              size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
+              size={width < 350 ? 16 : 18 && width > 600 ? 24 : 18} />
             <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
                 History
             </Text>
@@ -668,7 +922,7 @@ export class Wallet extends React.Component {
             <Icon
               name="bars"
               color={Theme.darkBlue}
-              size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
+              size={width < 350 ? 16 : 18 && width > 600 ? 24 : 18} />
             <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
                 Menu
             </Text>
@@ -681,11 +935,15 @@ export class Wallet extends React.Component {
 
 let {width} = Dimensions.get('window');
 let interval = 0;
+let cashDesign = [];
+let rewardsDesign = [];
+let deviceId = 0;
+let cash = {};
+let rewards = {};
 
 let codeRedeemed = '';
-let passed = '';
-const HEADER_MAX_HEIGHT = 160;
-const HEADER_MIN_HEIGHT = 60;
+const HEADER_MIN_HEIGHT = width < 350 ? 50 : 120 && Platform.OS === 'ios' ? 50 : 120;
+const HEADER_MAX_HEIGHT = width < 350 ? 150 : 200;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 let count = 0;
 const styles = StyleSheet.create({
@@ -696,11 +954,17 @@ const styles = StyleSheet.create({
     right: 0,
     overflow: 'hidden'
   },
+  animatedHeaderContainer: {
+    position: 'absolute',
+    top: 50,
+    left: 0,
+    right: 0,
+    justifyContent: 'flex-start',
+    alignItems: 'center'
+  },
   bar: {
-    marginTop: width < 330 ? 65 : 80,
-    height: width > 600 ? 70 : 50,
-    marginRight: 30,
-    alignItems: 'flex-end',
+    marginTop: width < 350 ? 60 : 90,
+    alignItems: 'center',
     justifyContent: 'center',
     position: 'absolute',
     top: 0,
@@ -711,36 +975,13 @@ const styles = StyleSheet.create({
     color: Theme.darkBlue,
     fontWeight: 'bold'
   },
-  title: {
-    color: 'white',
-    fontSize: 18
-  },
-  ferlyImg: {
-    height: width < 330 ? 48 : 57 && width > 600 ? 90 : 57,
-    marginTop: width < 330 ? -50 : -65 && width > 600 ? -100 : -65
-  },
-  backgroundImage: {
-    height: width < 330 ? 160 : 190 && width > 600 ? 250 : 190,
-    flexDirection: 'row-reverse',
-    alignSelf: 'center',
-    padding: 10,
-    marginTop: 60,
-    borderRadius: 10
-  },
-  ferlyCard: {
-    justifyContent: 'space-around',
-    flexDirection: 'row',
-    borderBottomWidth: 2,
-    borderBottomColor: 'lightgray',
-    paddingBottom: 15
-  },
   cardContainer: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
     marginHorizontal: 20,
     marginBottom: 15,
-    height: width < 330 ? 90 : 100 && width > 600 ? 110 : 100,
+    height: width < 350 ? 90 : 100 && width > 600 ? 110 : 100,
     borderWidth: 1,
     borderRadius: 10,
     backgroundColor: 'white',
@@ -750,15 +991,15 @@ const styles = StyleSheet.create({
     shadowOpacity: 1
   },
   cardImage: {
-    width: width > 600 ? 170 : 130,
+    width: width < 350 ? 120 : 130 && width > 600 ? 170 : 130,
     alignItems: 'center',
     justifyContent: 'center',
     borderTopLeftRadius: 10,
     borderBottomLeftRadius: 10
   },
   theCard: {
-    backgroundColor: Theme.yellow,
-    height: width < 330 ? 35 : 40 && width > 600 ? 50 : 40,
+    backgroundColor: Theme.lightBlue,
+    height: width < 350 ? 25 : 35 && width > 600 ? 35 : 35,
     borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center'
@@ -768,23 +1009,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     borderLeftWidth: 0.5
-  },
-  fab: {
-    width: width < 330 ? 50 : 60 && width > 600 ? 70 : 60,
-    height: width < 330 ? 50 : 60 && width > 600 ? 70 : 60,
-    borderRadius: width > 600 ? 35 : 30,
-    backgroundColor: Theme.yellow,
-    position: 'absolute',
-    bottom: 20,
-    right: 25,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: Theme.yellow,
-    elevation: 5,
-    shadowOffset: {width: 2, height: 2},
-    shadowColor: 'lightgray',
-    shadowOpacity: 1
   },
   cashButton: {
     flexDirection: 'row',
@@ -818,11 +1042,30 @@ Wallet.propTypes = {
 function mapStateToProps (state) {
   const apiStore = state.api.apiStore;
   const {checkUidPrompt, updateDownloaded} = state.settings;
-  const {
+  let {
     amounts,
     first_name: firstName,
     uids = []
   } = apiStore[urls.profile] || {};
+  let loyalty = {};
+  if (amounts) {
+    amounts.forEach(function (item) {
+      if (item.title.includes('Loyalty')) {
+        loyalty = item;
+        let newTitle = item.title.replace(' Loyalty', '');
+        amounts.forEach(function (items) {
+          if (!items.title.includes('Loyalty')) {
+            if (items.title === newTitle) {
+              items['loyaltyAmount'] = loyalty.amount;
+              items['expiringAmounts'] = loyalty.expiring;
+              items['loyaltyId'] = loyalty.id;
+            }
+          }
+        });
+      }
+    });
+    amounts = amounts.filter((item) => !item.title.includes('Loyalty'));
+  }
   const {deviceToken} = state.settings;
   const data = apiStore[urls.profile];
   const {cards} = data || {};

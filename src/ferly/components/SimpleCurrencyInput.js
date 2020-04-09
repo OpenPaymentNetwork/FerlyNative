@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
   error: {
     color: 'red',
     textAlign: 'right',
-    width: '100%'
+    width: 100
   }
 });
 

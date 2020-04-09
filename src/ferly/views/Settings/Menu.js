@@ -156,25 +156,6 @@ export class Settings extends React.Component {
     );
   }
 
-  onMarketClick () {
-    fetch(createUrl('verify-account'), {
-      headers: {
-        Authorization: 'Bearer ' + this.props.deviceToken
-      }})
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (responseJson.Verified) {
-          this.props.navigation.navigate('Market');
-        } else {
-          Alert.alert('Feature Unavailable', `This feature is available only for invitees. ` +
-          `Coming soon to all users. In the meantime, enjoy previewing the Ferly App!`);
-        }
-      })
-      .catch(() => {
-        Alert.alert('Error please check internet connection!');
-      });
-  }
-
   onCardClick () {
     fetch(createUrl('verify-account'), {
       headers: {
@@ -374,7 +355,7 @@ export class Settings extends React.Component {
               backgroundColor: 'white',
               width: width / 4
             }}
-            onPress={() => this.onMarketClick()}>
+            onPress={() => this.props.navigation.navigate('Market')}>
             <Icons
               name="store-alt"
               color={Theme.darkBlue}

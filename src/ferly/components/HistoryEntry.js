@@ -1,9 +1,11 @@
+import accounting from 'ferly/utils/accounting';
 import PropTypes from 'prop-types';
 import React from 'react';
 import TestElement from 'ferly/components/TestElement';
 import {connect} from 'react-redux';
 import {setRefreshHistory} from 'ferly/store/settings';
 import Theme from 'ferly/utils/theme';
+import Icon from 'react-native-vector-icons/EvilIcons';
 import {format as formatDate} from 'date-fns';
 import {Text, View, StyleSheet, TouchableOpacity, Dimensions} from 'react-native';
 
@@ -18,12 +20,17 @@ export class HistoryEntry extends React.Component {
     const {entry, navigation} = this.props;
     const {amount} = entry;
     const transferType = entry.transfer_type;
+    const tradeDesign = entry.trade_Designs_Received;
     const reason = entry.reason;
     const expired = entry.expired;
 
     let titleVerb;
-    let symbol = '';
+    let symbol;
     switch (transferType) {
+      case 'add':
+        titleVerb = 'Add';
+        symbol = '+';
+        break;
       case 'purchase':
         titleVerb = 'Add';
         symbol = '+';
@@ -49,12 +56,25 @@ export class HistoryEntry extends React.Component {
         symbol = '-';
         break;
     }
+    if (transferType === 'trade') {
+      if (tradeDesign[1] === 'Ferly Rewards') {
+        titleVerb = 'Reward';
+        symbol = '+';
+      } else {
+        titleVerb = 'Purchase';
+        symbol = '';
+      }
+    }
     if (reason) {
       titleVerb = 'Spend Error';
+      symbol = '';
     }
     if (expired) {
       titleVerb = 'Expired Gift';
+      symbol = '';
     }
+    let rewardsAmount = amount / 100 * 5;
+    rewardsAmount = accounting.formatMoney(parseFloat(rewardsAmount));
     const b = entry.timestamp.split(/\D+/);
     const date = new Date(Date.UTC(b[0], --b[1], b[2], b[3], b[4], b[5]));
     // React Native doesn't fully support Date.toLocaleString() on Android
@@ -92,13 +112,23 @@ export class HistoryEntry extends React.Component {
           borderColor: 'white',
           justifyContent: 'flex-end',
           alignItems: 'flex-end',
-          width: width / 3,
+          flexDirection: 'row',
+          width: width / 3 + 3,
           paddingRight: 30
         }}>
+          {transferType === 'canceled' ||
+          (transferType === 'trade' && tradeDesign[1] !== 'Ferly Rewards')
+            ? <Icon
+              name="refresh"
+              color={Theme.darkBlue}
+              size={width < 330 ? 22 : 24 && width > 600 ? 30 : 24} />
+            : null
+          }
           <Text style={{
             color: Theme.darkBlue, fontSize: width > 600 ? 19 : 16
           }}>
-            {`${symbol}$${amount}`}
+            {tradeDesign[1] === 'Ferly Rewards'
+              ? `${symbol}${rewardsAmount}` : `${symbol}$${amount}`}
           </Text>
         </View>
       </TestElement>
@@ -130,6 +160,7 @@ HistoryEntry.propTypes = {
     counter_party: PropTypes.string.isRequired,
     timestamp: PropTypes.string.isRequired,
     design_title: PropTypes.string.isRequired,
+    trade_Designs_Received: PropTypes.array,
     transfer_type: PropTypes.string.isRequired,
     reason: PropTypes.string,
     expired: PropTypes.bool

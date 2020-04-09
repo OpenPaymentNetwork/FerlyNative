@@ -18,8 +18,10 @@ import Home from 'ferly/views/Wallet/Home';
 import Menu from 'ferly/views/Settings/Menu';
 import LoadingInstructions from 'ferly/views/Settings/LoadingInstructions';
 import Value from 'ferly/views/Wallet/Value';
+import FerlyValue from 'ferly/views/Wallet/FerlyValue';
 import LandingPage from 'ferly/views/Public/LandingPage';
 import Cart from 'ferly/views/Purchase/Cart';
+import MarketCart from 'ferly/views/Purchase/MarketCart';
 import Purchase from 'ferly/views/Purchase/Purchase';
 import Market from 'ferly/views/Purchase/Market';
 import Recovery from 'ferly/views/Settings/Recovery';
@@ -43,13 +45,16 @@ const WalletStack = createStackNavigator(
   {
     Home: {screen: Home, navigationOptions: drawerOptions},
     Value: {screen: Value, navigationOptions: drawerOptions},
-    Give: {screen: Recipient, navigationOptions: drawerOptions},
+    FerlyValue: {screen: FerlyValue, navigationOptions: drawerOptions},
+    Transfer: {screen: Transfer, navigationOptions: drawerOptions},
+    Recipient: {screen: Recipient, navigationOptions: drawerOptions},
     GiveContact: {screen: GiveContact, navigationOptions: drawerOptions},
     Amount: {screen: Give, navigationOptions: drawerOptions},
     Purchase: {screen: Purchase, navigationOptions: drawerOptions},
     Cart: {screen: Cart, navigationOptions: drawerOptions},
     FerlyCard: {screen: FerlyCard, navigationOptions: drawerOptions},
-    EventListener: {screen: EventListener, navigationOptions: drawerOptions}
+    EventListener: {screen: EventListener, navigationOptions: drawerOptions},
+    LoadingInstructions: {screen: LoadingInstructions, navigationOptions: drawerOptions}
   },
   {
     initialRouteName: 'Home'
@@ -78,7 +83,7 @@ const MarketStack = createStackNavigator(
   {
     Market: {screen: Market, navigationOptions: drawerOptions},
     Purchase: {screen: Purchase, navigationOptions: drawerOptions},
-    Cart: {screen: Cart, navigationOptions: drawerOptions}
+    Cart: {screen: MarketCart, navigationOptions: drawerOptions}
   },
   {
     initialRouteName: 'Market'
@@ -115,7 +120,8 @@ const AuthDrawer = createDrawerNavigator(
   },
   {
     initialRouteName: 'Wallet',
-    contentOptions: {activeTintColor: Theme.lightBlue}
+    contentOptions: {activeTintColor: Theme.lightBlue},
+    drawerLockMode: 'locked-closed'
   }
 );
 
@@ -154,7 +160,9 @@ export const CreateAuthSwitch = (isUser, doneTutorial) => {
     {
       initialRouteName: (isUser === 'false') ? 'Pub' : ((doneTutorial === 'false') ? 'Auth' : 'Auth')
     });
-  return AppLayout;
+  return (
+    AppLayout
+  );
 };
 
 export default CreateAuthSwitch;

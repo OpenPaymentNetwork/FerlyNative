@@ -53,9 +53,9 @@ export class Purchase extends React.Component {
   onPurchase () {
     const {navigation} = this.props;
     const params = navigation.state.params;
-    const {design} = params;
+    const {design, cashDesign, rewardsDesign} = params;
     const amount = this.state.text;
-    navigation.navigate('Cart', {amount, design});
+    navigation.navigate('Cart', {amount, design, cashDesign, rewardsDesign});
   }
 
   onChange (newAmount) {

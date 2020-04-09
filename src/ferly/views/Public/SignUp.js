@@ -376,7 +376,7 @@ const styles = StyleSheet.create({
   },
   logo: {width: 160, height: 156, marginVertical: 40},
   recoveryText: {
-    color: Theme.lightBlue,
+    color: '#65C7C7',
     textDecorationLine: 'underline',
     fontSize: width > 600 ? 20 : 16
   },

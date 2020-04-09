@@ -21,3 +21,4 @@ export const DirectDeposit = require('./direct_deposit.png');
 export const FerlyCash = require('./ferly_cash.png');
 export const FerlyRewards = require('./ferly_rewards.png');
 export const Why = require('./why.png');
+export const Present = require('./Present.png');

@@ -12,7 +12,7 @@ import {format as formatDate} from 'date-fns';
 import {Alert, View, FlatList, Text, TouchableOpacity, Dimensions} from 'react-native';
 import {apiRequire, apiInject, apiRefresh} from 'ferly/store/api';
 import {connect} from 'react-redux';
-import {urls, post, createUrl} from 'ferly/utils/fetch';
+import {urls, post} from 'ferly/utils/fetch';
 
 export class History extends React.Component {
   static navigationOptions = {
@@ -77,25 +77,6 @@ export class History extends React.Component {
     this.setState({searchText: text.toLowerCase()});
   }
 
-  onMarketClick () {
-    fetch(createUrl('verify-account'), {
-      headers: {
-        Authorization: 'Bearer ' + this.props.deviceToken
-      }})
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (responseJson.Verified) {
-          this.props.navigation.navigate('Market');
-        } else {
-          Alert.alert('Feature Unavailable', `This feature is available only for invitees. ` +
-          `Coming soon to all users. In the meantime, enjoy previewing the Ferly App!`);
-        }
-      })
-      .catch(() => {
-        Alert.alert('Error please check internet connection!');
-      });
-  }
-
   changeToCompleted () {
     this.onChangeText('');
     this.setState({page: 'Completed'});
@@ -131,19 +112,27 @@ export class History extends React.Component {
       const b = item.timestamp.split(/\D+/);
       const date = new Date(Date.UTC(b[0], --b[1], b[2], b[3], b[4], b[5]));
       const dateDisplay = formatDate(date, 'MMM D');
-      let typeTitle;
+      let typeTitle = '';
       if (item.transfer_type === 'pending') {
-        typeTitle = 'pending gift';
-      } else if (item.transfer_type === 'send') {
-        typeTitle = 'send gift';
+        typeTitle = 'Pending Gift';
       } else if (item.transfer_type === 'purchase') {
-        typeTitle = 'add';
+        typeTitle = 'Add';
+      } else if (item.transfer_type === 'send') {
+        typeTitle = 'Send Gift';
+      } else if (item.transfer_type === 'add') {
+        typeTitle = 'Add';
       } else if (item.transfer_type === 'canceled') {
-        typeTitle = 'canceled gift';
+        typeTitle = 'Canceled Gift';
       } else if (item.transfer_type === 'receive') {
-        typeTitle = 'receive gift';
+        typeTitle = 'Receive Gift';
       } else if (item.transfer_type === 'redeem') {
-        typeTitle = 'spend';
+        typeTitle = 'Spend';
+      } else if (item.transfer_type === 'trade') {
+        if (item.trade_Designs_Received[1] === 'Ferly Rewards') {
+          typeTitle = 'Reward';
+        } else {
+          typeTitle = 'Purchase';
+        }
       }
       if (
         dateDisplay.toLowerCase().includes(this.state.searchText) ||
@@ -169,6 +158,7 @@ export class History extends React.Component {
             }}>
               <Text style={{
                 color: Theme.darkBlue,
+                width: width / 3,
                 fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
                 fontWeight: 'bold',
                 paddingTop: 10
@@ -177,6 +167,7 @@ export class History extends React.Component {
               </Text>
               <Text style={{
                 color: Theme.darkBlue,
+                width: width / 3,
                 fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
                 fontWeight: 'bold',
                 paddingTop: 10
@@ -185,9 +176,12 @@ export class History extends React.Component {
               </Text>
               <Text style={{
                 color: Theme.darkBlue,
+                width: width / 3,
+                textAlign: 'right',
                 fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
                 fontWeight: 'bold',
-                paddingTop: 10
+                paddingTop: 10,
+                paddingRight: 30
               }}>
               Amount
               </Text>
@@ -375,7 +369,7 @@ export class History extends React.Component {
               backgroundColor: 'white',
               width: width / 4
             }}
-            onPress={() => this.onMarketClick()}>
+            onPress={() => this.props.navigation.navigate('Market')}>
             <Icons
               name="store-alt"
               color={Theme.darkBlue}

@@ -123,7 +123,7 @@ export class RecoveryChannel extends React.Component {
         <TouchableOpacity
           onPress={() => navigation.navigate('SignUp', signUpParams)}>
           <Text style={{
-            color: Theme.lightBlue,
+            color: '#65C7C7',
             textDecorationLine: 'underline',
             fontSize: width > 600 ? 20 : 16,
             paddingLeft: 5}}>Sign Up</Text>

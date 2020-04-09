@@ -8,6 +8,7 @@ import React from 'react';
 import TestElement from 'ferly/components/TestElement';
 import Theme from 'ferly/utils/theme';
 import Spinner from 'ferly/components/Spinner';
+import {StackActions} from 'react-navigation';
 import {apiRequire, apiExpire, apiRefresh} from 'ferly/store/api';
 import {connect} from 'react-redux';
 import {createUrl, post, urls} from 'ferly/utils/fetch';
@@ -23,7 +24,7 @@ import {
   TextInput
 } from 'react-native';
 
-export class Cart extends React.Component {
+export class MarketCart extends React.Component {
   static navigationOptions = {
     title: 'Cart'
   };
@@ -218,6 +219,13 @@ export class Cart extends React.Component {
                       const desc = `You added ${formatted} ${design.title} to your wallet.`;
                       Alert.alert('Complete!', desc);
                       this.props.apiExpire(this.props.sourcesUrl);
+                      const resetAction = StackActions.reset({
+                        index: 0,
+                        actions: [
+                          StackActions.push({routeName: 'Market'})
+                        ]
+                      });
+                      this.props.navigation.dispatch(resetAction);
                       this.props.navigation.navigate('Home');
                     } else {
                       const text = {'text': 'Unsuccessful accept trade'};
@@ -364,6 +372,13 @@ export class Cart extends React.Component {
                   const desc = `You added ${formatted} ${design.title} to your wallet.`;
                   Alert.alert('Complete!', desc);
                   this.props.apiExpire(this.props.sourcesUrl);
+                  const resetAction = StackActions.reset({
+                    index: 0,
+                    actions: [
+                      StackActions.push({routeName: 'Market'})
+                    ]
+                  });
+                  this.props.navigation.dispatch(resetAction);
                   this.props.navigation.navigate('Home');
                 } else {
                   const text = {'text': 'Unsuccessful accept trade'};
@@ -755,7 +770,7 @@ const styles = StyleSheet.create({
     fontSize: width > 600 ? 24 : 20
   },
   invalidText: {fontSize: width > 600 ? 18 : 14, color: 'red', textAlign: 'right'},
-  page: {flex: 1, justifyContent: 'space-between', backgroundColor: 'white'},
+  page: {flex: 1, flexDirection: 'column', backgroundColor: 'white'},
   source: {
     height: width > 600 ? 100 : 90,
     marginHorizontal: 20,
@@ -788,7 +803,7 @@ const styles = StyleSheet.create({
   totalText: {fontSize: width > 600 ? 18 : 16, fontWeight: 'bold', color: Theme.darkBlue}
 });
 
-Cart.propTypes = {
+MarketCart.propTypes = {
   card: PropTypes.object,
   amounts: PropTypes.array,
   apiExpire: PropTypes.func.isRequired,
@@ -836,4 +851,4 @@ const mapDispatchToProps = {
   apiRequire
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Cart);
+export default connect(mapStateToProps, mapDispatchToProps)(MarketCart);
