@@ -60,6 +60,9 @@ export class MarketCart extends React.Component {
         }
       }
     });
+    if (!cash.amount) {
+      this.setState({cashChecked: false});
+    }
     if (!cash.title && !rewards.title) {
       Alert.alert('Sorry!', `You need to have Ferly Cash or Ferly Rewards value in your wallet ` +
       `before you can purchase gift values.`);
@@ -106,6 +109,16 @@ export class MarketCart extends React.Component {
           invalid: `The amount you entered is more than $${amountNumber}`, submitting: false
         });
         return;
+      } else if (parseInt(cash.amount) + parseInt(this.state.setRewardsAmount) < amountNumber) {
+        this.setState({
+          invalid: `The total amount you entered is less than $${amountNumber}`, submitting: false
+        });
+        return;
+      } else if (parseInt(cash.amount) + parseInt(this.state.setRewardsAmount) >
+      parseInt(cash.amount) + parseInt(rewards.amount)) {
+        this.setState({invalid: `You have only $${cash.amount} Ferly Cash and $${rewards.amount}` +
+        ` Rewards available.`});
+        return;
       }
     }
     if (design.authorized_merchant) {
@@ -121,6 +134,8 @@ export class MarketCart extends React.Component {
           if (!this.state.cashChecked) {
             if (design.authorized_merchant) {
               tradeParams = {
+                accept_expire_seconds: 30,
+                combine_accept: true,
                 open_loop: this.state.openLoop,
                 amounts: [this.state.setRewardsAmount],
                 expect_amounts: [amount, gettingLoyaltyAmount],
@@ -129,6 +144,8 @@ export class MarketCart extends React.Component {
               };
             } else {
               tradeParams = {
+                accept_expire_seconds: 30,
+                combine_accept: true,
                 open_loop: this.state.openLoop,
                 amounts: [this.state.setRewardsAmount],
                 expect_amounts: [amount],
@@ -139,6 +156,8 @@ export class MarketCart extends React.Component {
           } else if (!this.state.rewardsChecked) {
             if (design.authorized_merchant) {
               tradeParams = {
+                accept_expire_seconds: 30,
+                combine_accept: true,
                 open_loop: this.state.openLoop,
                 amounts: [amountNumber.toString()],
                 expect_amounts: [amount, gettingLoyaltyAmount],
@@ -147,6 +166,8 @@ export class MarketCart extends React.Component {
               };
             } else {
               tradeParams = {
+                accept_expire_seconds: 30,
+                combine_accept: true,
                 open_loop: this.state.openLoop,
                 amounts: [amountNumber.toString()],
                 expect_amounts: [amount],
@@ -157,6 +178,8 @@ export class MarketCart extends React.Component {
           } else {
             if (design.authorized_merchant) {
               tradeParams = {
+                accept_expire_seconds: 30,
+                combine_accept: true,
                 open_loop: this.state.openLoop,
                 amounts: [this.state.setCashAmount, this.state.setRewardsAmount],
                 expect_amounts: [amount, gettingLoyaltyAmount],
@@ -165,6 +188,8 @@ export class MarketCart extends React.Component {
               };
             } else {
               tradeParams = {
+                accept_expire_seconds: 30,
+                combine_accept: true,
                 open_loop: this.state.openLoop,
                 amounts: [this.state.setCashAmount, this.state.setRewardsAmount],
                 expect_amounts: [amount],
@@ -178,21 +203,7 @@ export class MarketCart extends React.Component {
           post('trade', this.props.deviceToken, tradeParams)
             .then((response) => response.json())
             .then((json) => {
-              let acceptParams = {};
               if (!json.invalid && !json.error) {
-                if (design.authorized_merchant) {
-                  acceptParams = {
-                    open_loop: this.state.openLoop,
-                    loop_ids: [design.id, gettingLoyaltyId],
-                    transfer_id: json.transfer_id
-                  };
-                } else {
-                  acceptParams = {
-                    open_loop: this.state.openLoop,
-                    loop_ids: [design.id],
-                    transfer_id: json.transfer_id
-                  };
-                }
                 const text = {'text': 'successful trade'};
                 post('log-info', this.props.deviceToken, text)
                   .then((response) => response.json())
@@ -201,49 +212,20 @@ export class MarketCart extends React.Component {
                   .catch(() => {
                     console.log('log error');
                   });
-                post('accept-trade', this.props.deviceToken, acceptParams)
-                  .then((response) => response.json())
-                  .then((json) => {
-                    if (!json.invalid && !json.error) {
-                      const text = {'text': 'successful accept trade'};
-                      post('log-info', this.props.deviceToken, text)
-                        .then((response) => response.json())
-                        .then((responseJson) => {
-                        })
-                        .catch(() => {
-                          console.log('log error');
-                        });
-                      this.props.apiRefresh(urls.history);
-                      this.props.apiRefresh(urls.profile);
-                      const formatted = accounting.formatMoney(parseFloat(amount));
-                      const desc = `You added ${formatted} ${design.title} to your wallet.`;
-                      Alert.alert('Complete!', desc);
-                      this.props.apiExpire(this.props.sourcesUrl);
-                      const resetAction = StackActions.reset({
-                        index: 0,
-                        actions: [
-                          StackActions.push({routeName: 'Market'})
-                        ]
-                      });
-                      this.props.navigation.dispatch(resetAction);
-                      this.props.navigation.navigate('Home');
-                    } else {
-                      const text = {'text': 'Unsuccessful accept trade'};
-                      post('log-info', this.props.deviceToken, text)
-                        .then((response) => response.json())
-                        .then((responseJson) => {
-                        })
-                        .catch(() => {
-                          console.log('log error');
-                        });
-                      Alert.alert('Error!', 'Please try again.');
-                      navigation.navigate('Home');
-                    }
-                  })
-                  .catch(() => {
-                    Alert.alert('Error!', 'Please try again.');
-                    navigation.navigate('Home');
-                  });
+                this.props.apiRefresh(urls.history);
+                this.props.apiRefresh(urls.profile);
+                const formatted = accounting.formatMoney(parseFloat(amount));
+                const desc = `You added ${formatted} ${design.title} to your wallet.`;
+                Alert.alert('Complete!', desc);
+                this.props.apiExpire(this.props.sourcesUrl);
+                const resetAction = StackActions.reset({
+                  index: 0,
+                  actions: [
+                    StackActions.push({routeName: 'Market'})
+                  ]
+                });
+                this.props.navigation.dispatch(resetAction);
+                this.props.navigation.navigate('Home');
               } else {
                 if (json.invalid['amounts.0']) {
                   this.setState({invalid: json.invalid['amounts.0']});
@@ -274,6 +256,8 @@ export class MarketCart extends React.Component {
       if (!this.state.cashChecked) {
         if (design.authorized_merchant) {
           tradeParams = {
+            accept_expire_seconds: 30,
+            combine_accept: true,
             open_loop: this.state.openLoop,
             amounts: [this.state.setRewardsAmount],
             expect_amounts: [amount, gettingLoyaltyAmount],
@@ -282,6 +266,8 @@ export class MarketCart extends React.Component {
           };
         } else {
           tradeParams = {
+            accept_expire_seconds: 30,
+            combine_accept: true,
             open_loop: this.state.openLoop,
             amounts: [this.state.setRewardsAmount],
             expect_amounts: [amount],
@@ -292,6 +278,8 @@ export class MarketCart extends React.Component {
       } else if (!this.state.rewardsChecked) {
         if (design.authorized_merchant) {
           tradeParams = {
+            accept_expire_seconds: 30,
+            combine_accept: true,
             open_loop: this.state.openLoop,
             amounts: [amountNumber.toString()],
             expect_amounts: [amount, gettingLoyaltyAmount],
@@ -300,6 +288,8 @@ export class MarketCart extends React.Component {
           };
         } else {
           tradeParams = {
+            accept_expire_seconds: 30,
+            combine_accept: true,
             open_loop: this.state.openLoop,
             amounts: [amountNumber.toString()],
             expect_amounts: [amount],
@@ -310,6 +300,8 @@ export class MarketCart extends React.Component {
       } else {
         if (design.authorized_merchant) {
           tradeParams = {
+            accept_expire_seconds: 30,
+            combine_accept: true,
             open_loop: this.state.openLoop,
             amounts: [this.state.setCashAmount, this.state.setRewardsAmount],
             expect_amounts: [amount, gettingLoyaltyAmount],
@@ -318,6 +310,8 @@ export class MarketCart extends React.Component {
           };
         } else {
           tradeParams = {
+            accept_expire_seconds: 30,
+            combine_accept: true,
             open_loop: this.state.openLoop,
             amounts: [this.state.setCashAmount, this.state.setRewardsAmount],
             expect_amounts: [amount],
@@ -331,21 +325,7 @@ export class MarketCart extends React.Component {
       post('trade', this.props.deviceToken, tradeParams)
         .then((response) => response.json())
         .then((json) => {
-          let acceptParams = {};
           if (!json.invalid && !json.error) {
-            if (design.authorized_merchant) {
-              acceptParams = {
-                open_loop: this.state.openLoop,
-                loop_ids: [design.id, gettingLoyaltyId],
-                transfer_id: json.transfer_id
-              };
-            } else {
-              acceptParams = {
-                open_loop: this.state.openLoop,
-                loop_ids: [design.id],
-                transfer_id: json.transfer_id
-              };
-            }
             const text = {'text': 'successful trade'};
             post('log-info', this.props.deviceToken, text)
               .then((response) => response.json())
@@ -354,49 +334,20 @@ export class MarketCart extends React.Component {
               .catch(() => {
                 console.log('log error');
               });
-            post('accept-trade', this.props.deviceToken, acceptParams)
-              .then((response) => response.json())
-              .then((json) => {
-                if (!json.invalid && !json.error) {
-                  const text = {'text': 'successful accept trade'};
-                  post('log-info', this.props.deviceToken, text)
-                    .then((response) => response.json())
-                    .then((responseJson) => {
-                    })
-                    .catch(() => {
-                      console.log('log error');
-                    });
-                  this.props.apiRefresh(urls.history);
-                  this.props.apiRefresh(urls.profile);
-                  const formatted = accounting.formatMoney(parseFloat(amount));
-                  const desc = `You added ${formatted} ${design.title} to your wallet.`;
-                  Alert.alert('Complete!', desc);
-                  this.props.apiExpire(this.props.sourcesUrl);
-                  const resetAction = StackActions.reset({
-                    index: 0,
-                    actions: [
-                      StackActions.push({routeName: 'Market'})
-                    ]
-                  });
-                  this.props.navigation.dispatch(resetAction);
-                  this.props.navigation.navigate('Home');
-                } else {
-                  const text = {'text': 'Unsuccessful accept trade'};
-                  post('log-info', this.props.deviceToken, text)
-                    .then((response) => response.json())
-                    .then((responseJson) => {
-                    })
-                    .catch(() => {
-                      console.log('log error');
-                    });
-                  Alert.alert('Error!', 'Please try again.');
-                  navigation.navigate('Home');
-                }
-              })
-              .catch(() => {
-                Alert.alert('Error!', 'Please try again.');
-                navigation.navigate('Home');
-              });
+            this.props.apiRefresh(urls.history);
+            this.props.apiRefresh(urls.profile);
+            const formatted = accounting.formatMoney(parseFloat(amount));
+            const desc = `You added ${formatted} ${design.title} to your wallet.`;
+            Alert.alert('Complete!', desc);
+            this.props.apiExpire(this.props.sourcesUrl);
+            const resetAction = StackActions.reset({
+              index: 0,
+              actions: [
+                StackActions.push({routeName: 'Market'})
+              ]
+            });
+            this.props.navigation.dispatch(resetAction);
+            this.props.navigation.navigate('Home');
           } else {
             if (json.error) {
               this.setState({invalid: json.error, submitting: false});
@@ -460,7 +411,7 @@ export class MarketCart extends React.Component {
       }
     }
     if (this.state.cashChecked) {
-      if (cash.amount + this.state.setRewardsAmount < amountNumber) {
+      if (parseInt(cash.amount) + parseInt(this.state.setRewardsAmount) > amountNumber - 1) {
         this.setState({invalid: `You have only $${cash.amount} Ferly Cash and $${rewards.amount}` +
         ` Rewards available.`});
       } else {
@@ -562,7 +513,7 @@ export class MarketCart extends React.Component {
                           </View>
                         </View>
                         <View style={[styles.functionRow, {marginTop: 10, marginHorizontal: 10}]}>
-                          <Text style={[styles.sectionText, {fontSize: 12, fontWeight: 'bold'}]}>
+                          <Text style={[styles.sectionText, {fontSize: 12}]}>
                         Online Fee
                           </Text>
                           <Text style={[styles.sectionText,
@@ -573,7 +524,7 @@ export class MarketCart extends React.Component {
                         <View style={[styles.functionRow, {
                           marginHorizontal: 10, marginVertical: 10
                         }]}>
-                          <Text style={[styles.sectionText, {fontSize: 12, fontWeight: 'bold'}]}>
+                          <Text style={[styles.sectionText, {fontSize: 12}]}>
                         Taxes
                           </Text>
                           <Text style={[styles.sectionText,
@@ -589,7 +540,6 @@ export class MarketCart extends React.Component {
                             {
                               margin: 10,
                               color: Theme.darkBlue,
-                              fontWeight: 'bold',
                               fontSize: width > 600 ? 18 : 16
                             }]}>
                             {accounting.formatMoney(total)}
@@ -616,47 +566,49 @@ export class MarketCart extends React.Component {
                       </View>
                     }
                     <View style={{paddingHorizontal: 20, marginTop: 10, marginBottom: 5}}>
-                      <View>
-                        <Text style={styles.sectionHeader}>Payment Method</Text>
-                      </View>
-                      <View style={[styles.functionRow, {height: 30}]}>
-                        <View style={[styles.sectionText,
-                          {color: Theme.darkBlue,
-                            marginVertical: 5,
-                            flexDirection: 'row',
-                            alignItems: 'center'
-                          }]}>
-                          <Icon name="dollar"
-                            color={Theme.darkBlue}
-                            size={width < 330 ? 18 : 23 && width > 600 ? 28 : 23}/>
-                          <Text style={[styles.sectionText,
-                            {marginHorizontal: 15, fontWeight: 'bold', fontSize: 16}
-                          ]}>
-                            {cash.title}
-                          </Text>
+                      {!cash.amount ? null
+                        : <View>
+                          <Text style={styles.sectionHeader}>Payment Method</Text>
+                          <View style={[styles.functionRow, {height: 30}]}>
+                            <View style={[styles.sectionText,
+                              {color: Theme.darkBlue,
+                                marginVertical: 5,
+                                flexDirection: 'row',
+                                alignItems: 'center'
+                              }]}>
+                              <Icon name="dollar"
+                                color={Theme.darkBlue}
+                                size={width < 330 ? 18 : 23 && width > 600 ? 28 : 23}/>
+                              <Text style={[styles.sectionText,
+                                {marginHorizontal: 15, fontWeight: 'bold', fontSize: 16}
+                              ]}>
+                                {cash.title}
+                              </Text>
+                            </View>
+                            <View style={[styles.sectionText,
+                              {
+                                color: Theme.darkBlue,
+                                marginHorizontal: 10,
+                                height: 50,
+                                marginTop: -11,
+                                marginRight: -15
+                              }]}>
+                              <CheckBox
+                                keyboardShouldPersistTaps='handled'
+                                center
+                                checkedColor={Theme.darkBlue}
+                                checked={this.state.cashChecked}
+                                onPress={() => this.checkedCash(cash)}
+                              />
+                            </View>
+                          </View>
+                          <View style={{marginBottom: 10, marginHorizontal: 25}}>
+                            <Text style={{fontSize: 12, color: Theme.darkBlue}}>
+                              {`Available: $${cash.amount}`}
+                            </Text>
+                          </View>
                         </View>
-                        <View style={[styles.sectionText,
-                          {
-                            color: Theme.darkBlue,
-                            marginHorizontal: 10,
-                            height: 50,
-                            marginTop: -11,
-                            marginRight: -15
-                          }]}>
-                          <CheckBox
-                            keyboardShouldPersistTaps='handled'
-                            center
-                            checkedColor={Theme.darkBlue}
-                            checked={this.state.cashChecked}
-                            onPress={() => this.checkedCash(cash)}
-                          />
-                        </View>
-                      </View>
-                      <View style={{marginBottom: 10, marginHorizontal: 25}}>
-                        <Text style={{fontSize: 12, color: Theme.darkBlue}}>
-                          {`Available: $${cash.amount}`}
-                        </Text>
-                      </View>
+                      }
                       <View>
                         { !rewards.amount ? null
                           : <View style={[styles.functionRow, {height: 30, marginTop: 10}]}>
@@ -763,13 +715,6 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     fontSize: width > 600 ? 18 : 14
   },
-  designText: {
-    flexShrink: 1,
-    fontWeight: 'bold',
-    flexWrap: 'wrap',
-    fontSize: width > 600 ? 24 : 20
-  },
-  invalidText: {fontSize: width > 600 ? 18 : 14, color: 'red', textAlign: 'right'},
   page: {flex: 1, flexDirection: 'column', backgroundColor: 'white'},
   source: {
     height: width > 600 ? 100 : 90,
@@ -785,12 +730,6 @@ const styles = StyleSheet.create({
     shadowOffset: {width: 2, height: 2},
     shadowColor: 'lightgray',
     shadowOpacity: 1
-  },
-  removeIconContainer: {
-    alignSelf: 'flex-end',
-    position: 'absolute',
-    height: width > 600 ? 100 : 90,
-    padding: 10
   },
   error: {
     fontSize: width > 600 ? 16 : 14,

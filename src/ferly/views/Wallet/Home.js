@@ -11,8 +11,8 @@ import Spinner from 'ferly/components/Spinner';
 import Theme from 'ferly/utils/theme';
 import TestElement from 'ferly/components/TestElement';
 import {Notifications, Updates} from 'expo';
-import {apiRequire, apiRefresh} from 'ferly/store/api';
-import {checkedUidPrompt} from 'ferly/store/settings';
+import {apiRequire, apiRefresh, apiErase} from 'ferly/store/api';
+import {checkedUidPrompt, setDeviceToken, setIsCustomer, setExpoToken} from 'ferly/store/settings';
 import {connect} from 'react-redux';
 import {urls, createUrl, post} from 'ferly/utils/fetch';
 import {
@@ -167,7 +167,7 @@ export class Wallet extends React.Component {
       this.array.push(i);
     }
     try {
-      this.props.apiRequire(urls.profile);
+      this.props.dispatch(apiRequire(urls.profile));
     } catch (error) {
       Alert.alert('Failed to refresh profile!');
     }
@@ -382,7 +382,7 @@ export class Wallet extends React.Component {
               marginBottom: 20,
               fontSize: 18
             }}>
-            There’s nothing here! Visit the Shop to browse your favorite brands.
+              There’s nothing here! Visit the Shop to browse your favorite brands.
             </Text>
             <TestElement
               parent={TouchableOpacity}
@@ -418,7 +418,7 @@ export class Wallet extends React.Component {
               <RefreshControl
                 style={{position: 'absolute'}}
                 refreshing={false}
-                onRefresh={() => this.props.apiRefresh(urls.profile)}
+                onRefresh={() => this.props.dispatch(apiRefresh(urls.profile))}
               />
             }>
             {amounts.map((cashRow, index) => this.renderCard(cashRow, index))}
@@ -438,7 +438,7 @@ export class Wallet extends React.Component {
             <RefreshControl
               style={{position: 'absolute'}}
               refreshing={false}
-              onRefresh={() => this.props.apiRefresh(urls.profile)}
+              onRefresh={() => this.props.dispatch(apiRefresh(urls.profile))}
             />
           }>
           {amounts.map((cashRow, index) => this.renderCard(cashRow, index))}
@@ -448,8 +448,95 @@ export class Wallet extends React.Component {
     }
   }
 
+  SignOut () {
+    post('get-expo-token', this.props.deviceToken)
+      .then((response) => response.json())
+      .then((json) => {
+        if (json.error || json.invalid) {
+          const text = {'text': 'Unsuccessful get expo token'};
+          post('log-info', this.props.deviceToken, text)
+            .then((response) => response.json())
+            .then((responseJson) => {
+            })
+            .catch(() => {
+              console.log('log error');
+            });
+        }
+        const text = {'text': 'successful get expo token'};
+        post('log-info', this.props.deviceToken, text)
+          .then((response) => response.json())
+          .then((responseJson) => {
+          })
+          .catch(() => {
+            console.log('log error');
+          });
+        AsyncStorage.setItem('expoToken', json.expo_token).then(() => {
+          this.props.dispatch(setExpoToken(json.expo_token));
+        });
+      })
+      .catch(() => {
+        const text = {'text': 'Call failed: get expo token'};
+        post('log-info', this.props.deviceToken, text)
+          .then((response) => response.json())
+          .then((responseJson) => {
+          })
+          .catch(() => {
+            console.log('log error');
+          });
+        Alert.alert('Error trying to get token!');
+      });
+    post('delete-device-tokens', this.props.deviceToken)
+      .then((response) => response.json())
+      .then((json) => {
+        if (json.error || json.invalid) {
+          const text = {'text': 'Unsuccessful delete expo token'};
+          post('log-info', this.props.deviceToken, text)
+            .then((response) => response.json())
+            .then((responseJson) => {
+            })
+            .catch(() => {
+              console.log('log error');
+            });
+        }
+        const text = {'text': 'successful delete device token'};
+        post('log-info', this.props.deviceToken, text)
+          .then((response) => response.json())
+          .then((responseJson) => {
+          })
+          .catch(() => {
+            console.log('log error');
+          });
+      })
+      .catch(() => {
+        const text = {'text': 'Call failed: delete expo token'};
+        post('log-info', this.props.deviceToken, text)
+          .then((response) => response.json())
+          .then((responseJson) => {
+          })
+          .catch(() => {
+            console.log('log error');
+          });
+        Alert.alert('Error trying to sign out!');
+      });
+    this.props.dispatch(apiErase());
+    device = makeid(32);
+    AsyncStorage.setItem('deviceToken', device).then(() => {
+      setTimeout(() => {
+        const alertText = 'You have been successfully signed out.';
+        Alert.alert('Done!', alertText);
+        try {
+          AsyncStorage.setItem('isCustomer', 'false').then((response) => {
+            this.props.dispatch(setIsCustomer('false'));
+            this.props.dispatch(setDeviceToken(device));
+          });
+        } catch (error) {
+        }
+      }, 500);
+    });
+  }
+
   showAddAccountRecoveryDialog () {
-    const {navigation, amounts, uids, checkedUidPrompt} = this.props;
+    const {navigation, amounts, uids} = this.props;
     if (uids.length > 0 || amounts.length === 0) {
       return;
     }
@@ -464,13 +551,13 @@ export class Wallet extends React.Component {
       {
         text: 'Close',
         keyboardShouldPersistTaps: 'handled',
-        onPress: () => checkedUidPrompt()
+        onPress: () => this.dispach(checkedUidPrompt())
       },
       {
         text: 'Add',
         keyboardShouldPersistTaps: 'handled',
         onPress: () => {
-          checkedUidPrompt();
+          this.dispach(checkedUidPrompt());
           navigation.navigate('Recovery');
         }
       }
@@ -480,6 +567,7 @@ export class Wallet extends React.Component {
 
   render () {
     cash = {};
+    rewards = {};
     if (this.props.amounts) {
       this.props.amounts.forEach(function (item) {
         if (item) {
@@ -516,11 +604,15 @@ export class Wallet extends React.Component {
           this.setState({
             loaded: true
           });
-        }, 5000);
+        }, 9000);
       }
       if (this.state.loaded) {
+        const buttons = [
+          {text: 'OK', onPress: null, style: 'cancel'},
+          {text: 'Sign Out', onPress: () => this.SignOut()}
+        ];
         Alert.alert('Error', `Unable to get profile information. Please check internet ` +
-        `connection and try again.`);
+        `connection and try again.`, buttons);
       }
       return <Spinner />;
     }
@@ -737,7 +829,7 @@ export class Wallet extends React.Component {
               {'Learn More'}
             </Text>
             <Icones
-              style={{paddingRight: 8}}
+              style={{paddingLeft: 8}}
               name="arrow-right"
               color={Theme.darkBlue}
               size={width < 350 ? 16 : 18 && width > 600 ? 24 : 18} />
@@ -758,7 +850,7 @@ export class Wallet extends React.Component {
             fontSize: width < 350 && Platform.OS === 'ios' ? 16 : 18 &&
             width < 350 && Platform.OS === 'android' ? 16 : 18
           }}>
-          Ferly Cash
+            Ferly Cash
           </Text>
         </View>
         <ScrollView
@@ -841,7 +933,7 @@ export class Wallet extends React.Component {
               backgroundColor: 'white',
               color: Theme.darkBlue
             }}>
-            Merchant Balances
+              Merchant Balances
             </Text>
           </Animated.View>
         </TestElement>
@@ -870,7 +962,7 @@ export class Wallet extends React.Component {
               color={Theme.darkBlue}
               size={width < 350 ? 16 : 18 && width > 600 ? 24 : 18} />
             <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
-                Wallet
+              Wallet
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -888,7 +980,7 @@ export class Wallet extends React.Component {
               color={Theme.darkBlue}
               size={width < 350 ? 16 : 18 && width > 600 ? 24 : 18} />
             <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
-                Shop
+              Shop
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -906,7 +998,7 @@ export class Wallet extends React.Component {
               color={Theme.darkBlue}
               size={width < 350 ? 16 : 18 && width > 600 ? 24 : 18} />
             <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
-                History
+              History
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -924,7 +1016,7 @@ export class Wallet extends React.Component {
               color={Theme.darkBlue}
               size={width < 350 ? 16 : 18 && width > 600 ? 24 : 18} />
             <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
-                Menu
+              Menu
             </Text>
           </TouchableOpacity>
         </TestElement>
@@ -1030,14 +1122,26 @@ Wallet.propTypes = {
   updateDownloaded: PropTypes.bool.isRequired,
   deviceToken: PropTypes.string,
   amounts: PropTypes.array,
-  apiRefresh: PropTypes.func.isRequired,
-  apiRequire: PropTypes.func.isRequired,
+  apiRefresh: PropTypes.func,
+  apiRequire: PropTypes.func,
   checkUidPrompt: PropTypes.bool,
-  checkedUidPrompt: PropTypes.func.isRequired,
+  checkedUidPrompt: PropTypes.func,
   firstName: PropTypes.string,
+  dispatch: PropTypes.func.isRequired,
   navigation: PropTypes.object.isRequired,
   uids: PropTypes.array
 };
+
+let device = makeid(32);
+function makeid (length) {
+  var result = '';
+  var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var charactersLength = characters.length;
+  for (var i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
 
 function mapStateToProps (state) {
   const apiStore = state.api.apiStore;
@@ -1085,10 +1189,4 @@ function mapStateToProps (state) {
   };
 }
 
-const mapDispatchToProps = {
-  apiRefresh,
-  apiRequire,
-  checkedUidPrompt
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Wallet);
+export default connect(mapStateToProps)(Wallet);

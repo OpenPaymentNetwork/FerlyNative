@@ -74,7 +74,7 @@ export class History extends React.Component {
   }
 
   onChangeText (text) {
-    this.setState({searchText: text.toLowerCase()});
+    this.setState({searchText: text});
   }
 
   changeToCompleted () {
@@ -111,7 +111,7 @@ export class History extends React.Component {
       fullHistory.push(item);
       const b = item.timestamp.split(/\D+/);
       const date = new Date(Date.UTC(b[0], --b[1], b[2], b[3], b[4], b[5]));
-      const dateDisplay = formatDate(date, 'MMM D');
+      const dateDisplay = formatDate(date, 'MMMM D');
       let typeTitle = '';
       if (item.transfer_type === 'pending') {
         typeTitle = 'Pending Gift';
@@ -135,9 +135,9 @@ export class History extends React.Component {
         }
       }
       if (
-        dateDisplay.toLowerCase().includes(this.state.searchText) ||
-        typeTitle.toLowerCase().includes(this.state.searchText) ||
-        item.amount.toLowerCase().includes(this.state.searchText)) {
+        dateDisplay.toLowerCase().includes(this.state.searchText.toLowerCase()) ||
+        typeTitle.toLowerCase().includes(this.state.searchText.toLowerCase()) ||
+        item.amount.toLowerCase().includes(this.state.searchText.toLowerCase())) {
         if (item.transfer_type === 'pending') {
           pendList.push(item);
         } else {
@@ -187,15 +187,16 @@ export class History extends React.Component {
               </Text>
             </View>
             <FlatList
+              disableVirtualization={true}
               keyboardShouldPersistTaps='handled'
               onRefresh={() => this.props.apiRefresh(urls.history)}
               refreshing={false}
               ListEmptyComponent={<Text style={{padding: 15}}>No transactions.</Text>}
-              initialNumToRender={10}
+              initialNumToRender={20}
               getItemLayout={(data, index) => (
                 {length: 90, offset: index * 90, index})}
               onEndReached={(info) => this.loadMore()}
-              onEndReachedThreshold={8}
+              onEndReachedThreshold={5}
               keyExtractor={(entry) => entry.timestamp}
               data={othList}
               renderItem={
@@ -246,15 +247,16 @@ export class History extends React.Component {
               </Text>
             </View>
             <FlatList
+              disableVirtualization={true}
               keyboardShouldPersistTaps='handled'
               onRefresh={() => this.props.apiRefresh(urls.history)}
               refreshing={false}
               ListEmptyComponent={<Text style={{padding: 15}}>No pending transactions.</Text>}
-              initialNumToRender={10}
+              initialNumToRender={20}
               getItemLayout={(data, index) => (
                 {length: 90, offset: index * 90, index})}
               onEndReached={(info) => this.loadMore()}
-              onEndReachedThreshold={8}
+              onEndReachedThreshold={5}
               keyExtractor={(entry) => entry.timestamp}
               data={pendList}
               renderItem={
@@ -267,15 +269,16 @@ export class History extends React.Component {
         list = (
           <View style={{flex: 1}}>
             <FlatList
+              disableVirtualization={true}
               keyboardShouldPersistTaps='handled'
               onRefresh={() => this.props.apiRefresh(urls.history)}
               refreshing={false}
               ListEmptyComponent={<Text style={{padding: 15}}>No pending transactions.</Text>}
-              initialNumToRender={10}
+              initialNumToRender={20}
               getItemLayout={(data, index) => (
                 {length: 90, offset: index * 90, index})}
               onEndReached={(info) => this.loadMore()}
-              onEndReachedThreshold={8}
+              onEndReachedThreshold={5}
               keyExtractor={(entry) => entry.timestamp}
               data={pendList}
               renderItem={

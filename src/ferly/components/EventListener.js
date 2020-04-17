@@ -57,6 +57,18 @@ class EventListener extends React.Component {
     if (notification.data && notification.data.type === 'redemption_error') {
       Alert.alert('Oops!', 'An attempt to use your Ferly Card was unsuccessful.');
     }
+    if (notification.data && notification.data.type === 'add') {
+      title = notification.data.Titles[0];
+      title2 = notification.data.Titles[1];
+      amount = notification.data.amounts[0];
+      reward = notification.data.amounts[1];
+      if (!reward) {
+        Alert.alert('Added!', `You added $${amount} of ${title} to your wallet.`);
+      } else {
+        Alert.alert('Added!', `You added $${amount} of ${title} to your wallet and earned ` +
+        `$${reward} ${title2}.`);
+      }
+    }
     this.props.apiRefresh(urls.profile);
     this.props.apiRefresh(urls.history);
   };
@@ -103,6 +115,8 @@ class EventListener extends React.Component {
   }
 }
 
+let reward = '';
+let title2 = '';
 let message = '';
 let amount = '';
 let title = '';

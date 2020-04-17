@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Theme from 'ferly/utils/theme';
 import TestElement from 'ferly/components/TestElement';
+import Icons from 'react-native-vector-icons/EvilIcons';
 import Icon from 'react-native-vector-icons/Feather';
 import Ico from 'react-native-vector-icons/MaterialIcons';
 import Spinner from 'ferly/components/Spinner';
@@ -37,34 +38,44 @@ export class FerlyValue extends React.Component {
 
   renderRow (key, column1, column2, column3, design) {
     let titleVerb = '';
+    let symbol = '';
     if (design.transfer_type === 'trade') {
       if (design.trade_Designs_Received[1] === 'Ferly Rewards') {
         titleVerb = 'Reward';
+        symbol = '+';
       } else {
         titleVerb = 'Purchase';
+        symbol = '';
       }
     }
     switch (design.transfer_type) {
       case 'add':
         titleVerb = 'Add';
+        symbol = '+';
         break;
       case 'send':
         titleVerb = 'Send Gift';
+        symbol = '-';
         break;
       case 'pending':
         titleVerb = 'Pending Gift';
+        symbol = '';
         break;
       case 'canceled':
         titleVerb = 'Canceled Gift';
+        symbol = '';
         break;
       case 'receive':
         titleVerb = 'Receive Gift';
+        symbol = '+';
         break;
       case 'redeem':
         titleVerb = 'Spend';
+        symbol = '-';
         break;
       case 'purchase':
         titleVerb = 'Add';
+        symbol = '+';
         break;
     }
     return (
@@ -100,13 +111,21 @@ export class FerlyValue extends React.Component {
           borderColor: 'white',
           justifyContent: 'flex-end',
           alignItems: 'flex-end',
+          flexDirection: 'row',
           width: width / 3,
           paddingRight: 30
         }}>
+          {symbol === ''
+            ? <Icons
+              name="refresh"
+              color={Theme.darkBlue}
+              size={width < 330 ? 20 : 22 && width > 600 ? 28 : 22} />
+            : null
+          }
           <Text style={{
             color: Theme.darkBlue, fontSize: width > 600 ? 18 : 14
           }}>
-            {column3}
+            {symbol}{column3}
           </Text>
         </View>
       </TouchableOpacity>
@@ -141,7 +160,8 @@ export class FerlyValue extends React.Component {
           <Text style={{
             color: Theme.darkBlue,
             fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
-            paddingTop: 10
+            paddingTop: 10,
+            paddingLeft: width < 350 ? 0 : 25
           }}>
             {column3}
           </Text>
@@ -266,11 +286,13 @@ export class FerlyValue extends React.Component {
     });
     history.forEach(function (item) {
       if (item && item.design) {
-        if (item.design.title === 'Ferly Cash' || item.transfer_type === 'add') {
+        if (item.design.title === 'Ferly Cash') {
           cashHist.push(item);
         } else if (item.design.title === 'Ferly Rewards') {
           rewardsHist.push(item);
         }
+      } else if (item.transfer_type === 'add') {
+        cashHist.push(item);
       }
     });
 
@@ -358,9 +380,10 @@ export class FerlyValue extends React.Component {
           index,
           dateDisplay,
           `${reward === 'Ferly Rewards' && cash === 'Ferly Cash'
-            ? 'Add' : this.getCashTitle(cashHistory.transfer_type).cashTitle}`,
-          `${reward === 'Ferly Rewards' && cash !== 'Ferly Cash'
-            ? '' : '$'}${reward === 'Ferly Rewards' && cash !== 'Ferly Cash' ? formatted : cashHistory.amount}`,
+            ? 'Reward' : this.getCashTitle(cashHistory.transfer_type).cashTitle}`,
+          `${reward === 'Ferly Rewards' && cash === 'Ferly Cash'
+            ? '' : '$'}${reward === 'Ferly Rewards' && cash === 'Ferly Cash'
+            ? formatted : cashHistory.amount}`,
           cashHistory
         );
       }
@@ -381,7 +404,8 @@ export class FerlyValue extends React.Component {
           `${reward === 'Ferly Rewards' && cash === 'Ferly Cash'
             ? 'Reward' : this.getCashTitle(rewardsHistoy.transfer_type).cashTitle}`,
           `${reward === 'Ferly Rewards' && cash !== 'Ferly Cash'
-            ? '' : '$'}${reward === 'Ferly Rewards' && cash !== 'Ferly Cash' ? formatted : rewardsHistoy.amount}`,
+            ? '' : '$'}${reward === 'Ferly Rewards' && cash !== 'Ferly Cash'
+            ? formatted : rewardsHistoy.amount}`,
           rewardsHistoy
         );
       }
@@ -418,7 +442,7 @@ export class FerlyValue extends React.Component {
           }}>
             {!cash ? '' : cash.title}
           </Text>
-          <Text style={styles.amount}>${!cash ? '' : cash.amount}</Text>
+          <Text style={styles.amount}>${!cash ? '0.00' : cash.amount}</Text>
           <Text style={{
             fontSize: width < 330 ? 14 : 16 && width > 600 ? 18 : 16,
             marginBottom: 10,
@@ -426,64 +450,96 @@ export class FerlyValue extends React.Component {
           }}>
             {`+ Rewards: ${!rewards ? '' : rewards.amount}`}
           </Text>
-          <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-            <View style={{marginBottom: 20, marginRight: 10}}>
-              <TestElement
-                parent={TouchableOpacity}
-                label='test-id-card-page'
-                style={{
-                  flexDirection: 'row',
-                  width: width / 4,
-                  backgroundColor: Theme.lightBlue,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderRadius: 5,
-                  height: 30
-                }}
-                onPress={() => this.props.navigation.navigate('Recipient', cash)}>
-                <Ico
-                  style={{paddingRight: 8}}
-                  name="card-giftcard"
-                  color={Theme.darkBlue}
-                  size={width < 350 ? 18 : 20 && width > 600 ? 26 : 20} />
-                <Text style={{
-                  fontSize: width < 350 ? 14 : 16 && width > 600 ? 18 : 16,
-                  fontWeight: 'bold',
-                  color: Theme.darkBlue
-                }}>
-                  {`Give`}
-                </Text>
-              </TestElement>
+          {!cash
+            ? <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+              <View style={{marginBottom: 20, marginRight: 10}}>
+                <TestElement
+                  parent={TouchableOpacity}
+                  label='test-id-card-page'
+                  style={{
+                    flexDirection: 'row',
+                    width: width / 3,
+                    backgroundColor: Theme.lightBlue,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderRadius: 5,
+                    height: 30
+                  }}
+                  onPress={() => this.props.navigation.navigate('Recipient', cash)}>
+                  <Text style={{
+                    fontSize: width < 350 ? 14 : 16 && width > 600 ? 18 : 16,
+                    fontWeight: 'bold',
+                    color: Theme.darkBlue
+                  }}>
+                    {`Learn More`}
+                  </Text>
+                  <Icon
+                    style={{paddingLeft: 8}}
+                    name="arrow-right"
+                    color={Theme.darkBlue}
+                    size={width < 350 ? 18 : 20 && width > 600 ? 26 : 20} />
+                </TestElement>
+              </View>
             </View>
-            <View style={{marginBottom: width < 350 ? 20 : 20}}>
-              <TestElement
-                parent={TouchableOpacity}
-                label='test-id-card-page'
-                style={{
-                  flexDirection: 'row',
-                  width: width / 4,
-                  backgroundColor: Theme.lightBlue,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderRadius: 5,
-                  height: 30
-                }}
-                onPress={() => this.props.navigation.navigate('LoadingInstructions')}>
-                <Icon
-                  style={{paddingRight: 8}}
-                  name="plus-circle"
-                  color={Theme.darkBlue}
-                  size={width < 350 ? 16 : 18 && width > 600 ? 24 : 18} />
-                <Text style={{
-                  fontSize: width < 350 ? 14 : 16 && width > 600 ? 18 : 16,
-                  fontWeight: 'bold',
-                  color: Theme.darkBlue
-                }}>
-                  {`Add`}
-                </Text>
-              </TestElement>
+            : <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+              <View style={{marginBottom: 20, marginRight: 10}}>
+                <TestElement
+                  parent={TouchableOpacity}
+                  label='test-id-card-page'
+                  style={{
+                    flexDirection: 'row',
+                    width: width / 4,
+                    backgroundColor: Theme.lightBlue,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderRadius: 5,
+                    height: 30
+                  }}
+                  onPress={() => this.props.navigation.navigate('Recipient', cash)}>
+                  <Ico
+                    style={{paddingRight: 8}}
+                    name="card-giftcard"
+                    color={Theme.darkBlue}
+                    size={width < 350 ? 18 : 20 && width > 600 ? 26 : 20} />
+                  <Text style={{
+                    fontSize: width < 350 ? 14 : 16 && width > 600 ? 18 : 16,
+                    fontWeight: 'bold',
+                    color: Theme.darkBlue
+                  }}>
+                    {`Give`}
+                  </Text>
+                </TestElement>
+              </View>
+              <View style={{marginBottom: width < 350 ? 20 : 20}}>
+                <TestElement
+                  parent={TouchableOpacity}
+                  label='test-id-card-page'
+                  style={{
+                    flexDirection: 'row',
+                    width: width / 4,
+                    backgroundColor: Theme.lightBlue,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderRadius: 5,
+                    height: 30
+                  }}
+                  onPress={() => this.props.navigation.navigate('LoadingInstructions')}>
+                  <Icon
+                    style={{paddingRight: 8}}
+                    name="plus-circle"
+                    color={Theme.darkBlue}
+                    size={width < 350 ? 16 : 18 && width > 600 ? 24 : 18} />
+                  <Text style={{
+                    fontSize: width < 350 ? 14 : 16 && width > 600 ? 18 : 16,
+                    fontWeight: 'bold',
+                    color: Theme.darkBlue
+                  }}>
+                    {`Add`}
+                  </Text>
+                </TestElement>
+              </View>
             </View>
-          </View>
+          }
         </View>
         <View>
           <View style={{
@@ -503,8 +559,8 @@ export class FerlyValue extends React.Component {
             <TouchableOpacity
               style={{
                 backgroundColor: Theme.lightBlue,
-                height: 25,
-                width: width / 3,
+                height: 35,
+                width: width / 4,
                 flexDirection: 'row',
                 alignSelf: 'center',
                 justifyContent: 'center',
@@ -560,9 +616,10 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   locations: {
+    color: Theme.darkBlue,
     alignSelf: 'center',
     fontWeight: 'bold',
-    fontSize: width > 600 ? 15 : 12
+    fontSize: width < 350 ? 12 : 14 && width > 600 ? 16 : 14
   },
   amount: {
     color: 'white',

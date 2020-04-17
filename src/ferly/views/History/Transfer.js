@@ -207,6 +207,7 @@ export class Transfer extends React.Component {
     const {transferDetails} = this.props;
     const {design} = transferDetails;
     let {
+      title,
       expiration,
       name,
       amount,
@@ -417,6 +418,12 @@ export class Transfer extends React.Component {
         sender = 'You';
       }
     }
+    if (title === 'add') {
+      verb = 'added';
+      symbol = '+';
+      cp = ` to your wallet`;
+      sender = 'You';
+    }
     let errorMessage = 'An attempt to use your Ferly Card was unsuccessful.';
     let errorReason = '';
     let errorFix = '';
@@ -450,13 +457,13 @@ export class Transfer extends React.Component {
         errorFix = 'You cannot get cash back from Ferly.';
         break;
       case 'no_funds':
-        errorReason = `Total amount charged was ${amount} but you held no ${designTitle} value.`;
+        errorReason = `Total amount charged was $${amount} but you held no ${designTitle} value.`;
         errorFix = `Next time buy ${designTitle} value before using you Ferly Card.`;
         break;
       case 'insufficient_funds':
-        errorReason = `The amount charged was ${amount} but you held only ${availableAmount} in ` +
+        errorReason = `The amount charged was $${amount} but you held only $${availableAmount} in ` +
         `${designTitle} value.`;
-        errorFix = `Next time tell the cashier to charge ${availableAmount} to your Ferly Card ` +
+        errorFix = `Next time tell the cashier to charge $${availableAmount} to your Ferly Card ` +
         `and use another payment method for the remaining amount.`;
         break;
       case 'reversal_original_not_found':
@@ -487,13 +494,13 @@ export class Transfer extends React.Component {
     if (message) {
       messageSection = (
         <View>
-          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 1}}>
+          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
             <Text style={styles.sectionHeader}>
               {`${messageTitle}Message`}
             </Text>
           </View>
           <Text style={{
-            fontSize: width > 600 ? 18 : 16, paddingLeft: 15, color: Theme.darkBlue, paddingTop: 10
+            fontSize: width > 600 ? 18 : 16, paddingLeft: 30, color: Theme.darkBlue, paddingTop: 10
           }}>
             {message}
           </Text>
@@ -506,14 +513,14 @@ export class Transfer extends React.Component {
       transferType === 'canceled') {
       messageSection = (
         <View style={styles.section}>
-          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 1, paddingTop: 10}}>
+          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2, paddingTop: 10}}>
             <Text style={styles.sectionHeader}>
               {`${messageTitle}Message`}
             </Text>
           </View>
           <Text style={{
             fontSize: width > 600 ? 18 : 16,
-            paddingLeft: 15,
+            paddingLeft: 30,
             color: Theme.darkBlue,
             paddingBottom: 20,
             paddingTop: 10
@@ -536,10 +543,10 @@ export class Transfer extends React.Component {
     if (reason) {
       theReason = (
         <View>
-          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 1}}>
+          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
             <Text style={styles.sectionHeader} >Error Reason</Text>
           </View>
-          <View style={{paddingLeft: 15}} >
+          <View style={{paddingLeft: 30}} >
             <Text style={[styles.sectionText, {paddingBottom: 0, fontSize: width > 600 ? 18 : 16}]}>
               {errorReason}
             </Text>
@@ -551,7 +558,7 @@ export class Transfer extends React.Component {
       );
       giftValue = (
         <View>
-          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 1}}>
+          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
             <Text style={styles.sectionHeader} >Merchant</Text>
           </View>
           <View style={{paddingLeft: 15}} >
@@ -563,7 +570,7 @@ export class Transfer extends React.Component {
       );
       cardLocationDetails = (
         <View>
-          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 1}}>
+          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
             <Text style={styles.sectionHeader} >Details</Text>
           </View>
           <View style={{paddingLeft: 15, flexDirection: 'row'}} >
@@ -601,11 +608,11 @@ export class Transfer extends React.Component {
     } else if (transferType === 'add' || transferType === 'purchase') {
       termsSection = (
         <View>
-          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 1}}>
+          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
             <Text style={styles.sectionHeader}>Rewards</Text>
           </View>
           <View style={{
-            paddingLeft: 50,
+            paddingLeft: 30,
             paddingBottom: 20,
             paddingTop: 10,
             flexDirection: 'row'
@@ -622,7 +629,7 @@ export class Transfer extends React.Component {
       );
       // paymentSection = (
       //   <View>
-      //     <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 1}}>
+      //     <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
       //       <Text style={styles.sectionHeader}>Source</Text>
       //     </View>
       //     <View style={[styles.functionRow, {paddingLeft: 15}]}>
@@ -644,10 +651,10 @@ export class Transfer extends React.Component {
       const expirationDate = formatDate(d, 'MMM D, YYYY');
       feesSection = (
         <View>
-          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 1}}>
+          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
             <Text style={styles.sectionHeader}>Expiration & Fees</Text>
           </View>
-          <View style={[styles.functionRow, {paddingLeft: 15}]}>
+          <View style={[styles.functionRow, {paddingLeft: 30}]}>
             <Text style={[styles.sectionText, {paddingTop: 10, paddingBottom: 0}]}>
               Expiration Date
             </Text>
@@ -659,7 +666,7 @@ export class Transfer extends React.Component {
               {expirationDate}
             </Text>
           </View>
-          <View style={[styles.functionRow, {paddingLeft: 15}]}>
+          <View style={[styles.functionRow, {paddingLeft: 30}]}>
             <Text style={[styles.sectionText, {paddingTop: 0, paddingBottom: 0}]}>
               Inactivity Fee
             </Text>
@@ -671,7 +678,7 @@ export class Transfer extends React.Component {
               None
             </Text>
           </View>
-          <View style={[styles.functionRow, {paddingLeft: 15}]}>
+          <View style={[styles.functionRow, {paddingLeft: 30}]}>
             <Text style={[styles.sectionText, {paddingTop: 0, paddingBottom: 20}]}>
               Service Fee
             </Text>
@@ -690,11 +697,11 @@ export class Transfer extends React.Component {
         if (merchantLoyalty) {
           termsSection = (
             <View>
-              <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 1}}>
+              <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
                 <Text style={styles.sectionHeader}>Rewards</Text>
               </View>
               <View style={{
-                paddingLeft: 50,
+                paddingLeft: 30,
                 paddingBottom: 20,
                 paddingTop: 10,
                 flexDirection: 'row'
@@ -703,7 +710,9 @@ export class Transfer extends React.Component {
                   name="heart-box"
                   color={Theme.darkBlue}
                   size={width < 330 ? 20 : 22 && width > 600 ? 24 : 22} />
-                <Text style={{color: Theme.darkBlue, paddingLeft: 10, fontSize: 14}}>
+                <Text style={{
+                  color: Theme.darkBlue, paddingLeft: 10, fontSize: width > 600 ? 20 : 16
+                }}>
                 You also earned {formatted} loyalty!
                 </Text>
               </View>
@@ -712,7 +721,7 @@ export class Transfer extends React.Component {
         }
         purchaseDetailsSection = (
           <View>
-            <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 1}}>
+            <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
               <Text style={styles.sectionHeader}>Purchase Summary</Text>
             </View>
             <View style={{paddingHorizontal: 15, paddingVertical: 15}}>
@@ -795,30 +804,34 @@ export class Transfer extends React.Component {
         );
         paymentSection = (
           <View style={{paddingBottom: 20}}>
-            <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 1}}>
-              <Text style={styles.sectionHeader}>Payment Method</Text>
-            </View>
-            {cashTitle
-              ? <View style={[styles.functionRow, {paddingLeft: 15}]}>
-                <Text style={[styles.sectionText, {paddingBottom: 0}]}>
-                  {!cashTitle ? null : cashTitle}
-                </Text>
-                <Text style={[styles.sectionText, {color: Theme.darkBlue, paddingBottom: 0}]}>
+            {!cashTitle || !rewardsTitle ? null
+              : <View>
+                <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
+                  <Text style={styles.sectionHeader}></Text>
+                </View>
+                {cashTitle
+                  ? <View style={[styles.functionRow, {paddingLeft: 30}]}>
+                    <Text style={[styles.sectionText, {paddingBottom: 0}]}>
+                      {!cashTitle ? null : cashTitle}
+                    </Text>
+                    <Text style={[styles.sectionText, {color: Theme.darkBlue, paddingBottom: 0}]}>
               ${!cashAmount ? null : cashAmount}
-                </Text>
-              </View> : null
-            }
-            {rewardsTitle
-              ? <View style={[styles.functionRow, {paddingLeft: 15}]}>
-                <Text style={[styles.sectionText, {paddingTop: 0, paddingBottom: 0}]}>
-                  {!rewardsTitle ? null : rewardsTitle}
-                </Text>
-                <Text style={[styles.sectionText, {
-                  color: Theme.darkBlue, paddingTop: 0, paddingBottom: 0
-                }]}>
+                    </Text>
+                  </View> : null
+                }
+                {rewardsTitle
+                  ? <View style={[styles.functionRow, {paddingLeft: 30}]}>
+                    <Text style={[styles.sectionText, {paddingTop: 0, paddingBottom: 0}]}>
+                      {!rewardsTitle ? null : rewardsTitle}
+                    </Text>
+                    <Text style={[styles.sectionText, {
+                      color: Theme.darkBlue, paddingTop: 0, paddingBottom: 0
+                    }]}>
               ${!rewardsAmount ? null : rewardsAmount}
-                </Text>
-              </View> : null
+                    </Text>
+                  </View> : null
+                }
+              </View>
             }
           </View>
         );
@@ -827,10 +840,10 @@ export class Transfer extends React.Component {
         const expirationDate = formatDate(d, 'MMM D, YYYY');
         feesSection = (
           <View>
-            <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 1}}>
+            <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
               <Text style={styles.sectionHeader}>Expiration & Fees</Text>
             </View>
-            <View style={[styles.functionRow, {paddingLeft: 15}]}>
+            <View style={[styles.functionRow, {paddingLeft: 30}]}>
               <Text style={[styles.sectionText, {paddingTop: 10, paddingBottom: 0}]}>
               Expiration Date
               </Text>
@@ -842,7 +855,7 @@ export class Transfer extends React.Component {
                 {expirationDate}
               </Text>
             </View>
-            <View style={[styles.functionRow, {paddingLeft: 15}]}>
+            <View style={[styles.functionRow, {paddingLeft: 30}]}>
               <Text style={[styles.sectionText, {paddingTop: 0, paddingBottom: 0}]}>
               Inactivity Fee
               </Text>
@@ -854,7 +867,7 @@ export class Transfer extends React.Component {
               None
               </Text>
             </View>
-            <View style={[styles.functionRow, {paddingLeft: 15}]}>
+            <View style={[styles.functionRow, {paddingLeft: 30}]}>
               <Text style={[styles.sectionText, {paddingTop: 0, paddingBottom: 20}]}>
               Service Fee
               </Text>
@@ -871,16 +884,17 @@ export class Transfer extends React.Component {
       } else if (verb === 'earned') {
         termsSection = (
           <View>
-            <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 1}}>
+            <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
               <Text style={styles.sectionHeader}>Reward Event</Text>
             </View>
             <View style={{
-              paddingHorizontal: 20,
+              paddingRight: 20,
+              paddingLeft: 30,
               paddingBottom: 20,
               paddingTop: 10,
               flexDirection: 'row'
             }}>
-              <Text style={{color: Theme.darkBlue, paddingLeft: 10, fontSize: 18}}>
+              <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 20 : 16}}>
                 You earned rewards by adding ${amount} of Ferly cash to your wallet.
               </Text>
             </View>
@@ -891,10 +905,10 @@ export class Transfer extends React.Component {
         const expirationDate = formatDate(d, 'MMM D, YYYY');
         feesSection = (
           <View>
-            <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 1}}>
+            <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
               <Text style={styles.sectionHeader}>Expiration & Fees</Text>
             </View>
-            <View style={[styles.functionRow, {paddingLeft: 15}]}>
+            <View style={[styles.functionRow, {paddingLeft: 30}]}>
               <Text style={[styles.sectionText, {paddingTop: 10, paddingBottom: 0}]}>
                 Expiration Date
               </Text>
@@ -906,7 +920,7 @@ export class Transfer extends React.Component {
                 {expirationDate}
               </Text>
             </View>
-            <View style={[styles.functionRow, {paddingLeft: 15}]}>
+            <View style={[styles.functionRow, {paddingLeft: 30}]}>
               <Text style={[styles.sectionText, {paddingTop: 0, paddingBottom: 0}]}>
                 Inactivity Fee
               </Text>
@@ -918,7 +932,7 @@ export class Transfer extends React.Component {
                 None
               </Text>
             </View>
-            <View style={[styles.functionRow, {paddingLeft: 15}]}>
+            <View style={[styles.functionRow, {paddingLeft: 30}]}>
               <Text style={[styles.sectionText, {paddingTop: 0, paddingBottom: 20}]}>
                 Service Fee
               </Text>
@@ -936,10 +950,10 @@ export class Transfer extends React.Component {
     } else if (transferType === 'send') {
       giftValue = (
         <View>
-          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 1}}>
+          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
             <Text style={styles.sectionHeader} >Gift Value</Text>
           </View>
-          <View style={{paddingLeft: 15}} >
+          <View style={{paddingLeft: 30}} >
             <Text style={[styles.sectionText, {fontSize: width > 600 ? 18 : 16}]} >
               {designTitle}
             </Text>
@@ -948,13 +962,13 @@ export class Transfer extends React.Component {
       );
       recipient = (
         <View>
-          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 1}}>
+          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
             <Text style={styles.sectionHeader} >
               Recipient
             </Text>
           </View>
           <View style={{
-            paddingLeft: 15,
+            paddingLeft: 30,
             flexDirection: 'row',
             paddingBottom: 20,
             paddingTop: 10
@@ -974,10 +988,10 @@ export class Transfer extends React.Component {
     } else if (transferType === 'canceled') {
       giftValue = (
         <View>
-          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 1}}>
+          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
             <Text style={styles.sectionHeader} >Gift Value</Text>
           </View>
-          <View style={{paddingLeft: 15}} >
+          <View style={{paddingLeft: 30}} >
             <Text style={[styles.sectionText, {fontSize: width > 600 ? 18 : 16}]} >
               {designTitle}
             </Text>
@@ -986,12 +1000,12 @@ export class Transfer extends React.Component {
       );
       recipient = (
         <View>
-          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 1}}>
+          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
             <Text style={styles.sectionHeader} >
               Recipient
             </Text>
           </View>
-          <View style={{paddingLeft: 15, flexDirection: 'column'}} >
+          <View style={{paddingLeft: 30, flexDirection: 'column'}} >
             {counterPartyAvatar}
             <Text style={{
               alignSelf: 'flex-start',
@@ -1014,10 +1028,10 @@ export class Transfer extends React.Component {
     } else if (transferType === 'expired') {
       giftValue = (
         <View>
-          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 1}}>
+          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
             <Text style={styles.sectionHeader} >Gift Value</Text>
           </View>
-          <View style={{paddingLeft: 15}} >
+          <View style={{paddingLeft: 30}} >
             <Text style={[styles.sectionText, {fontSize: width > 600 ? 18 : 16}]} >
               {designTitle}
             </Text>
@@ -1026,12 +1040,12 @@ export class Transfer extends React.Component {
       );
       recipient = (
         <View>
-          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 1}}>
+          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
             <Text style={styles.sectionHeader} >
               Recipient
             </Text>
           </View>
-          <View style={{paddingLeft: 15, flexDirection: 'column'}} >
+          <View style={{paddingLeft: 30, flexDirection: 'column'}} >
             {counterPartyAvatar}
             <Text style={{
               alignSelf: 'flex-start',
@@ -1054,10 +1068,10 @@ export class Transfer extends React.Component {
     } else if (transferType === 'pending') {
       giftValue = (
         <View>
-          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 1}}>
+          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
             <Text style={styles.sectionHeader} >Gift Value</Text>
           </View>
-          <View style={{paddingLeft: 15}} >
+          <View style={{paddingLeft: 30}} >
             <Text style={[styles.sectionText, {fontSize: width > 600 ? 18 : 16}]} >
               {designTitle}
             </Text>
@@ -1066,12 +1080,12 @@ export class Transfer extends React.Component {
       );
       recipient = (
         <View>
-          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 1}}>
+          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
             <Text style={styles.sectionHeader} >
               Recipient
             </Text>
           </View>
-          <View style={{paddingLeft: 15, flexDirection: 'column', paddingBottom: 10}} >
+          <View style={{paddingLeft: 30, flexDirection: 'column', paddingBottom: 10}} >
             {counterPartyAvatar}
             <Text style={{
               alignSelf: 'flex-start',
@@ -1096,12 +1110,12 @@ export class Transfer extends React.Component {
       const giftExpiration = formatDate(giftDate, 'MMM D, YYYY');
       status = (
         <View>
-          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 1}}>
+          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
             <Text style={styles.sectionHeader} >
               Status
             </Text>
           </View>
-          <View style={{paddingLeft: 15, flexDirection: 'column'}} >
+          <View style={{paddingLeft: 30, flexDirection: 'column'}} >
             <Text style={{
               paddingHorizontal: 10,
               color: Theme.darkBlue,
@@ -1143,10 +1157,10 @@ export class Transfer extends React.Component {
     } else if (transferType === 'receive') {
       giftValue = (
         <View>
-          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 1}}>
+          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
             <Text style={styles.sectionHeader} >Gift Value</Text>
           </View>
-          <View style={{paddingLeft: 15}} >
+          <View style={{paddingLeft: 30}} >
             <Text style={[styles.sectionText, {fontSize: width > 600 ? 18 : 16}]} >
               {designTitle}
             </Text>
@@ -1155,10 +1169,10 @@ export class Transfer extends React.Component {
       );
       received = (
         <View>
-          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 1}}>
+          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
             <Text style={styles.sectionHeader} >Received From</Text>
           </View>
-          <View style={{paddingLeft: 15, flexDirection: 'row', paddingTop: 10, paddingBottom: 20}} >
+          <View style={{paddingLeft: 30, flexDirection: 'row', paddingTop: 10, paddingBottom: 20}} >
             {counterPartyAvatar}
             <Text style={{
               alignSelf: 'center',
@@ -1176,16 +1190,16 @@ export class Transfer extends React.Component {
       const expirationDate = formatDate(d, 'MMM D, YYYY');
       feesSection = (
         <View>
-          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 1}}>
+          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
             <Text style={styles.sectionHeader}>Expiration & Fees</Text>
           </View>
-          <View style={[styles.functionRow, {paddingLeft: 15}]}>
+          <View style={[styles.functionRow, {paddingLeft: 30}]}>
             <Text style={[styles.sectionText, {paddingBottom: 0}]}>Expiration Date</Text>
             <Text style={[styles.sectionText, {color: Theme.darkBlue, paddingBottom: 0}]}>
               {expirationDate}
             </Text>
           </View>
-          <View style={[styles.functionRow, {paddingLeft: 15}]}>
+          <View style={[styles.functionRow, {paddingLeft: 30}]}>
             <Text style={[styles.sectionText, {paddingTop: 5, paddingBottom: 0}]}>
               Inactivity Fee
             </Text>
@@ -1197,7 +1211,7 @@ export class Transfer extends React.Component {
               None
             </Text>
           </View>
-          <View style={[styles.functionRow, {paddingLeft: 15}]}>
+          <View style={[styles.functionRow, {paddingLeft: 30}]}>
             <Text style={[styles.sectionText, {paddingTop: 5}]}>Service Fee</Text>
             <Text style={[styles.sectionText, {color: Theme.darkBlue, paddingTop: 5}]}>
               None
@@ -1208,7 +1222,7 @@ export class Transfer extends React.Component {
     } else if (transferType === 'redeem') {
       giftValue = (
         <View>
-          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 1}}>
+          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
             <Text style={styles.sectionHeader} >Merchant</Text>
           </View>
           <View style={{paddingLeft: 15}} >
@@ -1220,7 +1234,7 @@ export class Transfer extends React.Component {
       );
       cardLocationDetails = (
         <View>
-          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 1}}>
+          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
             <Text style={styles.sectionHeader} >Details</Text>
           </View>
           <View style={{paddingLeft: 15, flexDirection: 'row'}} >

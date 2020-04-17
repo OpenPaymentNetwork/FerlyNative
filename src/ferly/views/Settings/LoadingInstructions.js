@@ -1,10 +1,11 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import Theme from 'ferly/utils/theme';
+import Swiper from 'react-native-swiper';
 import {StackActions} from 'react-navigation';
 import {connect} from 'react-redux';
 import {post} from 'ferly/utils/fetch';
-import {View, Text, Image, StyleSheet, Dimensions, Alert} from 'react-native';
+import {View, Text, Image, StyleSheet, Dimensions, Alert, ScrollView} from 'react-native';
 import {
   DirectDeposit,
   FerlyCash,
@@ -20,65 +21,18 @@ export class LoadingInstructions extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      accountNumber: '',
-      time: 0,
-      page: 0,
-      dataSource: [
-        {
-          title: 1
-        }, {
-          title: 2
-        }, {
-          title: 3
-        }
-      ]
+      accountNumber: ''
     };
   }
 
   componentDidMount () {
-    interval = setInterval(() => {
-      this.setState({
-        page: this.state.page === this.state.dataSource.length ? 0 : this.state.page + 1,
-        time: this.state.time + 1
-      });
-    }, 5000);
-  }
-
-  componentWillUnmount () {
-    clearInterval(interval);
-  }
-
-  renderDots () {
-    const {page} = this.state;
-    let dots = [];
-    for (let i = 0; i < 4; i++) {
-      dots.push(
-        <View
-          key={i}
-          style={{
-            backgroundColor: i === page ? Theme.darkBlue : Theme.lightBlue,
-            width: i === page ? 12 : 10,
-            height: i === page ? 12 : 10,
-            borderRadius: i === page ? 6 : 4
-          }} />
-      );
-    }
-    return dots;
-  }
-
-  render () {
-    const {page} = this.state;
-    let sub1 = '';
-    let sub2 = '';
-    let sub3 = '';
-    let sub4 = '';
     post('get-ach', this.props.deviceToken)
       .then((response) => response.json())
       .then((responseJson) => {
         this.setState({accountNumber: responseJson[0].account_number});
       })
       .catch(() => {
-        Alert.alert('Error please check internet connection!');
+        Alert.alert('Error', 'Please check internet connection!');
         const resetAction = StackActions.reset({
           index: 0,
           actions: [
@@ -88,54 +42,119 @@ export class LoadingInstructions extends React.Component {
         this.props.navigation.dispatch(resetAction);
         this.props.navigation.navigate('Home');
       });
+  }
+
+  render () {
+    let sub1 = '';
+    let sub2 = '';
+    let sub3 = '';
+    let sub4 = '';
     sub1 = this.state.accountNumber.substring(0, 4);
     sub2 = this.state.accountNumber.substring(4, 8);
     sub3 = this.state.accountNumber.substring(8, 12);
     sub4 = this.state.accountNumber.substring(12, 17);
-    const images = [
-      Why,
-      DirectDeposit,
-      FerlyCash,
-      FerlyRewards
-    ];
-
-    const step = [
-      'Why do we use direct deposit?',
-      'Step 1',
-      'Step 2',
-      'Step 3'
-    ];
-
-    const descriptions = [
-      `We understand direct deposit is an extra step, BUT it reduces fraud and eliminates ` +
-      `credit card fees so we can pass the savings along to you!`,
-      'Set up direct deposit using the routing and accout number below to buy Ferly Cash.',
-      'On payday, Ferly Cash is immediately available in your wallet.',
-      'Earn 5% (yes 5%!) for all Ferly Cash purchased.'
-    ];
 
     return (
-      <View style={{flex: 1, backgroundColor: 'white'}}>
-        <View style={styles.container}>
-          <Image style={styles.image} source={images[page]} />
-          <Text style={[styles.text, {
-            fontSize: width > 600 ? 25 : 18 && width < 350 ? 16 : 18,
-            paddingVertical: width < 350 ? 10 : 15 && width > 600 ? 25 : 15,
-            fontWeight: 'bold'
-          }]}>
-            {step[page]}
-          </Text>
-          <Text style={[styles.text, {
-            height: 105,
-            fontSize: width > 600 ? 25 : 18 && width < 350 ? 16 : 18,
-            paddingBottom: width < 350 ? 10 : 15 && width > 600 ? 25 : 15
-          }]}>
-            {descriptions[page]}
-          </Text>
-          <View style={styles.dots}>
-            {this.renderDots()}
+      <ScrollView style={{flex: 1, backgroundColor: 'white'}}>
+        <Swiper
+          dot={
+            <View style={{
+              backgroundColor: Theme.lightBlue,
+              width: width < 350 ? 8 : 10,
+              height: width < 350 ? 8 : 10,
+              borderRadius: 5,
+              marginLeft: 5,
+              marginRight: 5,
+              marginTop: 3,
+              marginBottom: 3
+            }} />
+          }
+          activeDot={
+            <View style={{
+              backgroundColor: Theme.darkBlue,
+              width: width < 350 ? 10 : 12,
+              height: width < 350 ? 10 : 12,
+              borderRadius: 6,
+              marginLeft: 5,
+              marginRight: 5,
+              marginTop: 3,
+              marginBottom: 3
+            }} />
+          }
+          autoplay={true}
+          autoplayTimeout={10}
+          style={{height: width < 350 ? 300 : 400 && width > 600 ? 600 : 400}}
+        >
+          <View style={styles.container}>
+            <Image style={styles.image} source={Why} />
+            <Text style={[styles.text, {
+              fontSize: width > 600 ? 25 : 18 && width < 350 ? 16 : 18,
+              paddingVertical: width < 350 ? 10 : 15 && width > 600 ? 25 : 15,
+              fontWeight: 'bold'
+            }]}>
+              Why do we use direct deposit?
+            </Text>
+            <Text style={[styles.text, {
+              height: height < 600 && width < 350 ? 125 : 105,
+              fontSize: width > 600 ? 25 : 18 && width < 350 ? 16 : 18,
+              paddingBottom: width < 350 ? 10 : 15 && width > 600 ? 25 : 15
+            }]}>
+              {`We understand direct deposit is an extra step, BUT it reduces fraud and ` +
+              `eliminates credit card fees so we can pass the savings along to you!`}
+            </Text>
           </View>
-        </View>
+          <View style={styles.container}>
+            <Image style={styles.image} source={DirectDeposit} />
+            <Text style={[styles.text, {
+              fontSize: width > 600 ? 25 : 18 && width < 350 ? 16 : 18,
+              paddingVertical: width < 350 ? 10 : 15 && width > 600 ? 25 : 15,
+              fontWeight: 'bold'
+            }]}>
+              Step 1
+            </Text>
+            <Text style={[styles.text, {
+              height: height < 600 && width < 350 ? 125 : 105,
+              fontSize: width > 600 ? 25 : 18 && width < 350 ? 16 : 18,
+              paddingBottom: width < 350 ? 10 : 15 && width > 600 ? 25 : 15
+            }]}>
+              Set up direct deposit using the routing and accout number below to buy Ferly Cash.
+            </Text>
+          </View>
+          <View style={styles.container}>
+            <Image style={styles.image} source={FerlyCash} />
+            <Text style={[styles.text, {
+              fontSize: width > 600 ? 25 : 18 && width < 350 ? 16 : 18,
+              paddingVertical: width < 350 ? 10 : 15 && width > 600 ? 25 : 15,
+              fontWeight: 'bold'
+            }]}>
+              Step 2
+            </Text>
+            <Text style={[styles.text, {
+              height: height < 600 && width < 350 ? 125 : 105,
+              fontSize: width > 600 ? 25 : 18 && width < 350 ? 16 : 18,
+              paddingBottom: width < 350 ? 10 : 15 && width > 600 ? 25 : 15
+            }]}>
+              On payday, Ferly Cash is immediately available in your wallet.
+            </Text>
+          </View>
+          <View style={styles.container}>
+            <Image style={styles.image} source={FerlyRewards} />
+            <Text style={[styles.text, {
+              fontSize: width > 600 ? 25 : 18 && width < 350 ? 16 : 18,
+              paddingVertical: width < 350 ? 10 : 15 && width > 600 ? 25 : 15,
+              fontWeight: 'bold'
+            }]}>
+              Step 3
+            </Text>
+            <Text style={[styles.text, {
+              height: height < 600 && width < 350 ? 125 : 105,
+              fontSize: width > 600 ? 25 : 18 && width < 350 ? 16 : 18,
+              paddingBottom: width < 350 ? 10 : 15 && width > 600 ? 25 : 15
+            }]}>
+              Earn 5% (yes 5%!) for all Ferly Cash purchased.
+            </Text>
+          </View>
+        </Swiper>
         <View style={{
           borderBottomWidth: 1,
           borderBottomColor: Theme.lightBlue,
@@ -194,13 +213,12 @@ export class LoadingInstructions extends React.Component {
             {sub1 + ' - ' + sub2 + ' - ' + sub3 + ' - ' + sub4}
           </Text>
         </View>
-      </View>
+      </ScrollView>
     );
   }
 }
 
-let interval = 0;
-let {width} = Dimensions.get('window');
+let {width, height} = Dimensions.get('window');
 
 LoadingInstructions.propTypes = {
   deviceToken: PropTypes.string,
@@ -222,12 +240,6 @@ const styles = StyleSheet.create({
   text: {
     textAlign: 'center',
     color: Theme.darkBlue
-  },
-  dots: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: width > 600 ? 120 : 100 && width < 350 ? 80 : 100,
-    paddingTop: width < 350 ? 10 : 15 && width > 600 ? 25 : 15
   }
 });
 

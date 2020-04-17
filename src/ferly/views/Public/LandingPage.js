@@ -4,6 +4,7 @@ import PrimaryButton from 'ferly/components/PrimaryButton';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Theme from 'ferly/utils/theme';
+import Swiper from 'react-native-swiper';
 import {connect} from 'react-redux';
 import {Notifications} from 'expo';
 import {setInitialExpoToken} from 'ferly/store/settings';
@@ -16,22 +17,6 @@ import {
 } from 'ferly/images/index';
 
 export class LandingPage extends React.Component {
-  constructor (props) {
-    super(props);
-    this.state = {
-      time: 0,
-      page: 0,
-      // expoToken: '',
-      dataSource: [
-        {
-          title: 1
-        }, {
-          title: 2
-        }
-      ]
-    };
-  }
-
   componentDidMount () {
     this.getToken().then((response) => {
       this.props.dispatch(setInitialExpoToken(response));
@@ -39,16 +24,6 @@ export class LandingPage extends React.Component {
       .catch((error) => {
         console.log('Unable to get expo token', error);
       });
-    interval = setInterval(() => {
-      this.setState({
-        page: this.state.page === this.state.dataSource.length ? 0 : this.state.page + 1,
-        time: this.state.time + 1
-      });
-    }, 5000);
-  }
-
-  componentWillUnmount () {
-    clearInterval(interval);
   }
 
   async getToken () {
@@ -90,54 +65,82 @@ export class LandingPage extends React.Component {
     }
   }
 
-  renderDots () {
-    const {page} = this.state;
-    let dots = [];
-    for (let i = 0; i < 3; i++) {
-      dots.push(
-        <View
-          key={i}
-          style={[
-            styles.circle,
-            {backgroundColor: i === page ? Theme.lightBlue : 'white'}
-          ]} />
-      );
-    }
-    return dots;
-  }
-
   render () {
     const {navigation} = this.props;
-    const {page} = this.state;
 
     const passParams = {
       expoToken: expoToken
     };
 
-    const images = [
-      tutorialTwo,
-      tutorialSix,
-      tutorialThree
-    ];
-
-    const descriptions = [
-      'Buy gift value anytime, anywhere, perfect for that last minute gift.',
-      'Easily send gifts to friends and family, even those far away.',
-      'Have real time access to gift card balances.'
-    ];
-
     return (
-      <View style={{flex: 1, justifyContent: 'space-between', backgroundColor: Theme.darkBlue}}>
-        <View style={styles.container}>
-          <Text style={[styles.text, {fontSize: width > 600 ? 22 : 18}]}>
-            {descriptions[page]}
-          </Text>
-          <Image style={styles.image} source={images[page]} />
-          <View style={styles.dots}>
-            {this.renderDots()}
+      <View style={{flex: 1, backgroundColor: Theme.darkBlue}}>
+        <Swiper
+          dot={
+            <View style={{
+              backgroundColor: 'white',
+              width: width < 350 ? 8 : 10 && width > 600 ? 16 : 10,
+              height: width < 350 ? 8 : 10 && width > 600 ? 16 : 10,
+              borderRadius: width > 600 ? 8 : 5,
+              marginLeft: 8,
+              marginRight: 8,
+              marginTop: 3,
+              marginBottom: 3
+            }} />
+          }
+          activeDot={
+            <View style={{
+              backgroundColor: Theme.lightBlue,
+              width: width < 350 ? 10 : 12 && width > 600 ? 20 : 12,
+              height: width < 350 ? 10 : 12 && width > 600 ? 20 : 12,
+              borderRadius: width > 600 ? 10 : 6,
+              marginLeft: 8,
+              marginRight: 8,
+              marginTop: 3,
+              marginBottom: 3
+            }} />
+          }
+          autoplay={true}
+          autoplayTimeout={10}
+          style={{height: width < 350 ? 500 : 500 && width > 600 ? 400 : 500}}
+        >
+          <View style={styles.container}>
+            <View style={{paddingTop: width < 350 ? 10 : 50 && width > 600 ? 100 : 50}}>
+              <Text style={[styles.text, {
+                fontSize: width > 600 ? 30 : 20 && width < 350 ? 16 : 20
+              }]}>
+                Buy gift value anytime, anywhere, perfect for that last minute gift.
+              </Text>
+            </View>
+            <View style={{paddingTop: width < 350 ? 25 : 50 && width > 600 ? 100 : 50}}>
+              <Image style={styles.image} source={tutorialTwo} />
+            </View>
           </View>
-        </View>
-        <View style={{paddingVertical: 20}}>
+          <View style={styles.container}>
+            <View style={{paddingTop: width < 350 ? 10 : 50 && width > 600 ? 100 : 50}}>
+              <Text style={[styles.text, {
+                fontSize: width > 600 ? 30 : 20 && width < 350 ? 16 : 20
+              }]}>
+                Easily send gifts to friends and family, even those far away.
+              </Text>
+            </View>
+            <View style={{paddingTop: width < 350 ? 25 : 50 && width > 600 ? 100 : 50}}>
+              <Image style={styles.image} source={tutorialSix} />
+            </View>
+          </View>
+          <View style={styles.container}>
+            <View style={{paddingTop: width < 350 ? 10 : 50 && width > 600 ? 100 : 50}}>
+              <Text style={[styles.text, {
+                fontSize: width > 600 ? 30 : 20 && width < 350 ? 16 : 20
+              }]}>
+                Have real time access to gift card balances.
+              </Text>
+            </View>
+            <View style={{paddingTop: width < 350 ? 25 : 50 && width > 600 ? 100 : 50}}>
+              <Image style={styles.image} source={tutorialThree} />
+            </View>
+          </View>
+        </Swiper>
+        <View style={{paddingVertical: 5}}>
           <PrimaryButton
             title="Sign Up"
             color={Theme.lightBlue}
@@ -148,7 +151,9 @@ export class LandingPage extends React.Component {
             </Text>
             <TouchableOpacity onPress={() => navigation.navigate('RecoveryChannel', passParams)}>
               <Text style={{
-                color: Theme.lightBlue, fontSize: width > 600 ? 22 : 18, paddingLeft: 10
+                color: Theme.lightBlue,
+                fontSize: width > 600 ? 22 : 18 && width < 350 ? 16 : 18,
+                paddingLeft: 10
               }}>
                 Sign In
               </Text>
@@ -161,7 +166,6 @@ export class LandingPage extends React.Component {
   }
 }
 
-let interval = 0;
 let {width} = Dimensions.get('window');
 let expoToken = '';
 
@@ -175,12 +179,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     paddingTop: 40,
-    paddingHorizontal: 20,
-    justifyContent: 'space-around'
+    paddingHorizontal: 20
   },
-  image: {height: width > 600 ? 350 : 220, resizeMode: 'contain'},
+  image: {height: width > 600 ? 500 : 300 && width < 350 ? 180 : 300, resizeMode: 'contain'},
   text: {textAlign: 'center', color: 'white'},
-  dots: {flexDirection: 'row', justifyContent: 'space-between', width: width > 600 ? 140 : 120},
   circle: {width: 12, height: 12, borderRadius: 6}
 });
 

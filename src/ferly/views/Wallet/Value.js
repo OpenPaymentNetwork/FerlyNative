@@ -33,30 +33,39 @@ export class Value extends React.Component {
 
   renderRow (key, column1, column2, column3, design) {
     let titleVerb;
+    let symbol;
     switch (design.transfer_type) {
       case 'add':
         titleVerb = 'Add';
+        symbol = '+';
         break;
       case 'send':
         titleVerb = 'Send Gift';
+        symbol = '-';
         break;
       case 'pending':
         titleVerb = 'Pending Gift';
+        symbol = '';
         break;
       case 'canceled':
         titleVerb = 'Canceled Gift';
+        symbol = '';
         break;
       case 'receive':
         titleVerb = 'Receive Gift';
+        symbol = '+';
         break;
       case 'redeem':
         titleVerb = 'Spend';
+        symbol = '-';
         break;
       case 'trade':
         titleVerb = 'Purchase';
+        symbol = '';
         break;
       case 'purchase':
         titleVerb = 'Add';
+        symbol = '+';
         break;
     }
     return (
@@ -98,7 +107,7 @@ export class Value extends React.Component {
           <Text style={{
             color: Theme.darkBlue, fontSize: width > 600 ? 18 : 14
           }}>
-            {column3}
+            {symbol}{column3}
           </Text>
         </View>
       </TouchableOpacity>
@@ -133,7 +142,8 @@ export class Value extends React.Component {
           <Text style={{
             color: Theme.darkBlue,
             fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
-            paddingTop: 10
+            paddingTop: 10,
+            paddingLeft: width < 350 ? 0 : 25
           }}>
             {column3}
           </Text>
@@ -388,8 +398,6 @@ export class Value extends React.Component {
       }
     });
 
-    console.log('here', expiring);
-
     const loyaltyExpiringInfo = !loyaltyExpiration ? null : loyaltyExpiration.map((expiringAmounts, index) => {
       const b = expiringAmounts.expire_time.split(/\D+/);
       const date = new Date(Date.UTC(b[0], --b[1], b[2], b[3], b[4], b[5]));
@@ -509,8 +517,8 @@ export class Value extends React.Component {
           <TouchableOpacity
             style={{
               backgroundColor: Theme.lightBlue,
-              height: 25,
-              width: width / 3,
+              height: 32,
+              width: width / 4,
               flexDirection: 'row',
               alignSelf: 'center',
               justifyContent: 'center',
@@ -554,7 +562,7 @@ export class Value extends React.Component {
           <TouchableOpacity
             style={{
               backgroundColor: Theme.lightBlue,
-              height: 25,
+              height: 32,
               width: width / 3,
               flexDirection: 'row',
               alignItems: 'center',
@@ -591,7 +599,7 @@ const styles = StyleSheet.create({
     color: Theme.darkBlue,
     alignSelf: 'center',
     fontWeight: 'bold',
-    fontSize: width > 600 ? 15 : 12
+    fontSize: width < 350 ? 12 : 14 && width > 600 ? 16 : 14
   },
   amount: {
     color: Theme.darkBlue,
