@@ -18,7 +18,7 @@ if (__DEV__ && env.EXPO_LOCAL_SERVER) {
 } else if (releaseChannel === 'production') {
   host = 'https://ferlyapi.com/';
 } else {
-  host = 'http://ferlystaging.us-east-2.elasticbeanstalk.com/';
+  host = 'https://ferlystaging.bridge.opn.bank/';
 }
 const prefix = 'api/';
 const baseUrl = host + prefix;

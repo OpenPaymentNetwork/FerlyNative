@@ -4,7 +4,6 @@ import React from 'react';
 import Avatar from 'ferly/components/Avatar';
 import Theme from 'ferly/utils/theme';
 import Spinner from 'ferly/components/Spinner';
-import Ic from 'react-native-vector-icons/Ionicons';
 import Ico from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/EvilIcons';
 import {apiRequire, apiRefresh} from 'ferly/store/api';
@@ -207,6 +206,9 @@ export class Transfer extends React.Component {
     const {transferDetails} = this.props;
     const {design} = transferDetails;
     let {
+      odfi,
+      credits,
+      debits,
       title,
       expiration,
       name,
@@ -214,6 +216,7 @@ export class Transfer extends React.Component {
       reason,
       message,
       timestamp,
+      odfi_name: bankName,
       transfer_designs: tranferDesigns,
       trade_Designs_Received: tradeDesignsReceived,
       card_acceptor: cardAcceptor,
@@ -294,6 +297,10 @@ export class Transfer extends React.Component {
     let cp = '';
     let sender = '';
     let messageTitle = '';
+    let creditsOne = '';
+    let creditsTwo = '';
+    let debitsOne = '';
+    let debitsTwo = '';
     let symbol;
     if (name) {
       switch (transferType) {
@@ -403,6 +410,35 @@ export class Transfer extends React.Component {
           cp = ` to your wallet`;
           sender = 'You';
           break;
+      }
+    }
+    if (odfi || bankName) {
+      if (debits) {
+        debitsOne =
+          debits.slice(0, 1);
+        debitsTwo =
+          debits.slice(1, 1 + debits.length);
+        designTitle = '';
+        verb = 'sent';
+        symbol = '';
+        cp = ` account confirmation entries to you.`;
+        sender = bankName || odfi;
+      } else if (credits) {
+        creditsOne =
+          credits.slice(0, 1);
+        creditsTwo =
+          credits.slice(1, 1 + credits.length);
+        designTitle = '';
+        verb = 'sent';
+        symbol = '';
+        cp = ` account confirmation entries to you.`;
+        sender = bankName || odfi;
+      } else {
+        designTitle = '';
+        verb = 'successfully';
+        symbol = '';
+        cp = ` confirmed your wallet.`;
+        sender = bankName || odfi;
       }
     }
     if (transferType === 'trade') {
@@ -531,6 +567,8 @@ export class Transfer extends React.Component {
       );
     }
     let giftValue;
+    let achAmounts;
+    let achDescription;
     let theReason;
     let cardLocationDetails;
     let recipient;
@@ -561,7 +599,7 @@ export class Transfer extends React.Component {
           <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
             <Text style={styles.sectionHeader} >Merchant</Text>
           </View>
-          <View style={{paddingLeft: 15}} >
+          <View style={{paddingLeft: 30}} >
             <Text style={[styles.sectionText, {fontSize: width > 600 ? 18 : 16}]} >
               {!merchant ? designTitle : merchant}
             </Text>
@@ -573,7 +611,7 @@ export class Transfer extends React.Component {
           <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
             <Text style={styles.sectionHeader} >Details</Text>
           </View>
-          <View style={{paddingLeft: 15, flexDirection: 'row'}} >
+          <View style={{paddingLeft: 30, flexDirection: 'row'}} >
             <Text style={[styles.sectionText, {
               fontSize: width > 600 ? 18 : 16,
               paddingBottom: 0,
@@ -589,7 +627,7 @@ export class Transfer extends React.Component {
               {panNumber}
             </Text>
           </View>
-          <View style={{paddingLeft: 15, flexDirection: 'row'}} >
+          <View style={{paddingLeft: 30, flexDirection: 'row'}} >
             <Text style={[styles.sectionText, {
               fontSize: width > 600 ? 18 : 16,
               justifyContent: 'flex-start'
@@ -605,89 +643,57 @@ export class Transfer extends React.Component {
           </View>
         </View>
       );
-    } else if (transferType === 'add' || transferType === 'purchase') {
-      termsSection = (
+    } else if ((odfi & debits || credits) || (bankName & credits || debits)) {
+      achAmounts = (
         <View>
           <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
-            <Text style={styles.sectionHeader}>Rewards</Text>
+            <Text style={styles.sectionHeader}>Amounts</Text>
           </View>
-          <View style={{
-            paddingLeft: 30,
-            paddingBottom: 20,
-            paddingTop: 10,
-            flexDirection: 'row'
-          }}>
-            <Ic
-              name="md-ribbon"
-              color={Theme.darkBlue}
-              size={width < 330 ? 20 : 23 && width > 600 ? 38 : 23} />
-            <Text style={{color: Theme.darkBlue, paddingLeft: 10, fontSize: 14}}>
-              You also earned {formatted} Rewards!
+          <View style={[styles.functionRow, {paddingLeft: 30}]}>
+            <Text style={styles.sectionText}>
+              ${!debitsOne ? null : debitsOne || !creditsOne ? null : creditsOne}
+            </Text>
+          </View>
+          <View style={[styles.functionRow, {paddingLeft: 30}]}>
+            <Text style={styles.sectionText}>
+              ${!debitsTwo ? null : debitsTwo || !creditsTwo ? null : creditsTwo}
             </Text>
           </View>
         </View>
       );
-      // paymentSection = (
-      //   <View>
-      //     <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
-      //       <Text style={styles.sectionHeader}>Source</Text>
-      //     </View>
-      //     <View style={[styles.functionRow, {paddingLeft: 15}]}>
-      //       <Text style={styles.sectionText}>Account Number</Text>
-      //       <Text style={[styles.sectionText, {color: Theme.darkBlue}]}>
-      //         *****************
-      //       </Text>
-      //     </View>
-      //     <View style={[styles.functionRow, {paddingLeft: 15}]}>
-      //       <Text style={styles.sectionText}>Routing Number</Text>
-      //       <Text style={[styles.sectionText, {color: Theme.darkBlue}]}>
-      //         *********
-      //       </Text>
-      //     </View>
-      //   </View>
-      // );
-      const d = new Date(date);
-      d.setDate(d.getDate(d) + 1825);
-      const expirationDate = formatDate(d, 'MMM D, YYYY');
-      feesSection = (
+      achDescription = (
         <View>
           <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
-            <Text style={styles.sectionHeader}>Expiration & Fees</Text>
+            <Text style={styles.sectionHeader}>Description</Text>
           </View>
           <View style={[styles.functionRow, {paddingLeft: 30}]}>
-            <Text style={[styles.sectionText, {paddingTop: 10, paddingBottom: 0}]}>
-              Expiration Date
-            </Text>
-            <Text style={[styles.sectionText, {
-              color: Theme.darkBlue,
-              paddingBottom: 0,
-              paddingTop: 10
-            }]}>
-              {expirationDate}
+            <Text style={styles.sectionText}>
+              {`${!bankName ? odfi : bankName} sent account confirmation entries, shown above. ` +
+              `You can use these amounts to confirm that you own the wallet.`}
             </Text>
           </View>
           <View style={[styles.functionRow, {paddingLeft: 30}]}>
-            <Text style={[styles.sectionText, {paddingTop: 0, paddingBottom: 0}]}>
-              Inactivity Fee
+            <Text style={styles.sectionText}>
+              {`No Ferly Cash or Ferly Rewards were added to your wallet.`}
             </Text>
-            <Text style={[styles.sectionText, {
-              color: Theme.darkBlue,
-              paddingBottom: 0,
-              paddingTop: 0
-            }]}>
-              None
+          </View>
+        </View>
+      );
+    } else if ((odfi & !debits || !credits) || (bankName & !credits || !debits)) {
+      achDescription = (
+        <View>
+          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
+            <Text style={styles.sectionHeader}>Description</Text>
+          </View>
+          <View style={[styles.functionRow, {paddingLeft: 30}]}>
+            <Text style={styles.sectionText}>
+              {`${!bankName ? odfi : bankName} sent a zero dollar transaction to verify your ` +
+              `wallet befor sending more funds. Verification was successful.`}
             </Text>
           </View>
           <View style={[styles.functionRow, {paddingLeft: 30}]}>
-            <Text style={[styles.sectionText, {paddingTop: 0, paddingBottom: 20}]}>
-              Service Fee
-            </Text>
-            <Text style={[styles.sectionText, {
-              color: Theme.darkBlue,
-              paddingBottom: 20,
-              paddingTop: 0
-            }]}>
-              None
+            <Text style={styles.sectionText}>
+              {`No Ferly Cash or Ferly Rewards were added to your wallet.`}
             </Text>
           </View>
         </View>
@@ -803,11 +809,11 @@ export class Transfer extends React.Component {
           </View>
         );
         paymentSection = (
-          <View style={{paddingBottom: 20}}>
-            {!cashTitle || !rewardsTitle ? null
+          <View style={{paddingVertical: 20}}>
+            {!cashTitle && !rewardsTitle ? null
               : <View>
                 <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
-                  <Text style={styles.sectionHeader}></Text>
+                  <Text style={styles.sectionHeader}>Payment Method</Text>
                 </View>
                 {cashTitle
                   ? <View style={[styles.functionRow, {paddingLeft: 30}]}>
@@ -815,7 +821,7 @@ export class Transfer extends React.Component {
                       {!cashTitle ? null : cashTitle}
                     </Text>
                     <Text style={[styles.sectionText, {color: Theme.darkBlue, paddingBottom: 0}]}>
-              ${!cashAmount ? null : cashAmount}
+                      ${!cashAmount ? null : cashAmount}
                     </Text>
                   </View> : null
                 }
@@ -827,58 +833,12 @@ export class Transfer extends React.Component {
                     <Text style={[styles.sectionText, {
                       color: Theme.darkBlue, paddingTop: 0, paddingBottom: 0
                     }]}>
-              ${!rewardsAmount ? null : rewardsAmount}
+                      ${!rewardsAmount ? null : rewardsAmount}
                     </Text>
                   </View> : null
                 }
               </View>
             }
-          </View>
-        );
-        const d = new Date(date);
-        d.setDate(d.getDate(d) + 1825);
-        const expirationDate = formatDate(d, 'MMM D, YYYY');
-        feesSection = (
-          <View>
-            <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
-              <Text style={styles.sectionHeader}>Expiration & Fees</Text>
-            </View>
-            <View style={[styles.functionRow, {paddingLeft: 30}]}>
-              <Text style={[styles.sectionText, {paddingTop: 10, paddingBottom: 0}]}>
-              Expiration Date
-              </Text>
-              <Text style={[styles.sectionText, {
-                color: Theme.darkBlue,
-                paddingBottom: 0,
-                paddingTop: 10
-              }]}>
-                {expirationDate}
-              </Text>
-            </View>
-            <View style={[styles.functionRow, {paddingLeft: 30}]}>
-              <Text style={[styles.sectionText, {paddingTop: 0, paddingBottom: 0}]}>
-              Inactivity Fee
-              </Text>
-              <Text style={[styles.sectionText, {
-                color: Theme.darkBlue,
-                paddingBottom: 0,
-                paddingTop: 0
-              }]}>
-              None
-              </Text>
-            </View>
-            <View style={[styles.functionRow, {paddingLeft: 30}]}>
-              <Text style={[styles.sectionText, {paddingTop: 0, paddingBottom: 20}]}>
-              Service Fee
-              </Text>
-              <Text style={[styles.sectionText, {
-                color: Theme.darkBlue,
-                paddingBottom: 20,
-                paddingTop: 0
-              }]}>
-              None
-              </Text>
-            </View>
           </View>
         );
       } else if (verb === 'earned') {
@@ -896,52 +856,6 @@ export class Transfer extends React.Component {
             }}>
               <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 20 : 16}}>
                 You earned rewards by adding ${amount} of Ferly cash to your wallet.
-              </Text>
-            </View>
-          </View>
-        );
-        const d = new Date(date);
-        d.setDate(d.getDate(d) + 1825);
-        const expirationDate = formatDate(d, 'MMM D, YYYY');
-        feesSection = (
-          <View>
-            <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
-              <Text style={styles.sectionHeader}>Expiration & Fees</Text>
-            </View>
-            <View style={[styles.functionRow, {paddingLeft: 30}]}>
-              <Text style={[styles.sectionText, {paddingTop: 10, paddingBottom: 0}]}>
-                Expiration Date
-              </Text>
-              <Text style={[styles.sectionText, {
-                color: Theme.darkBlue,
-                paddingBottom: 0,
-                paddingTop: 10
-              }]}>
-                {expirationDate}
-              </Text>
-            </View>
-            <View style={[styles.functionRow, {paddingLeft: 30}]}>
-              <Text style={[styles.sectionText, {paddingTop: 0, paddingBottom: 0}]}>
-                Inactivity Fee
-              </Text>
-              <Text style={[styles.sectionText, {
-                color: Theme.darkBlue,
-                paddingBottom: 0,
-                paddingTop: 0
-              }]}>
-                None
-              </Text>
-            </View>
-            <View style={[styles.functionRow, {paddingLeft: 30}]}>
-              <Text style={[styles.sectionText, {paddingTop: 0, paddingBottom: 20}]}>
-                Service Fee
-              </Text>
-              <Text style={[styles.sectionText, {
-                color: Theme.darkBlue,
-                paddingBottom: 20,
-                paddingTop: 0
-              }]}>
-                None
               </Text>
             </View>
           </View>
@@ -1185,47 +1099,13 @@ export class Transfer extends React.Component {
           </View>
         </View>
       );
-      const d = new Date(date);
-      d.setDate(d.getDate(d) + 1825);
-      const expirationDate = formatDate(d, 'MMM D, YYYY');
-      feesSection = (
-        <View>
-          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
-            <Text style={styles.sectionHeader}>Expiration & Fees</Text>
-          </View>
-          <View style={[styles.functionRow, {paddingLeft: 30}]}>
-            <Text style={[styles.sectionText, {paddingBottom: 0}]}>Expiration Date</Text>
-            <Text style={[styles.sectionText, {color: Theme.darkBlue, paddingBottom: 0}]}>
-              {expirationDate}
-            </Text>
-          </View>
-          <View style={[styles.functionRow, {paddingLeft: 30}]}>
-            <Text style={[styles.sectionText, {paddingTop: 5, paddingBottom: 0}]}>
-              Inactivity Fee
-            </Text>
-            <Text style={[styles.sectionText, {
-              color: Theme.darkBlue,
-              paddingTop: 5,
-              paddingBottom: 0
-            }]}>
-              None
-            </Text>
-          </View>
-          <View style={[styles.functionRow, {paddingLeft: 30}]}>
-            <Text style={[styles.sectionText, {paddingTop: 5}]}>Service Fee</Text>
-            <Text style={[styles.sectionText, {color: Theme.darkBlue, paddingTop: 5}]}>
-              None
-            </Text>
-          </View>
-        </View>
-      );
     } else if (transferType === 'redeem') {
       giftValue = (
         <View>
           <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
             <Text style={styles.sectionHeader} >Merchant</Text>
           </View>
-          <View style={{paddingLeft: 15}} >
+          <View style={{paddingLeft: 30}} >
             <Text style={[styles.sectionText, {fontSize: width > 600 ? 18 : 16}]} >
               {designTitle}
             </Text>
@@ -1237,7 +1117,7 @@ export class Transfer extends React.Component {
           <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
             <Text style={styles.sectionHeader} >Details</Text>
           </View>
-          <View style={{paddingLeft: 15, flexDirection: 'row'}} >
+          <View style={{paddingLeft: 30, flexDirection: 'row'}} >
             <Text style={[styles.sectionText, {
               fontSize: width > 600 ? 18 : 16,
               paddingBottom: 0,
@@ -1253,7 +1133,7 @@ export class Transfer extends React.Component {
               {panNumber}
             </Text>
           </View>
-          <View style={{paddingLeft: 15, flexDirection: 'row'}} >
+          <View style={{paddingLeft: 30, flexDirection: 'row'}} >
             <Text style={[styles.sectionText, {
               fontSize: width > 600 ? 18 : 16,
               justifyContent: 'flex-start'
@@ -1307,16 +1187,17 @@ export class Transfer extends React.Component {
               fontSize: width < 330 ? 16 : 18 && width > 600 ? 20 : 18,
               color: Theme.darkBlue
             }}>
-              {verb === 'earned'
-                ? `You ${verb}${cp}.`
-                : `${sender} ${verb} ` +
-                `${designTitle === 'Unrecognized' ? 'Ferly Cash' : designTitle}${cp}.` &&
-                rewardsTitle !== undefined && cashTitle !== undefined
-                  ? `You used ${cashTitle} and ${rewardsTitle}${cp}!`
+              {
+                verb === 'earned'
+                  ? `You ${verb}${cp}.`
                   : `${sender} ${verb} ` +
                 `${designTitle === 'Unrecognized' ? 'Ferly Cash' : designTitle}${cp}.` &&
-                reason ? `${errorMessage}`
+                rewardsTitle !== undefined && cashTitle !== undefined
+                    ? `You used ${cashTitle} and ${rewardsTitle}${cp}!`
                     : `${sender} ${verb} ` +
+                `${designTitle === 'Unrecognized' ? 'Ferly Cash' : designTitle}${cp}.` &&
+                reason ? `${errorMessage}`
+                      : `${sender} ${verb} ` +
                   `${designTitle === 'Unrecognized' ? 'Ferly Cash' : designTitle}${cp}.`
               }
             </Text>
@@ -1330,6 +1211,8 @@ export class Transfer extends React.Component {
             <View style={styles.spacer} />
           </View>
         </View>
+        {achAmounts}
+        {achDescription}
         {theReason}
         {giftValue}
         {recipient}

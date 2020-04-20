@@ -65,6 +65,15 @@ export class HistoryEntry extends React.Component {
         symbol = '';
       }
     }
+    if (entry.odfi || entry.odfi_name) {
+      if (entry.debits) {
+        titleVerb = 'Ach Confirmation';
+        symbol = '';
+      } else if (entry.credits) {
+        titleVerb = 'Ach Confirmation';
+        symbol = '';
+      }
+    }
     if (reason) {
       titleVerb = 'Spend Error';
       symbol = '';
@@ -127,8 +136,12 @@ export class HistoryEntry extends React.Component {
           <Text style={{
             color: Theme.darkBlue, fontSize: width > 600 ? 19 : 16
           }}>
-            {tradeDesign[1] === 'Ferly Rewards'
-              ? `${symbol}${rewardsAmount}` : `${symbol}$${amount}`}
+            {
+              tradeDesign[1] === 'Ferly Rewards'
+                ? `${symbol}${rewardsAmount}` : `${symbol}$${amount}` &&
+              (entry.debits || entry.credits)
+                  ? `${symbol}$0.00` : `${symbol}$${amount}`
+            }
           </Text>
         </View>
       </TestElement>
@@ -163,6 +176,10 @@ HistoryEntry.propTypes = {
     trade_Designs_Received: PropTypes.array,
     transfer_type: PropTypes.string.isRequired,
     reason: PropTypes.string,
+    debits: PropTypes.array,
+    credits: PropTypes.array,
+    odfi: PropTypes.string,
+    odfi_name: PropTypes.string,
     expired: PropTypes.bool
   }),
   navigation: PropTypes.object.isRequired
