@@ -19,6 +19,7 @@ export class HistoryEntry extends React.Component {
   render () {
     const {entry, navigation} = this.props;
     const {amount} = entry;
+    const workFlowType = entry.workflow_type;
     const transferType = entry.transfer_type;
     const tradeDesign = entry.trade_Designs_Received;
     const reason = entry.reason;
@@ -26,61 +27,63 @@ export class HistoryEntry extends React.Component {
 
     let titleVerb;
     let symbol;
-    switch (transferType) {
-      case 'add':
-        titleVerb = 'Add';
-        symbol = '+';
-        break;
-      case 'purchase':
-        titleVerb = 'Add';
-        symbol = '+';
-        break;
-      case 'send':
-        titleVerb = 'Send Gift';
-        symbol = '-';
-        break;
-      case 'pending':
-        titleVerb = 'Pending Gift';
-        symbol = '-';
-        break;
-      case 'canceled':
-        titleVerb = 'Canceled Gift';
-        symbol = '';
-        break;
-      case 'receive':
-        titleVerb = 'Receive Gift';
-        symbol = '+';
-        break;
-      case 'redeem':
-        titleVerb = 'Spend';
-        symbol = '-';
-        break;
-    }
-    if (transferType === 'trade') {
-      if (tradeDesign[1] === 'Ferly Rewards') {
-        titleVerb = 'Reward';
-        symbol = '+';
-      } else {
-        titleVerb = 'Purchase';
+    if (workFlowType && workFlowType === 'receive_ach_confirm') {
+      titleVerb = 'Ach Confirmation';
+      symbol = '';
+    } else if (workFlowType && workFlowType === 'receive_ach_prenote') {
+      titleVerb = 'Ach Confirmation';
+      symbol = '';
+    } else {
+      switch (transferType) {
+        case 'add':
+          titleVerb = 'Add';
+          symbol = '+';
+          break;
+        case 'purchase':
+          titleVerb = 'Add';
+          symbol = '+';
+          break;
+        case 'send':
+          titleVerb = 'Send Gift';
+          symbol = '-';
+          break;
+        case 'pending':
+          titleVerb = 'Pending Gift';
+          symbol = '-';
+          break;
+        case 'canceled':
+          titleVerb = 'Canceled Gift';
+          symbol = '';
+          break;
+        case 'receive':
+          titleVerb = 'Receive Gift';
+          symbol = '+';
+          break;
+        case 'redeem':
+          titleVerb = 'Spend';
+          symbol = '-';
+          break;
+      }
+      if (transferType === 'trade') {
+        if (tradeDesign.length >= 2 && tradeDesign[1] === 'Ferly Rewards') {
+          titleVerb = 'Reward';
+          symbol = '+';
+        } else if (tradeDesign.length === 1 && tradeDesign[0] === 'Ferly Cash') {
+          titleVerb = 'Reward';
+          symbol = '+';
+        } else {
+          titleVerb = 'Purchase';
+          symbol = '';
+        }
+      }
+      if (reason) {
+        titleVerb = 'Spend Error';
         symbol = '';
       }
-    }
-    if (entry.odfi || entry.odfi_name) {
-      if (entry.debits) {
-        titleVerb = 'Ach Confirmation';
-        symbol = '';
-      } else if (entry.credits) {
-        titleVerb = 'Ach Confirmation';
+      if (expired) {
+        titleVerb = 'Expired Gift';
         symbol = '';
       }
-    }
-    if (reason) {
-      titleVerb = 'Spend Error';
-      symbol = '';
-    }
-    if (expired) {
-      titleVerb = 'Expired Gift';
-      symbol = '';
     }
     let rewardsAmount = amount / 100 * 5;
     rewardsAmount = accounting.formatMoney(parseFloat(rewardsAmount));
@@ -126,7 +129,9 @@ export class HistoryEntry extends React.Component {
           paddingRight: 30
         }}>
           {transferType === 'canceled' ||
-          (transferType === 'trade' && tradeDesign[1] !== 'Ferly Rewards')
+          (transferType === 'trade' &&
+          tradeDesign.length > 1 &&
+          tradeDesign[1] !== 'Ferly Rewards')
             ? <Icon
               name="refresh"
               color={Theme.darkBlue}
@@ -137,10 +142,12 @@ export class HistoryEntry extends React.Component {
             color: Theme.darkBlue, fontSize: width > 600 ? 19 : 16
           }}>
             {
-              tradeDesign[1] === 'Ferly Rewards'
+              tradeDesign.length >= 1 && tradeDesign[1] === 'Ferly Rewards'
                 ? `${symbol}${rewardsAmount}` : `${symbol}$${amount}` &&
               (entry.debits || entry.credits)
-                  ? `${symbol}$0.00` : `${symbol}$${amount}`
+                  ? `${symbol}$0.00` : `${symbol}$${amount}` &&
+              (tradeDesign.length === 1 && tradeDesign[0] === 'Ferly Cash')
+                    ? `${symbol}$0.00` : `${symbol}$${amount}`
             }
           </Text>
         </View>
@@ -178,7 +185,7 @@ HistoryEntry.propTypes = {
     reason: PropTypes.string,
     debits: PropTypes.array,
     credits: PropTypes.array,
-    odfi: PropTypes.string,
+    workflow_type: PropTypes.string,
     odfi_name: PropTypes.string,
     expired: PropTypes.bool
   }),

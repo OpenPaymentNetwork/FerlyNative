@@ -4,6 +4,7 @@ import React from 'react';
 import Avatar from 'ferly/components/Avatar';
 import Theme from 'ferly/utils/theme';
 import Spinner from 'ferly/components/Spinner';
+import Ic from 'react-native-vector-icons/Ionicons';
 import Ico from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/EvilIcons';
 import {apiRequire, apiRefresh} from 'ferly/store/api';
@@ -184,6 +185,18 @@ export class Transfer extends React.Component {
       });
   }
 
+  renderAmounts (eachAmount) {
+    return (
+      <View>
+        <View style={[styles.functionRow, {paddingLeft: 30}]}>
+          <Text style={[styles.sectionText, {paddingBottom: 5, paddingTop: 0}]}>
+            ${eachAmount}
+          </Text>
+        </View>
+      </View>
+    );
+  }
+
   render () {
     const {submitting} = this.state;
     if (submitting) {
@@ -206,7 +219,6 @@ export class Transfer extends React.Component {
     const {transferDetails} = this.props;
     const {design} = transferDetails;
     let {
-      odfi,
       credits,
       debits,
       title,
@@ -216,6 +228,7 @@ export class Transfer extends React.Component {
       reason,
       message,
       timestamp,
+      workflow_type: workFlowType,
       odfi_name: bankName,
       transfer_designs: tranferDesigns,
       trade_Designs_Received: tradeDesignsReceived,
@@ -297,155 +310,162 @@ export class Transfer extends React.Component {
     let cp = '';
     let sender = '';
     let messageTitle = '';
-    let creditsOne = '';
-    let creditsTwo = '';
-    let debitsOne = '';
-    let debitsTwo = '';
     let symbol;
-    if (name) {
-      switch (transferType) {
-        case 'purchase':
-          verb = 'added';
-          symbol = '+';
-          cp = ' to your account';
-          sender = 'You';
-          break;
-        case 'pending':
-          verb = 'gifted';
-          symbol = '-';
-          cp = ` to ${name}`;
-          sender = 'You';
-          break;
-        case 'send':
-          verb = 'gifted';
-          symbol = '-';
-          cp = ` to ${name}`;
-          messageTitle = 'Your ';
-          sender = 'You';
-          break;
-        case 'canceled':
-          verb = 'canceled';
-          symbol = '';
-          cp = ` to ${name}`;
-          sender = 'You';
-          break;
-        case 'receive':
-          verb = 'received';
-          symbol = '+';
-          cp = ` from ${counterParty}`;
-          messageTitle = 'Their ';
-          sender = 'You';
-          break;
-        case 'redeem':
-          verb = 'spent';
-          symbol = '-';
-          break;
-        case 'expired':
-          verb = 'expired';
-          symbol = '';
-          cp = ` to ${name}`;
-          sender = 'You';
-          break;
-        case 'trade':
-          verb = 'added';
-          symbol = '';
-          cp = ` to your wallet`;
-          sender = 'You';
-          break;
-        case 'add':
-          verb = 'added';
-          symbol = '+';
-          cp = ` to your wallet`;
-          sender = 'You';
-          break;
-      }
-    } else {
-      switch (transferType) {
-        case 'purchase':
-          verb = 'added';
-          symbol = '+';
-          cp = ' to your account';
-          sender = 'You';
-          break;
-        case 'pending':
-          verb = 'gifted';
-          symbol = '-';
-          cp = ` to ${counterParty}`;
-          sender = 'You';
-          break;
-        case 'send':
-          verb = 'gifted';
-          symbol = '-';
-          cp = ` to ${counterParty}`;
-          messageTitle = 'Your ';
-          sender = 'You';
-          break;
-        case 'canceled':
-          verb = 'canceled';
-          symbol = '';
-          cp = ` to ${counterParty}`;
-          sender = 'You';
-          break;
-        case 'receive':
-          verb = 'received';
-          symbol = '+';
-          cp = ` from ${counterParty}`;
-          messageTitle = 'Their ';
-          sender = 'You';
-          break;
-        case 'redeem':
-          verb = 'spent';
-          symbol = '-';
-          sender = 'You';
-          break;
-        case 'expired':
-          verb = 'Expired Gift';
-          symbol = '';
-          cp = ` to ${counterParty}`;
-          sender = 'Your';
-          break;
-        case 'add':
-          verb = 'added';
-          symbol = '+';
-          cp = ` to your wallet`;
-          sender = 'You';
-          break;
-      }
-    }
-    if (odfi || bankName) {
-      if (debits) {
-        debitsOne =
-          debits.slice(0, 1);
-        debitsTwo =
-          debits.slice(1, 1 + debits.length);
+    let amountsList;
+    if (workFlowType === 'receive_ach_confirm') {
+      if (debits && debits.length > 1) {
+        amountsList = (
+          debits.map((amount) => this.renderAmounts(amount))
+        );
         designTitle = '';
         verb = 'sent';
         symbol = '';
-        cp = ` account confirmation entries to you.`;
-        sender = bankName || odfi;
-      } else if (credits) {
-        creditsOne =
-          credits.slice(0, 1);
-        creditsTwo =
-          credits.slice(1, 1 + credits.length);
+        cp = `account confirmation entries to you`;
+        sender = !bankName ? 'Your bank' : bankName;
+      } else if (credits && credits.length > 1) {
+        amountsList = (
+          credits.map((amount) => this.renderAmounts(amount))
+        );
         designTitle = '';
         verb = 'sent';
         symbol = '';
-        cp = ` account confirmation entries to you.`;
-        sender = bankName || odfi;
+        cp = `account confirmation entries to you`;
+        sender = !bankName ? 'Your bank' : bankName;
       } else {
         designTitle = '';
         verb = 'successfully';
         symbol = '';
-        cp = ` confirmed your wallet.`;
-        sender = bankName || odfi;
+        cp = `confirmed your wallet`;
+        sender = !bankName ? 'Your bank' : bankName;
+      }
+    } else if (workFlowType === 'receive_ach_prenote') {
+      designTitle = '';
+      verb = 'successfully';
+      symbol = '';
+      cp = `confirmed your wallet`;
+      sender = !bankName ? 'Your bank' : bankName;
+    } else {
+      if (name) {
+        switch (transferType) {
+          case 'purchase':
+            verb = 'added';
+            symbol = '+';
+            cp = ' to your account';
+            sender = 'You';
+            break;
+          case 'pending':
+            verb = 'gifted';
+            symbol = '-';
+            cp = ` to ${name}`;
+            sender = 'You';
+            break;
+          case 'send':
+            verb = 'gifted';
+            symbol = '-';
+            cp = ` to ${name}`;
+            messageTitle = 'Your ';
+            sender = 'You';
+            break;
+          case 'canceled':
+            verb = 'canceled';
+            symbol = '';
+            cp = ` to ${name}`;
+            sender = 'You';
+            break;
+          case 'receive':
+            verb = 'received';
+            symbol = '+';
+            cp = ` from ${counterParty}`;
+            messageTitle = 'Their ';
+            sender = 'You';
+            break;
+          case 'redeem':
+            verb = 'spent';
+            symbol = '-';
+            break;
+          case 'expired':
+            verb = 'expired';
+            symbol = '';
+            cp = ` to ${name}`;
+            sender = 'You';
+            break;
+          case 'trade':
+            verb = 'added';
+            symbol = '';
+            cp = ` to your wallet`;
+            sender = 'You';
+            break;
+          case 'add':
+            verb = 'added';
+            symbol = '+';
+            cp = ` to your wallet`;
+            sender = 'You';
+            break;
+        }
+      } else {
+        switch (transferType) {
+          case 'purchase':
+            verb = 'added';
+            symbol = '+';
+            cp = ' to your account';
+            sender = 'You';
+            break;
+          case 'pending':
+            verb = 'gifted';
+            symbol = '-';
+            cp = ` to ${counterParty}`;
+            sender = 'You';
+            break;
+          case 'send':
+            verb = 'gifted';
+            symbol = '-';
+            cp = ` to ${counterParty}`;
+            messageTitle = 'Your ';
+            sender = 'You';
+            break;
+          case 'canceled':
+            verb = 'canceled';
+            symbol = '';
+            cp = ` to ${counterParty}`;
+            sender = 'You';
+            break;
+          case 'receive':
+            verb = 'received';
+            symbol = '+';
+            cp = ` from ${counterParty}`;
+            messageTitle = 'Their ';
+            sender = 'You';
+            break;
+          case 'redeem':
+            verb = 'spent';
+            symbol = '-';
+            sender = 'You';
+            break;
+          case 'expired':
+            verb = 'Expired Gift';
+            symbol = '';
+            cp = ` to ${counterParty}`;
+            sender = 'Your';
+            break;
+          case 'add':
+            verb = 'added';
+            symbol = '+';
+            cp = ` to your wallet`;
+            sender = 'You';
+            break;
+        }
       }
     }
     if (transferType === 'trade') {
-      if (tradeDesignsReceived[1] === 'Ferly Rewards') {
+      if (tradeDesignsReceived.length >= 2 && tradeDesignsReceived[1] === 'Ferly Rewards') {
         verb = 'earned';
         symbol = '+';
         cp = ` ${tradeDesignsReceived[1]}`;
+        sender = 'You';
+      } else if (tradeDesignsReceived.length === 1 && tradeDesignsReceived[0] === 'Ferly Cash') {
+        verb = 'earned';
+        symbol = '+';
+        cp = ` $0.00 rewards'`;
         sender = 'You';
       } else {
         verb = 'used';
@@ -475,7 +495,8 @@ export class Transfer extends React.Component {
         break;
       case 'card_holder_not_found':
         errorReason = 'The Ferly Card used is not linked to a Wallet.';
-        errorFix = 'In the app go to the Ferly Card page in the Menu to add the card to your wallet.';
+        errorFix = `In the app go to the Ferly Card page in the Menu to add the card to your ` +
+        `wallet.`;
         break;
       case 'merchant_not_found':
         errorReason = 'The Ferly Card was used at a non-participating merchant.';
@@ -497,8 +518,8 @@ export class Transfer extends React.Component {
         errorFix = `Next time buy ${designTitle} value before using you Ferly Card.`;
         break;
       case 'insufficient_funds':
-        errorReason = `The amount charged was $${amount} but you held only $${availableAmount} in ` +
-        `${designTitle} value.`;
+        errorReason = `The amount charged was $${amount} but you held only $${availableAmount} ` +
+        `in ${designTitle} value.`;
         errorFix = `Next time tell the cashier to charge $${availableAmount} to your Ferly Card ` +
         `and use another payment method for the remaining amount.`;
         break;
@@ -600,7 +621,9 @@ export class Transfer extends React.Component {
             <Text style={styles.sectionHeader} >Merchant</Text>
           </View>
           <View style={{paddingLeft: 30}} >
-            <Text style={[styles.sectionText, {fontSize: width > 600 ? 18 : 16}]} >
+            <Text style={[styles.sectionText, {
+              fontSize: width > 600 ? 18 : 16, paddingBottom: 20
+            }]} >
               {!merchant ? designTitle : merchant}
             </Text>
           </View>
@@ -643,22 +666,15 @@ export class Transfer extends React.Component {
           </View>
         </View>
       );
-    } else if ((odfi & debits || credits) || (bankName & credits || debits)) {
+    } else if (workFlowType === 'receive_ach_confirm') {
       achAmounts = (
-        <View>
-          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
+        <View style={{paddingBottom: 15}}>
+          <View style={{
+            borderBottomColor: Theme.lightBlue, borderBottomWidth: 2, paddingBottom: 10
+          }}>
             <Text style={styles.sectionHeader}>Amounts</Text>
           </View>
-          <View style={[styles.functionRow, {paddingLeft: 30}]}>
-            <Text style={styles.sectionText}>
-              ${!debitsOne ? null : debitsOne || !creditsOne ? null : creditsOne}
-            </Text>
-          </View>
-          <View style={[styles.functionRow, {paddingLeft: 30}]}>
-            <Text style={styles.sectionText}>
-              ${!debitsTwo ? null : debitsTwo || !creditsTwo ? null : creditsTwo}
-            </Text>
-          </View>
+          {amountsList}
         </View>
       );
       achDescription = (
@@ -667,9 +683,9 @@ export class Transfer extends React.Component {
             <Text style={styles.sectionHeader}>Description</Text>
           </View>
           <View style={[styles.functionRow, {paddingLeft: 30}]}>
-            <Text style={styles.sectionText}>
-              {`${!bankName ? odfi : bankName} sent account confirmation entries, shown above. ` +
-              `You can use these amounts to confirm that you own the wallet.`}
+            <Text style={[styles.sectionText, {height: 105}]}>
+              {`${!bankName ? 'Your bank' : bankName} sent account confirmation entries, shown ` +
+              `above. You can use these amounts to confirm that you own the wallet.`}
             </Text>
           </View>
           <View style={[styles.functionRow, {paddingLeft: 30}]}>
@@ -679,21 +695,43 @@ export class Transfer extends React.Component {
           </View>
         </View>
       );
-    } else if ((odfi & !debits || !credits) || (bankName & !credits || !debits)) {
+    } else if (workFlowType === 'receive_ach_prenote') {
       achDescription = (
         <View>
           <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
             <Text style={styles.sectionHeader}>Description</Text>
           </View>
           <View style={[styles.functionRow, {paddingLeft: 30}]}>
-            <Text style={styles.sectionText}>
-              {`${!bankName ? odfi : bankName} sent a zero dollar transaction to verify your ` +
-              `wallet befor sending more funds. Verification was successful.`}
+            <Text style={[styles.sectionText, {height: 105}]}>
+              {`${!bankName ? 'Your bank' : bankName} sent a zero dollar transaction to verify ` +
+              `your wallet befor sending more funds. Verification was successful.`}
             </Text>
           </View>
           <View style={[styles.functionRow, {paddingLeft: 30}]}>
             <Text style={styles.sectionText}>
               {`No Ferly Cash or Ferly Rewards were added to your wallet.`}
+            </Text>
+          </View>
+        </View>
+      );
+    } else if (transferType === 'add') {
+      termsSection = (
+        <View>
+          <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 1}}>
+            <Text style={styles.sectionHeader}>Rewards</Text>
+          </View>
+          <View style={{
+            paddingLeft: 50,
+            paddingBottom: 10,
+            paddingTop: 10,
+            flexDirection: 'row'
+          }}>
+            <Ic
+              name="md-ribbon"
+              color={Theme.darkBlue}
+              size={width < 330 ? 20 : 23 && width > 600 ? 38 : 23} />
+            <Text style={{color: Theme.darkBlue, paddingLeft: 10, fontSize: 14}}>
+              You also earned {formatted} Rewards!
             </Text>
           </View>
         </View>
@@ -868,7 +906,9 @@ export class Transfer extends React.Component {
             <Text style={styles.sectionHeader} >Gift Value</Text>
           </View>
           <View style={{paddingLeft: 30}} >
-            <Text style={[styles.sectionText, {fontSize: width > 600 ? 18 : 16}]} >
+            <Text style={[styles.sectionText, {
+              fontSize: width > 600 ? 18 : 16, paddingBottom: 20
+            }]} >
               {designTitle}
             </Text>
           </View>
@@ -906,7 +946,9 @@ export class Transfer extends React.Component {
             <Text style={styles.sectionHeader} >Gift Value</Text>
           </View>
           <View style={{paddingLeft: 30}} >
-            <Text style={[styles.sectionText, {fontSize: width > 600 ? 18 : 16}]} >
+            <Text style={[styles.sectionText, {
+              fontSize: width > 600 ? 18 : 16, paddingBottom: 20
+            }]} >
               {designTitle}
             </Text>
           </View>
@@ -946,7 +988,9 @@ export class Transfer extends React.Component {
             <Text style={styles.sectionHeader} >Gift Value</Text>
           </View>
           <View style={{paddingLeft: 30}} >
-            <Text style={[styles.sectionText, {fontSize: width > 600 ? 18 : 16}]} >
+            <Text style={[styles.sectionText, {
+              fontSize: width > 600 ? 18 : 16, paddingBottom: 20
+            }]} >
               {designTitle}
             </Text>
           </View>
@@ -986,7 +1030,9 @@ export class Transfer extends React.Component {
             <Text style={styles.sectionHeader} >Gift Value</Text>
           </View>
           <View style={{paddingLeft: 30}} >
-            <Text style={[styles.sectionText, {fontSize: width > 600 ? 18 : 16}]} >
+            <Text style={[styles.sectionText, {
+              fontSize: width > 600 ? 18 : 16, paddingBottom: 20
+            }]} >
               {designTitle}
             </Text>
           </View>
@@ -1075,7 +1121,9 @@ export class Transfer extends React.Component {
             <Text style={styles.sectionHeader} >Gift Value</Text>
           </View>
           <View style={{paddingLeft: 30}} >
-            <Text style={[styles.sectionText, {fontSize: width > 600 ? 18 : 16}]} >
+            <Text style={[styles.sectionText, {
+              fontSize: width > 600 ? 18 : 16, paddingBottom: 20
+            }]} >
               {designTitle}
             </Text>
           </View>
@@ -1106,7 +1154,9 @@ export class Transfer extends React.Component {
             <Text style={styles.sectionHeader} >Merchant</Text>
           </View>
           <View style={{paddingLeft: 30}} >
-            <Text style={[styles.sectionText, {fontSize: width > 600 ? 18 : 16}]} >
+            <Text style={[styles.sectionText, {
+              fontSize: width > 600 ? 18 : 16, paddingBottom: 20
+            }]} >
               {designTitle}
             </Text>
           </View>
@@ -1211,7 +1261,9 @@ export class Transfer extends React.Component {
             <View style={styles.spacer} />
           </View>
         </View>
-        {achAmounts}
+        {!debits && !credits ? null
+          : achAmounts
+        }
         {achDescription}
         {theReason}
         {giftValue}
@@ -1243,7 +1295,7 @@ const styles = StyleSheet.create({
   sectionText: {
     color: Theme.darkBlue,
     fontSize: width > 600 ? 20 : 16,
-    paddingBottom: 20,
+    paddingBottom: 10,
     paddingTop: 10,
     paddingRight: 15
   }

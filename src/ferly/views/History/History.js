@@ -115,6 +115,10 @@ export class History extends React.Component {
       let typeTitle = '';
       if (item.transfer_type === 'pending') {
         typeTitle = 'Pending Gift';
+      } else if (item.workflow_type === 'receive_ach_confirm') {
+        typeTitle = 'Ach Confirmation';
+      } else if (item.workflow_type === 'receive_ach_prenote') {
+        typeTitle = 'Ach Confirmation';
       } else if (item.transfer_type === 'purchase') {
         typeTitle = 'Add';
       } else if (item.transfer_type === 'send') {
