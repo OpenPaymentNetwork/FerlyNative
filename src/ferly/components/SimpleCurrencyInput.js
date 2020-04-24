@@ -11,9 +11,36 @@ export default class SimpleCurrencyInput extends React.Component {
     };
   }
 
+  validateText (newAmount) {
+    if (newAmount.match(/^\d*\.?\d*$/)) {
+      if (newAmount.includes('.')) {
+        let arr = newAmount.split('.');
+        if (arr.length > 2) {
+          return false;
+        }
+        let secondArr = arr[1];
+        if (secondArr.includes('.')) {
+          return false;
+        } else if (secondArr.length > 2) {
+          return false;
+        } else {
+          return true;
+        }
+      } else {
+        return true;
+      }
+    } else {
+      return false;
+    }
+  }
+
   onChange (newText) {
-    this.props.onChangeText(newText);
-    this.setState({text: newText});
+    if (this.validateText(newText)) {
+      this.setState({text: newText});
+      this.props.onChangeText(newText);
+    } else {
+      return null;
+    }
   }
 
   render () {

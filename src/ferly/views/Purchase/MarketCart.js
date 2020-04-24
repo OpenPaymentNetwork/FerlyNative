@@ -109,15 +109,16 @@ export class MarketCart extends React.Component {
           invalid: `The amount you entered is more than $${amountNumber}`, submitting: false
         });
         return;
-      } else if (parseInt(cash.amount) + parseInt(this.state.setRewardsAmount) < amountNumber) {
+      } else if (parseFloat(cash.amount) + parseFloat(this.state.setRewardsAmount) < amountNumber) {
         this.setState({
           invalid: `The total amount you entered is less than $${amountNumber}`, submitting: false
         });
         return;
-      } else if (parseInt(cash.amount) + parseInt(this.state.setRewardsAmount) >
-      parseInt(cash.amount) + parseInt(rewards.amount)) {
+      } else if (parseFloat(cash.amount) + parseFloat(this.state.setRewardsAmount) >
+      parseFloat(cash.amount) + parseFloat(rewards.amount)) {
         this.setState({invalid: `You have only $${cash.amount} Ferly Cash and $${rewards.amount}` +
-        ` Rewards available.`});
+        ` Rewards available.`,
+        submitting: false});
         return;
       }
     }
@@ -227,8 +228,10 @@ export class MarketCart extends React.Component {
                 this.props.navigation.dispatch(resetAction);
                 this.props.navigation.navigate('Home');
               } else {
-                if (json.invalid['amounts.0']) {
-                  this.setState({invalid: json.invalid['amounts.0']});
+                if (json.invalid && json.invalid['amounts.0']) {
+                  this.setState({invalid: json.invalid['amounts.0'], submitting: false});
+                } else if (json.invalid && json.invalid['amounts.1']) {
+                  this.setState({invalid: json.invalid['amounts.1'], submitting: false});
                 } else {
                   Alert.alert('Error!', 'Please check all info and try again!');
                   navigation.navigate('Home');
@@ -349,10 +352,13 @@ export class MarketCart extends React.Component {
             this.props.navigation.dispatch(resetAction);
             this.props.navigation.navigate('Home');
           } else {
-            if (json.error) {
-              this.setState({invalid: json.error, submitting: false});
-            } else if (json.invalid) {
-              this.setState({invalid: json.invalid['amounts.0']});
+            if (json.invalid && json.invalid['amounts.0']) {
+              this.setState({invalid: json.invalid['amounts.0'], submitting: false});
+            } else if (json.invalid && json.invalid['amounts.1']) {
+              this.setState({invalid: json.invalid['amounts.1'], submitting: false});
+            } else {
+              Alert.alert('Error!', 'Please check all info and try again!');
+              navigation.navigate('Home');
             }
             const text = {'text': 'Unsuccessful trade'};
             post('log-info', this.props.deviceToken, text)
@@ -396,34 +402,59 @@ export class MarketCart extends React.Component {
     this.setState({rewardsLoopId: rewards.id});
   }
 
-  rewardsText (text) {
-    this.setState({setRewardsAmount: text, invalid: ''});
-    if (text.includes('.')) {
-      if (text.split('.').length > 2) {
-        this.setState({invalid: `You entered more than one decimal.`});
-        return;
-      } else {
-        let number = text.split('.')[1].length;
-        if (number > 2) {
-          this.setState({invalid: `You entered to many numbers after decimal.`});
-          return;
+  validateText (newAmount) {
+    if (newAmount.match(/^\d*\.?\d*$/)) {
+      if (newAmount.includes('.')) {
+        let arr = newAmount.split('.');
+        if (arr.length > 2) {
+          return false;
         }
-      }
-    }
-    if (this.state.cashChecked) {
-      if (parseInt(cash.amount) + parseInt(this.state.setRewardsAmount) > amountNumber - 1) {
-        this.setState({invalid: `You have only $${cash.amount} Ferly Cash and $${rewards.amount}` +
-        ` Rewards available.`});
+        let secondArr = arr[1];
+        if (secondArr.includes('.')) {
+          return false;
+        } else if (secondArr.length > 2) {
+          return false;
+        } else {
+          return true;
+        }
       } else {
-        let totalCashAmount = amountNumber - text;
-        this.setState({setCashAmount: totalCashAmount.toString()});
+        return true;
       }
     } else {
-      if (text > amountNumber) {
-        this.setState({invalid: `The amount you entered is more than $${amountNumber}`});
-      } else if (text === amountNumber) {
-        this.setState({invalid: ''});
+      return false;
+    }
+  }
+
+  rewardsText (text) {
+    if (this.validateText(text)) {
+      this.setState({setRewardsAmount: text, invalid: ''});
+      if (text.match(/[^.\d]/)) {
+        this.setState({invalid: `Only numbers and periods allowed.`});
       }
+      if (text.includes('.')) {
+        if (text.split('.').length > 2) {
+          this.setState({invalid: `You entered more than one decimal.`});
+          return;
+        } else {
+          let number = text.split('.')[1].length;
+          if (number > 2) {
+            this.setState({invalid: `You entered too many numbers after decimal.`});
+            return;
+          }
+        }
+      }
+      if (this.state.cashChecked) {
+        let totalCashAmount = amountNumber - text;
+        this.setState({setCashAmount: totalCashAmount.toString()});
+      } else {
+        if (text > amountNumber) {
+          this.setState({invalid: `The amount you entered is more than $${amountNumber}`});
+        } else if (text === amountNumber) {
+          this.setState({invalid: ''});
+        }
+      }
+    } else {
+      return null;
     }
   }
 
@@ -494,11 +525,17 @@ export class MarketCart extends React.Component {
                 <ScrollView>
                   <View style={{flexGrow: 1, flexWrap: 'wrap', flex: 1}}>
                     <View style={styles.section}>
-                      <Text style={[styles.sectionHeader, {marginBottom: 15}]}>Purchase Summary</Text>
-                      <View style={{borderWidth: 2, borderRadius: 10, borderColor: Theme.lightBlue}}>
+                      <Text style={[styles.sectionHeader, {marginBottom: 15}]}>
+                        Purchase Summary
+                      </Text>
+                      <View style={{
+                        borderWidth: 2, borderRadius: 10, borderColor: Theme.lightBlue
+                      }}>
                         <View style={{borderBottomWidth: 2, borderBottomColor: Theme.lightBlue}}>
                           <View style={[styles.functionRow]}>
-                            <Text style={[styles.sectionText, {marginTop: 15, marginHorizontal: 10, width: width / 3}]}>
+                            <Text style={[styles.sectionText, {
+                              marginTop: 15, marginHorizontal: 10, width: width / 3
+                            }]}>
                               {title}
                             </Text>
                             <Text style={[styles.sectionText,
