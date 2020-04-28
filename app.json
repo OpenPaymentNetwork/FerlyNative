@@ -2,8 +2,7 @@
   "expo": {
     "name": "Ferly",
     "icon": "./ferly-icon.png",
-    "version": "1.4.5.1",
-    "sdkVersion": "34.0.0",
+    "version": "1.4.13.1",
     "privacy": "public",
     "slug": "ferly",
     "orientation": "portrait",
