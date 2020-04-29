@@ -116,9 +116,9 @@ export class History extends React.Component {
       if (item.transfer_type === 'pending') {
         typeTitle = 'Pending Gift';
       } else if (item.workflow_type === 'receive_ach_confirm') {
-        typeTitle = 'Ach Confirmation';
+        typeTitle = 'ACH Confirmation';
       } else if (item.workflow_type === 'receive_ach_prenote') {
-        typeTitle = 'Ach Confirmation';
+        typeTitle = 'ACH Confirmation';
       } else if (item.transfer_type === 'purchase') {
         typeTitle = 'Add';
       } else if (item.transfer_type === 'send') {
@@ -298,7 +298,7 @@ export class History extends React.Component {
       <View style={{flex: 1, backgroundColor: 'white', justifyContent: 'space-between'}}>
         <TestElement
           parent={View}
-          label='test-id-recipient-navbar'
+          label='test-id-history-type'
           style={{
             flexDirection: 'row',
             justifyContent: 'space-around',

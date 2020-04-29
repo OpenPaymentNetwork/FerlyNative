@@ -28,10 +28,10 @@ export class HistoryEntry extends React.Component {
     let titleVerb;
     let symbol;
     if (workFlowType && workFlowType === 'receive_ach_confirm') {
-      titleVerb = 'Ach Confirmation';
+      titleVerb = 'ACH Confirmation';
       symbol = '';
     } else if (workFlowType && workFlowType === 'receive_ach_prenote') {
-      titleVerb = 'Ach Confirmation';
+      titleVerb = 'ACH Confirmation';
       symbol = '';
     } else {
       switch (transferType) {

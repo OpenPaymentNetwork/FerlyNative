@@ -11,6 +11,7 @@ Sentry.init({
 });
 
 const store = configureStore();
+console.warn = () => {};
 
 export default class App extends React.Component {
   render () {
