@@ -296,16 +296,16 @@ export class History extends React.Component {
 
     return (
       <View style={{flex: 1, backgroundColor: 'white', justifyContent: 'space-between'}}>
-        <TestElement
-          parent={View}
-          label='test-id-history-type'
+        <View
           style={{
             flexDirection: 'row',
             justifyContent: 'space-around',
             alignItems: 'center',
             backgroundColor: Theme.darkBlue
           }}>
-          <TouchableOpacity
+          <TestElement
+            parent={TouchableOpacity}
+            label='test-id-history-type-pending'
             style={{
               borderBottomWidth: this.state.page === 'Pending' ? 4 : 0,
               borderColor: 'white',
@@ -318,8 +318,10 @@ export class History extends React.Component {
             <Text style={{color: 'white', fontSize: width > 600 ? 18 : 16}}>
               Pending
             </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
+          </TestElement>
+          <TestElement
+            parent={TouchableOpacity}
+            label='test-id-history-type-complete'
             style={{
               borderBottomWidth: this.state.page === 'Completed' ? 4 : 0,
               borderColor: 'white',
@@ -332,16 +334,14 @@ export class History extends React.Component {
             <Text style={{color: 'white', fontSize: width > 600 ? 18 : 16}}>
               Completed
             </Text>
-          </TouchableOpacity>
-        </TestElement>
+          </TestElement>
+        </View>
         <SearchBar
           value={this.state.searchText}
           placeholder='Search'
           onChangeText={this.onChangeText.bind(this)}/>
         {list}
-        <TestElement
-          parent={View}
-          label='test-id-navbar'
+        <View
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
@@ -349,7 +349,9 @@ export class History extends React.Component {
             height: width > 600 ? 95 : 75,
             width: width
           }}>
-          <TouchableOpacity
+          <TestElement
+            parent={TouchableOpacity}
+            label='test-id-navbar-wallet'
             style={{
               borderColor: 'white',
               height: width > 600 ? 95 : 75,
@@ -366,8 +368,10 @@ export class History extends React.Component {
             <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
                 Wallet
             </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
+          </TestElement>
+          <TestElement
+            parent={TouchableOpacity}
+            label='test-id-navbar-shop'
             style={{
               borderColor: 'white',
               height: width > 600 ? 95 : 75,
@@ -384,8 +388,10 @@ export class History extends React.Component {
             <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
                 Shop
             </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
+          </TestElement>
+          <TestElement
+            parent={TouchableOpacity}
+            label='test-id-navbar-history'
             style={{
               borderColor: 'white',
               height: width > 600 ? 95 : 75,
@@ -402,8 +408,10 @@ export class History extends React.Component {
             <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
                 History
             </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
+          </TestElement>
+          <TestElement
+            parent={TouchableOpacity}
+            label='test-id-navbar-menu'
             style={{
               borderColor: 'white',
               height: width > 600 ? 95 : 75,
@@ -420,8 +428,8 @@ export class History extends React.Component {
             <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
                 Menu
             </Text>
-          </TouchableOpacity>
-        </TestElement>
+          </TestElement>
+        </View>
       </View>
     );
   }

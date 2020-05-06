@@ -136,9 +136,7 @@ export class Market extends React.Component {
           placeholder='Search for gift value'
           onChangeText={this.onChangeText.bind(this)} />
         {body}
-        <TestElement
-          parent={View}
-          label='test-id-navbar'
+        <View
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
@@ -146,7 +144,9 @@ export class Market extends React.Component {
             height: width > 600 ? 95 : 75,
             width: width
           }}>
-          <TouchableOpacity
+          <TestElement
+            parent={TouchableOpacity}
+            label='test-id-navbar-wallet'
             style={{
               borderColor: 'white',
               height: width > 600 ? 95 : 75,
@@ -163,8 +163,10 @@ export class Market extends React.Component {
             <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
                 Wallet
             </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
+          </TestElement>
+          <TestElement
+            parent={TouchableOpacity}
+            label='test-id-navbar-shop'
             style={{
               borderColor: 'white',
               height: width > 600 ? 95 : 75,
@@ -181,8 +183,10 @@ export class Market extends React.Component {
             <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
                 Shop
             </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
+          </TestElement>
+          <TestElement
+            parent={TouchableOpacity}
+            label='test-id-navbar-history'
             style={{
               borderColor: 'white',
               height: width > 600 ? 95 : 75,
@@ -199,8 +203,10 @@ export class Market extends React.Component {
             <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
                 History
             </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
+          </TestElement>
+          <TestElement
+            parent={TouchableOpacity}
+            label='test-id-navbar-menu'
             style={{
               borderColor: 'white',
               height: width > 600 ? 95 : 75,
@@ -217,8 +223,8 @@ export class Market extends React.Component {
             <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
                 Menu
             </Text>
-          </TouchableOpacity>
-        </TestElement>
+          </TestElement>
+        </View>
       </View>
     );
   }

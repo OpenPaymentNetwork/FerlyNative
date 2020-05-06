@@ -318,9 +318,7 @@ export class Settings extends React.Component {
             </View>
           </TouchableOpacity>
         </ScrollView>
-        <TestElement
-          parent={View}
-          label='test-id-navbar'
+        <View
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
@@ -328,7 +326,9 @@ export class Settings extends React.Component {
             height: width > 600 ? 95 : 75,
             width: width
           }}>
-          <TouchableOpacity
+          <TestElement
+            parent={TouchableOpacity}
+            label='test-id-navbar-wallet'
             style={{
               borderColor: 'white',
               height: width > 600 ? 95 : 75,
@@ -345,8 +345,10 @@ export class Settings extends React.Component {
             <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
                 Wallet
             </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
+          </TestElement>
+          <TestElement
+            parent={TouchableOpacity}
+            label='test-id-navbar-shop'
             style={{
               borderColor: 'white',
               height: width > 600 ? 95 : 75,
@@ -363,8 +365,10 @@ export class Settings extends React.Component {
             <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
                 Shop
             </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
+          </TestElement>
+          <TestElement
+            parent={TouchableOpacity}
+            label='test-id-navbar-history'
             style={{
               borderColor: 'white',
               height: width > 600 ? 95 : 75,
@@ -381,8 +385,10 @@ export class Settings extends React.Component {
             <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
                 History
             </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
+          </TestElement>
+          <TestElement
+            parent={TouchableOpacity}
+            label='test-id-navbar-menu'
             style={{
               borderColor: 'white',
               height: width > 600 ? 95 : 75,
@@ -399,8 +405,8 @@ export class Settings extends React.Component {
             <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
                 Menu
             </Text>
-          </TouchableOpacity>
-        </TestElement>
+          </TestElement>
+        </View>
       </View>
     );
   }

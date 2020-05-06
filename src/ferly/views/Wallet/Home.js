@@ -69,6 +69,7 @@ export class Wallet extends React.Component {
   }
 
   componentDidMount = async () => {
+    count2++;
     Dimensions.addEventListener('change', this.theWidth);
     let expoToken = await AsyncStorage.getItem('expoToken') || '';
     if (!expoToken) {
@@ -149,7 +150,7 @@ export class Wallet extends React.Component {
         Alert.alert('Error trying to get token!');
       });
     codeRedeemed = await this.retrieveCodeRedeemed();
-    if (codeRedeemed === 'needed') {
+    if (codeRedeemed === 'needed' && count2 < 2) {
       const {navigation} = this.props;
       const buttons = [
         {
@@ -162,6 +163,8 @@ export class Wallet extends React.Component {
         }
       ];
       Alert.alert('Have an invite code?', '', buttons);
+    } else {
+      count2 = 0;
     }
     for (var i = 1; i <= 75; i++) {
       this.array.push(i);
@@ -210,11 +213,6 @@ export class Wallet extends React.Component {
       let token = await Notifications.getExpoPushTokenAsync();
       return token;
     }
-  }
-
-  componentWillUnmount () {
-    Dimensions.removeEventListener('change', this.theWidth);
-    clearInterval(interval);
   }
 
   renderScrollViewContent () {
@@ -565,6 +563,17 @@ export class Wallet extends React.Component {
     Alert.alert(title, message, buttons, {cancelable: false});
   }
 
+  changeLoaded () {
+    this.setState({
+      loaded: true
+    });
+  }
+
+  componentWillUnmount () {
+    Dimensions.removeEventListener('change', this.theWidth);
+    clearInterval(interval);
+  }
+
   render () {
     cash = {};
     rewards = {};
@@ -601,9 +610,7 @@ export class Wallet extends React.Component {
     if (!firstName) {
       if (!this.state.loaded) {
         interval = setTimeout(() => {
-          this.setState({
-            loaded: true
-          });
+          this.changeLoaded();
         }, 9000);
       }
       if (this.state.loaded) {
@@ -937,9 +944,7 @@ export class Wallet extends React.Component {
             </Text>
           </Animated.View>
         </TestElement>
-        <TestElement
-          parent={View}
-          label='test-id-navbar'
+        <View
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
@@ -947,7 +952,9 @@ export class Wallet extends React.Component {
             height: width > 600 ? 95 : 75,
             width: width
           }}>
-          <TouchableOpacity
+          <TestElement
+            parent={TouchableOpacity}
+            label='test-id-navbar-wallet'
             style={{
               borderColor: 'white',
               height: width > 600 ? 95 : 75,
@@ -964,8 +971,10 @@ export class Wallet extends React.Component {
             <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
               Wallet
             </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
+          </TestElement>
+          <TestElement
+            parent={TouchableOpacity}
+            label='test-id-navbar-shop'
             style={{
               borderColor: 'white',
               height: width > 600 ? 95 : 75,
@@ -982,8 +991,10 @@ export class Wallet extends React.Component {
             <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
               Shop
             </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
+          </TestElement>
+          <TestElement
+            parent={TouchableOpacity}
+            label='test-id-navbar-history'
             style={{
               borderColor: 'white',
               height: width > 600 ? 95 : 75,
@@ -1000,8 +1011,10 @@ export class Wallet extends React.Component {
             <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
               History
             </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
+          </TestElement>
+          <TestElement
+            parent={TouchableOpacity}
+            label='test-id-navbar-menu'
             style={{
               borderColor: 'white',
               height: width > 600 ? 95 : 75,
@@ -1018,8 +1031,8 @@ export class Wallet extends React.Component {
             <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
               Menu
             </Text>
-          </TouchableOpacity>
-        </TestElement>
+          </TestElement>
+        </View>
       </View>
     );
   }
@@ -1038,6 +1051,7 @@ const HEADER_MIN_HEIGHT = width < 350 ? 50 : 120 && Platform.OS === 'ios' ? 50 :
 const HEADER_MAX_HEIGHT = width < 350 ? 150 : 200;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 let count = 0;
+let count2 = 0;
 const styles = StyleSheet.create({
   header: {
     position: 'absolute',

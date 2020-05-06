@@ -1,7 +1,6 @@
 import Icon from 'react-native-vector-icons/FontAwesome';
 import PropTypes from 'prop-types';
 import React from 'react';
-import TestElement from 'ferly/components/TestElement';
 import Theme from 'ferly/utils/theme';
 import {apiRequire, apiExpire} from 'ferly/store/api';
 import {connect} from 'react-redux';
@@ -16,7 +15,6 @@ import {
   StyleSheet,
   Dimensions
 } from 'react-native';
-import {format as formatDate} from 'date-fns';
 
 export class Invitations extends React.Component {
   static navigationOptions = {
@@ -82,44 +80,6 @@ export class Invitations extends React.Component {
         Alert.alert('Error trying to delete invitation!');
         navigator.navigate('Home');
       });
-  }
-
-  renderInvite (invite) {
-    const b = invite.created.split(/\D+/);
-    const date = new Date(Date.UTC(b[0], --b[1], b[2], b[3], b[4], b[5]));
-    // React Native doesn't fully support Date.toLocaleString() on Android
-    // use date-fns. Expect the JavaScriptCore to be updated in SDK 31.
-    const dateDisplay = formatDate(date, 'MMM D, YYYY h:mm A');
-    return (
-      <TestElement
-        parent={View}
-        label='test-id-invitations'
-        key={invite.id} style={styles.invitationContainer}>
-        <View style={styles.invitationHeader}>
-          <Text style={{fontSize: 22, color: Theme.darkBlue}}>Invited</Text>
-        </View>
-        <View style={styles.invitationBody}>
-          <View style={styles.invitationIconContainer}>
-            <Icon
-              name={invite.recipient.indexOf('@') > -1 ? 'envelope' : 'phone'}
-              color="white"
-              size={22} />
-          </View>
-          <View style={{marginLeft: 20}}>
-            <Text style={styles.recipientText}>{invite.recipient}</Text>
-            <Text style={{color: 'gray'}}>{dateDisplay}</Text>
-          </View>
-        </View>
-        <View style={{flex: 1}}>
-          <TouchableOpacity
-            style={styles.invitationActionButton}
-            disabled={this.state.deleting}
-            onPress={() => this.deleteInvite(invite)}>
-            <Text style={{fontSize: 20, color: Theme.lightBlue}}>DELETE</Text>
-          </TouchableOpacity>
-        </View>
-      </TestElement>
-    );
   }
 
   render () {

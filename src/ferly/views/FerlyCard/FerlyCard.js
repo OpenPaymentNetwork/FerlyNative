@@ -162,7 +162,38 @@ export class FerlyCard extends React.Component {
   }
 
   removeCard = () => {
-    const {address} = this.state;
+    this.setState({submitting: true});
+    let {haveCard} = this.state;
+    let newAddress = {};
+    fetch(createUrl('verify-address'), {
+      headers: {
+        Authorization: 'Bearer ' + this.props.deviceToken
+      }})
+      .then((response) => response.json())
+      .then((json) => {
+        this.setState({address: json});
+        newAddress = json;
+        if (json['verified'] === 'yes') {
+          this.setState({passed: 'true'});
+        } else if (json['verified'] === 'no') {
+          this.setState({passed: ''});
+        } else if (json['error'] === 'No address on file' && haveCard) {
+          this.setState({passed: 'false'});
+        } else {
+          this.setState({passed: ''});
+        }
+      })
+      .catch(() => {
+        const text = {'text': 'Call failed: verify address'};
+        post('log-info', this.props.deviceToken, text)
+          .then((response) => response.json())
+          .then((responseJson) => {
+          })
+          .catch(() => {
+            console.log('log error');
+          });
+        Alert.alert('Error trying to get address!');
+      });
     const {card_id: cardId} = this.props.card;
     this.setState({submitting: true});
     post('delete-card', this.props.deviceToken, {card_id: cardId})
@@ -179,7 +210,6 @@ export class FerlyCard extends React.Component {
             });
         }
         const text = {'text': 'successful delete card'};
-        this.setState({submitting: false});
         post('log-info', this.props.deviceToken, text)
           .then((response) => response.json())
           .then((responseJson) => {
@@ -190,23 +220,23 @@ export class FerlyCard extends React.Component {
         this.props.dispatch(apiRefresh(urls.profile));
         this.setState({passed: ''});
         if (this.state.passed === '') {
-          if (!address['address_line1']) {
+          if (!newAddress['address_line1']) {
             this.setState({passed: ''});
           } else {
-            let addressLine2 = address['address_line2'] === '' ? '' : address['address_line2'] + '\n';
+            let addressLine2 = newAddress['address_line2'] === '' ? '' : newAddress['address_line2'] + '\n';
             Alert.alert(
               'Correct Address?',
-              address['address_line1'] + '\n' +
+              newAddress['address_line1'] + '\n' +
             addressLine2 +
-            address['city'] + ' ' +
-            address['state'] + ' ' +
-            address['zip'],
+            newAddress['city'] + ' ' +
+            newAddress['state'] + ' ' +
+            newAddress['zip'],
               [
                 {text: 'No',
                   onPress: () => {
-                    address['verified'] = 'no';
+                    newAddress['verified'] = 'no';
                     this.props.dispatch(setHaveCard(true));
-                    post('request-card', this.props.deviceToken, this.modifyAddress(address))
+                    post('request-card', this.props.deviceToken, this.modifyAddress(newAddress))
                       .then((response) => response.json())
                       .then((json) => {
                         if (json.error || json.invalid) {
@@ -244,9 +274,9 @@ export class FerlyCard extends React.Component {
                   }},
                 {text: 'Yes',
                   onPress: () => {
-                    address['verified'] = 'yes';
+                    newAddress['verified'] = 'yes';
                     this.props.dispatch(setHaveCard(false));
-                    post('request-card', this.props.deviceToken, this.modifyAddress(address))
+                    post('request-card', this.props.deviceToken, this.modifyAddress(newAddress))
                       .then((response) => response.json())
                       .then((json) => {
                         if (json.error || json.invalid) {
@@ -286,6 +316,7 @@ export class FerlyCard extends React.Component {
             );
           }
         }
+        this.setState({submitting: false});
       })
       .catch(() => {
         const text = {'text': 'Call failed: delete card ferly card'};

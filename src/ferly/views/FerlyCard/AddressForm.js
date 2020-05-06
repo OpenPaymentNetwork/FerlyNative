@@ -174,8 +174,10 @@ export class AddressForm extends React.Component {
           <KeyboardAvoidingView style={styles.form}
             behavior={'padding'}
             keyboardVerticalOffset={64}>
-            <ScrollView keyboardShouldPersistTaps='handled'>
-              <TestElement parent={View} label='test-id-address-form'>
+            <TestElement
+              parent={ScrollView} label='test-id-address-form' keyboardShouldPersistTaps='handled'
+            >
+              <View>
                 <View>
                   <View style={[styles.textBox, {paddingTop: 30}]}>
                     <TextInput
@@ -280,8 +282,8 @@ export class AddressForm extends React.Component {
                       paddingLeft: 5}}>Activate It</Text>
                   </TouchableOpacity>
                 </View>
-              </TestElement>
-            </ScrollView>
+              </View>
+            </TestElement>
           </KeyboardAvoidingView>
         </View>
       );

@@ -99,43 +99,56 @@ export class LandingPage extends React.Component {
               marginBottom: 3
             }} />
           }
+          horizontal={true}
           autoplay={true}
           autoplayTimeout={10}
-          style={{height: width < 350 ? 500 : 500 && width > 600 ? 400 : 500}}
+          style={{height: width < 350 ? 400 : width > 600 ? 800 : 600}}
         >
           <View style={styles.container}>
-            <View style={{paddingTop: width < 350 ? 10 : 50 && width > 600 ? 100 : 50}}>
+            <View style={{
+              paddingTop: width < 350 && height < 745 ? 20 : width < 600 && height > 745 ? 80 : 40
+            }}>
               <Text style={[styles.text, {
-                fontSize: width > 600 ? 30 : 20 && width < 350 ? 16 : 20
+                fontSize: width > 600 && height > 745 ? 30 : width < 400 && height < 600 ? 16 : 22
               }]}>
                 Buy gift value anytime, anywhere, perfect for that last minute gift.
               </Text>
             </View>
-            <View style={{paddingTop: width < 350 ? 25 : 50 && width > 600 ? 100 : 50}}>
+            <View style={{
+              paddingTop: width < 350 && height < 745 ? 20 : width < 600 && height > 745 ? 80 : 40
+            }}>
               <Image style={styles.image} source={tutorialTwo} />
             </View>
           </View>
           <View style={styles.container}>
-            <View style={{paddingTop: width < 350 ? 10 : 50 && width > 600 ? 100 : 50}}>
+            <View style={{
+              paddingTop: width < 350 && height < 745 ? 20 : width < 600 && height > 745 ? 80 : 40
+            }}>
               <Text style={[styles.text, {
-                fontSize: width > 600 ? 30 : 20 && width < 350 ? 16 : 20
+                fontSize: width > 600 && height > 745 ? 30 : width < 400 && height < 600 ? 16 : 22
               }]}>
                 Easily send gifts to friends and family, even those far away.
               </Text>
             </View>
-            <View style={{paddingTop: width < 350 ? 25 : 50 && width > 600 ? 100 : 50}}>
+            <View style={{
+              paddingTop: width < 350 && height < 745 ? 20 : width < 600 && height > 745 ? 80 : 40
+            }}>
               <Image style={styles.image} source={tutorialSix} />
             </View>
           </View>
           <View style={styles.container}>
-            <View style={{paddingTop: width < 350 ? 10 : 50 && width > 600 ? 100 : 50}}>
+            <View style={{
+              paddingTop: width < 350 && height < 745 ? 20 : width < 600 && height > 745 ? 80 : 40
+            }}>
               <Text style={[styles.text, {
-                fontSize: width > 600 ? 30 : 20 && width < 350 ? 16 : 20
+                fontSize: width > 600 && height > 745 ? 30 : width < 400 && height < 600 ? 16 : 22
               }]}>
                 Have real time access to gift card balances.
               </Text>
             </View>
-            <View style={{paddingTop: width < 350 ? 25 : 50 && width > 600 ? 100 : 50}}>
+            <View style={{
+              paddingTop: width < 350 && height < 745 ? 20 : width < 600 && height > 745 ? 80 : 40
+            }}>
               <Image style={styles.image} source={tutorialThree} />
             </View>
           </View>
@@ -152,7 +165,7 @@ export class LandingPage extends React.Component {
             <TouchableOpacity onPress={() => navigation.navigate('RecoveryChannel', passParams)}>
               <Text style={{
                 color: Theme.lightBlue,
-                fontSize: width > 600 ? 22 : 18 && width < 350 ? 16 : 18,
+                fontSize: width > 600 && height > 745 ? 22 : width < 400 && height < 745 ? 16 : 18,
                 paddingLeft: 10
               }}>
                 Sign In
@@ -166,7 +179,7 @@ export class LandingPage extends React.Component {
   }
 }
 
-let {width} = Dimensions.get('window');
+let {width, height} = Dimensions.get('window');
 let expoToken = '';
 
 LandingPage.propTypes = {
@@ -181,7 +194,9 @@ const styles = StyleSheet.create({
     paddingTop: 40,
     paddingHorizontal: 20
   },
-  image: {height: width > 600 ? 500 : 300 && width < 350 ? 180 : 300, resizeMode: 'contain'},
+  image: {
+    height: width > 600 && height > 745 ? 500 : width < 400 && height < 600 ? 180 : 300,
+    resizeMode: 'contain'},
   text: {textAlign: 'center', color: 'white'},
   circle: {width: 12, height: 12, borderRadius: 6}
 });

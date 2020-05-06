@@ -77,7 +77,7 @@ export class CardForm extends React.Component {
     post('add-card', this.props.deviceToken, {pan, pin})
       .then((response) => response.json())
       .then((json) => {
-        this.setState({submitting: false, pin: '', invalid: {}});
+        this.setState({pin: '', invalid: {}});
         if (this.validateAddCard(json)) {
           const text = {'text': 'succesful add card'};
           post('log-info', this.props.deviceToken, text)
@@ -88,6 +88,7 @@ export class CardForm extends React.Component {
               console.log('log error');
             });
           this.props.apiRefresh(urls.profile);
+          this.setState({submitting: false});
           const alertText = 'Your card is ready to use. Remember to select ' +
             'debit when using your card.';
           Alert.alert('Success', alertText);

@@ -1,18 +1,18 @@
-import AddressForm from 'ferly/views/FerlyCard/AddressForm';
+// import AddressForm from 'ferly/views/FerlyCard/AddressForm';
 import EnterCode from 'ferly/views/Give/EnterCode';
 import FerlyCard from 'ferly/views/FerlyCard/FerlyCard';
 import Give from 'ferly/views/Give/Give';
 import GiveContact from 'ferly/views/Give/GiveContact';
 import Recipient from 'ferly/views/Give/Recipient';
 import History from 'ferly/views/History/History';
-import NewCardForm from 'ferly/views/FerlyCard/NewCardForm';
+// import NewCardForm from 'ferly/views/FerlyCard/NewCardForm';
 import Profile from 'ferly/views/Profile/Profile';
 import RecoveryChannel from 'ferly/views/Public/RecoveryChannel';
 import RecoveryCode from 'ferly/views/Public/RecoveryCode';
 import Settings from 'ferly/views/Settings/Settings';
 import SignUp from 'ferly/views/Public/SignUp';
 import SignUpCode from 'ferly/views/Public/SignUpCode';
-import SignUpWaiting from 'ferly/views/FerlyCard/SignUpWaiting';
+// import SignUpWaiting from 'ferly/views/FerlyCard/SignUpWaiting';
 import Transfer from 'ferly/views/History/Transfer';
 import Home from 'ferly/views/Wallet/Home';
 import Menu from 'ferly/views/Settings/Menu';
@@ -26,7 +26,7 @@ import Purchase from 'ferly/views/Purchase/Purchase';
 import Market from 'ferly/views/Purchase/Market';
 import Recovery from 'ferly/views/Settings/Recovery';
 import EventListener from 'ferly/components/EventListener';
-import Tutorial from 'ferly/views/Public/Tutorial';
+// import Tutorial from 'ferly/views/Public/Tutorial';
 import {
   createDrawerNavigator,
   createStackNavigator,
@@ -125,17 +125,17 @@ const AuthDrawer = createDrawerNavigator(
   }
 );
 
-const MidStack = createStackNavigator(
-  {
-    Tutorial: {screen: Tutorial, navigationOptions: {header: null}},
-    AddressForm: {screen: AddressForm, navigationOptions: publicHeader},
-    SignUpWaiting: {screen: SignUpWaiting, navigationOptions: publicHeader},
-    NewCardForm: {screen: NewCardForm, navigationOptions: publicHeader}
-  },
-  {
-    initialRouteName: 'Tutorial'
-  }
-);
+// const MidStack = createStackNavigator(
+//   {
+//     Tutorial: {screen: Tutorial, navigationOptions: {header: null}},
+//     AddressForm: {screen: AddressForm, navigationOptions: publicHeader},
+//     SignUpWaiting: {screen: SignUpWaiting, navigationOptions: publicHeader},
+//     NewCardForm: {screen: NewCardForm, navigationOptions: publicHeader}
+//   },
+//   {
+//     initialRouteName: 'Tutorial'
+//   }
+// );
 
 const PubStack = createStackNavigator(
   {
@@ -154,8 +154,7 @@ export const CreateAuthSwitch = (isUser, doneTutorial) => {
   const AppLayout = createSwitchNavigator(
     {
       Pub: PubStack,
-      Auth: AuthDrawer,
-      Mid: MidStack
+      Auth: AuthDrawer
     },
     {
       initialRouteName: (isUser === 'false') ? 'Pub' : ((doneTutorial === 'false') ? 'Auth' : 'Auth')

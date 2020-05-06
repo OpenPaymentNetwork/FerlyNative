@@ -40,17 +40,17 @@ export class Recovery extends React.Component {
     } else {
       form = (
         <View>
-          <TestElement
-            parent={View}
-            label='test-id-recovery-email'>
-            <UIDController type="email" uid={email} navigation={navigation} />
-          </TestElement>
+          <View>
+            <TestElement
+              parent={UIDController}
+              label='test-id-recovery-email' type="email" uid={email} navigation={navigation} />
+          </View>
           <View style={{borderBottomColor: 'gray', borderBottomWidth: 0.5}}/>
-          <TestElement
-            parent={View}
-            label='test-id-recovery-phone'>
-            <UIDController type="phone" uid={phone} navigation={navigation} />
-          </TestElement>
+          <View>
+            < TestElement
+              parent={UIDController}
+              label='test-id-recovery-phone' type="phone" uid={phone} navigation={navigation} />
+          </View>
         </View>
       );
     }

@@ -1,8 +1,9 @@
 {
   "expo": {
     "name": "Ferly",
+    "description": "App for close loop gift value.",
     "icon": "./ferly-icon.png",
-    "version": "1.4.13.1",
+    "version": "1.5.0",
     "privacy": "public",
     "slug": "ferly",
     "orientation": "portrait",
@@ -17,7 +18,7 @@
       "buildNumber": "10"
     },
     "android": {
-      "versionCode": 13,
+      "versionCode": 14,
       "package": "com.ferly.ferly",
       "config": {
         "googleMaps": {

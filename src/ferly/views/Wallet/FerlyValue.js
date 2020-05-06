@@ -156,12 +156,12 @@ export class FerlyValue extends React.Component {
             {column2}
           </Text>
         </View>
-        <View style={{justifyContent: 'flex-end', width: width / 3}}>
+        <View style={{justifyContent: 'flex-end', width: width < 400 ? width / 4 : width / 3.8}}>
           <Text style={{
             color: Theme.darkBlue,
             fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
             paddingTop: 10,
-            paddingLeft: width < 350 ? 0 : 25
+            alignSelf: 'flex-end'
           }}>
             {column3}
           </Text>

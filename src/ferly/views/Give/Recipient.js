@@ -480,16 +480,16 @@ class Recipient extends React.Component {
 
     return (
       <View style={{flex: 1, backgroundColor: 'white'}}>
-        <TestElement
-          parent={View}
-          label='test-id-recipient-navbar'
+        <View
           style={{
             flexDirection: 'row',
             justifyContent: 'space-around',
             alignItems: 'center',
             backgroundColor: Theme.darkBlue
           }}>
-          <TouchableOpacity
+          <TestElement
+            parent={TouchableOpacity}
+            label='test-id-recipient-navbar-contacts'
             style={{
               borderBottomWidth: this.state.page === 'Contacts' ? 4 : 0,
               borderColor: 'white',
@@ -502,8 +502,10 @@ class Recipient extends React.Component {
             <Text style={{color: 'white', fontSize: width > 600 ? 18 : 16}}>
                 Contacts
             </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
+          </TestElement>
+          <TestElement
+            parent={TouchableOpacity}
+            label='test-id-recipient-navbar-users'
             style={{
               borderBottomWidth: this.state.page === 'Users' ? 4 : 0,
               borderColor: 'white',
@@ -516,8 +518,10 @@ class Recipient extends React.Component {
             <Text style={{color: 'white', fontSize: width > 600 ? 18 : 16}}>
               Users
             </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
+          </TestElement>
+          <TestElement
+            parent={TouchableOpacity}
+            label='test-id-recipient-navbar-other'
             style={{
               borderBottomWidth: this.state.page === 'Other' ? 4 : 0,
               borderColor: 'white',
@@ -530,8 +534,8 @@ class Recipient extends React.Component {
             <Text style={{color: 'white', fontSize: width > 600 ? 18 : 16}}>
               Other
             </Text>
-          </TouchableOpacity>
-        </TestElement>
+          </TestElement>
+        </View>
         <View style={{flex: 1, marginHorizontal: width > 600 ? 15 : 10}}>
           {body}
         </View>

@@ -94,13 +94,13 @@ export class Settings extends React.Component {
     );
 
     return (
-      <TestElement
-        parent={View}
-        label='test-id-settings-page'
+      <View
         style={{flex: 1, backgroundColor: 'white'}}
       >
         <Text style={styles.title}>{'Account Recovery'}</Text>
-        <TouchableOpacity
+        <TestElement
+          parent={TouchableOpacity}
+          label='test-id-settings-page-recover'
           style={styles.item}
           onPress={() => navigation.navigate('Recovery')}>
           <View style={styles.sectionContainer}>
@@ -115,9 +115,11 @@ export class Settings extends React.Component {
             </View>
             {arrowIcon}
           </View>
-        </TouchableOpacity>
+        </TestElement>
         <Text style={styles.title}>{'About'}</Text>
-        <TouchableOpacity
+        <TestElement
+          parent={TouchableOpacity}
+          label='test-id-settings-page-about'
           style={styles.item}
           disabled={!updateDownloaded}
           onPress={this.handleUpdateClick.bind(this)}>
@@ -133,8 +135,8 @@ export class Settings extends React.Component {
             </View>
             {updateDownloaded ? updateIcon : null}
           </View>
-        </TouchableOpacity>
-      </TestElement>
+        </TestElement>
+      </View>
     );
   }
 }

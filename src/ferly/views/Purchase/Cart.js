@@ -177,26 +177,50 @@ export class Cart extends React.Component {
               };
             }
           } else {
-            if (design.authorized_merchant) {
-              tradeParams = {
-                accept_expire_seconds: 30,
-                combine_accept: true,
-                open_loop: this.state.openLoop,
-                amounts: [this.state.setCashAmount, this.state.setRewardsAmount],
-                expect_amounts: [amount, gettingLoyaltyAmount],
-                expect_loop_ids: [design.id, gettingLoyaltyId],
-                loop_ids: [cash.id.toString(), this.state.rewardsLoopId]
-              };
+            if (this.state.setCashAmount === '0') {
+              if (design.authorized_merchant) {
+                tradeParams = {
+                  accept_expire_seconds: 30,
+                  combine_accept: true,
+                  open_loop: this.state.openLoop,
+                  amounts: [this.state.setRewardsAmount],
+                  expect_amounts: [amount, gettingLoyaltyAmount],
+                  expect_loop_ids: [design.id, gettingLoyaltyId],
+                  loop_ids: [this.state.rewardsLoopId]
+                };
+              } else {
+                tradeParams = {
+                  accept_expire_seconds: 30,
+                  combine_accept: true,
+                  open_loop: this.state.openLoop,
+                  amounts: [this.state.setRewardsAmount],
+                  expect_amounts: [amount],
+                  expect_loop_ids: [design.id],
+                  loop_ids: [this.state.rewardsLoopId]
+                };
+              }
             } else {
-              tradeParams = {
-                accept_expire_seconds: 30,
-                combine_accept: true,
-                open_loop: this.state.openLoop,
-                amounts: [this.state.setCashAmount, this.state.setRewardsAmount],
-                expect_amounts: [amount],
-                expect_loop_ids: [design.id],
-                loop_ids: [cash.id.toString(), this.state.rewardsLoopId]
-              };
+              if (design.authorized_merchant) {
+                tradeParams = {
+                  accept_expire_seconds: 30,
+                  combine_accept: true,
+                  open_loop: this.state.openLoop,
+                  amounts: [this.state.setCashAmount, this.state.setRewardsAmount],
+                  expect_amounts: [amount, gettingLoyaltyAmount],
+                  expect_loop_ids: [design.id, gettingLoyaltyId],
+                  loop_ids: [cash.id.toString(), this.state.rewardsLoopId]
+                };
+              } else {
+                tradeParams = {
+                  accept_expire_seconds: 30,
+                  combine_accept: true,
+                  open_loop: this.state.openLoop,
+                  amounts: [this.state.setCashAmount, this.state.setRewardsAmount],
+                  expect_amounts: [amount],
+                  expect_loop_ids: [design.id],
+                  loop_ids: [cash.id.toString(), this.state.rewardsLoopId]
+                };
+              }
             }
           }
 
@@ -293,32 +317,57 @@ export class Cart extends React.Component {
           };
         }
       } else {
-        if (design.authorized_merchant) {
-          tradeParams = {
-            accept_expire_seconds: 30,
-            combine_accept: true,
-            open_loop: this.state.openLoop,
-            amounts: [this.state.setCashAmount, this.state.setRewardsAmount],
-            expect_amounts: [amount, gettingLoyaltyAmount],
-            expect_loop_ids: [design.id, gettingLoyaltyId],
-            loop_ids: [cash.id.toString(), this.state.rewardsLoopId]
-          };
+        if (this.state.setCashAmount === '0') {
+          if (design.authorized_merchant) {
+            tradeParams = {
+              accept_expire_seconds: 30,
+              combine_accept: true,
+              open_loop: this.state.openLoop,
+              amounts: [this.state.setRewardsAmount],
+              expect_amounts: [amount, gettingLoyaltyAmount],
+              expect_loop_ids: [design.id, gettingLoyaltyId],
+              loop_ids: [this.state.rewardsLoopId]
+            };
+          } else {
+            tradeParams = {
+              accept_expire_seconds: 30,
+              combine_accept: true,
+              open_loop: this.state.openLoop,
+              amounts: [this.state.setRewardsAmount],
+              expect_amounts: [amount],
+              expect_loop_ids: [design.id],
+              loop_ids: [this.state.rewardsLoopId]
+            };
+          }
         } else {
-          tradeParams = {
-            accept_expire_seconds: 30,
-            combine_accept: true,
-            open_loop: this.state.openLoop,
-            amounts: [this.state.setCashAmount, this.state.setRewardsAmount],
-            expect_amounts: [amount],
-            expect_loop_ids: [design.id],
-            loop_ids: [cash.id.toString(), this.state.rewardsLoopId]
-          };
+          if (design.authorized_merchant) {
+            tradeParams = {
+              accept_expire_seconds: 30,
+              combine_accept: true,
+              open_loop: this.state.openLoop,
+              amounts: [this.state.setCashAmount, this.state.setRewardsAmount],
+              expect_amounts: [amount, gettingLoyaltyAmount],
+              expect_loop_ids: [design.id, gettingLoyaltyId],
+              loop_ids: [cash.id.toString(), this.state.rewardsLoopId]
+            };
+          } else {
+            tradeParams = {
+              accept_expire_seconds: 30,
+              combine_accept: true,
+              open_loop: this.state.openLoop,
+              amounts: [this.state.setCashAmount, this.state.setRewardsAmount],
+              expect_amounts: [amount],
+              expect_loop_ids: [design.id],
+              loop_ids: [cash.id.toString(), this.state.rewardsLoopId]
+            };
+          }
         }
       }
 
       post('trade', this.props.deviceToken, tradeParams)
         .then((response) => response.json())
         .then((json) => {
+          console.log('json', json);
           if (!json.invalid && !json.error) {
             const text = {'text': 'successful trade'};
             post('log-info', this.props.deviceToken, text)
@@ -497,17 +546,17 @@ export class Cart extends React.Component {
           behavior='position'
           keyboardVerticalOffset={80}
           style={{flex: 1}}>
-          <ScrollView
+          <TestElement
+            parent={ScrollView}
+            label='test-id-cart-header-box'
             keyboardShouldPersistTaps='handled'>
-            <TestElement
-              parent={View}
-              label='test-id-cart-header-box'
+            <View
               style={styles.header}>
               <View style={{alignItems: 'center'}} >
               </View>
               <View style={styles.designContainer}>
                 <ScrollView>
-                  <View style={{flexGrow: 1, flexWrap: 'wrap', flex: 1}}>
+                  <View style={{flexGrow: 1, flex: 1}}>
                     <View style={styles.section}>
                       <Text style={[styles.sectionHeader, {marginBottom: 15}]}>
                         Purchase Summary
@@ -518,7 +567,9 @@ export class Cart extends React.Component {
                         <View style={{borderBottomWidth: 2, borderBottomColor: Theme.lightBlue}}>
                           <View style={[styles.functionRow]}>
                             <Text style={[styles.sectionText, {
-                              marginTop: 15, marginHorizontal: 10, width: width / 3
+                              marginTop: 15,
+                              marginHorizontal: 10,
+                              width: width > 350 ? width / 1.5 : width / 1.6
                             }]}>
                               {title}
                             </Text>
@@ -535,7 +586,7 @@ export class Cart extends React.Component {
                         </View>
                         <View style={[styles.functionRow, {marginTop: 10, marginHorizontal: 10}]}>
                           <Text style={[styles.sectionText, {fontSize: 12}]}>
-                        Online Fee
+                            Online Fee
                           </Text>
                           <Text style={[styles.sectionText,
                             {color: Theme.darkBlue, fontSize: 12}]}>
@@ -546,16 +597,16 @@ export class Cart extends React.Component {
                           marginHorizontal: 10, marginVertical: 10
                         }]}>
                           <Text style={[styles.sectionText, {fontSize: 12}]}>
-                        Taxes
+                            Taxes
                           </Text>
                           <Text style={[styles.sectionText,
                             {color: Theme.darkBlue, fontSize: 12}]}>
-                        $0.00
+                            $0.00
                           </Text>
                         </View>
                         <View style={[styles.functionRow, {backgroundColor: Theme.lightBlue}]}>
                           <Text style={[styles.totalText, {margin: 10}]}>
-                        Total
+                            Total
                           </Text>
                           <Text style={[styles.sectionText,
                             {
@@ -578,7 +629,7 @@ export class Cart extends React.Component {
                         <I
                           name="heart-box"
                           color={Theme.darkBlue}
-                          size={width < 330 ? 20 : 23 && width > 600 ? 28 : 23}/>
+                          size={width < 330 ? 20 : 23 && width > 600 ? 18 : 23}/>
                         <Text style={[styles.sectionHeader, {
                           fontSize: 14, paddingLeft: 5, marginTop: 0, marginBottom: 0
                         }]}>
@@ -599,7 +650,7 @@ export class Cart extends React.Component {
                               }]}>
                               <Icon name="dollar"
                                 color={Theme.darkBlue}
-                                size={width < 330 ? 18 : 23 && width > 600 ? 28 : 23}/>
+                                size={width < 330 ? 18 : 21 && width > 600 ? 18 : 21}/>
                               <Text style={[styles.sectionText,
                                 {marginHorizontal: 15, fontWeight: 'bold', fontSize: 16}
                               ]}>
@@ -642,7 +693,7 @@ export class Cart extends React.Component {
                               <Ico
                                 name="md-ribbon"
                                 color={Theme.darkBlue}
-                                size={width < 330 ? 20 : 23 && width > 600 ? 38 : 23} />
+                                size={width < 330 ? 20 : 23 && width > 600 ? 23 : 23} />
                               <Text style={[styles.sectionText,
                                 {marginHorizontal: 10, fontWeight: 'bold', fontSize: 16}
                               ]}>
@@ -697,9 +748,8 @@ export class Cart extends React.Component {
                   </View>
                 </ScrollView>
               </View>
-            </TestElement>
-            <View style={{height: 80}} />
-          </ScrollView>
+            </View>
+          </TestElement>
         </KeyboardAvoidingView>
         <PrimaryButton
           title="Confirm Purchase"
@@ -731,7 +781,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: Theme.lightBlue,
     height: width > 600 ? 40 : 35,
-    width: width / 2,
+    width: width / 1.5,
     borderRadius: 5,
     paddingLeft: 10,
     fontSize: width > 600 ? 18 : 14
