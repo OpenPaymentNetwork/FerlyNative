@@ -599,12 +599,6 @@ const styles = StyleSheet.create({
   title: {fontSize: width > 600 ? 26 : 22, fontWeight: 'bold', color: Theme.darkBlue},
   errorText: {color: 'red'},
   labelText: {color: 'gray'},
-  instructions: {
-    fontSize: width > 600 ? 20 : 16,
-    paddingHorizontal: 6,
-    paddingVertical: 10,
-    color: Theme.darkBlue
-  },
   actionsContainer: {
     marginHorizontal: 20,
     borderTopWidth: 0.5,

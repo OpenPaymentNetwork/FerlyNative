@@ -227,12 +227,6 @@ let count = 0;
 const {width} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
-  cardContainer: {
-    justifyContent: 'space-around',
-    flexDirection: 'row',
-    padding: 20
-  },
-  panText: {fontSize: 20, padding: 20, color: 'white'},
   inputContainer: {
     borderWidth: 1,
     height: width > 600 ? 40 : 35,
@@ -242,32 +236,11 @@ const styles = StyleSheet.create({
   },
   title: {fontSize: width > 600 ? 24 : 22, fontWeight: 'bold', color: Theme.darkBlue},
   errorText: {color: 'red'},
-  labelText: {color: 'gray'},
   instructions: {
     fontSize: width > 600 ? 18 : 16,
     paddingHorizontal: 6,
     paddingVertical: 10,
     color: Theme.darkBlue
-  },
-  actionsContainer: {
-    marginHorizontal: 20,
-    borderTopWidth: 0.5,
-    borderTopColor: 'gray'
-  },
-  actionRow: {flexDirection: 'row', padding: 10, alignItems: 'center'},
-  modalPage: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.5)'
-  },
-  modalDialog: {
-    backgroundColor: 'white',
-    height: 160,
-    width: 260,
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingVertical: 10
   }
 });
 

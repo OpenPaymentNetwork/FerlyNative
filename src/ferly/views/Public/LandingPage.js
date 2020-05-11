@@ -102,52 +102,52 @@ export class LandingPage extends React.Component {
           horizontal={true}
           autoplay={true}
           autoplayTimeout={10}
-          style={{height: width < 350 ? 400 : width > 600 ? 800 : 600}}
+          style={{height: height > 750 ? 600 : 400}}
         >
           <View style={styles.container}>
             <View style={{
-              paddingTop: width < 350 && height < 745 ? 20 : width < 600 && height > 745 ? 80 : 40
+              paddingTop: height > 750 ? height / 12 : height / 25
             }}>
               <Text style={[styles.text, {
-                fontSize: width > 600 && height > 745 ? 30 : width < 400 && height < 600 ? 16 : 22
+                fontSize: height / 35
               }]}>
                 Buy gift value anytime, anywhere, perfect for that last minute gift.
               </Text>
             </View>
             <View style={{
-              paddingTop: width < 350 && height < 745 ? 20 : width < 600 && height > 745 ? 80 : 40
+              paddingTop: height > 750 ? height / 15 : height / 20
             }}>
               <Image style={styles.image} source={tutorialTwo} />
             </View>
           </View>
           <View style={styles.container}>
             <View style={{
-              paddingTop: width < 350 && height < 745 ? 20 : width < 600 && height > 745 ? 80 : 40
+              paddingTop: height > 750 ? height / 12 : height / 25
             }}>
               <Text style={[styles.text, {
-                fontSize: width > 600 && height > 745 ? 30 : width < 400 && height < 600 ? 16 : 22
+                fontSize: height / 35
               }]}>
                 Easily send gifts to friends and family, even those far away.
               </Text>
             </View>
             <View style={{
-              paddingTop: width < 350 && height < 745 ? 20 : width < 600 && height > 745 ? 80 : 40
+              paddingTop: height > 750 ? height / 15 : height / 20
             }}>
               <Image style={styles.image} source={tutorialSix} />
             </View>
           </View>
           <View style={styles.container}>
             <View style={{
-              paddingTop: width < 350 && height < 745 ? 20 : width < 600 && height > 745 ? 80 : 40
+              paddingTop: height > 750 ? height / 10 : height / 25
             }}>
               <Text style={[styles.text, {
-                fontSize: width > 600 && height > 745 ? 30 : width < 400 && height < 600 ? 16 : 22
+                fontSize: height / 35
               }]}>
                 Have real time access to gift card balances.
               </Text>
             </View>
             <View style={{
-              paddingTop: width < 350 && height < 745 ? 20 : width < 600 && height > 745 ? 80 : 40
+              paddingTop: height > 750 ? height / 15 : height / 20
             }}>
               <Image style={styles.image} source={tutorialThree} />
             </View>
@@ -195,10 +195,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20
   },
   image: {
-    height: width > 600 && height > 745 ? 500 : width < 400 && height < 600 ? 180 : 300,
+    height: height > 550 ? height / 2.5 : height / 3,
     resizeMode: 'contain'},
-  text: {textAlign: 'center', color: 'white'},
-  circle: {width: 12, height: 12, borderRadius: 6}
+  text: {textAlign: 'center', color: 'white'}
 });
 
 function mapStateToProps (state) {

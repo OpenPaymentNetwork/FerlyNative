@@ -154,16 +154,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 5,
     shadowRadius: 10
   },
-  logo: {
-    marginLeft: 20,
-    zIndex: 1,
-    marginBottom: -35,
-    width: 70,
-    height: 70,
-    borderRadius: 35,
-    borderWidth: 8,
-    borderColor: 'white'
-  },
   selectionDetails: {
     flex: 1,
     backgroundColor: 'white',

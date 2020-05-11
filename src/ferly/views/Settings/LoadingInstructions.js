@@ -229,13 +229,13 @@ LoadingInstructions.propTypes = {
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    paddingVertical: width < 350 ? 15 : 20 && width > 600 ? 25 : 20,
+    paddingVertical: width < 350 ? 15 : width > 600 ? 25 : 20,
     paddingHorizontal: 10
   },
   image: {
-    height: width > 600 ? 250 : 175 && width < 350 ? 100 : 175,
+    height: width > 600 ? 250 : width < 350 ? 100 : 175,
     resizeMode: 'contain',
-    paddingBottom: width < 350 ? 15 : 20 && width > 600 ? 25 : 20
+    paddingBottom: width < 350 ? 15 : width > 600 ? 25 : 20
   },
   text: {
     textAlign: 'center',

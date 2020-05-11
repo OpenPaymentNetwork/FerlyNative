@@ -398,19 +398,9 @@ let count = 0;
 const {width} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
-  avatarContainer: {
-    width: width > 600 ? 150 : 110,
-    height: width > 600 ? 150 : 110,
-    borderRadius: width > 600 ? 65 : 55
-  },
   label: {
     color: 'gray',
     marginTop: 12
-  },
-  profileText: {
-    backgroundColor: 'lightgray',
-    justifyContent: 'center',
-    alignItems: 'center'
   },
   scrollContainer: {
     flexGrow: 1,
@@ -419,12 +409,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 40
   },
   error: {color: 'red', width: '100%'},
-  topView: {
-    flex: 1,
-    justifyContent: 'space-around',
-    backgroundColor: Theme.darkBlue,
-    alignItems: 'center'
-  },
   name: {fontSize: width > 600 ? 35 : 30},
   username: {fontSize: width > 600 ? 25 : 20, color: 'gray'},
   field: {

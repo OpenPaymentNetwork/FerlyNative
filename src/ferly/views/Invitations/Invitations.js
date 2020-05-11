@@ -134,46 +134,6 @@ let count = 0;
 const {width} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
-  invitationContainer: {
-    marginBottom: 14,
-    borderRadius: 5,
-    height: 160,
-    backgroundColor: 'white',
-    borderWidth: 1,
-    borderColor: 'lightgray',
-    elevation: 1.8,
-    shadowOffset: {width: 2, height: 2},
-    shadowColor: 'lightgray',
-    shadowOpacity: 1
-  },
-  invitationHeader: {
-    paddingLeft: 20,
-    height: 40,
-    backgroundColor: Theme.lightBlue,
-    justifyContent: 'center'
-  },
-  invitationBody: {
-    height: 80,
-    flexDirection: 'row',
-    borderBottomWidth: 1,
-    borderColor: 'lightgray',
-    alignItems: 'center',
-    paddingLeft: 20
-  },
-  invitationIconContainer: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: 'gray',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  invitationActionButton: {
-    width: 110,
-    paddingLeft: 20,
-    height: 40,
-    justifyContent: 'center'
-  },
   addIconContainer: {
     width: 24,
     height: 24,
@@ -185,14 +145,7 @@ const styles = StyleSheet.create({
   },
   button: {alignItems: 'center', flexDirection: 'row', paddingVertical: 10},
   buttonText: {color: Theme.lightBlue, fontSize: width > 600 ? 22 : 18},
-  headerText: {color: Theme.darkBlue, fontSize: width > 600 ? 26 : 22, paddingLeft: 20},
-  pendingTitleContainer: {
-    borderTopWidth: 1,
-    borderColor: 'lightgray',
-    paddingHorizontal: 20
-  },
-  pendingTitle: {color: Theme.darkBlue, fontSize: 22, paddingVertical: 12},
-  recipientText: {fontSize: 18, color: Theme.darkBlue}
+  headerText: {color: Theme.darkBlue, fontSize: width > 600 ? 26 : 22, paddingLeft: 20}
 });
 
 Invitations.propTypes = {

@@ -443,11 +443,6 @@ const styles = StyleSheet.create({
     fontSize: width > 600 ? 20 : 18,
     color: Theme.darkBlue
   },
-  description: {
-    fontSize: width > 600 ? 18 : 16,
-    color: 'gray',
-    paddingLeft: 20
-  },
   sectionContainer: {
     flex: 1,
     justifyContent: 'space-between',

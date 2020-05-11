@@ -116,34 +116,51 @@ export class Value extends React.Component {
 
   renderExpirationRow (key, column1, column2, column3) {
     return (
-      <View key={key} style={{
-        flexDirection: 'row',
-        paddingHorizontal: 15
-      }}>
-        <View style={{justifyContent: 'flex-start', width: width / 3}}>
+      <View
+        key={key}
+        style={{
+          flex: 1,
+          flexDirection: 'row',
+          justifyContent: 'space-around',
+          height: width < 350 ? 30 : width > 600 ? 40 : 35,
+          alignItems: 'center',
+          paddingHorizontal: 20,
+          backgroundColor: 'white'
+        }}
+      >
+        <View style={{
+          borderColor: 'white',
+          justifyContent: 'flex-start',
+          alignItems: 'flex-start',
+          width: width / 3
+        }}>
           <Text style={{
-            color: Theme.darkBlue,
-            fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
-            paddingTop: 10
+            color: Theme.darkBlue, fontSize: width > 600 ? 16 : 14
           }}>
             {column1}
           </Text>
         </View>
-        <View style={{justifyContent: 'center', width: width / 3}}>
+        <View style={{
+          borderColor: 'white',
+          justifyContent: 'flex-start',
+          alignItems: 'flex-start',
+          width: width / 3
+        }}>
           <Text style={{
-            color: Theme.darkBlue,
-            fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
-            paddingTop: 10
+            color: Theme.darkBlue, fontSize: width > 600 ? 16 : 14
           }}>
             {column2}
           </Text>
         </View>
-        <View style={{justifyContent: 'flex-end', width: width < 400 ? width / 4 : width / 3.8}}>
+        <View style={{
+          borderColor: 'white',
+          justifyContent: 'flex-end',
+          alignItems: 'flex-start',
+          flexDirection: 'row',
+          width: width / 3
+        }}>
           <Text style={{
-            color: Theme.darkBlue,
-            fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
-            paddingTop: 10,
-            alignSelf: 'flex-end'
+            color: Theme.darkBlue, fontSize: width > 600 ? 16 : 14
           }}>
             {column3}
           </Text>
@@ -291,36 +308,63 @@ export class Value extends React.Component {
     });
 
     const tableHeader = (
-      <View style={{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        paddingHorizontal: 15
-      }}>
-        <Text style={{
-          color: Theme.darkBlue,
-          fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
-          fontWeight: 'bold',
-          paddingTop: 10
+      <View
+        style={{
+          flex: 1,
+          flexDirection: 'row',
+          justifyContent: 'space-around',
+          height: width < 350 ? 30 : width > 600 ? 40 : 35,
+          alignItems: 'center',
+          paddingHorizontal: 20,
+          backgroundColor: 'white'
+        }}
+      >
+        <View style={{
+          borderColor: 'white',
+          justifyContent: 'flex-start',
+          alignItems: 'flex-start',
+          width: width / 3
         }}>
-        Amount
-        </Text>
-        <Text style={{
-          color: Theme.darkBlue,
-          fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
-          fontWeight: 'bold',
-          paddingTop: 10,
-          marginLeft: width < 350 ? 40 : 0
+          <Text style={{
+            color: Theme.darkBlue,
+            fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
+            fontWeight: 'bold',
+            paddingTop: 10
+          }}>
+            Amount
+          </Text>
+        </View>
+        <View style={{
+          borderColor: 'white',
+          justifyContent: 'flex-start',
+          alignItems: 'flex-start',
+          width: width / 3
         }}>
-        Type
-        </Text>
-        <Text style={{
-          color: Theme.darkBlue,
-          fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
-          fontWeight: 'bold',
-          paddingTop: 10
+          <Text style={{
+            color: Theme.darkBlue,
+            fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
+            fontWeight: 'bold',
+            paddingTop: 10
+          }}>
+            Type
+          </Text>
+        </View>
+        <View style={{
+          borderColor: 'white',
+          justifyContent: 'flex-end',
+          alignItems: 'flex-start',
+          flexDirection: 'row',
+          width: width / 3
         }}>
-        Expiration Date
-        </Text>
+          <Text style={{
+            color: Theme.darkBlue,
+            fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
+            fontWeight: 'bold',
+            paddingTop: 10
+          }}>
+            Expiration Date
+          </Text>
+        </View>
       </View>
     );
 
@@ -621,20 +665,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     backgroundColor: 'white'
   },
-  image: {width: width - 40, height: width > 600 ? 100 : 80, borderRadius: 10},
   paragraph: {
     fontSize: width > 600 ? 18 : 16,
     marginBottom: 10,
     color: Theme.darkBlue,
     marginHorizontal: 15
-  },
-  supportParagraph: {fontSize: width > 600 ? 18 : 16, color: Theme.darkBlue},
-  tableRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: Theme.darkBlue
   }
 });
 

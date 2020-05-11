@@ -308,13 +308,11 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     fontSize: width > 600 ? 20 : 14
   },
-  labelText: {color: 'gray'},
   textBox: {
     paddingHorizontal: width > 600 ? 15 : 10,
     paddingLeft: width > 600 ? 24 : 20,
     paddingTop: width > 600 ? 20 : 15
   },
-  iconStyles: {flexDirection: 'row', paddingTop: 15, paddingLeft: 20},
   page: {flex: 1, justifyContent: 'space-between', backgroundColor: 'white'},
   zipField: {
     borderWidth: 1,

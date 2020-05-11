@@ -348,11 +348,6 @@ let count = 0;
 let {width} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-    flex: 1,
-    paddingHorizontal: 5
-  },
   error: {color: 'red', width: '100%'},
   field: {
     borderWidth: 1,
@@ -363,18 +358,6 @@ const styles = StyleSheet.create({
     height: width > 600 ? 40 : 35,
     paddingLeft: 10
   },
-  firstField: {
-    borderWidth: 1,
-    borderRadius: 5,
-    fontSize: 18,
-    marginBottom: 15,
-    marginTop: 40,
-    width: '50%',
-    height: 35,
-    paddingLeft: 10,
-    justifyContent: 'space-between'
-  },
-  logo: {width: 160, height: 156, marginVertical: 40},
   recoveryText: {
     color: '#65C7C7',
     textDecorationLine: 'underline',
