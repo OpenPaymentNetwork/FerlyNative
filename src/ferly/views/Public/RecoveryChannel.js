@@ -119,14 +119,18 @@ export class RecoveryChannel extends React.Component {
         flexDirection: 'row',
         justifyContent: 'center',
         marginBottom: 30}}>
-        <Text style={{fontSize: width > 600 ? 20 : 16}}>{`Don't have an account?`}</Text>
+        <Text
+          allowFontScaling={false}
+          style={{fontSize: width > 600 ? 20 : 16}}>{`Don't have an account?`}</Text>
         <TouchableOpacity
           onPress={() => navigation.navigate('SignUp', signUpParams)}>
-          <Text style={{
-            color: '#65C7C7',
-            textDecorationLine: 'underline',
-            fontSize: width > 600 ? 20 : 16,
-            paddingLeft: 5}}>Sign Up</Text>
+          <Text
+            allowFontScaling={false}
+            style={{
+              color: '#65C7C7',
+              textDecorationLine: 'underline',
+              fontSize: width > 600 ? 20 : 16,
+              paddingLeft: 5}}>Sign Up</Text>
         </TouchableOpacity>
       </View>
     );
@@ -154,6 +158,7 @@ export class RecoveryChannel extends React.Component {
         <View style={{paddingVertical: 30}}>
           <View style={{paddingHorizontal: 15, paddingBottom: width > 600 ? 20 : 0}} >
             <TextInput
+              allowFontScaling={false}
               style={{
                 fontSize: width > 600 ? 22 : 18,
                 borderWidth: 1,
@@ -169,7 +174,9 @@ export class RecoveryChannel extends React.Component {
               value={fieldValue} />
             {
               invalid.login
-                ? (<Text style={styles.error}>{invalid.login}</Text>)
+                ? (<Text
+                  allowFontScaling={false}
+                  style={styles.error}>{invalid.login}</Text>)
                 : null
             }
           </View>

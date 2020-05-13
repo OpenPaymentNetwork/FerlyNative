@@ -27,7 +27,9 @@ export default class Avatar extends React.Component {
       return (
         <View
           style={[sizeStyle, styles.initialsContainer, shade && styles.shade]}>
-          <Text style={{fontSize: 28, color: 'gray'}}>
+          <Text
+            allowFontScaling={false}
+            style={{fontSize: 28, color: 'gray'}}>
             {firstInitial + lastInitial}
           </Text>
         </View>

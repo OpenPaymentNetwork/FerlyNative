@@ -14,7 +14,9 @@ export default class StoreAvatar extends React.Component {
     if (title) {
       return (
         <View style={[styles.container, sizeStyle, shade && styles.shade]}>
-          <Text style={{fontSize: 36, color: 'white'}}>
+          <Text
+            allowFontScaling={false}
+            style={{fontSize: 36, color: 'white'}}>
             {title.charAt(0)}
           </Text>
         </View>

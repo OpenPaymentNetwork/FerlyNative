@@ -558,7 +558,9 @@ export class Cart extends React.Component {
                 <ScrollView>
                   <View style={{flexGrow: 1, flex: 1}}>
                     <View style={styles.section}>
-                      <Text style={[styles.sectionHeader, {marginBottom: 15}]}>
+                      <Text
+                        allowFontScaling={false}
+                        style={[styles.sectionHeader, {marginBottom: 15}]}>
                         Purchase Summary
                       </Text>
                       <View style={{
@@ -566,54 +568,72 @@ export class Cart extends React.Component {
                       }}>
                         <View style={{borderBottomWidth: 2, borderBottomColor: Theme.lightBlue}}>
                           <View style={[styles.functionRow]}>
-                            <Text style={[styles.sectionText, {
-                              marginTop: 15,
-                              marginHorizontal: 10,
-                              width: width > 350 ? width / 1.5 : width / 1.6
-                            }]}>
+                            <Text
+                              allowFontScaling={false}
+                              style={[styles.sectionText, {
+                                marginTop: 15,
+                                marginHorizontal: 10,
+                                width: width > 350 ? width / 1.5 : width / 1.6
+                              }]}>
                               {title}
                             </Text>
-                            <Text style={[styles.sectionText,
-                              {color: Theme.darkBlue, marginTop: 15, marginHorizontal: 10}]}>
+                            <Text
+                              allowFontScaling={false}
+                              style={[styles.sectionText,
+                                {color: Theme.darkBlue, marginTop: 15, marginHorizontal: 10}]}>
                               {accounting.formatMoney(amountNumber)}
                             </Text>
                           </View>
                           <View style={{marginBottom: 10, marginHorizontal: 10}}>
-                            <Text style={{fontSize: 12, color: Theme.darkBlue}}>
+                            <Text
+                              allowFontScaling={false}
+                              style={{fontSize: 12, color: Theme.darkBlue}}>
                               {design.authorized_merchant ? 'Qualifies for 5% loyalty' : null}
                             </Text>
                           </View>
                         </View>
                         <View style={[styles.functionRow, {marginTop: 10, marginHorizontal: 10}]}>
-                          <Text style={[styles.sectionText, {fontSize: 12}]}>
+                          <Text
+                            allowFontScaling={false}
+                            style={[styles.sectionText, {fontSize: 12}]}>
                             Online Fee
                           </Text>
-                          <Text style={[styles.sectionText,
-                            {color: Theme.darkBlue, fontSize: 12}]}>
+                          <Text
+                            allowFontScaling={false}
+                            style={[styles.sectionText,
+                              {color: Theme.darkBlue, fontSize: 12}]}>
                             {accounting.formatMoney(convenienceFee)}
                           </Text>
                         </View>
                         <View style={[styles.functionRow, {
                           marginHorizontal: 10, marginVertical: 10
                         }]}>
-                          <Text style={[styles.sectionText, {fontSize: 12}]}>
+                          <Text
+                            allowFontScaling={false}
+                            style={[styles.sectionText, {fontSize: 12}]}>
                             Taxes
                           </Text>
-                          <Text style={[styles.sectionText,
-                            {color: Theme.darkBlue, fontSize: 12}]}>
+                          <Text
+                            allowFontScaling={false}
+                            style={[styles.sectionText,
+                              {color: Theme.darkBlue, fontSize: 12}]}>
                             $0.00
                           </Text>
                         </View>
                         <View style={[styles.functionRow, {backgroundColor: Theme.lightBlue}]}>
-                          <Text style={[styles.totalText, {margin: 10}]}>
+                          <Text
+                            allowFontScaling={false}
+                            style={[styles.totalText, {margin: 10}]}>
                             Total
                           </Text>
-                          <Text style={[styles.sectionText,
-                            {
-                              margin: 10,
-                              color: Theme.darkBlue,
-                              fontSize: width > 600 ? 18 : 16
-                            }]}>
+                          <Text
+                            allowFontScaling={false}
+                            style={[styles.sectionText,
+                              {
+                                margin: 10,
+                                color: Theme.darkBlue,
+                                fontSize: width > 600 ? 18 : 16
+                              }]}>
                             {accounting.formatMoney(total)}
                           </Text>
                         </View>
@@ -630,9 +650,11 @@ export class Cart extends React.Component {
                           name="heart-box"
                           color={Theme.darkBlue}
                           size={width < 330 ? 20 : 23 && width > 600 ? 18 : 23}/>
-                        <Text style={[styles.sectionHeader, {
-                          fontSize: 14, paddingLeft: 5, marginTop: 0, marginBottom: 0
-                        }]}>
+                        <Text
+                          allowFontScaling={false}
+                          style={[styles.sectionHeader, {
+                            fontSize: 14, paddingLeft: 5, marginTop: 0, marginBottom: 0
+                          }]}>
                           {`You'll earn $${rewardsAmount} loyalty!`}
                         </Text>
                       </View>
@@ -640,7 +662,9 @@ export class Cart extends React.Component {
                     <View style={{paddingHorizontal: 20, marginTop: 10, marginBottom: 5}}>
                       {!cash.amount ? null
                         : <View>
-                          <Text style={styles.sectionHeader}>Payment Method</Text>
+                          <Text
+                            allowFontScaling={false}
+                            style={styles.sectionHeader}>Payment Method</Text>
                           <View style={[styles.functionRow, {height: 30}]}>
                             <View style={[styles.sectionText,
                               {color: Theme.darkBlue,
@@ -651,9 +675,11 @@ export class Cart extends React.Component {
                               <Icon name="dollar"
                                 color={Theme.darkBlue}
                                 size={width < 330 ? 18 : 21 && width > 600 ? 18 : 21}/>
-                              <Text style={[styles.sectionText,
-                                {marginHorizontal: 15, fontWeight: 'bold', fontSize: 16}
-                              ]}>
+                              <Text
+                                allowFontScaling={false}
+                                style={[styles.sectionText,
+                                  {marginHorizontal: 15, fontWeight: 'bold', fontSize: 16}
+                                ]}>
                                 {cash.title}
                               </Text>
                             </View>
@@ -675,7 +701,9 @@ export class Cart extends React.Component {
                             </View>
                           </View>
                           <View style={{marginBottom: 10, marginHorizontal: 25}}>
-                            <Text style={{fontSize: 12, color: Theme.darkBlue}}>
+                            <Text
+                              allowFontScaling={false}
+                              style={{fontSize: 12, color: Theme.darkBlue}}>
                               {`Available: $${cash.amount}`}
                             </Text>
                           </View>
@@ -694,9 +722,11 @@ export class Cart extends React.Component {
                                 name="md-ribbon"
                                 color={Theme.darkBlue}
                                 size={width < 330 ? 20 : 23 && width > 600 ? 23 : 23} />
-                              <Text style={[styles.sectionText,
-                                {marginHorizontal: 10, fontWeight: 'bold', fontSize: 16}
-                              ]}>
+                              <Text
+                                allowFontScaling={false}
+                                style={[styles.sectionText,
+                                  {marginHorizontal: 10, fontWeight: 'bold', fontSize: 16}
+                                ]}>
                                 {!rewards ? null : rewards.title}
                               </Text>
                             </View>
@@ -720,7 +750,9 @@ export class Cart extends React.Component {
                         }
                         { !rewards.amount ? null
                           : <View style={{marginBottom: 15, marginHorizontal: 25}}>
-                            <Text style={{fontSize: 12, color: Theme.darkBlue}}>
+                            <Text
+                              allowFontScaling={false}
+                              style={{fontSize: 12, color: Theme.darkBlue}}>
                               {`Available: $${!rewards ? null : rewards.amount}`}
                             </Text>
                           </View>
@@ -730,6 +762,7 @@ export class Cart extends React.Component {
                             {
                               !this.state.rewardsChecked ? null
                                 : <TextInput
+                                  allowFontScaling={false}
                                   keyboardShouldPersistTaps='handled'
                                   placeholder="Enter amount to use"
                                   style={styles.textField}
@@ -742,7 +775,9 @@ export class Cart extends React.Component {
                             }
                           </View>
                         }
-                        {invalid ? (<Text style={styles.error}>{invalid}</Text>) : null}
+                        {invalid ? (<Text
+                          allowFontScaling={false}
+                          style={styles.error}>{invalid}</Text>) : null}
                       </View>
                     </View>
                   </View>

@@ -189,7 +189,9 @@ export class Transfer extends React.Component {
     return (
       <View>
         <View style={[styles.functionRow, {paddingLeft: 30}]}>
-          <Text style={[styles.sectionText, {paddingBottom: 5, paddingTop: 0}]}>
+          <Text
+            allowFontScaling={false}
+            style={[styles.sectionText, {paddingBottom: 5, paddingTop: 0}]}>
             ${eachAmount}
           </Text>
         </View>
@@ -228,6 +230,7 @@ export class Transfer extends React.Component {
       reason,
       message,
       timestamp,
+      split_redemption_info: splitRedemption,
       workflow_type: workFlowType,
       odfi_name: bankName,
       transfer_designs: tranferDesigns,
@@ -267,6 +270,12 @@ export class Transfer extends React.Component {
         rewardsTitle = rewardsFinalTitleArray[1];
         rewardsAmount = rewardsFinalAmountArray[1];
       }
+    }
+    let theGift = {};
+    let theLoyalty = {};
+    if (splitRedemption) {
+      theGift = splitRedemption[0];
+      theLoyalty = splitRedemption[1];
     }
     let merchant = '';
     let merchantLoyalty = '';
@@ -552,13 +561,17 @@ export class Transfer extends React.Component {
       messageSection = (
         <View>
           <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
-            <Text style={styles.sectionHeader}>
+            <Text
+              allowFontScaling={false}
+              style={styles.sectionHeader}>
               {`${messageTitle}Message`}
             </Text>
           </View>
-          <Text style={{
-            fontSize: width > 600 ? 18 : 16, paddingLeft: 30, color: Theme.darkBlue, paddingTop: 10
-          }}>
+          <Text
+            allowFontScaling={false}
+            style={{
+              fontSize: width > 600 ? 18 : 16, paddingLeft: 30, color: Theme.darkBlue, paddingTop: 10
+            }}>
             {message}
           </Text>
         </View>
@@ -571,17 +584,21 @@ export class Transfer extends React.Component {
       messageSection = (
         <View style={styles.section}>
           <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2, paddingTop: 10}}>
-            <Text style={styles.sectionHeader}>
+            <Text
+              allowFontScaling={false}
+              style={styles.sectionHeader}>
               {`${messageTitle}Message`}
             </Text>
           </View>
-          <Text style={{
-            fontSize: width > 600 ? 18 : 16,
-            paddingLeft: 30,
-            color: Theme.darkBlue,
-            paddingBottom: 20,
-            paddingTop: 10
-          }}>
+          <Text
+            allowFontScaling={false}
+            style={{
+              fontSize: width > 600 ? 18 : 16,
+              paddingLeft: 30,
+              color: Theme.darkBlue,
+              paddingBottom: 20,
+              paddingTop: 10
+            }}>
             {'No message included.'}
           </Text>
         </View>
@@ -603,13 +620,19 @@ export class Transfer extends React.Component {
       theReason = (
         <View>
           <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
-            <Text style={styles.sectionHeader} >Error Reason</Text>
+            <Text
+              allowFontScaling={false}
+              style={styles.sectionHeader} >Error Reason</Text>
           </View>
           <View style={{paddingLeft: 30}} >
-            <Text style={[styles.sectionText, {paddingBottom: 0, fontSize: width > 600 ? 18 : 16}]}>
+            <Text
+              allowFontScaling={false}
+              style={[styles.sectionText, {paddingBottom: 0, fontSize: width > 600 ? 18 : 16}]}>
               {errorReason}
             </Text>
-            <Text style={[styles.sectionText, {fontSize: width > 600 ? 18 : 16}]} >
+            <Text
+              allowFontScaling={false}
+              style={[styles.sectionText, {fontSize: width > 600 ? 18 : 16}]} >
               {errorFix}
             </Text>
           </View>
@@ -618,12 +641,16 @@ export class Transfer extends React.Component {
       giftValue = (
         <View>
           <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
-            <Text style={styles.sectionHeader} >Merchant</Text>
+            <Text
+              allowFontScaling={false}
+              style={styles.sectionHeader} >Merchant</Text>
           </View>
           <View style={{paddingLeft: 30}} >
-            <Text style={[styles.sectionText, {
-              fontSize: width > 600 ? 18 : 16, paddingBottom: 20
-            }]} >
+            <Text
+              allowFontScaling={false}
+              style={[styles.sectionText, {
+                fontSize: width > 600 ? 18 : 16, paddingBottom: 20
+              }]} >
               {!merchant ? designTitle : merchant}
             </Text>
           </View>
@@ -632,35 +659,45 @@ export class Transfer extends React.Component {
       cardLocationDetails = (
         <View>
           <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
-            <Text style={styles.sectionHeader} >Details</Text>
+            <Text
+              allowFontScaling={false}
+              style={styles.sectionHeader} >Details</Text>
           </View>
           <View style={{paddingLeft: 30, flexDirection: 'row'}} >
-            <Text style={[styles.sectionText, {
-              fontSize: width > 600 ? 18 : 16,
-              paddingBottom: 0,
-              justifyContent: 'flex-start'
-            }]} >
+            <Text
+              allowFontScaling={false}
+              style={[styles.sectionText, {
+                fontSize: width > 600 ? 18 : 16,
+                paddingBottom: 0,
+                justifyContent: 'flex-start'
+              }]} >
               Ferly Card
             </Text>
-            <Text style={[styles.sectionText, {
-              fontSize: width > 600 ? 18 : 16,
-              paddingBottom: 0,
-              justifyContent: 'flex-end'
-            }]} >
+            <Text
+              allowFontScaling={false}
+              style={[styles.sectionText, {
+                fontSize: width > 600 ? 18 : 16,
+                paddingBottom: 0,
+                justifyContent: 'flex-end'
+              }]} >
               {panNumber}
             </Text>
           </View>
           <View style={{paddingLeft: 30, flexDirection: 'row'}} >
-            <Text style={[styles.sectionText, {
-              fontSize: width > 600 ? 18 : 16,
-              justifyContent: 'flex-start'
-            }]} >
+            <Text
+              allowFontScaling={false}
+              style={[styles.sectionText, {
+                fontSize: width > 600 ? 18 : 16,
+                justifyContent: 'flex-start'
+              }]} >
               Location
             </Text>
-            <Text style={[styles.sectionText, {
-              fontSize: width > 600 ? 18 : 16,
-              justifyContent: 'flex-end'
-            }]} >
+            <Text
+              allowFontScaling={false}
+              style={[styles.sectionText, {
+                fontSize: width > 600 ? 18 : 16,
+                justifyContent: 'flex-end'
+              }]} >
               {locationName}
             </Text>
           </View>
@@ -672,7 +709,9 @@ export class Transfer extends React.Component {
           <View style={{
             borderBottomColor: Theme.lightBlue, borderBottomWidth: 2, paddingBottom: 10
           }}>
-            <Text style={styles.sectionHeader}>Amounts</Text>
+            <Text
+              allowFontScaling={false}
+              style={styles.sectionHeader}>Amounts</Text>
           </View>
           {amountsList}
         </View>
@@ -680,16 +719,22 @@ export class Transfer extends React.Component {
       achDescription = (
         <View>
           <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
-            <Text style={styles.sectionHeader}>Description</Text>
+            <Text
+              allowFontScaling={false}
+              style={styles.sectionHeader}>Description</Text>
           </View>
           <View style={[styles.functionRow, {paddingLeft: 30}]}>
-            <Text style={[styles.sectionText, {height: 105}]}>
+            <Text
+              allowFontScaling={false}
+              style={[styles.sectionText, {height: 105, paddingBottom: 0}]}>
               {`${!bankName ? 'Your bank' : bankName} sent account confirmation entries, shown ` +
               `above. You can use these amounts to confirm that you own the wallet.`}
             </Text>
           </View>
-          <View style={[styles.functionRow, {paddingLeft: 30}]}>
-            <Text style={styles.sectionText}>
+          <View style={[styles.functionRow, {paddingLeft: 30, paddingTop: 0}]}>
+            <Text
+              allowFontScaling={false}
+              style={styles.sectionText}>
               {`No Ferly Cash or Ferly Rewards were added to your wallet.`}
             </Text>
           </View>
@@ -699,16 +744,22 @@ export class Transfer extends React.Component {
       achDescription = (
         <View>
           <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
-            <Text style={styles.sectionHeader}>Description</Text>
+            <Text
+              allowFontScaling={false}
+              style={styles.sectionHeader}>Description</Text>
           </View>
           <View style={[styles.functionRow, {paddingLeft: 30}]}>
-            <Text style={[styles.sectionText, {height: 105}]}>
+            <Text
+              allowFontScaling={false}
+              style={[styles.sectionText, {height: 105, paddingBottom: 0}]}>
               {`${!bankName ? 'Your bank' : bankName} sent a zero dollar transaction to verify ` +
               `your wallet befor sending more funds. Verification was successful.`}
             </Text>
           </View>
-          <View style={[styles.functionRow, {paddingLeft: 30}]}>
-            <Text style={styles.sectionText}>
+          <View style={[styles.functionRow, {paddingLeft: 30, paddingTop: 0}]}>
+            <Text
+              allowFontScaling={false}
+              style={styles.sectionText}>
               {`No Ferly Cash or Ferly Rewards were added to your wallet.`}
             </Text>
           </View>
@@ -718,7 +769,9 @@ export class Transfer extends React.Component {
       termsSection = (
         <View>
           <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 1}}>
-            <Text style={styles.sectionHeader}>Rewards</Text>
+            <Text
+              allowFontScaling={false}
+              style={styles.sectionHeader}>Rewards</Text>
           </View>
           <View style={{
             paddingLeft: 50,
@@ -730,7 +783,9 @@ export class Transfer extends React.Component {
               name="md-ribbon"
               color={Theme.darkBlue}
               size={width < 330 ? 20 : 23 && width > 600 ? 38 : 23} />
-            <Text style={{color: Theme.darkBlue, paddingLeft: 10, fontSize: 14}}>
+            <Text
+              allowFontScaling={false}
+              style={{color: Theme.darkBlue, paddingLeft: 10, fontSize: 14}}>
               You also earned {formatted} Rewards!
             </Text>
           </View>
@@ -742,7 +797,9 @@ export class Transfer extends React.Component {
           termsSection = (
             <View>
               <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
-                <Text style={styles.sectionHeader}>Rewards</Text>
+                <Text
+                  allowFontScaling={false}
+                  style={styles.sectionHeader}>Rewards</Text>
               </View>
               <View style={{
                 paddingLeft: 30,
@@ -754,9 +811,11 @@ export class Transfer extends React.Component {
                   name="heart-box"
                   color={Theme.darkBlue}
                   size={width < 330 ? 20 : 22 && width > 600 ? 24 : 22} />
-                <Text style={{
-                  color: Theme.darkBlue, paddingLeft: 10, fontSize: width > 600 ? 20 : 16
-                }}>
+                <Text
+                  allowFontScaling={false}
+                  style={{
+                    color: Theme.darkBlue, paddingLeft: 10, fontSize: width > 600 ? 20 : 16
+                  }}>
                 You also earned {formatted} loyalty!
                 </Text>
               </View>
@@ -766,7 +825,9 @@ export class Transfer extends React.Component {
         purchaseDetailsSection = (
           <View>
             <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
-              <Text style={styles.sectionHeader}>Purchase Summary</Text>
+              <Text
+                allowFontScaling={false}
+                style={styles.sectionHeader}>Purchase Summary</Text>
             </View>
             <View style={{paddingHorizontal: 15, paddingVertical: 15}}>
               <View style={{borderWidth: 1, borderColor: Theme.lightBlue, borderRadius: 5}}>
@@ -776,20 +837,26 @@ export class Transfer extends React.Component {
                   borderBottomColor: Theme.lightBlue,
                   paddingHorizontal: 15}}>
                   <View style={[styles.functionRow]}>
-                    <Text style={[styles.sectionText, {paddingTop: 10, paddingBottom: 5}]}>
+                    <Text
+                      allowFontScaling={false}
+                      style={[styles.sectionText, {paddingTop: 10, paddingBottom: 5}]}>
                       {!merchant ? designTitle : merchant}
                     </Text>
-                    <Text style={[styles.sectionText, {
-                      color: Theme.darkBlue,
-                      paddingBottom: 5,
-                      paddingTop: 10,
-                      paddingRight: 0
-                    }]}>
+                    <Text
+                      allowFontScaling={false}
+                      style={[styles.sectionText, {
+                        color: Theme.darkBlue,
+                        paddingBottom: 5,
+                        paddingTop: 10,
+                        paddingRight: 0
+                      }]}>
                     ${amount}
                     </Text>
                   </View>
                   {tradeDesignsReceived[1]
-                    ? <Text style={{fontSize: 12, color: Theme.darkBlue}}>
+                    ? <Text
+                      allowFontScaling={false}
+                      style={{fontSize: 12, color: Theme.darkBlue}}>
                     Earned 5% loyalty
                     </Text>
                     : null
@@ -797,48 +864,60 @@ export class Transfer extends React.Component {
                 </View>
                 <View style={{paddingHorizontal: 15, paddingTop: 10}}>
                   <View style={styles.functionRow}>
-                    <Text style={[styles.sectionText, {paddingTop: 0, paddingBottom: 0}]}>
+                    <Text
+                      allowFontScaling={false}
+                      style={[styles.sectionText, {paddingTop: 0, paddingBottom: 0}]}>
                     Online Fee
                     </Text>
-                    <Text style={[styles.sectionText, {
-                      color: Theme.darkBlue,
-                      paddingBottom: 0,
-                      paddingTop: 0,
-                      paddingRight: 0
-                    }]}>
+                    <Text
+                      allowFontScaling={false}
+                      style={[styles.sectionText, {
+                        color: Theme.darkBlue,
+                        paddingBottom: 0,
+                        paddingTop: 0,
+                        paddingRight: 0
+                      }]}>
                       {accounting.formatMoney(convenienceFee)}
                     </Text>
                   </View>
                   <View style={[styles.functionRow]}>
-                    <Text style={[styles.sectionText, {paddingTop: 5, paddingBottom: 5}]}>
+                    <Text
+                      allowFontScaling={false}
+                      style={[styles.sectionText, {paddingTop: 5, paddingBottom: 5}]}>
                     Taxes
                     </Text>
-                    <Text style={[styles.sectionText, {
-                      color: Theme.darkBlue,
-                      paddingBottom: 5,
-                      paddingTop: 5,
-                      paddingRight: 0
-                    }]}>
+                    <Text
+                      allowFontScaling={false}
+                      style={[styles.sectionText, {
+                        color: Theme.darkBlue,
+                        paddingBottom: 5,
+                        paddingTop: 5,
+                        paddingRight: 0
+                      }]}>
                     $0.00
                     </Text>
                   </View>
                 </View>
                 <View style={[styles.functionRow, {backgroundColor: '#ABE0E0'}]}>
-                  <Text style={[styles.sectionText, {
-                    paddingTop: 15,
-                    paddingBottom: 15,
-                    paddingHorizontal: 15,
-                    fontWeight: 'bold'
-                  }]}>
+                  <Text
+                    allowFontScaling={false}
+                    style={[styles.sectionText, {
+                      paddingTop: 15,
+                      paddingBottom: 15,
+                      paddingHorizontal: 15,
+                      fontWeight: 'bold'
+                    }]}>
                   Total Purchase
                   </Text>
-                  <Text style={[styles.sectionText, {
-                    color: Theme.darkBlue,
-                    paddingBottom: 15,
-                    paddingTop: 15,
-                    paddingRight: 15,
-                    fontWeight: 'bold'
-                  }]}>
+                  <Text
+                    allowFontScaling={false}
+                    style={[styles.sectionText, {
+                      color: Theme.darkBlue,
+                      paddingBottom: 15,
+                      paddingTop: 15,
+                      paddingRight: 15,
+                      fontWeight: 'bold'
+                    }]}>
                   ${!convenienceFee ? amount : amount + convenienceFee}
                   </Text>
                 </View>
@@ -851,26 +930,36 @@ export class Transfer extends React.Component {
             {!cashTitle && !rewardsTitle ? null
               : <View>
                 <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
-                  <Text style={styles.sectionHeader}>Payment Method</Text>
+                  <Text
+                    allowFontScaling={false}
+                    style={styles.sectionHeader}>Payment Method</Text>
                 </View>
                 {cashTitle
                   ? <View style={[styles.functionRow, {paddingLeft: 30}]}>
-                    <Text style={[styles.sectionText, {paddingBottom: 0}]}>
+                    <Text
+                      allowFontScaling={false}
+                      style={[styles.sectionText, {paddingBottom: 0}]}>
                       {!cashTitle ? null : cashTitle}
                     </Text>
-                    <Text style={[styles.sectionText, {color: Theme.darkBlue, paddingBottom: 0}]}>
+                    <Text
+                      allowFontScaling={false}
+                      style={[styles.sectionText, {color: Theme.darkBlue, paddingBottom: 0}]}>
                       ${!cashAmount ? null : cashAmount}
                     </Text>
                   </View> : null
                 }
                 {rewardsTitle
                   ? <View style={[styles.functionRow, {paddingLeft: 30}]}>
-                    <Text style={[styles.sectionText, {paddingTop: 0, paddingBottom: 0}]}>
+                    <Text
+                      allowFontScaling={false}
+                      style={[styles.sectionText, {paddingTop: 0, paddingBottom: 0}]}>
                       {!rewardsTitle ? null : rewardsTitle}
                     </Text>
-                    <Text style={[styles.sectionText, {
-                      color: Theme.darkBlue, paddingTop: 0, paddingBottom: 0
-                    }]}>
+                    <Text
+                      allowFontScaling={false}
+                      style={[styles.sectionText, {
+                        color: Theme.darkBlue, paddingTop: 0, paddingBottom: 0
+                      }]}>
                       ${!rewardsAmount ? null : rewardsAmount}
                     </Text>
                   </View> : null
@@ -883,7 +972,9 @@ export class Transfer extends React.Component {
         termsSection = (
           <View>
             <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
-              <Text style={styles.sectionHeader}>Reward Event</Text>
+              <Text
+                allowFontScaling={false}
+                style={styles.sectionHeader}>Reward Event</Text>
             </View>
             <View style={{
               paddingRight: 20,
@@ -892,7 +983,9 @@ export class Transfer extends React.Component {
               paddingTop: 10,
               flexDirection: 'row'
             }}>
-              <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 20 : 16}}>
+              <Text
+                allowFontScaling={false}
+                style={{color: Theme.darkBlue, fontSize: width > 600 ? 20 : 16}}>
                 You earned rewards by adding ${amount} of Ferly cash to your wallet.
               </Text>
             </View>
@@ -903,12 +996,16 @@ export class Transfer extends React.Component {
       giftValue = (
         <View>
           <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
-            <Text style={styles.sectionHeader} >Gift Value</Text>
+            <Text
+              allowFontScaling={false}
+              style={styles.sectionHeader} >Gift Value</Text>
           </View>
           <View style={{paddingLeft: 30}} >
-            <Text style={[styles.sectionText, {
-              fontSize: width > 600 ? 18 : 16, paddingBottom: 20
-            }]} >
+            <Text
+              allowFontScaling={false}
+              style={[styles.sectionText, {
+                fontSize: width > 600 ? 18 : 16, paddingBottom: 20
+              }]} >
               {designTitle}
             </Text>
           </View>
@@ -917,7 +1014,9 @@ export class Transfer extends React.Component {
       recipient = (
         <View>
           <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
-            <Text style={styles.sectionHeader} >
+            <Text
+              allowFontScaling={false}
+              style={styles.sectionHeader} >
               Recipient
             </Text>
           </View>
@@ -928,12 +1027,14 @@ export class Transfer extends React.Component {
             paddingTop: 10
           }} >
             {counterPartyAvatar}
-            <Text style={{
-              alignSelf: 'center',
-              paddingLeft: 10,
-              color: Theme.darkBlue,
-              fontSize: width > 600 ? 18 : 16
-            }} >
+            <Text
+              allowFontScaling={false}
+              style={{
+                alignSelf: 'center',
+                paddingLeft: 10,
+                color: Theme.darkBlue,
+                fontSize: width > 600 ? 18 : 16
+              }} >
               {!name ? counterParty : name}
             </Text>
           </View>
@@ -943,12 +1044,16 @@ export class Transfer extends React.Component {
       giftValue = (
         <View>
           <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
-            <Text style={styles.sectionHeader} >Gift Value</Text>
+            <Text
+              allowFontScaling={false}
+              style={styles.sectionHeader} >Gift Value</Text>
           </View>
           <View style={{paddingLeft: 30}} >
-            <Text style={[styles.sectionText, {
-              fontSize: width > 600 ? 18 : 16, paddingBottom: 20
-            }]} >
+            <Text
+              allowFontScaling={false}
+              style={[styles.sectionText, {
+                fontSize: width > 600 ? 18 : 16, paddingBottom: 20
+              }]} >
               {designTitle}
             </Text>
           </View>
@@ -957,25 +1062,31 @@ export class Transfer extends React.Component {
       recipient = (
         <View>
           <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
-            <Text style={styles.sectionHeader} >
+            <Text
+              allowFontScaling={false}
+              style={styles.sectionHeader} >
               Recipient
             </Text>
           </View>
           <View style={{paddingLeft: 30, flexDirection: 'column'}} >
             {counterPartyAvatar}
-            <Text style={{
-              alignSelf: 'flex-start',
-              color: Theme.darkBlue,
-              fontSize: width > 600 ? 18 : 16,
-              paddingTop: 10
-            }} >
+            <Text
+              allowFontScaling={false}
+              style={{
+                alignSelf: 'flex-start',
+                color: Theme.darkBlue,
+                fontSize: width > 600 ? 18 : 16,
+                paddingTop: 10
+              }} >
               {!name ? counterParty : name}
             </Text>
-            <Text style={{
-              alignSelf: 'flex-start',
-              color: Theme.darkBlue,
-              fontSize: width > 600 ? 16 : 14
-            }} >
+            <Text
+              allowFontScaling={false}
+              style={{
+                alignSelf: 'flex-start',
+                color: Theme.darkBlue,
+                fontSize: width > 600 ? 16 : 14
+              }} >
               {!name ? null : counterParty}
             </Text>
           </View>
@@ -985,12 +1096,16 @@ export class Transfer extends React.Component {
       giftValue = (
         <View>
           <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
-            <Text style={styles.sectionHeader} >Gift Value</Text>
+            <Text
+              allowFontScaling={false}
+              style={styles.sectionHeader} >Gift Value</Text>
           </View>
           <View style={{paddingLeft: 30}} >
-            <Text style={[styles.sectionText, {
-              fontSize: width > 600 ? 18 : 16, paddingBottom: 20
-            }]} >
+            <Text
+              allowFontScaling={false}
+              style={[styles.sectionText, {
+                fontSize: width > 600 ? 18 : 16, paddingBottom: 20
+              }]} >
               {designTitle}
             </Text>
           </View>
@@ -999,25 +1114,31 @@ export class Transfer extends React.Component {
       recipient = (
         <View>
           <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
-            <Text style={styles.sectionHeader} >
+            <Text
+              allowFontScaling={false}
+              style={styles.sectionHeader} >
               Recipient
             </Text>
           </View>
           <View style={{paddingLeft: 30, flexDirection: 'column'}} >
             {counterPartyAvatar}
-            <Text style={{
-              alignSelf: 'flex-start',
-              color: Theme.darkBlue,
-              fontSize: width > 600 ? 18 : 16,
-              paddingTop: 10
-            }} >
+            <Text
+              allowFontScaling={false}
+              style={{
+                alignSelf: 'flex-start',
+                color: Theme.darkBlue,
+                fontSize: width > 600 ? 18 : 16,
+                paddingTop: 10
+              }} >
               {!name ? counterParty : name}
             </Text>
-            <Text style={{
-              alignSelf: 'flex-start',
-              color: Theme.darkBlue,
-              fontSize: width > 600 ? 16 : 14
-            }} >
+            <Text
+              allowFontScaling={false}
+              style={{
+                alignSelf: 'flex-start',
+                color: Theme.darkBlue,
+                fontSize: width > 600 ? 16 : 14
+              }} >
               {!name ? null : counterParty}
             </Text>
           </View>
@@ -1027,12 +1148,16 @@ export class Transfer extends React.Component {
       giftValue = (
         <View>
           <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
-            <Text style={styles.sectionHeader} >Gift Value</Text>
+            <Text
+              allowFontScaling={false}
+              style={styles.sectionHeader} >Gift Value</Text>
           </View>
           <View style={{paddingLeft: 30}} >
-            <Text style={[styles.sectionText, {
-              fontSize: width > 600 ? 18 : 16, paddingBottom: 20
-            }]} >
+            <Text
+              allowFontScaling={false}
+              style={[styles.sectionText, {
+                fontSize: width > 600 ? 18 : 16, paddingBottom: 20
+              }]} >
               {designTitle}
             </Text>
           </View>
@@ -1041,25 +1166,31 @@ export class Transfer extends React.Component {
       recipient = (
         <View>
           <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
-            <Text style={styles.sectionHeader} >
+            <Text
+              allowFontScaling={false}
+              style={styles.sectionHeader} >
               Recipient
             </Text>
           </View>
           <View style={{paddingLeft: 30, flexDirection: 'column', paddingBottom: 10}} >
             {counterPartyAvatar}
-            <Text style={{
-              alignSelf: 'flex-start',
-              color: Theme.darkBlue,
-              fontSize: width > 600 ? 18 : 16,
-              paddingTop: 10
-            }} >
+            <Text
+              allowFontScaling={false}
+              style={{
+                alignSelf: 'flex-start',
+                color: Theme.darkBlue,
+                fontSize: width > 600 ? 18 : 16,
+                paddingTop: 10
+              }} >
               {!name ? counterParty : name}
             </Text>
-            <Text style={{
-              alignSelf: 'flex-start',
-              color: Theme.darkBlue,
-              fontSize: width > 600 ? 16 : 14
-            }} >
+            <Text
+              allowFontScaling={false}
+              style={{
+                alignSelf: 'flex-start',
+                color: Theme.darkBlue,
+                fontSize: width > 600 ? 16 : 14
+              }} >
               {!name ? null : counterParty}
             </Text>
           </View>
@@ -1071,26 +1202,32 @@ export class Transfer extends React.Component {
       status = (
         <View>
           <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
-            <Text style={styles.sectionHeader} >
+            <Text
+              allowFontScaling={false}
+              style={styles.sectionHeader} >
               Status
             </Text>
           </View>
           <View style={{paddingLeft: 30, flexDirection: 'column'}} >
-            <Text style={{
-              paddingHorizontal: 10,
-              color: Theme.darkBlue,
-              fontSize: 16,
-              paddingTop: 10,
-              paddingBottom: 5
-            }} >
+            <Text
+              allowFontScaling={false}
+              style={{
+                paddingHorizontal: 10,
+                color: Theme.darkBlue,
+                fontSize: 16,
+                paddingTop: 10,
+                paddingBottom: 5
+              }} >
               {!name ? counterParty : name} hasnt accepted your gift yet.
             </Text>
-            <Text style={{
-              paddingLeft: 10,
-              paddingBottom: 15,
-              color: Theme.darkBlue,
-              fontSize: 16
-            }} >
+            <Text
+              allowFontScaling={false}
+              style={{
+                paddingLeft: 10,
+                paddingBottom: 15,
+                color: Theme.darkBlue,
+                fontSize: 16
+              }} >
               The gift expires {!expiringDate ? giftExpiration : expiringDate}.
             </Text>
             <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
@@ -1098,7 +1235,9 @@ export class Transfer extends React.Component {
                 onPress={() => this.remind()}
                 style={{backgroundColor: Theme.lightBlue, borderRadius: 5}}
               >
-                <Text style={{fontSize: 16, paddingHorizontal: 34, paddingVertical: 8}}>
+                <Text
+                  allowFontScaling={false}
+                  style={{fontSize: 16, paddingHorizontal: 34, paddingVertical: 8}}>
                   Remind
                 </Text>
               </TouchableOpacity>
@@ -1106,7 +1245,9 @@ export class Transfer extends React.Component {
                 onPress={() => this.takeBack()}
                 style={{backgroundColor: Theme.lightBlue, borderRadius: 5}}
               >
-                <Text style={{fontSize: 16, paddingHorizontal: 25, paddingVertical: 8}}>
+                <Text
+                  allowFontScaling={false}
+                  style={{fontSize: 16, paddingHorizontal: 25, paddingVertical: 8}}>
                   Take Back
                 </Text>
               </TouchableOpacity>
@@ -1118,12 +1259,16 @@ export class Transfer extends React.Component {
       giftValue = (
         <View>
           <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
-            <Text style={styles.sectionHeader} >Gift Value</Text>
+            <Text
+              allowFontScaling={false}
+              style={styles.sectionHeader} >Gift Value</Text>
           </View>
           <View style={{paddingLeft: 30}} >
-            <Text style={[styles.sectionText, {
-              fontSize: width > 600 ? 18 : 16, paddingBottom: 20
-            }]} >
+            <Text
+              allowFontScaling={false}
+              style={[styles.sectionText, {
+                fontSize: width > 600 ? 18 : 16, paddingBottom: 20
+              }]} >
               {designTitle}
             </Text>
           </View>
@@ -1132,70 +1277,220 @@ export class Transfer extends React.Component {
       received = (
         <View>
           <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
-            <Text style={styles.sectionHeader} >Received From</Text>
+            <Text
+              allowFontScaling={false}
+              style={styles.sectionHeader} >Received From</Text>
           </View>
           <View style={{paddingLeft: 30, flexDirection: 'row', paddingTop: 10, paddingBottom: 20}} >
             {counterPartyAvatar}
-            <Text style={{
-              alignSelf: 'center',
-              paddingLeft: 10,
-              color: Theme.darkBlue,
-              fontSize: 16
-            }} >
+            <Text
+              allowFontScaling={false}
+              style={{
+                alignSelf: 'center',
+                paddingLeft: 10,
+                color: Theme.darkBlue,
+                fontSize: 16
+              }} >
               {counterParty}
             </Text>
           </View>
         </View>
       );
     } else if (transferType === 'redeem') {
+      if (designTitle) {
+        if (designTitle.includes(' Loyalty')) {
+          designTitle = designTitle.replace(' Loyalty', '');
+        }
+      }
+      if (merchant) {
+        if (merchant.includes(' Loyalty')) {
+          merchant = merchant.replace(' Loyalty', '');
+        }
+      }
       giftValue = (
         <View>
           <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
-            <Text style={styles.sectionHeader} >Merchant</Text>
+            <Text
+              allowFontScaling={false}
+              style={styles.sectionHeader} >Details</Text>
           </View>
-          <View style={{paddingLeft: 30}} >
-            <Text style={[styles.sectionText, {
-              fontSize: width > 600 ? 18 : 16, paddingBottom: 20
-            }]} >
-              {designTitle}
-            </Text>
+          <View style={{paddingHorizontal: 30}} >
+            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              <Text
+                allowFontScaling={false}
+                style={[styles.sectionText, {
+                  fontSize: width > 600 ? 18 : 16,
+                  paddingBottom: 0,
+                  justifyContent: 'flex-start'
+                }]} >
+              Merchant
+              </Text>
+              <Text
+                allowFontScaling={false}
+                style={[styles.sectionText, {
+                  fontSize: width > 600 ? 18 : 16,
+                  paddingBottom: 0,
+                  justifyContent: 'flex-start'
+                }]} >
+                {!merchant ? designTitle : merchant}
+              </Text>
+            </View>
+            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              <Text
+                allowFontScaling={false}
+                style={[styles.sectionText, {
+                  fontSize: width > 600 ? 18 : 16,
+                  paddingBottom: 0,
+                  justifyContent: 'flex-start'
+                }]} >
+              Ferly Card
+              </Text>
+              <Text
+                allowFontScaling={false}
+                style={[styles.sectionText, {
+                  fontSize: width > 600 ? 18 : 16,
+                  paddingBottom: 0,
+                  justifyContent: 'flex-end'
+                }]} >
+                {panNumber}
+              </Text>
+            </View>
+            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              <Text
+                allowFontScaling={false}
+                style={[styles.sectionText, {
+                  fontSize: width > 600 ? 18 : 16,
+                  justifyContent: 'flex-start'
+                }]} >
+              Location
+              </Text>
+              <Text
+                allowFontScaling={false}
+                style={[styles.sectionText, {
+                  fontSize: width > 600 ? 18 : 16,
+                  justifyContent: 'flex-end'
+                }]} >
+                {locationName}
+              </Text>
+            </View>
           </View>
         </View>
       );
       cardLocationDetails = (
         <View>
           <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
-            <Text style={styles.sectionHeader} >Details</Text>
+            <Text
+              allowFontScaling={false}
+              style={styles.sectionHeader} >Payment Method</Text>
           </View>
           <View style={{paddingLeft: 30, flexDirection: 'row'}} >
-            <Text style={[styles.sectionText, {
-              fontSize: width > 600 ? 18 : 16,
-              paddingBottom: 0,
-              justifyContent: 'flex-start'
-            }]} >
-              Ferly Card
-            </Text>
-            <Text style={[styles.sectionText, {
-              fontSize: width > 600 ? 18 : 16,
-              paddingBottom: 0,
-              justifyContent: 'flex-end'
-            }]} >
-              {panNumber}
-            </Text>
-          </View>
-          <View style={{paddingLeft: 30, flexDirection: 'row'}} >
-            <Text style={[styles.sectionText, {
-              fontSize: width > 600 ? 18 : 16,
-              justifyContent: 'flex-start'
-            }]} >
-              Location
-            </Text>
-            <Text style={[styles.sectionText, {
-              fontSize: width > 600 ? 18 : 16,
-              justifyContent: 'flex-end'
-            }]} >
-              {locationName}
-            </Text>
+            {splitRedemption
+              ? <View style={{borderWidth: 1, borderColor: Theme.lightBlue, borderRadius: 5}}>
+                <View style={{paddingHorizontal: 15, paddingTop: 10}}>
+                  <View style={styles.functionRow}>
+                    <Text
+                      allowFontScaling={false}
+                      style={[styles.sectionText, {paddingTop: 0, paddingBottom: 0}]}>
+                      {theGift.title}
+                    </Text>
+                    <Text
+                      allowFontScaling={false}
+                      style={[styles.sectionText, {
+                        color: Theme.darkBlue,
+                        paddingBottom: 0,
+                        paddingTop: 0,
+                        paddingRight: 0
+                      }]}>
+                      ${theGift.amount}
+                    </Text>
+                  </View>
+                  <View style={[styles.functionRow]}>
+                    <Text
+                      allowFontScaling={false}
+                      style={[styles.sectionText, {paddingTop: 5, paddingBottom: 5}]}>
+                      {theLoyalty.title}
+                    </Text>
+                    <Text
+                      allowFontScaling={false}
+                      style={[styles.sectionText, {
+                        color: Theme.darkBlue,
+                        paddingBottom: 5,
+                        paddingTop: 5,
+                        paddingRight: 0
+                      }]}>
+                      ${theLoyalty.amount}
+                    </Text>
+                  </View>
+                </View>
+                <View style={[styles.functionRow, {backgroundColor: '#ABE0E0'}]}>
+                  <Text
+                    allowFontScaling={false}
+                    style={[styles.sectionText, {
+                      paddingTop: 15,
+                      paddingBottom: 15,
+                      paddingHorizontal: 15,
+                      fontWeight: 'bold'
+                    }]}>
+                  Total Purchase
+                  </Text>
+                  <Text
+                    allowFontScaling={false}
+                    style={[styles.sectionText, {
+                      color: Theme.darkBlue,
+                      paddingBottom: 15,
+                      paddingTop: 15,
+                      paddingRight: 15,
+                      fontWeight: 'bold'
+                    }]}>
+                  ${!convenienceFee ? amount : amount + convenienceFee}
+                  </Text>
+                </View>
+              </View>
+              : <View style={{borderWidth: 1, borderColor: Theme.lightBlue, borderRadius: 5}}>
+                <View style={{paddingHorizontal: 15, paddingTop: 10}}>
+                  <View style={[styles.functionRow]}>
+                    <Text
+                      allowFontScaling={false}
+                      style={[styles.sectionText, {paddingTop: 5, paddingBottom: 5}]}>
+                      {designTitle}
+                    </Text>
+                    <Text
+                      allowFontScaling={false}
+                      style={[styles.sectionText, {
+                        color: Theme.darkBlue,
+                        paddingBottom: 5,
+                        paddingTop: 5,
+                        paddingRight: 0
+                      }]}>
+                      ${amount}
+                    </Text>
+                  </View>
+                </View>
+                <View style={[styles.functionRow, {backgroundColor: '#ABE0E0'}]}>
+                  <Text
+                    allowFontScaling={false}
+                    style={[styles.sectionText, {
+                      paddingTop: 15,
+                      paddingBottom: 15,
+                      paddingHorizontal: 15,
+                      fontWeight: 'bold'
+                    }]}>
+                Total Purchase
+                  </Text>
+                  <Text
+                    allowFontScaling={false}
+                    style={[styles.sectionText, {
+                      color: Theme.darkBlue,
+                      paddingBottom: 15,
+                      paddingTop: 15,
+                      paddingRight: 15,
+                      fontWeight: 'bold'
+                    }]}>
+                ${!convenienceFee ? amount : amount + convenienceFee}
+                  </Text>
+                </View>
+              </View>
+            }
           </View>
         </View>
       );
@@ -1218,9 +1513,11 @@ export class Transfer extends React.Component {
                 size={width < 330 ? 30 : 35 && width > 600 ? 40 : 35} />
               : null
             }
-            <Text style={{
-              color: Theme.darkBlue, fontSize: width < 330 ? 30 : 35 && width > 600 ? 40 : 35
-            }}>
+            <Text
+              allowFontScaling={false}
+              style={{
+                color: Theme.darkBlue, fontSize: width < 330 ? 30 : 35 && width > 600 ? 40 : 35
+              }}>
               {
                 verb === 'earned' ? `${symbol}${formatted}` : `${symbol}$${amount}`
               }
@@ -1232,11 +1529,13 @@ export class Transfer extends React.Component {
             marginHorizontal: 20,
             paddingBottom: 10
           }}>
-            <Text style={{
-              textAlign: 'center',
-              fontSize: width < 330 ? 16 : 18 && width > 600 ? 20 : 18,
-              color: Theme.darkBlue
-            }}>
+            <Text
+              allowFontScaling={false}
+              style={{
+                textAlign: 'center',
+                fontSize: width < 330 ? 16 : 18 && width > 600 ? 20 : 18,
+                color: Theme.darkBlue
+              }}>
               {
                 verb === 'earned'
                   ? `You ${verb}${cp}.`
@@ -1251,11 +1550,13 @@ export class Transfer extends React.Component {
                   `${designTitle === 'Unrecognized' ? 'Ferly Cash' : designTitle}${cp}.`
               }
             </Text>
-            <Text style={[styles.sectionText, {
-              paddingTop: 5,
-              paddingBottom: 30,
-              fontSize: width < 330 ? 12 : 14 && width > 600 ? 16 : 14
-            }]}>
+            <Text
+              allowFontScaling={false}
+              style={[styles.sectionText, {
+                paddingTop: 5,
+                paddingBottom: 30,
+                fontSize: width < 330 ? 12 : 14 && width > 600 ? 16 : 14
+              }]}>
               {dateDisplay}
             </Text>
             <View style={styles.spacer} />

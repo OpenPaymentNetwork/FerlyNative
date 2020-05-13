@@ -77,7 +77,8 @@ export class Locations extends React.Component {
 
     if (locations.length === 0) {
       return (
-        <Text>There are no plottable locations to show</Text>
+        <Text
+          allowFontScaling={false}>There are no plottable locations to show</Text>
       );
     }
 
@@ -88,11 +89,15 @@ export class Locations extends React.Component {
         <View style={styles.shadow}>
           <View style={{flexDirection: 'row'}}>
             <View style={styles.selectionDetails}>
-              <Text style={styles.selectionTitle}>
+              <Text
+                allowFontScaling={false}
+                style={styles.selectionTitle}>
                 {title.replace(/ *\([^)]*\) */g, '')}
               </Text>
               <View style={styles.selectionOptions}>
-                <Text style={styles.selectionAddress}>{address}</Text>
+                <Text
+                  allowFontScaling={false}
+                  style={styles.selectionAddress}>{address}</Text>
                 <TouchableOpacity
                   style={{alignItems: 'center'}}
                   onPress={this.openInMaps}>
@@ -100,7 +105,9 @@ export class Locations extends React.Component {
                     name={'directions'}
                     color={Theme.lightBlue}
                     size={26} />
-                  <Text style={{color: Theme.lightBlue}}>Directions</Text>
+                  <Text
+                    allowFontScaling={false}
+                    style={{color: Theme.lightBlue}}>Directions</Text>
                 </TouchableOpacity>
               </View>
             </View>

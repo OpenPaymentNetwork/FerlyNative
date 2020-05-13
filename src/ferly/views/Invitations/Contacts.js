@@ -159,7 +159,9 @@ export class Contacts extends React.Component {
           firstWord={firstName}
           secondWord={lastName}
           pictureUrl={uri} />
-        <Text style={{fontSize: 20, paddingLeft: 10}}>{name}</Text>
+        <Text
+          allowFontScaling={false}
+          style={{fontSize: 20, paddingLeft: 10}}>{name}</Text>
       </TestElement>
     );
   }
@@ -184,14 +186,16 @@ export class Contacts extends React.Component {
       return (
         <View
           style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-          <Text>Ferly needs permission to access your contacts.</Text>
+          <Text
+            allowFontScaling={false}>Ferly needs permission to access your contacts.</Text>
         </View>
       );
     } else if (contacts && contacts.length === 0) {
       return (
         <View
           style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-          <Text>You have no contacts.</Text>
+          <Text
+            allowFontScaling={false}>You have no contacts.</Text>
         </View>
       );
     }
@@ -203,7 +207,8 @@ export class Contacts extends React.Component {
     let contactsList;
     if (searchResults) {
       if (searchResults.length === 0) {
-        contactsList = <Text>No contacts match your search.</Text>;
+        contactsList = <Text
+          allowFontScaling={false}>No contacts match your search.</Text>;
       } else {
         contactsList = (
           <ScrollView keyboardShouldPersistTaps='handled'>

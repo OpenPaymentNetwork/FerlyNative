@@ -300,7 +300,9 @@ export class EnterCode extends React.Component {
         <View style={{
           paddingHorizontal: width < 330 ? 30 : 40 && width > 600 ? 50 : 40, paddingVertical: 30
         }}>
-          <Text style={{fontSize: width > 600 ? 22 : 18, textAlign: 'center'}}>
+          <Text
+            allowFontScaling={false}
+            style={{fontSize: width > 600 ? 22 : 18, textAlign: 'center'}}>
             {`Enter gift code sent to your email or phone to accept a gift.`}
           </Text>
           <View style={{paddingVertical: width < 330 ? 30 : 35 && width > 600 ? 40 : 35}}>
@@ -310,6 +312,7 @@ export class EnterCode extends React.Component {
               alignSelf: 'center',
               borderColor: invalid ? 'red' : 'gray'}}>
               <TextInput
+                allowFontScaling={false}
                 keyboardShouldPersistTaps = 'handled'
                 maxLength={7}
                 autoCapitalize = 'characters'
@@ -333,7 +336,7 @@ export class EnterCode extends React.Component {
                 placeholder="123-ABC"
                 value={this.state.code !== '' ? this.state.code : fieldValue} />
             </View>
-            {invalid ? (<Text style={styles.error}>{invalid}</Text>) : null}
+            {invalid ? (<Text allowFontScaling={false}style={styles.error}>{invalid}</Text>) : null}
           </View>
           <PrimaryButton
             marginHorizontal={1}
@@ -356,13 +359,19 @@ export class EnterCode extends React.Component {
           }}>
           <View style={{alignItems: 'center'}}>
             <Image style={{height: 140, width: 140, marginBottom: 20}} source={Present}/>
-            <Text style={{marginBottom: 10, fontSize: 22, fontWeight: 'bold'}}>
+            <Text
+              allowFontScaling={false}
+              style={{marginBottom: 10, fontSize: 22, fontWeight: 'bold'}}>
               Congrats!
             </Text>
-            <Text style={{marginBottom: 10, fontSize: 16, color: 'gray'}}>
+            <Text
+              allowFontScaling={false}
+              style={{marginBottom: 10, fontSize: 16, color: 'gray'}}>
               {`You accepted ${amount} of ${title} from ${sender}.`}
             </Text>
-            <Text style={{color: 'gray'}}>
+            <Text
+              allowFontScaling={false}
+              style={{color: 'gray'}}>
               {!message ? null : '"' + message + '"'}
             </Text>
           </View>

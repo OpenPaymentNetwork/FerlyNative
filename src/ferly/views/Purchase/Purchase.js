@@ -106,8 +106,12 @@ export class Purchase extends React.Component {
         <ScrollView keyboardShouldPersistTaps='handled' style={styles.contentContainer}>
           <View style={styles.topRow}>
             <View style={{flexShrink: 1, paddingVertical: 14}}>
-              <Text style={styles.title}>{title}</Text>
-              <Text style={{color: 'gray', fontSize: width > 600 ? 14 : 12}}>
+              <Text
+                allowFontScaling={false}
+                style={styles.title}>{title}</Text>
+              <Text
+                allowFontScaling={false}
+                style={{color: 'gray', fontSize: width > 600 ? 14 : 12}}>
                 Balance: {formatted}
               </Text>
             </View>
@@ -115,13 +119,21 @@ export class Purchase extends React.Component {
               <SimpleCurrencyInput onChangeText={this.onChange.bind(this)} />
             </View>
           </View>
-          <Text style={styles.header}>Online Fee</Text>
-          <Text style={styles.paragraph}>
+          <Text
+            allowFontScaling={false}
+            style={styles.header}>Online Fee</Text>
+          <Text
+            allowFontScaling={false}
+            style={styles.paragraph}>
             The purchase of this gift value is subject to
             a ${formatedFee} online fee.
           </Text>
-          <Text style={styles.header}>Redemption Locations</Text>
-          <Text style={styles.paragraph}>
+          <Text
+            allowFontScaling={false}
+            style={styles.header}>Redemption Locations</Text>
+          <Text
+            allowFontScaling={false}
+            style={styles.paragraph}>
             Click the button below to view {title} locations where you can
             use your Ferly Card.
           </Text>
@@ -132,27 +144,41 @@ export class Purchase extends React.Component {
             <Image
               source={viewLocations}
               style={styles.image}/>
-            <Text style={styles.locations}>
+            <Text
+              allowFontScaling={false}
+              style={styles.locations}>
               View Locations
             </Text>
           </TouchableOpacity>
-          <Text style={styles.header}>Expiration and Fees</Text>
-          <Text style={styles.paragraph}>
+          <Text
+            allowFontScaling={false}
+            style={styles.header}>Expiration and Fees</Text>
+          <Text
+            allowFontScaling={false}
+            style={styles.paragraph}>
             Gift value expires {expirationDate}, five years after the date of
             purchase. Dormancy, inactivity, or service fees do not apply to
             purchased gift value.
           </Text>
-          <Text style={styles.header}>Terms</Text>
-          <Text>
-            <Text style={styles.paragraph}>
+          <Text
+            allowFontScaling={false}
+            style={styles.header}>Terms</Text>
+          <Text
+            allowFontScaling={false}>
+            <Text
+              allowFontScaling={false}
+              style={styles.paragraph}>
               The purchase of this gift value is subject to the Ferly Cardholder
               and App Agreement and Ferly's Privacy Policy and Refund Policy.
               Please contact us at </Text>
             <Text
+              allowFontScaling={false}
               onPress={() => { Linking.openURL('tel://8006512186'); }}
               style={[styles.paragraph, {textDecorationLine: 'underline'}]}>
               (800) 651-2186 </Text>
-            <Text style={styles.paragraph}>for any questions.</Text>
+            <Text
+              allowFontScaling={false}
+              style={styles.paragraph}>for any questions.</Text>
           </Text>
         </ScrollView>
         {submitting ? <Spinner /> : null}

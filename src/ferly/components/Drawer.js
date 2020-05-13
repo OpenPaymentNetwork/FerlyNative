@@ -37,7 +37,9 @@ class DrawerContent extends React.Component {
                 firstWord={firstName}
                 secondWord={lastName}
                 pictureUrl={profileImage} />
-              <Text style={styles.text}>{`${firstName} ${lastName}`}</Text>
+              <Text
+                allowFontScaling={false}
+                style={styles.text}>{`${firstName} ${lastName}`}</Text>
             </TouchableOpacity>
           </View>
           <TestElement

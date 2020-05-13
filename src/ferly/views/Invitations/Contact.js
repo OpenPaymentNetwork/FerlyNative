@@ -97,7 +97,9 @@ export class Contact extends React.Component {
           name={option.indexOf('@') > -1 ? 'envelope' : 'phone'}
           color='black'
           size={26} />
-        <Text style={{fontSize: 22, paddingLeft: 20}}>{option}</Text>
+        <Text
+          allowFontScaling={false}
+          style={{fontSize: 22, paddingLeft: 20}}>{option}</Text>
       </TouchableOpacity>
     );
   }
@@ -134,7 +136,9 @@ export class Contact extends React.Component {
               firstWord={display.firstName}
               secondWord={display.lastName}
               pictureUrl={display.uri} />
-            <Text style={{fontSize: 26, paddingTop: 10}}>{contact.name}</Text>
+            <Text
+              allowFontScaling={false}
+              style={{fontSize: 26, paddingTop: 10}}>{contact.name}</Text>
           </View>
         </View>
         {options.map((option) => this.renderOption(option))}

@@ -110,18 +110,24 @@ export class Invitations extends React.Component {
         <ScrollView
           keyboardShouldPersistTaps='handled'
           contentContainerStyle={{paddingVertical: 15}}>
-          <Text style={styles.headerText}>Send</Text>
+          <Text
+            allowFontScaling={false}
+            style={styles.headerText}>Send</Text>
           <TouchableOpacity
             style={styles.button}
             onPress={() => navigation.navigate('Contacts')}>
             {addIcon}
-            <Text style={styles.buttonText}>From Contacts</Text>
+            <Text
+              allowFontScaling={false}
+              style={styles.buttonText}>From Contacts</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.button}
             onPress={() => navigation.navigate('ManualAdd')}>
             {addIcon}
-            <Text style={styles.buttonText}>New</Text>
+            <Text
+              allowFontScaling={false}
+              style={styles.buttonText}>New</Text>
           </TouchableOpacity>
           <View style={{marginTop: 10}} />
         </ScrollView>

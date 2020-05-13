@@ -25,6 +25,7 @@ export default class SearchBar extends React.Component {
         <TestElement
           parent={TextInput}
           label='test-id-search'
+          allowFontScaling={false}
           underlineColorAndroid='transparent'
           style={styles.input}
           onChangeText={this.onChangeText.bind(this)}

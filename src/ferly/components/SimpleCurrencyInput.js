@@ -47,7 +47,9 @@ export default class SimpleCurrencyInput extends React.Component {
     return (
       <View>
         <View style={styles.inputContainer}>
-          <Text style={styles.dollarSign}>$</Text>
+          <Text
+            allowFontScaling={false}
+            style={styles.dollarSign}>$</Text>
           <TestElement
             parent={TextInput}
             label='test-id-currency-input'
@@ -60,7 +62,9 @@ export default class SimpleCurrencyInput extends React.Component {
             autoFocus
             value={this.state.text} />
         </View>
-        <Text style={styles.error}>
+        <Text
+          allowFontScaling={false}
+          style={styles.error}>
           {this.props.error}
         </Text>
       </View>

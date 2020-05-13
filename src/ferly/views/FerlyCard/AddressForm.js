@@ -173,7 +173,7 @@ export class AddressForm extends React.Component {
         <View style={styles.page}>
           <KeyboardAvoidingView style={styles.form}
             behavior={'padding'}
-            keyboardVerticalOffset={64}>
+            keyboardVerticalOffset={-250}>
             <TestElement
               parent={ScrollView} label='test-id-address-form' keyboardShouldPersistTaps='handled'
             >
@@ -181,6 +181,7 @@ export class AddressForm extends React.Component {
                 <View>
                   <View style={[styles.textBox, {paddingTop: 30}]}>
                     <TextInput
+                      allowFontScaling={false}
                       placeholder="Name"
                       underlineColorAndroid='transparent'
                       style={styles.textField}
@@ -189,12 +190,15 @@ export class AddressForm extends React.Component {
                       autoFocus={true}
                       maxLength={50}
                       onChangeText={(text) => this.setState({name: text})} />
-                    <Text style={styles.error}>{nameError}</Text>
+                    <Text
+                      allowFontScaling={false}
+                      style={styles.error}>{nameError}</Text>
                   </View>
                 </View>
                 <View>
                   <View style={styles.textBox}>
                     <TextInput
+                      allowFontScaling={false}
                       placeholder="Address"
                       underlineColorAndroid='transparent'
                       style={styles.textField}
@@ -204,11 +208,14 @@ export class AddressForm extends React.Component {
                       onChangeText={
                         (text) => this.setState({address: text})
                       } />
-                    <Text style={styles.error}>{addressError}</Text>
+                    <Text
+                      allowFontScaling={false}
+                      style={styles.error}>{addressError}</Text>
                   </View>
                 </View>
                 <View style={styles.textBox}>
                   <TextInput
+                    allowFontScaling={false}
                     placeholder="Apartment Number"
                     underlineColorAndroid='transparent'
                     style={styles.textField}
@@ -216,10 +223,11 @@ export class AddressForm extends React.Component {
                     value={apt}
                     onChangeText={(text) => this.setState({apt: text})}
                     maxLength={50} />
-                  <Text></Text>
+                  <Text allowFontScaling={false}></Text>
                 </View>
                 <View style={styles.textBox}>
                   <TextInput
+                    allowFontScaling={false}
                     placeholder="City"
                     underlineColorAndroid='transparent'
                     style={styles.textField}
@@ -227,11 +235,14 @@ export class AddressForm extends React.Component {
                     value={city}
                     maxLength={50}
                     onChangeText={(text) => this.setState({city: text})} />
-                  <Text style={styles.error}>{cityError}</Text>
+                  <Text
+                    allowFontScaling={false}
+                    style={styles.error}>{cityError}</Text>
                 </View>
                 <View style={{flexDirection: 'row', marginBottom: 10}} >
                   <View style={styles.textBox}>
                     <TextInput
+                      allowFontScaling={false}
                       placeholder="St"
                       underlineColorAndroid='transparent'
                       style={[styles.zipField, {width: 50}]}
@@ -239,10 +250,13 @@ export class AddressForm extends React.Component {
                       value={state}
                       maxLength={2}
                       onChangeText={(text) => this.setState({state: text})} />
-                    <Text style={styles.error}>{stateError}</Text>
+                    <Text
+                      allowFontScaling={false}
+                      style={styles.error}>{stateError}</Text>
                   </View>
                   <View style={styles.textBox}>
                     <TextInput
+                      allowFontScaling={false}
                       placeholder="Zip"
                       underlineColorAndroid='transparent'
                       style={styles.zipField}
@@ -253,7 +267,9 @@ export class AddressForm extends React.Component {
                       onChangeText={
                         (text) => this.setState({zipCode: text})
                       } />
-                    <Text style={styles.error}>{zipError}</Text>
+                    <Text
+                      allowFontScaling={false}
+                      style={styles.error}>{zipError}</Text>
                   </View>
                 </View>
                 <PrimaryButton
@@ -273,13 +289,17 @@ export class AddressForm extends React.Component {
                   flexDirection: 'row',
                   justifyContent: 'center',
                   marginBottom: 30}}>
-                  <Text style={{fontSize: width > 600 ? 18 : 16}}>Already have a Ferly Card?</Text>
+                  <Text
+                    allowFontScaling={false}
+                    style={{fontSize: width > 600 ? 18 : 16}}>Already have a Ferly Card?</Text>
                   <TouchableOpacity onPress={() => navigation.navigate('NewCardForm')}>
-                    <Text style={{
-                      color: Theme.lightBlue,
-                      textDecorationLine: 'underline',
-                      fontSize: width > 600 ? 18 : 16,
-                      paddingLeft: 5}}>Activate It</Text>
+                    <Text
+                      allowFontScaling={false}
+                      style={{
+                        color: Theme.lightBlue,
+                        textDecorationLine: 'underline',
+                        fontSize: width > 600 ? 18 : 16,
+                        paddingLeft: 5}}>Activate It</Text>
                   </TouchableOpacity>
                 </View>
               </View>

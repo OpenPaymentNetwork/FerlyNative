@@ -78,7 +78,9 @@ export class Tutorial extends React.Component {
       <View style={{flex: 1, justifyContent: 'space-between'}}>
         <View style={styles.container}>
           {this.nextPage()}
-          <Text style={[styles.text, {fontSize: 22}]}>
+          <Text
+            allowFontScaling={false}
+            style={[styles.text, {fontSize: 22}]}>
             {descriptions[page]}
           </Text>
           <Image style={styles.image} source={images[page]} />
@@ -92,12 +94,16 @@ export class Tutorial extends React.Component {
             color={Theme.lightBlue}
             onPress={() => navigation.navigate('AddressForm')} />
           <View style={{justifyContent: 'center'}}>
-            <Text style={[styles.text, {fontSize: 20}]}>
+            <Text
+              allowFontScaling={false}
+              style={[styles.text, {fontSize: 20}]}>
               Already have a Ferly Card?
             </Text>
             <TouchableOpacity
               style={{alignItems: 'center'}} onPress={() => navigation.navigate('NewCardForm')}>
-              <Text style={{color: Theme.darkBlue, fontSize: 18, paddingBottom: 20}}>
+              <Text
+                allowFontScaling={false}
+                style={{color: Theme.darkBlue, fontSize: 18, paddingBottom: 20}}>
                 Activate It
               </Text>
             </TouchableOpacity>

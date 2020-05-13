@@ -83,7 +83,9 @@ export class Value extends React.Component {
           alignItems: 'flex-start',
           width: width / 3
         }}>
-          <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 14}}>
+          <Text
+            allowFontScaling={false}
+            style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 14}}>
             {column1}
           </Text>
         </View>
@@ -93,7 +95,9 @@ export class Value extends React.Component {
           alignItems: 'flex-start',
           width: width / 3
         }}>
-          <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 14}}>
+          <Text
+            allowFontScaling={false}
+            style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 14}}>
             {column2}
           </Text>
         </View>
@@ -104,9 +108,11 @@ export class Value extends React.Component {
           width: width / 3,
           paddingRight: 30
         }}>
-          <Text style={{
-            color: Theme.darkBlue, fontSize: width > 600 ? 18 : 14
-          }}>
+          <Text
+            allowFontScaling={false}
+            style={{
+              color: Theme.darkBlue, fontSize: width > 600 ? 18 : 14
+            }}>
             {symbol}{column3}
           </Text>
         </View>
@@ -134,9 +140,11 @@ export class Value extends React.Component {
           alignItems: 'flex-start',
           width: width / 3
         }}>
-          <Text style={{
-            color: Theme.darkBlue, fontSize: width > 600 ? 16 : 14
-          }}>
+          <Text
+            allowFontScaling={false}
+            style={{
+              color: Theme.darkBlue, fontSize: width > 600 ? 16 : 14
+            }}>
             {column1}
           </Text>
         </View>
@@ -146,9 +154,11 @@ export class Value extends React.Component {
           alignItems: 'flex-start',
           width: width / 3
         }}>
-          <Text style={{
-            color: Theme.darkBlue, fontSize: width > 600 ? 16 : 14
-          }}>
+          <Text
+            allowFontScaling={false}
+            style={{
+              color: Theme.darkBlue, fontSize: width > 600 ? 16 : 14
+            }}>
             {column2}
           </Text>
         </View>
@@ -159,9 +169,11 @@ export class Value extends React.Component {
           flexDirection: 'row',
           width: width / 3
         }}>
-          <Text style={{
-            color: Theme.darkBlue, fontSize: width > 600 ? 16 : 14
-          }}>
+          <Text
+            allowFontScaling={false}
+            style={{
+              color: Theme.darkBlue, fontSize: width > 600 ? 16 : 14
+            }}>
             {column3}
           </Text>
         </View>
@@ -325,12 +337,14 @@ export class Value extends React.Component {
           alignItems: 'flex-start',
           width: width / 3
         }}>
-          <Text style={{
-            color: Theme.darkBlue,
-            fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
-            fontWeight: 'bold',
-            paddingTop: 10
-          }}>
+          <Text
+            allowFontScaling={false}
+            style={{
+              color: Theme.darkBlue,
+              fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
+              fontWeight: 'bold',
+              paddingTop: 10
+            }}>
             Amount
           </Text>
         </View>
@@ -340,12 +354,14 @@ export class Value extends React.Component {
           alignItems: 'flex-start',
           width: width / 3
         }}>
-          <Text style={{
-            color: Theme.darkBlue,
-            fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
-            fontWeight: 'bold',
-            paddingTop: 10
-          }}>
+          <Text
+            allowFontScaling={false}
+            style={{
+              color: Theme.darkBlue,
+              fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
+              fontWeight: 'bold',
+              paddingTop: 10
+            }}>
             Type
           </Text>
         </View>
@@ -356,12 +372,14 @@ export class Value extends React.Component {
           flexDirection: 'row',
           width: width / 3
         }}>
-          <Text style={{
-            color: Theme.darkBlue,
-            fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
-            fontWeight: 'bold',
-            paddingTop: 10
-          }}>
+          <Text
+            allowFontScaling={false}
+            style={{
+              color: Theme.darkBlue,
+              fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
+              fontWeight: 'bold',
+              paddingTop: 10
+            }}>
             Expiration Date
           </Text>
         </View>
@@ -374,33 +392,39 @@ export class Value extends React.Component {
         justifyContent: 'space-between',
         paddingHorizontal: 15
       }}>
-        <Text style={{
-          color: Theme.darkBlue,
-          width: width / 3,
-          fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
-          fontWeight: 'bold',
-          paddingTop: 10
-        }}>
+        <Text
+          allowFontScaling={false}
+          style={{
+            color: Theme.darkBlue,
+            width: width / 3,
+            fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
+            fontWeight: 'bold',
+            paddingTop: 10
+          }}>
         Date
         </Text>
-        <Text style={{
-          color: Theme.darkBlue,
-          width: width / 3,
-          fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
-          fontWeight: 'bold',
-          paddingTop: 10
-        }}>
+        <Text
+          allowFontScaling={false}
+          style={{
+            color: Theme.darkBlue,
+            width: width / 3,
+            fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
+            fontWeight: 'bold',
+            paddingTop: 10
+          }}>
         Type
         </Text>
-        <Text style={{
-          color: Theme.darkBlue,
-          width: width / 3,
-          fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
-          fontWeight: 'bold',
-          textAlign: 'right',
-          paddingRight: 30,
-          paddingTop: 10
-        }}>
+        <Text
+          allowFontScaling={false}
+          style={{
+            color: Theme.darkBlue,
+            width: width / 3,
+            fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
+            fontWeight: 'bold',
+            textAlign: 'right',
+            paddingRight: 30,
+            paddingTop: 10
+          }}>
         Amount
         </Text>
       </View>
@@ -469,21 +493,27 @@ export class Value extends React.Component {
         keyboardShouldPersistTaps='handled'
         style={{flex: 1, backgroundColor: 'white'}}>
         <View style={styles.headerContainer}>
-          <Text style={{
-            fontSize: width < 330 ? 19 : 22 && width > 600 ? 24 : 22,
-            marginTop: 20,
-            marginBottom: 10,
-            color: Theme.darkBlue
-          }}>
-            {title}
-          </Text>
-          <Text style={styles.amount}>${amount}</Text>
-          {design.authorized_merchant
-            ? <Text style={{
-              fontSize: width < 330 ? 14 : 16 && width > 600 ? 18 : 16,
+          <Text
+            allowFontScaling={false}
+            style={{
+              fontSize: width < 330 ? 19 : 22 && width > 600 ? 24 : 22,
+              marginTop: 20,
               marginBottom: 10,
               color: Theme.darkBlue
             }}>
+            {title}
+          </Text>
+          <Text
+            allowFontScaling={false}
+            style={styles.amount}>${amount}</Text>
+          {design.authorized_merchant
+            ? <Text
+              allowFontScaling={false}
+              style={{
+                fontSize: width < 330 ? 14 : 16 && width > 600 ? 18 : 16,
+                marginBottom: 10,
+                color: Theme.darkBlue
+              }}>
               {loyaltyAmount ? `+ Loyalty: $${loyaltyAmount}` : `+ Loyalty: $0.00`}
             </Text> : null
           }
@@ -507,10 +537,12 @@ export class Value extends React.Component {
                   name="card-giftcard"
                   color={'white'}
                   size={width < 350 ? 18 : 20 && width > 600 ? 26 : 20} />
-                <Text style={{
-                  fontSize: width < 350 ? 14 : 16 && width > 600 ? 18 : 16,
-                  color: 'white'
-                }}>
+                <Text
+                  allowFontScaling={false}
+                  style={{
+                    fontSize: width < 350 ? 14 : 16 && width > 600 ? 18 : 16,
+                    color: 'white'
+                  }}>
                   {`Give`}
                 </Text>
               </TestElement>
@@ -534,10 +566,12 @@ export class Value extends React.Component {
                   name="plus-circle"
                   color={'white'}
                   size={width < 350 ? 16 : 18 && width > 600 ? 24 : 18} />
-                <Text style={{
-                  fontSize: width < 350 ? 14 : 16 && width > 600 ? 18 : 16,
-                  color: 'white'
-                }}>
+                <Text
+                  allowFontScaling={false}
+                  style={{
+                    fontSize: width < 350 ? 14 : 16 && width > 600 ? 18 : 16,
+                    color: 'white'
+                  }}>
                   {`Buy`}
                 </Text>
               </TestElement>
@@ -551,7 +585,9 @@ export class Value extends React.Component {
             marginBottom: 15,
             marginTop: 10
           }}>
-            <Text style={styles.header}>Transactions</Text>
+            <Text
+              allowFontScaling={false}
+              style={styles.header}>Transactions</Text>
           </View>
           <View style={{flex: 1}}>
             {historyInfo.length > 0 ? historyHeader : null}
@@ -570,7 +606,9 @@ export class Value extends React.Component {
               marginVertical: 10
             }}
             onPress={() => this.props.navigation.navigate('History')}>
-            <Text style={styles.locations}>
+            <Text
+              allowFontScaling={false}
+              style={styles.locations}>
               See All
             </Text>
             <Icon
@@ -584,22 +622,32 @@ export class Value extends React.Component {
             borderBottomColor: Theme.lightBlue,
             marginBottom: 15
           }}>
-            <Text style={styles.header}>Expiration Dates</Text>
+            <Text
+              allowFontScaling={false}
+              style={styles.header}>Expiration Dates</Text>
           </View>
           {expiringInfo.length > 0 ? tableHeader : null}
           {expiringInfo}
           {loyaltyExpiringInfo}
           <View style={{borderBottomWidth: 2, borderBottomColor: Theme.lightBlue, marginBottom: 15}}>
-            <Text style={[styles.header, {marginTop: 20}]}>Fees</Text>
+            <Text
+              allowFontScaling={false}
+              style={[styles.header, {marginTop: 20}]}>Fees</Text>
           </View>
-          <Text style={styles.paragraph}>
+          <Text
+            allowFontScaling={false}
+            style={styles.paragraph}>
             {`Your ${title} balance and loyalty are NOT subject to dormancy, inactivity, or ` +
             `service fees.`}
           </Text>
           <View style={{borderBottomWidth: 2, borderBottomColor: Theme.lightBlue, marginBottom: 15}}>
-            <Text style={styles.header}>Participating Locations</Text>
+            <Text
+              allowFontScaling={false}
+              style={styles.header}>Participating Locations</Text>
           </View>
-          <Text style={styles.paragraph}>
+          <Text
+            allowFontScaling={false}
+            style={styles.paragraph}>
             {`The Ferly Card can be used to spend your ${title} value at any ${title} ` +
             `located in the United States.`}
           </Text>
@@ -615,7 +663,9 @@ export class Value extends React.Component {
               borderRadius: 5
             }}
             onPress={this.openInMaps}>
-            <Text style={styles.locations}>
+            <Text
+              allowFontScaling={false}
+              style={styles.locations}>
               Open Maps
             </Text>
             <I
@@ -624,7 +674,9 @@ export class Value extends React.Component {
               color={Theme.darkBlue}
               size={width < 350 ? 16 : 18 && width > 600 ? 24 : 18} />
           </TouchableOpacity>
-          <Text style={{paddingBottom: 20}} />
+          <Text
+            allowFontScaling={false}
+            style={{paddingBottom: 20}} />
         </View>
       </ScrollView>
     );

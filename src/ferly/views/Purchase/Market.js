@@ -95,7 +95,9 @@ export class Market extends React.Component {
     if (searchResults && searchResults.length === 0) {
       body = (
         <View style={{flex: 1}}>
-          <Text style={styles.noResults}>
+          <Text
+            allowFontScaling={false}
+            style={styles.noResults}>
             We're sorry, no results found.
           </Text>
         </View>
@@ -117,10 +119,22 @@ export class Market extends React.Component {
                       size={width > 600 ? 40 : 30}
                       pictureUrl={design.logo_image_url}/>
                     <View style={{flex: 1, paddingHorizontal: 10}}>
-                      <Text style={{fontSize: width > 600 ? 22 : 18, fontWeight: 'bold'}}>
+                      <Text
+                        allowFontScaling={false}
+                        style={{fontSize: width > 600 ? 22 : 18, fontWeight: 'bold'}}>
                         {design.title}
                       </Text>
                     </View>
+                    {design.authorized_merchant === true
+                      ? <View style={{height: 29, width: 81, backgroundColor: '#fde890', borderRadius: 13, justifyContent: 'center', alignItems: 'center'}}>
+                        <Text
+                          allowFontScaling={false}
+                          style={{color: Theme.darkBlue, paddingHorizontal: 5, fontSize: 15}}>
+                          Earn 5%
+                        </Text>
+                      </View>
+                      : null
+                    }
                   </View>
                 </TestElement>
               );
@@ -160,7 +174,9 @@ export class Market extends React.Component {
               name="md-wallet"
               color={Theme.darkBlue}
               size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
-            <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
+            <Text
+              allowFontScaling={false}
+              style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
                 Wallet
             </Text>
           </TestElement>
@@ -180,7 +196,9 @@ export class Market extends React.Component {
               name="store-alt"
               color={Theme.darkBlue}
               size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
-            <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
+            <Text
+              allowFontScaling={false}
+              style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
                 Shop
             </Text>
           </TestElement>
@@ -200,7 +218,9 @@ export class Market extends React.Component {
               name="history"
               color={Theme.darkBlue}
               size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
-            <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
+            <Text
+              allowFontScaling={false}
+              style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
                 History
             </Text>
           </TestElement>
@@ -220,7 +240,9 @@ export class Market extends React.Component {
               name="bars"
               color={Theme.darkBlue}
               size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
-            <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
+            <Text
+              allowFontScaling={false}
+              style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
                 Menu
             </Text>
           </TestElement>

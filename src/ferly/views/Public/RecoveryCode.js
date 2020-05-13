@@ -207,7 +207,9 @@ export class RecoveryCode extends React.Component {
         justifyContent: 'space-between',
         backgroundColor: 'white'}}>
         <View style={{paddingHorizontal: 40, paddingVertical: 30}}>
-          <Text style={{fontSize: width > 600 ? 22 : 18}}>
+          <Text
+            allowFontScaling={false}
+            style={{fontSize: width > 600 ? 22 : 18}}>
             {`We sent a unique and temporary code to your ${channelType}. ` +
              `Enter the ${codeLength}-digit code below.`}
           </Text>
@@ -216,6 +218,7 @@ export class RecoveryCode extends React.Component {
             borderColor: 'gray',
             paddingTop: 20}}>
             <TextInput
+              allowFontScaling={false}
               style={{fontSize: width > 600 ? 22 : 18}}
               onChangeText={(text) => this.setState({fieldValue: text})}
               autoFocus
@@ -225,7 +228,9 @@ export class RecoveryCode extends React.Component {
               value={fieldValue} />
             {showRecaptcha ? recaptchaComponent : null}
           </View>
-          {invalid ? (<Text style={styles.error}>{invalid}</Text>) : null}
+          {invalid ? (<Text
+            allowFontScaling={false}
+            style={styles.error}>{invalid}</Text>) : null}
         </View>
         <PrimaryButton
           title="Recover Account"

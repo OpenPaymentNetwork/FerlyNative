@@ -68,9 +68,15 @@ export class Recovery extends React.Component {
         behavior="padding">
         <ScrollView keyboardShouldPersistTaps='handled' contentContainerStyle={{flexGrow: 1}}>
           <View style={{paddingHorizontal: 20, paddingTop: 20}}>
-            <Text style={{fontSize: width > 600 ? 18 : 16, marginBottom: 8}}>{message}</Text>
-            <Text style={{fontSize: width > 600 ? 18 : 16}}>
-              <Text style={{fontWeight: 'bold'}}>NOTE: </Text>
+            <Text
+              allowFontScaling={false}
+              style={{fontSize: width > 600 ? 18 : 16, marginBottom: 8}}>{message}</Text>
+            <Text
+              allowFontScaling={false}
+              style={{fontSize: width > 600 ? 18 : 16}}>
+              <Text
+                allowFontScaling={false}
+                style={{fontWeight: 'bold'}}>NOTE: </Text>
               {note}
             </Text>
           </View>

@@ -87,70 +87,86 @@ export class LoadingInstructions extends React.Component {
         >
           <View style={styles.container}>
             <Image style={styles.image} source={Why} />
-            <Text style={[styles.text, {
-              fontSize: width > 600 ? 25 : 18 && width < 350 ? 16 : 18,
-              paddingVertical: width < 350 ? 10 : 15 && width > 600 ? 25 : 15,
-              fontWeight: 'bold'
-            }]}>
+            <Text
+              allowFontScaling={false}
+              style={[styles.text, {
+                fontSize: width > 600 ? 25 : 18 && width < 350 ? 16 : 18,
+                paddingVertical: width < 350 ? 10 : 15 && width > 600 ? 25 : 15,
+                fontWeight: 'bold'
+              }]}>
               Why do we use direct deposit?
             </Text>
-            <Text style={[styles.text, {
-              height: height < 600 && width < 350 ? 125 : 105,
-              fontSize: width > 600 ? 25 : 18 && width < 350 ? 16 : 18,
-              paddingBottom: width < 350 ? 10 : 15 && width > 600 ? 25 : 15
-            }]}>
+            <Text
+              allowFontScaling={false}
+              style={[styles.text, {
+                height: height < 600 && width < 350 ? 125 : 105,
+                fontSize: width > 600 ? 25 : 18 && width < 350 ? 16 : 18,
+                paddingBottom: width < 350 ? 10 : 15 && width > 600 ? 25 : 15
+              }]}>
               {`We understand direct deposit is an extra step, BUT it reduces fraud and ` +
               `eliminates credit card fees so we can pass the savings along to you!`}
             </Text>
           </View>
           <View style={styles.container}>
             <Image style={styles.image} source={DirectDeposit} />
-            <Text style={[styles.text, {
-              fontSize: width > 600 ? 25 : 18 && width < 350 ? 16 : 18,
-              paddingVertical: width < 350 ? 10 : 15 && width > 600 ? 25 : 15,
-              fontWeight: 'bold'
-            }]}>
+            <Text
+              allowFontScaling={false}
+              style={[styles.text, {
+                fontSize: width > 600 ? 25 : 18 && width < 350 ? 16 : 18,
+                paddingVertical: width < 350 ? 10 : 15 && width > 600 ? 25 : 15,
+                fontWeight: 'bold'
+              }]}>
               Step 1
             </Text>
-            <Text style={[styles.text, {
-              height: height < 600 && width < 350 ? 125 : 105,
-              fontSize: width > 600 ? 25 : 18 && width < 350 ? 16 : 18,
-              paddingBottom: width < 350 ? 10 : 15 && width > 600 ? 25 : 15
-            }]}>
+            <Text
+              allowFontScaling={false}
+              style={[styles.text, {
+                height: height < 600 && width < 350 ? 125 : 105,
+                fontSize: width > 600 ? 25 : 18 && width < 350 ? 16 : 18,
+                paddingBottom: width < 350 ? 10 : 15 && width > 600 ? 25 : 15
+              }]}>
               Set up direct deposit using the routing and accout number below to buy Ferly Cash.
             </Text>
           </View>
           <View style={styles.container}>
             <Image style={styles.image} source={FerlyCash} />
-            <Text style={[styles.text, {
-              fontSize: width > 600 ? 25 : 18 && width < 350 ? 16 : 18,
-              paddingVertical: width < 350 ? 10 : 15 && width > 600 ? 25 : 15,
-              fontWeight: 'bold'
-            }]}>
+            <Text
+              allowFontScaling={false}
+              style={[styles.text, {
+                fontSize: width > 600 ? 25 : 18 && width < 350 ? 16 : 18,
+                paddingVertical: width < 350 ? 10 : 15 && width > 600 ? 25 : 15,
+                fontWeight: 'bold'
+              }]}>
               Step 2
             </Text>
-            <Text style={[styles.text, {
-              height: height < 600 && width < 350 ? 125 : 105,
-              fontSize: width > 600 ? 25 : 18 && width < 350 ? 16 : 18,
-              paddingBottom: width < 350 ? 10 : 15 && width > 600 ? 25 : 15
-            }]}>
+            <Text
+              allowFontScaling={false}
+              style={[styles.text, {
+                height: height < 600 && width < 350 ? 125 : 105,
+                fontSize: width > 600 ? 25 : 18 && width < 350 ? 16 : 18,
+                paddingBottom: width < 350 ? 10 : 15 && width > 600 ? 25 : 15
+              }]}>
               On payday, Ferly Cash is immediately available in your wallet.
             </Text>
           </View>
           <View style={styles.container}>
             <Image style={styles.image} source={FerlyRewards} />
-            <Text style={[styles.text, {
-              fontSize: width > 600 ? 25 : 18 && width < 350 ? 16 : 18,
-              paddingVertical: width < 350 ? 10 : 15 && width > 600 ? 25 : 15,
-              fontWeight: 'bold'
-            }]}>
+            <Text
+              allowFontScaling={false}
+              style={[styles.text, {
+                fontSize: width > 600 ? 25 : 18 && width < 350 ? 16 : 18,
+                paddingVertical: width < 350 ? 10 : 15 && width > 600 ? 25 : 15,
+                fontWeight: 'bold'
+              }]}>
               Step 3
             </Text>
-            <Text style={[styles.text, {
-              height: height < 600 && width < 350 ? 125 : 105,
-              fontSize: width > 600 ? 25 : 18 && width < 350 ? 16 : 18,
-              paddingBottom: width < 350 ? 10 : 15 && width > 600 ? 25 : 15
-            }]}>
+            <Text
+              allowFontScaling={false}
+              style={[styles.text, {
+                height: height < 600 && width < 350 ? 125 : 105,
+                fontSize: width > 600 ? 25 : 18 && width < 350 ? 16 : 18,
+                paddingBottom: width < 350 ? 10 : 15 && width > 600 ? 25 : 15
+              }]}>
               Earn 5% (yes 5%!) for all Ferly Cash purchased.
             </Text>
           </View>
@@ -161,55 +177,67 @@ export class LoadingInstructions extends React.Component {
           paddingTop: width < 350 ? 15 : 20 && width > 600 ? 25 : 20,
           paddingBottom: 5
         }}>
-          <Text style={{
-            paddingHorizontal: 10,
-            fontSize: width > 600 ? 25 : 18 && width < 350 ? 16 : 18,
-            color: Theme.darkBlue
-          }}>
+          <Text
+            allowFontScaling={false}
+            style={{
+              paddingHorizontal: 10,
+              fontSize: width > 600 ? 25 : 18 && width < 350 ? 16 : 18,
+              color: Theme.darkBlue
+            }}>
             Direct Deposit Information
           </Text>
         </View>
         <View style={{paddingTop: 10}}>
-          <Text style={{
-            paddingHorizontal: 10,
-            fontSize: width > 600 ? 25 : 18 && width < 350 ? 16 : 18,
-            color: Theme.darkBlue
-          }}>
+          <Text
+            allowFontScaling={false}
+            style={{
+              paddingHorizontal: 10,
+              fontSize: width > 600 ? 25 : 18 && width < 350 ? 16 : 18,
+              color: Theme.darkBlue
+            }}>
             Use this information on a direct deposit form to add Ferly Cash to your wallet.
           </Text>
         </View>
         <View style={{paddingTop: width < 350 ? 15 : 20 && width > 600 ? 25 : 20}}>
-          <Text style={{
-            paddingHorizontal: 10,
-            fontSize: width > 600 ? 26 : 18 && width < 350 ? 16 : 18,
-            color: Theme.darkBlue
-          }}>
+          <Text
+            allowFontScaling={false}
+            style={{
+              paddingHorizontal: 10,
+              fontSize: width > 600 ? 26 : 18 && width < 350 ? 16 : 18,
+              color: Theme.darkBlue
+            }}>
             Routing Number
           </Text>
-          <Text style={{
-            paddingHorizontal: 10,
-            fontSize: width > 600 ? 25 : 20 && width < 350 ? 18 : 20,
-            color: Theme.darkBlue,
-            fontWeight: 'bold'
-          }}>
+          <Text
+            allowFontScaling={false}
+            style={{
+              paddingHorizontal: 10,
+              fontSize: width > 600 ? 25 : 20 && width < 350 ? 18 : 20,
+              color: Theme.darkBlue,
+              fontWeight: 'bold'
+            }}>
             073923059
           </Text>
         </View>
         <View style={{paddingTop: 10}}>
-          <Text style={{
-            paddingHorizontal: 10,
-            fontSize: width > 600 ? 25 : 18 && width < 350 ? 16 : 18,
-            color: Theme.darkBlue
-          }}>
+          <Text
+            allowFontScaling={false}
+            style={{
+              paddingHorizontal: 10,
+              fontSize: width > 600 ? 25 : 18 && width < 350 ? 16 : 18,
+              color: Theme.darkBlue
+            }}>
             Account Number
           </Text>
-          <Text style={{
-            paddingHorizontal: 10,
-            paddingBottom: width < 350 ? 10 : 15 && width > 600 ? 25 : 15,
-            fontSize: width > 600 ? 26 : 20 && width < 350 ? 18 : 20,
-            color: Theme.darkBlue,
-            fontWeight: 'bold'
-          }}>
+          <Text
+            allowFontScaling={false}
+            style={{
+              paddingHorizontal: 10,
+              paddingBottom: width < 350 ? 10 : 15 && width > 600 ? 25 : 15,
+              fontSize: width > 600 ? 26 : 20 && width < 350 ? 18 : 20,
+              color: Theme.darkBlue,
+              fontWeight: 'bold'
+            }}>
             {sub1 + ' - ' + sub2 + ' - ' + sub3 + ' - ' + sub4}
           </Text>
         </View>

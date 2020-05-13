@@ -93,7 +93,9 @@ export class FerlyValue extends React.Component {
           alignItems: 'flex-start',
           width: width / 3
         }}>
-          <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 14}}>
+          <Text
+            allowFontScaling={false}
+            style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 14}}>
             {column1}
           </Text>
         </View>
@@ -103,7 +105,9 @@ export class FerlyValue extends React.Component {
           alignItems: 'flex-start',
           width: width / 3
         }}>
-          <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 14}}>
+          <Text
+            allowFontScaling={false}
+            style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 14}}>
             {column2}
           </Text>
         </View>
@@ -122,9 +126,11 @@ export class FerlyValue extends React.Component {
               size={width < 330 ? 20 : 22 && width > 600 ? 28 : 22} />
             : null
           }
-          <Text style={{
-            color: Theme.darkBlue, fontSize: width > 600 ? 18 : 14
-          }}>
+          <Text
+            allowFontScaling={false}
+            style={{
+              color: Theme.darkBlue, fontSize: width > 600 ? 18 : 14
+            }}>
             {symbol}{column3}
           </Text>
         </View>
@@ -152,9 +158,11 @@ export class FerlyValue extends React.Component {
           alignItems: 'flex-start',
           width: width / 3
         }}>
-          <Text style={{
-            color: Theme.darkBlue, fontSize: width > 600 ? 16 : 14
-          }}>
+          <Text
+            allowFontScaling={false}
+            style={{
+              color: Theme.darkBlue, fontSize: width > 600 ? 16 : 14
+            }}>
             {column1}
           </Text>
         </View>
@@ -164,9 +172,11 @@ export class FerlyValue extends React.Component {
           alignItems: 'flex-start',
           width: width / 3
         }}>
-          <Text style={{
-            color: Theme.darkBlue, fontSize: width > 600 ? 16 : 14
-          }}>
+          <Text
+            allowFontScaling={false}
+            style={{
+              color: Theme.darkBlue, fontSize: width > 600 ? 16 : 14
+            }}>
             {column2}
           </Text>
         </View>
@@ -177,9 +187,11 @@ export class FerlyValue extends React.Component {
           flexDirection: 'row',
           width: width / 3
         }}>
-          <Text style={{
-            color: Theme.darkBlue, fontSize: width > 600 ? 16 : 14
-          }}>
+          <Text
+            allowFontScaling={false}
+            style={{
+              color: Theme.darkBlue, fontSize: width > 600 ? 16 : 14
+            }}>
             {column3}
           </Text>
         </View>
@@ -331,12 +343,14 @@ export class FerlyValue extends React.Component {
           alignItems: 'flex-start',
           width: width / 3
         }}>
-          <Text style={{
-            color: Theme.darkBlue,
-            fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
-            fontWeight: 'bold',
-            paddingTop: 10
-          }}>
+          <Text
+            allowFontScaling={false}
+            style={{
+              color: Theme.darkBlue,
+              fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
+              fontWeight: 'bold',
+              paddingTop: 10
+            }}>
             Amount
           </Text>
         </View>
@@ -346,12 +360,14 @@ export class FerlyValue extends React.Component {
           alignItems: 'flex-start',
           width: width / 3
         }}>
-          <Text style={{
-            color: Theme.darkBlue,
-            fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
-            fontWeight: 'bold',
-            paddingTop: 10
-          }}>
+          <Text
+            allowFontScaling={false}
+            style={{
+              color: Theme.darkBlue,
+              fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
+              fontWeight: 'bold',
+              paddingTop: 10
+            }}>
             Type
           </Text>
         </View>
@@ -362,12 +378,14 @@ export class FerlyValue extends React.Component {
           flexDirection: 'row',
           width: width / 3
         }}>
-          <Text style={{
-            color: Theme.darkBlue,
-            fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
-            fontWeight: 'bold',
-            paddingTop: 10
-          }}>
+          <Text
+            allowFontScaling={false}
+            style={{
+              color: Theme.darkBlue,
+              fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
+              fontWeight: 'bold',
+              paddingTop: 10
+            }}>
             Expiration Date
           </Text>
         </View>
@@ -380,33 +398,39 @@ export class FerlyValue extends React.Component {
         justifyContent: 'space-between',
         paddingHorizontal: 15
       }}>
-        <Text style={{
-          color: Theme.darkBlue,
-          width: width / 3,
-          fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
-          fontWeight: 'bold',
-          paddingTop: 10
-        }}>
+        <Text
+          allowFontScaling={false}
+          style={{
+            color: Theme.darkBlue,
+            width: width / 3,
+            fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
+            fontWeight: 'bold',
+            paddingTop: 10
+          }}>
         Date
         </Text>
-        <Text style={{
-          color: Theme.darkBlue,
-          width: width / 3,
-          fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
-          fontWeight: 'bold',
-          paddingTop: 10
-        }}>
+        <Text
+          allowFontScaling={false}
+          style={{
+            color: Theme.darkBlue,
+            width: width / 3,
+            fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
+            fontWeight: 'bold',
+            paddingTop: 10
+          }}>
         Type
         </Text>
-        <Text style={{
-          color: Theme.darkBlue,
-          width: width / 3,
-          fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
-          fontWeight: 'bold',
-          textAlign: 'right',
-          paddingRight: 30,
-          paddingTop: 10
-        }}>
+        <Text
+          allowFontScaling={false}
+          style={{
+            color: Theme.darkBlue,
+            width: width / 3,
+            fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
+            fontWeight: 'bold',
+            textAlign: 'right',
+            paddingRight: 30,
+            paddingTop: 10
+          }}>
         Amount
         </Text>
       </View>
@@ -479,20 +503,26 @@ export class FerlyValue extends React.Component {
         keyboardShouldPersistTaps='handled'
         style={{flex: 1, backgroundColor: 'white'}}>
         <View style={styles.headerContainer}>
-          <Text style={{
-            fontSize: width < 330 ? 19 : 22 && width > 600 ? 24 : 22,
-            marginTop: 20,
-            marginBottom: 10,
-            color: 'white'
-          }}>
+          <Text
+            allowFontScaling={false}
+            style={{
+              fontSize: width < 330 ? 19 : 22 && width > 600 ? 24 : 22,
+              marginTop: 20,
+              marginBottom: 10,
+              color: 'white'
+            }}>
             {!cash ? '' : cash.title}
           </Text>
-          <Text style={styles.amount}>${!cash ? '0.00' : cash.amount}</Text>
-          <Text style={{
-            fontSize: width < 330 ? 14 : 16 && width > 600 ? 18 : 16,
-            marginBottom: 10,
-            color: 'white'
-          }}>
+          <Text
+            allowFontScaling={false}
+            style={styles.amount}>${!cash ? '0.00' : cash.amount}</Text>
+          <Text
+            allowFontScaling={false}
+            style={{
+              fontSize: width < 330 ? 14 : 16 && width > 600 ? 18 : 16,
+              marginBottom: 10,
+              color: 'white'
+            }}>
             {`+ Rewards: ${!rewards ? '' : rewards.amount}`}
           </Text>
           {!cash
@@ -511,11 +541,13 @@ export class FerlyValue extends React.Component {
                     height: 30
                   }}
                   onPress={() => this.props.navigation.navigate('Recipient', cash)}>
-                  <Text style={{
-                    fontSize: width < 350 ? 14 : 16 && width > 600 ? 18 : 16,
-                    fontWeight: 'bold',
-                    color: Theme.darkBlue
-                  }}>
+                  <Text
+                    allowFontScaling={false}
+                    style={{
+                      fontSize: width < 350 ? 14 : 16 && width > 600 ? 18 : 16,
+                      fontWeight: 'bold',
+                      color: Theme.darkBlue
+                    }}>
                     {`Learn More`}
                   </Text>
                   <Icon
@@ -546,11 +578,13 @@ export class FerlyValue extends React.Component {
                     name="card-giftcard"
                     color={Theme.darkBlue}
                     size={width < 350 ? 18 : 20 && width > 600 ? 26 : 20} />
-                  <Text style={{
-                    fontSize: width < 350 ? 14 : 16 && width > 600 ? 18 : 16,
-                    fontWeight: 'bold',
-                    color: Theme.darkBlue
-                  }}>
+                  <Text
+                    allowFontScaling={false}
+                    style={{
+                      fontSize: width < 350 ? 14 : 16 && width > 600 ? 18 : 16,
+                      fontWeight: 'bold',
+                      color: Theme.darkBlue
+                    }}>
                     {`Give`}
                   </Text>
                 </TestElement>
@@ -574,11 +608,13 @@ export class FerlyValue extends React.Component {
                     name="plus-circle"
                     color={Theme.darkBlue}
                     size={width < 350 ? 16 : 18 && width > 600 ? 24 : 18} />
-                  <Text style={{
-                    fontSize: width < 350 ? 14 : 16 && width > 600 ? 18 : 16,
-                    fontWeight: 'bold',
-                    color: Theme.darkBlue
-                  }}>
+                  <Text
+                    allowFontScaling={false}
+                    style={{
+                      fontSize: width < 350 ? 14 : 16 && width > 600 ? 18 : 16,
+                      fontWeight: 'bold',
+                      color: Theme.darkBlue
+                    }}>
                     {`Add`}
                   </Text>
                 </TestElement>
@@ -593,7 +629,9 @@ export class FerlyValue extends React.Component {
             marginBottom: 15,
             marginTop: 10
           }}>
-            <Text style={styles.header}>Transactions</Text>
+            <Text
+              allowFontScaling={false}
+              style={styles.header}>Transactions</Text>
           </View>
           <View style={{flex: 1}}>
             {historyInfo.length > 0 ? historyHeader : null}
@@ -613,7 +651,9 @@ export class FerlyValue extends React.Component {
                 marginVertical: 10
               }}
               onPress={() => this.props.navigation.navigate('History')}>
-              <Text style={styles.locations}>
+              <Text
+                allowFontScaling={false}
+                style={styles.locations}>
               See All
               </Text>
               <Icon
@@ -628,7 +668,9 @@ export class FerlyValue extends React.Component {
             borderBottomColor: Theme.lightBlue,
             marginBottom: 15
           }}>
-            <Text style={styles.header}>Expiration Dates</Text>
+            <Text
+              allowFontScaling={false}
+              style={styles.header}>Expiration Dates</Text>
           </View>
           {!expiringInfo ? null : tableHeader}
           {expiringInfo}
@@ -638,13 +680,19 @@ export class FerlyValue extends React.Component {
             borderBottomColor: Theme.lightBlue,
             marginBottom: 15
           }}>
-            <Text style={[styles.header, {marginTop: 20}]}>Fees</Text>
+            <Text
+              allowFontScaling={false}
+              style={[styles.header, {marginTop: 20}]}>Fees</Text>
           </View>
-          <Text style={styles.paragraph}>
+          <Text
+            allowFontScaling={false}
+            style={styles.paragraph}>
             Your Ferly Cash and Ferly Rewards are NOT subject to dormancy, inactivity, or service
              fees.
           </Text>
-          <Text style={{paddingBottom: 20}} />
+          <Text
+            allowFontScaling={false}
+            style={{paddingBottom: 20}} />
         </View>
       </ScrollView>
     );

@@ -110,11 +110,14 @@ export class ManualAdd extends React.Component {
         backgroundColor: 'white'
       }}>
         <View style={{margin: 20}}>
-          <Text style={{fontSize: width > 600 ? 20 : 16, marginBottom: 14}}>
+          <Text
+            allowFontScaling={false}
+            style={{fontSize: width > 600 ? 20 : 16, marginBottom: 14}}>
             Enter an email address or phone number to send an invitation to.
           </Text>
           <View style={{borderBottomWidth: 1, borderColor: 'gray'}}>
             <TextInput
+              allowFontScaling={false}
               onChangeText={(text) => this.setState({fieldValue: text})}
               autoFocus
               underlineColorAndroid={'transparent'}
@@ -123,7 +126,9 @@ export class ManualAdd extends React.Component {
               keyboardType="email-address"
               value={fieldValue} />
           </View>
-          <Text style={{color: 'red'}}>{error}</Text>
+          <Text
+            allowFontScaling={false}
+            style={{color: 'red'}}>{error}</Text>
         </View>
         <PrimaryButton
           title="Send Invitation"

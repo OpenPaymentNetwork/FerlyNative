@@ -228,8 +228,12 @@ export class Give extends React.Component {
     if (!contact) {
       return (
         <View style={styles.recipientRow}>
-          <Text style={{fontSize: width > 600 ? 24 : 20, fontWeight: 'bold'}}>Send</Text>
-          <Text style={{fontSize: width > 600 ? 22 : 20, fontWeight: 'bold', paddingLeft: 40}}>
+          <Text
+            allowFontScaling={false}
+            style={{fontSize: width > 600 ? 24 : 20, fontWeight: 'bold'}}>Send</Text>
+          <Text
+            allowFontScaling={false}
+            style={{fontSize: width > 600 ? 22 : 20, fontWeight: 'bold', paddingLeft: 40}}>
             {`${params.customer.first_name} ${params.customer.last_name}`}
           </Text>
         </View>
@@ -238,9 +242,13 @@ export class Give extends React.Component {
       if (contactName.firstName === undefined && contactName.firstName === undefined) {
         return (
           <View style={styles.recipientRow}>
-            <Text style={{fontSize: width > 600 ? 24 : 20, fontWeight: 'bold'}}>Send</Text>
+            <Text
+              allowFontScaling={false}
+              style={{fontSize: width > 600 ? 24 : 20, fontWeight: 'bold'}}>Send</Text>
             <View style={{flexDirection: 'column'}}>
-              <Text style={{fontSize: width > 600 ? 20 : 18, fontWeight: 'bold', paddingLeft: 40}}>
+              <Text
+                allowFontScaling={false}
+                style={{fontSize: width > 600 ? 20 : 18, fontWeight: 'bold', paddingLeft: 40}}>
                 {`${contact}`}
               </Text>
             </View>
@@ -249,12 +257,18 @@ export class Give extends React.Component {
       } else if (contactName.firstName === undefined) {
         return (
           <View style={styles.recipientRow}>
-            <Text style={{fontSize: width > 600 ? 24 : 20, fontWeight: 'bold'}}>Send</Text>
+            <Text
+              allowFontScaling={false}
+              style={{fontSize: width > 600 ? 24 : 20, fontWeight: 'bold'}}>Send</Text>
             <View style={{flexDirection: 'column'}}>
-              <Text style={{fontSize: width > 600 ? 20 : 18, fontWeight: 'bold', paddingLeft: 40}}>
+              <Text
+                allowFontScaling={false}
+                style={{fontSize: width > 600 ? 20 : 18, fontWeight: 'bold', paddingLeft: 40}}>
                 {`${contactName.lastName}`}
               </Text>
-              <Text style={{fontSize: width > 600 ? 16 : 14, color: 'gray', paddingLeft: 40}}>
+              <Text
+                allowFontScaling={false}
+                style={{fontSize: width > 600 ? 16 : 14, color: 'gray', paddingLeft: 40}}>
                 {`${contact}`}
               </Text>
             </View>
@@ -263,12 +277,18 @@ export class Give extends React.Component {
       } else if (contactName.lastName === undefined) {
         return (
           <View style={styles.recipientRow}>
-            <Text style={{fontSize: width > 600 ? 24 : 20, fontWeight: 'bold'}}>Send</Text>
+            <Text
+              allowFontScaling={false}
+              style={{fontSize: width > 600 ? 24 : 20, fontWeight: 'bold'}}>Send</Text>
             <View style={{flexDirection: 'column'}}>
-              <Text style={{fontSize: width > 600 ? 20 : 18, fontWeight: 'bold', paddingLeft: 40}}>
+              <Text
+                allowFontScaling={false}
+                style={{fontSize: width > 600 ? 20 : 18, fontWeight: 'bold', paddingLeft: 40}}>
                 {`${contactName.firstName}`}
               </Text>
-              <Text style={{fontSize: width > 600 ? 16 : 14, color: 'gray', paddingLeft: 40}}>
+              <Text
+                allowFontScaling={false}
+                style={{fontSize: width > 600 ? 16 : 14, color: 'gray', paddingLeft: 40}}>
                 {`${contact}`}
               </Text>
             </View>
@@ -277,12 +297,18 @@ export class Give extends React.Component {
       } else {
         return (
           <View style={styles.recipientRow}>
-            <Text style={{fontSize: width > 600 ? 24 : 20, fontWeight: 'bold'}}>Send</Text>
+            <Text
+              allowFontScaling={false}
+              style={{fontSize: width > 600 ? 24 : 20, fontWeight: 'bold'}}>Send</Text>
             <View style={{flexDirection: 'column'}}>
-              <Text style={{fontSize: width > 600 ? 20 : 18, fontWeight: 'bold', paddingLeft: 40}}>
+              <Text
+                allowFontScaling={false}
+                style={{fontSize: width > 600 ? 20 : 18, fontWeight: 'bold', paddingLeft: 40}}>
                 {`${contactName.firstName} ${contactName.lastName}`}
               </Text>
-              <Text style={{fontSize: width > 600 ? 16 : 14, color: 'gray', paddingLeft: 40}}>
+              <Text
+                allowFontScaling={false}
+                style={{fontSize: width > 600 ? 16 : 14, color: 'gray', paddingLeft: 40}}>
                 {`${contact}`}
               </Text>
             </View>
@@ -292,12 +318,18 @@ export class Give extends React.Component {
     } else {
       return (
         <View style={styles.recipientRow}>
-          <Text style={{fontSize: 20, fontWeight: 'bold'}}>Send</Text>
+          <Text
+            allowFontScaling={false}
+            style={{fontSize: 20, fontWeight: 'bold'}}>Send</Text>
           <View style={{flexDirection: 'column'}}>
-            <Text style={{fontSize: 18, fontWeight: 'bold', paddingLeft: 40}}>
+            <Text
+              allowFontScaling={false}
+              style={{fontSize: 18, fontWeight: 'bold', paddingLeft: 40}}>
               {`${name}`}
             </Text>
-            <Text style={{fontSize: 14, color: 'gray', paddingLeft: 40}}>
+            <Text
+              allowFontScaling={false}
+              style={{fontSize: 14, color: 'gray', paddingLeft: 40}}>
               {`${contact}`}
             </Text>
           </View>
@@ -335,7 +367,9 @@ export class Give extends React.Component {
     const formatted = accounting.formatMoney(parseFloat(foundAmount));
 
     const counter = (
-      <Text style={{color: 'lightgray'}}>
+      <Text
+        allowFontScaling={false}
+        style={{color: 'lightgray'}}>
         {`${message.length}/${this.maxMessageLength}`}
       </Text>
     );
@@ -346,8 +380,12 @@ export class Give extends React.Component {
           {this.details()}
           <View style={styles.designRow}>
             <View style={{flexShrink: 1, paddingVertical: 14}}>
-              <Text style={styles.designTitle}>{design.title}</Text>
-              <Text style={{color: 'gray', fontSize: width > 600 ? 16 : 14}}>
+              <Text
+                allowFontScaling={false}
+                style={styles.designTitle}>{design.title}</Text>
+              <Text
+                allowFontScaling={false}
+                style={{color: 'gray', fontSize: width > 600 ? 16 : 14}}>
                 Available: {formatted}
               </Text>
             </View>
@@ -356,13 +394,16 @@ export class Give extends React.Component {
               error={error} />
           </View>
           <View style={{paddingHorizontal: 20}}>
-            <Text style={styles.messageTitle}>
+            <Text
+              allowFontScaling={false}
+              style={styles.messageTitle}>
               Add a message
             </Text>
             <TouchableWithoutFeedback
               onPress={() => this.messageInput.focus()}>
               <View style={{borderWidth: 0.5, padding: 6, minHeight: width > 600 ? 150 : 100}}>
                 <TextInput
+                  allowFontScaling={false}
                   ref={ref => (this.messageInput = ref)}
                   multiline
                   maxLength={this.maxMessageLength}

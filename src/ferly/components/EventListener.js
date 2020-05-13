@@ -97,13 +97,19 @@ class EventListener extends React.Component {
           }}>
           <View style={{alignItems: 'center'}}>
             <Image style={{height: 140, width: 140, marginBottom: 20}} source={Present}/>
-            <Text style={{marginBottom: 10, fontSize: 22, fontWeight: 'bold'}}>
+            <Text
+              allowFontScaling={false}
+              style={{marginBottom: 10, fontSize: 22, fontWeight: 'bold'}}>
               Congrats!
             </Text>
-            <Text style={{marginBottom: 10, fontSize: 16, color: 'gray'}}>
+            <Text
+              allowFontScaling={false}
+              style={{marginBottom: 10, fontSize: 16, color: 'gray'}}>
               {`${sender} gifted you ${amount} of ${title}.`}
             </Text>
-            <Text style={{color: 'gray'}}>
+            <Text
+              allowFontScaling={false}
+              style={{color: 'gray'}}>
               {!message ? null : '"' + message + '"'}
             </Text>
           </View>

@@ -475,7 +475,9 @@ export class FerlyCard extends React.Component {
       <View style={{flex: 1, backgroundColor: 'white'}}>
         <View style={styles.cardContainer}>
           <ImageBackground style={styles.cardBackground} source={ferlyCard}>
-            <Text style={styles.panText}>
+            <Text
+              allowFontScaling={false}
+              style={styles.panText}>
               **** {card.pan_redacted.substring(12, 16)}
             </Text>
           </ImageBackground>
@@ -486,9 +488,11 @@ export class FerlyCard extends React.Component {
               name={abilityValue ? 'md-unlock' : 'md-lock'}
               color={Theme.darkBlue}
               size={width > 600 ? 28 : 26} />
-            <Text style={{
-              flex: 1, paddingLeft: 20, color: Theme.darkBlue, fontSize: width > 600 ? 18 : 14
-            }}>
+            <Text
+              allowFontScaling={false}
+              style={{
+                flex: 1, paddingLeft: 20, color: Theme.darkBlue, fontSize: width > 600 ? 18 : 14
+              }}>
               {abilityValue ? 'Enabled' : 'Disabled'}
             </Text>
             <Switch
@@ -501,10 +505,14 @@ export class FerlyCard extends React.Component {
             style={styles.actionRow}>
             <Ionicons name="md-calendar" color={Theme.darkBlue} size={width > 600 ? 26 : 24} />
             <View style={{flex: 1, paddingLeft: 20}}>
-              <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 16 : 12}}>
+              <Text
+                allowFontScaling={false}
+                style={{color: Theme.darkBlue, fontSize: width > 600 ? 16 : 12}}>
                 Expiration Date
               </Text>
-              <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 16 : 12}}>
+              <Text
+                allowFontScaling={false}
+                style={{color: Theme.darkBlue, fontSize: width > 600 ? 16 : 12}}>
                 {`${splitExpiration[1]}/${splitExpiration[0]}`}
               </Text>
             </View>
@@ -513,9 +521,11 @@ export class FerlyCard extends React.Component {
             onPress={() => this.setState({showNewPinModal: true})}
             style={styles.actionRow}>
             <Ionicons name="md-keypad" color={Theme.darkBlue} size={width > 600 ? 28 : 26} />
-            <Text style={{
-              flex: 1, paddingLeft: 20, color: Theme.darkBlue, fontSize: width > 600 ? 18 : 14
-            }}>
+            <Text
+              allowFontScaling={false}
+              style={{
+                flex: 1, paddingLeft: 20, color: Theme.darkBlue, fontSize: width > 600 ? 18 : 14
+              }}>
               Change PIN
             </Text>
           </TouchableOpacity>
@@ -523,9 +533,11 @@ export class FerlyCard extends React.Component {
             onPress={this.handleRemoveCardClick}
             style={styles.actionRow}>
             <Ionicons name="md-trash" color={Theme.darkBlue} size={width > 600 ? 28 : 26} />
-            <Text style={{
-              flex: 1, paddingLeft: 20, color: Theme.darkBlue, fontSize: width > 600 ? 18 : 14
-            }}>
+            <Text
+              allowFontScaling={false}
+              style={{
+                flex: 1, paddingLeft: 20, color: Theme.darkBlue, fontSize: width > 600 ? 18 : 14
+              }}>
               Remove Card
             </Text>
           </TouchableOpacity>
@@ -536,13 +548,18 @@ export class FerlyCard extends React.Component {
             onRequestClose={this.handleCloseModal}>
             <View style={styles.modalPage}>
               <View style={styles.modalDialog}>
-                <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 24 : 22}}>
+                <Text
+                  allowFontScaling={false}
+                  style={{color: Theme.darkBlue, fontSize: width > 600 ? 24 : 22}}>
                   Enter a new PIN
                 </Text>
                 <View>
-                  <Text style={styles.labelText}>PIN</Text>
+                  <Text
+                    allowFontScaling={false}
+                    style={styles.labelText}>PIN</Text>
                   <View style={styles.inputContainer}>
                     <TextInput
+                      allowFontScaling={false}
                       underlineColorAndroid='transparent'
                       keyboardType='numeric'
                       maxLength={4}
@@ -555,20 +572,26 @@ export class FerlyCard extends React.Component {
                       }}
                       value={pin} />
                   </View>
-                  <Text style={styles.errorText}>{this.state.pinError}</Text>
+                  <Text
+                    allowFontScaling={false}
+                    style={styles.errorText}>{this.state.pinError}</Text>
                 </View>
                 <View style={{flexDirection: 'row-reverse'}}>
                   <TouchableOpacity
                     style={{paddingVertical: 5, paddingHorizontal: 8}}
                     disabled={submitting}
                     onPress={this.submitNewPin}>
-                    <Text style={{color: Theme.lightBlue}}>SUBMIT</Text>
+                    <Text
+                      allowFontScaling={false}
+                      style={{color: Theme.lightBlue}}>SUBMIT</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={{paddingVertical: 5, paddingHorizontal: 8}}
                     disabled={submitting}
                     onPress={this.handleCloseModal}>
-                    <Text style={{color: Theme.lightBlue}}>CANCEL</Text>
+                    <Text
+                      allowFontScaling={false}
+                      style={{color: Theme.lightBlue}}>CANCEL</Text>
                   </TouchableOpacity>
                 </View>
               </View>

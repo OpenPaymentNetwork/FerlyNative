@@ -97,7 +97,9 @@ export class Settings extends React.Component {
       <View
         style={{flex: 1, backgroundColor: 'white'}}
       >
-        <Text style={styles.title}>{'Account Recovery'}</Text>
+        <Text
+          allowFontScaling={false}
+          style={styles.title}>{'Account Recovery'}</Text>
         <TestElement
           parent={TouchableOpacity}
           label='test-id-settings-page-recover'
@@ -109,14 +111,18 @@ export class Settings extends React.Component {
                 name="md-person"
                 color={Theme.darkBlue}
                 size={20} />
-              <Text style={styles.description}>
+              <Text
+                allowFontScaling={false}
+                style={styles.description}>
                 {'Edit Email/Phone'}
               </Text>
             </View>
             {arrowIcon}
           </View>
         </TestElement>
-        <Text style={styles.title}>{'About'}</Text>
+        <Text
+          allowFontScaling={false}
+          style={styles.title}>{'About'}</Text>
         <TestElement
           parent={TouchableOpacity}
           label='test-id-settings-page-about'
@@ -129,7 +135,9 @@ export class Settings extends React.Component {
                 name="md-information-circle-outline"
                 color={Theme.darkBlue}
                 size={22} />
-              <Text style={styles.description}>
+              <Text
+                allowFontScaling={false}
+                style={styles.description}>
                 {`Version: ${version}/${envId}`}
               </Text>
             </View>

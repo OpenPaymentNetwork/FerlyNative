@@ -176,12 +176,17 @@ export class CardForm extends React.Component {
       <View style={{flex: 1, backgroundColor: 'white'}}>
         <View style={{flex: 1, paddingVertical: 20}}>
           <View style={{paddingBottom: 10, alignItems: 'center', paddingHorizontal: 10}}>
-            <Text style={styles.title}>Add Card Information</Text>
-            <Text style={styles.instructions}>{instructions}</Text>
+            <Text
+              allowFontScaling={false}
+              style={styles.title}>Add Card Information</Text>
+            <Text
+              allowFontScaling={false}
+              style={styles.instructions}>{instructions}</Text>
           </View>
           <View style={{paddingHorizontal: 15}} >
             <View style={styles.inputContainer}>
               <TextInput
+                allowFontScaling={false}
                 style={{fontSize: width > 600 ? 22 : 18}}
                 placeholder="Card Number"
                 underlineColorAndroid='transparent'
@@ -191,9 +196,12 @@ export class CardForm extends React.Component {
                 onChangeText={this.onChangePan}
                 value={pan.replace(/(.{4})/g, '$1 ').trim()} />
             </View>
-            <Text style={styles.errorText}>{panError}</Text>
+            <Text
+              allowFontScaling={false}
+              style={styles.errorText}>{panError}</Text>
             <View style={styles.inputContainer}>
               <TextInput
+                allowFontScaling={false}
                 style={{fontSize: width > 600 ? 22 : 18}}
                 placeholder="Pin"
                 underlineColorAndroid='transparent'
@@ -205,7 +213,9 @@ export class CardForm extends React.Component {
             </View>
           </View>
           <View style={{width: '100%'}} >
-            <Text style={styles.errorText}>{pinError}</Text>
+            <Text
+              allowFontScaling={false}
+              style={styles.errorText}>{pinError}</Text>
             <PrimaryButton
               title="Add"
               disabled={

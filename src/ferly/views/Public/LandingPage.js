@@ -56,7 +56,9 @@ export class LandingPage extends React.Component {
     const {version} = Constants.manifest;
     if (envId === 's') {
       return (
-        <Text style={{alignSelf: 'flex-end'}}>
+        <Text
+          allowFontScaling={false}
+          style={{alignSelf: 'flex-end'}}>
           {`${version}/${envId}`}
         </Text>
       );
@@ -108,9 +110,11 @@ export class LandingPage extends React.Component {
             <View style={{
               paddingTop: height > 750 ? height / 12 : height / 25
             }}>
-              <Text style={[styles.text, {
-                fontSize: height / 35
-              }]}>
+              <Text
+                allowFontScaling={false}
+                style={[styles.text, {
+                  fontSize: height / 35
+                }]}>
                 Buy gift value anytime, anywhere, perfect for that last minute gift.
               </Text>
             </View>
@@ -124,9 +128,11 @@ export class LandingPage extends React.Component {
             <View style={{
               paddingTop: height > 750 ? height / 12 : height / 25
             }}>
-              <Text style={[styles.text, {
-                fontSize: height / 35
-              }]}>
+              <Text
+                allowFontScaling={false}
+                style={[styles.text, {
+                  fontSize: height / 35
+                }]}>
                 Easily send gifts to friends and family, even those far away.
               </Text>
             </View>
@@ -140,9 +146,11 @@ export class LandingPage extends React.Component {
             <View style={{
               paddingTop: height > 750 ? height / 10 : height / 25
             }}>
-              <Text style={[styles.text, {
-                fontSize: height / 35
-              }]}>
+              <Text
+                allowFontScaling={false}style={[styles.text, {
+
+                  fontSize: height / 35
+                }]}>
                 Have real time access to gift card balances.
               </Text>
             </View>
@@ -159,15 +167,19 @@ export class LandingPage extends React.Component {
             color={Theme.lightBlue}
             onPress={() => navigation.navigate('SignUp', passParams)} />
           <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-            <Text style={[styles.text, {paddingBottom: 30, fontSize: width > 600 ? 22 : 18}]}>
+            <Text
+              allowFontScaling={false}
+              style={[styles.text, {paddingBottom: 30, fontSize: width > 600 ? 22 : 18}]}>
               Already have an account?
             </Text>
             <TouchableOpacity onPress={() => navigation.navigate('RecoveryChannel', passParams)}>
-              <Text style={{
-                color: Theme.lightBlue,
-                fontSize: width > 600 && height > 745 ? 22 : width < 400 && height < 745 ? 16 : 18,
-                paddingLeft: 10
-              }}>
+              <Text
+                allowFontScaling={false}
+                style={{
+                  color: Theme.lightBlue,
+                  fontSize: width > 600 && height > 745 ? 22 : width < 400 && height < 745 ? 16 : 18,
+                  paddingLeft: 10
+                }}>
                 Sign In
               </Text>
             </TouchableOpacity>

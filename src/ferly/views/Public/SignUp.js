@@ -222,10 +222,14 @@ export class SignUp extends React.Component {
     };
     return (
       <View style={[styles.row, {marginBottom: 30}]}>
-        <Text style={{fontSize: width > 600 ? 20 : 16}}>Already have an account?</Text>
+        <Text
+          allowFontScaling={false}
+          style={{fontSize: width > 600 ? 20 : 16}}>Already have an account?</Text>
         <TouchableOpacity
           onPress={() => navigation.navigate('RecoveryChannel', signInParams)}>
-          <Text style={[styles.recoveryText, {paddingLeft: 5}]}>Sign In</Text>
+          <Text
+            allowFontScaling={false}
+            style={[styles.recoveryText, {paddingLeft: 5}]}>Sign In</Text>
         </TouchableOpacity>
       </View>
     );
@@ -248,6 +252,7 @@ export class SignUp extends React.Component {
       <View style={{flex: 1, backgroundColor: 'white'}}>
         <View style={{paddingHorizontal: width > 600 ? 20 : 15}} >
           <TextInput
+            allowFontScaling={false}
             style={styles.field}
             underlineColorAndroid={'transparent'}
             placeholderTextColor={'gray'}
@@ -264,10 +269,13 @@ export class SignUp extends React.Component {
             value={firstName} />
           {
             invalid.first_name || this.state.showFirstNameError
-              ? (<Text style={styles.error}>{invalid.first_name}</Text>)
+              ? (<Text
+                allowFontScaling={false}
+                style={styles.error}>{invalid.first_name}</Text>)
               : null
           }
           <TextInput
+            allowFontScaling={false}
             style={styles.field}
             underlineColorAndroid={'transparent'}
             placeholderTextColor={'gray'}
@@ -284,10 +292,13 @@ export class SignUp extends React.Component {
             value={lastName} />
           {
             invalid.last_name || this.state.showLastNameError
-              ? (<Text style={styles.error}>{invalid.last_name}</Text>)
+              ? (<Text
+                allowFontScaling={false}
+                style={styles.error}>{invalid.last_name}</Text>)
               : null
           }
           <TextInput
+            allowFontScaling={false}
             style={styles.field}
             underlineColorAndroid={'transparent'}
             placeholderTextColor={'gray'}
@@ -304,10 +315,13 @@ export class SignUp extends React.Component {
             value={username} />
           {
             invalid.username || this.state.showUsernameError
-              ? (<Text style={styles.error}>{invalid.username}</Text>)
+              ? (<Text
+                allowFontScaling={false}
+                style={styles.error}>{invalid.username}</Text>)
               : null
           }
           <TextInput
+            allowFontScaling={false}
             style={[styles.field]}
             underlineColorAndroid={'transparent'}
             placeholderTextColor={'gray'}
@@ -316,7 +330,9 @@ export class SignUp extends React.Component {
             value={fieldValue} />
           {
             invalid.login
-              ? (<Text style={styles.error}>{invalid.login}</Text>)
+              ? (<Text
+                allowFontScaling={false}
+                style={styles.error}>{invalid.login}</Text>)
               : null
           }
         </View>

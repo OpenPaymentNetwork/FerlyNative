@@ -251,8 +251,12 @@ class Profile extends React.Component {
       return (
         <View style={{alignItems: 'center', paddingTop: 20}}>
           <Avatar {...avatarProps} />
-          <Text style={styles.name}>{firstName + ' ' + lastName}</Text>
-          <Text style={styles.username}>{'@' + username}</Text>
+          <Text
+            allowFontScaling={false}
+            style={styles.name}>{firstName + ' ' + lastName}</Text>
+          <Text
+            allowFontScaling={false}
+            style={styles.username}>{'@' + username}</Text>
         </View>
       );
     } else {
@@ -285,8 +289,11 @@ class Profile extends React.Component {
                   onImageChange={this.onImageChange.bind(this)}
                   avatarProps={avatarProps} />
               </View>
-              <Text style={styles.label}>First Name</Text>
+              <Text
+                allowFontScaling={false}
+                style={styles.label}>First Name</Text>
               <TextInput
+                allowFontScaling={false}
                 style={styles.field}
                 underlineColorAndroid={'transparent'}
                 onChangeText={(text) => {
@@ -295,11 +302,16 @@ class Profile extends React.Component {
                 value={formFirstName} />
               {
                 invalid.first_name
-                  ? (<Text style={styles.error}>{invalid.first_name}</Text>)
+                  ? (<Text
+                    allowFontScaling={false}
+                    style={styles.error}>{invalid.first_name}</Text>)
                   : null
               }
-              <Text style={styles.label}>Last Name</Text>
+              <Text
+                allowFontScaling={false}
+                style={styles.label}>Last Name</Text>
               <TextInput
+                allowFontScaling={false}
                 style={styles.field}
                 underlineColorAndroid={'transparent'}
                 onChangeText={(text) => {
@@ -308,11 +320,16 @@ class Profile extends React.Component {
                 value={formLastName} />
               {
                 invalid.last_name
-                  ? (<Text style={styles.error}>{invalid.last_name}</Text>)
+                  ? (<Text
+                    allowFontScaling={false}
+                    style={styles.error}>{invalid.last_name}</Text>)
                   : null
               }
-              <Text style={styles.label}>Username</Text>
+              <Text
+                allowFontScaling={false}
+                style={styles.label}>Username</Text>
               <TextInput
+                allowFontScaling={false}
                 style={styles.field}
                 underlineColorAndroid={'transparent'}
                 onChangeText={(text) => {
@@ -322,7 +339,9 @@ class Profile extends React.Component {
                 value={formUsername} />
               {
                 invalid.username
-                  ? (<Text style={styles.error}>{invalid.username}</Text>)
+                  ? (<Text
+                    allowFontScaling={false}
+                    style={styles.error}>{invalid.username}</Text>)
                   : null
               }
               <View style={{height: 80}} />

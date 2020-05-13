@@ -221,7 +221,7 @@ export class Wallet extends React.Component {
       <View style={styles.scrollViewContent}>
         {data.map((_, i) => (
           <View key={i} style={styles.row}>
-            <Text>{i}</Text>
+            <Text allowFontScaling={false}>{i}</Text>
           </View>
         ))}
       </View>
@@ -276,18 +276,22 @@ export class Wallet extends React.Component {
           onPress={() => navigation.navigate('Value', {design, cashDesign, rewardsDesign})}
           style={[styles.cardContainer, {borderColor: color}]}>
           <View style={[styles.cardImage, {backgroundColor: color}]}>
-            <Text style={{
-              fontSize: width < 350 ? 20 : 22 && width > 600 ? 26 : 22, color: text
-            }}>
+            <Text
+              allowFontScaling={false}
+              style={{
+                fontSize: width < 350 ? 20 : 22 && width > 600 ? 26 : 22, color: text
+              }}>
               {formatted}
             </Text>
           </View>
           <View style={[styles.cardDetails, {borderColor: color}]}>
             <View style={{flex: 1, justifyContent: 'center', paddingHorizontal: 15}}>
-              <Text style={{
-                fontSize: width < 350 ? 16 : 18 && width > 600 ? 24 : 18,
-                fontWeight: 'bold',
-                color: Theme.darkBlue}}>{title}</Text>
+              <Text
+                allowFontScaling={false}
+                style={{
+                  fontSize: width < 350 ? 16 : 18 && width > 600 ? 24 : 18,
+                  fontWeight: 'bold',
+                  color: Theme.darkBlue}}>{title}</Text>
             </View>
             <View style={[styles.buttonRow, {borderColor: color}]}>
               <TestElement
@@ -300,11 +304,13 @@ export class Wallet extends React.Component {
                   name="card-giftcard"
                   color={Theme.darkBlue}
                   size={width < 350 ? 18 : 20 && width > 600 ? 26 : 20} />
-                <Text style={{
-                  color: Theme.darkBlue,
-                  fontSize: width < 350 ? 11 : 12 && width > 600 ? 16 : 12,
-                  fontWeight: 'bold'
-                }}>
+                <Text
+                  allowFontScaling={false}
+                  style={{
+                    color: Theme.darkBlue,
+                    fontSize: width < 350 ? 11 : 12 && width > 600 ? 16 : 12,
+                    fontWeight: 'bold'
+                  }}>
                 GIVE
                 </Text>
               </TestElement>
@@ -320,11 +326,13 @@ export class Wallet extends React.Component {
                   name="plus-circle"
                   color={Theme.darkBlue}
                   size={width < 350 ? 16 : 18 && width > 600 ? 24 : 18} />
-                <Text style={{
-                  color: Theme.darkBlue,
-                  fontSize: width < 350 ? 11 : 12 && width > 600 ? 16 : 12,
-                  fontWeight: 'bold'
-                }}>
+                <Text
+                  allowFontScaling={false}
+                  style={{
+                    color: Theme.darkBlue,
+                    fontSize: width < 350 ? 11 : 12 && width > 600 ? 16 : 12,
+                    fontWeight: 'bold'
+                  }}>
                 BUY
                 </Text>
               </TestElement>
@@ -340,12 +348,14 @@ export class Wallet extends React.Component {
     if (amounts.length === 0) {
       return (
         <View style={{alignItems: 'center'}}>
-          <Text style={{
-            marginTop: Platform.OS === 'ios' ? -20 : 235,
-            marginHorizontal: 20,
-            marginBottom: 20,
-            fontSize: 18
-          }}>
+          <Text
+            allowFontScaling={false}
+            style={{
+              marginTop: Platform.OS === 'ios' ? -20 : 235,
+              marginHorizontal: 20,
+              marginBottom: 20,
+              fontSize: 18
+            }}>
           There’s nothing here! Visit the Shop to browse your favorite brands.
           </Text>
           <TestElement
@@ -362,9 +372,11 @@ export class Wallet extends React.Component {
               name="store-alt"
               color={Theme.darkBlue}
               size={width < 350 ? 14 : 16 && width > 600 ? 20 : 18} />
-            <Text style={[styles.cardManager, {
-              fontSize: width < 350 || Platform.OS === 'ios' ? 14 : 16 && width > 600 ? 18 : 16
-            }]}>
+            <Text
+              allowFontScaling={false}
+              style={[styles.cardManager, {
+                fontSize: width < 350 || Platform.OS === 'ios' ? 14 : 16 && width > 600 ? 18 : 16
+              }]}>
               {`Shop`}
             </Text>
           </TestElement>
@@ -374,12 +386,14 @@ export class Wallet extends React.Component {
       if (amounts[0].title === 'Ferly Cash' || amounts[0].title === 'Ferly Rewards') {
         return (
           <View style={{alignItems: 'center'}}>
-            <Text style={{
-              marginTop: Platform.OS === 'ios' ? -20 : 235,
-              marginHorizontal: 20,
-              marginBottom: 20,
-              fontSize: 18
-            }}>
+            <Text
+              allowFontScaling={false}
+              style={{
+                marginTop: Platform.OS === 'ios' ? -20 : 235,
+                marginHorizontal: 20,
+                marginBottom: 20,
+                fontSize: 18
+              }}>
               There’s nothing here! Visit the Shop to browse your favorite brands.
             </Text>
             <TestElement
@@ -396,9 +410,11 @@ export class Wallet extends React.Component {
                 name="store-alt"
                 color={Theme.darkBlue}
                 size={width < 350 ? 14 : 16 && width > 600 ? 20 : 18} />
-              <Text style={[styles.cardManager, {
-                fontSize: width < 350 || Platform.OS === 'ios' ? 14 : 16 && width > 600 ? 18 : 16
-              }]}>
+              <Text
+                allowFontScaling={false}
+                style={[styles.cardManager, {
+                  fontSize: width < 350 || Platform.OS === 'ios' ? 14 : 16 && width > 600 ? 18 : 16
+                }]}>
                 {`Shop`}
               </Text>
             </TestElement>
@@ -783,10 +799,12 @@ export class Wallet extends React.Component {
                 name="card-giftcard"
                 color={Theme.darkBlue}
                 size={width < 350 ? 18 : 20 && width > 600 ? 26 : 20} />
-              <Text style={[styles.cardManager, {
-                fontSize: width < 350 && Platform.OS === 'ios' ? 14 : 16 &&
+              <Text
+                allowFontScaling={false}
+                style={[styles.cardManager, {
+                  fontSize: width < 350 && Platform.OS === 'ios' ? 14 : 16 &&
                 width > 600 && Platform.OS === 'ios' ? 24 : 16
-              }]}>
+                }]}>
                 {`Give`}
               </Text>
             </TestElement>
@@ -808,10 +826,12 @@ export class Wallet extends React.Component {
                 name="plus-circle"
                 color={Theme.darkBlue}
                 size={width < 350 ? 16 : 18 && width > 600 ? 24 : 18} />
-              <Text style={[styles.cardManager, {
-                fontSize: width < 350 && Platform.OS === 'ios' ? 14 : 16 &&
+              <Text
+                allowFontScaling={false}
+                style={[styles.cardManager, {
+                  fontSize: width < 350 && Platform.OS === 'ios' ? 14 : 16 &&
                 width > 600 && Platform.OS === 'ios' ? 24 : 16
-              }]}>
+                }]}>
                 {`Add`}
               </Text>
             </TestElement>
@@ -829,10 +849,12 @@ export class Wallet extends React.Component {
             label='test-id-card-page'
             style={[styles.theCard, {width: width / 3, flexDirection: 'row'}]}
             onPress={() => this.props.navigation.navigate('LoadingInstructions')}>
-            <Text style={[styles.cardManager, {
-              marginLeft: 10,
-              fontSize: width < 350 ? 14 : 16 && width > 600 ? 18 : 16
-            }]}>
+            <Text
+              allowFontScaling={false}
+              style={[styles.cardManager, {
+                marginLeft: 10,
+                fontSize: width < 350 ? 14 : 16 && width > 600 ? 18 : 16
+              }]}>
               {'Learn More'}
             </Text>
             <Icones
@@ -848,15 +870,17 @@ export class Wallet extends React.Component {
     return (
       <View keyboardShouldPersistTaps='handled' style={{flex: 1, backgroundColor: 'white'}}>
         <View>
-          <Text style={{
-            position: 'relative',
-            backgroundColor: Theme.darkBlue,
-            color: 'white',
-            paddingHorizontal: 20,
-            paddingVertical: 20,
-            fontSize: width < 350 && Platform.OS === 'ios' ? 16 : 18 &&
+          <Text
+            allowFontScaling={false}
+            style={{
+              position: 'relative',
+              backgroundColor: Theme.darkBlue,
+              color: 'white',
+              paddingHorizontal: 20,
+              paddingVertical: 20,
+              fontSize: width < 350 && Platform.OS === 'ios' ? 16 : 18 &&
             width < 350 && Platform.OS === 'android' ? 16 : 18
-          }}>
+            }}>
             Ferly Cash
           </Text>
         </View>
@@ -885,15 +909,17 @@ export class Wallet extends React.Component {
           }}>
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate('FerlyValue')}>
-              <Animated.Text style={{
-                marginTop: width < 350 || Platform.OS === 'ios' ? cashDistanceY : cashMiddleDistanceY &&
+              <Animated.Text
+                allowFontScaling={false}
+                style={{
+                  marginTop: width < 350 || Platform.OS === 'ios' ? cashDistanceY : cashMiddleDistanceY &&
                 width > 600 ? 160 : cashMiddleDistanceY,
-                justifyContent: 'center',
-                alignSelf: 'center',
-                height: 50,
-                color: 'white',
-                fontSize: width < 350 ? titleTranslateY : titleMiddleTranslateY
-              }}>
+                  justifyContent: 'center',
+                  alignSelf: 'center',
+                  height: 50,
+                  color: 'white',
+                  fontSize: width < 350 ? titleTranslateY : titleMiddleTranslateY
+                }}>
                 {!cash.amount ? '$0.00' : `$${cash.amount}`}
               </Animated.Text>
               <Animated.View style={{
@@ -910,14 +936,16 @@ export class Wallet extends React.Component {
             </TouchableOpacity>
           </Animated.View>
           <View>
-            <Animated.Text style={{
-              marginTop: width < 350 ? rewardsDistanceY : rewardsMiddleDistanceY &&
+            <Animated.Text
+              allowFontScaling={false}
+              style={{
+                marginTop: width < 350 ? rewardsDistanceY : rewardsMiddleDistanceY &&
               Platform.OS === 'ios' ? iosRewardsDistanceY : rewardsMiddleDistanceY,
-              position: 'absolute',
-              alignSelf: 'center',
-              color: 'white',
-              fontSize: rewardsTranslateY
-            }}>
+                position: 'absolute',
+                alignSelf: 'center',
+                color: 'white',
+                fontSize: rewardsTranslateY
+              }}>
               {
                 !rewards.amount ? '+ Rewards: $0.00' : `+ Rewards: $${rewards.amount}`
               }
@@ -932,14 +960,16 @@ export class Wallet extends React.Component {
             Platform.OS === 'ios' ? iosMerchantDistanceY : merchantMiddleDistanceY,
             height: 60
           }}>
-            <Text style={{
-              paddingHorizontal: 20,
-              paddingVertical: 15,
-              marginTop: width < 330 ? 8 : 17,
-              fontSize: width < 350 ? 16 : 18 && width > 600 ? 20 : 18,
-              backgroundColor: 'white',
-              color: Theme.darkBlue
-            }}>
+            <Text
+              allowFontScaling={false}
+              style={{
+                paddingHorizontal: 20,
+                paddingVertical: 15,
+                marginTop: width < 330 ? 8 : 17,
+                fontSize: width < 350 ? 16 : 18 && width > 600 ? 20 : 18,
+                backgroundColor: 'white',
+                color: Theme.darkBlue
+              }}>
               Merchant Balances
             </Text>
           </Animated.View>
@@ -968,7 +998,9 @@ export class Wallet extends React.Component {
               name="md-wallet"
               color={Theme.darkBlue}
               size={width < 350 ? 16 : 18 && width > 600 ? 24 : 18} />
-            <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
+            <Text
+              allowFontScaling={false}
+              style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
               Wallet
             </Text>
           </TestElement>
@@ -988,7 +1020,9 @@ export class Wallet extends React.Component {
               name="store-alt"
               color={Theme.darkBlue}
               size={width < 350 ? 16 : 18 && width > 600 ? 24 : 18} />
-            <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
+            <Text
+              allowFontScaling={false}
+              style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
               Shop
             </Text>
           </TestElement>
@@ -1008,7 +1042,9 @@ export class Wallet extends React.Component {
               name="history"
               color={Theme.darkBlue}
               size={width < 350 ? 16 : 18 && width > 600 ? 24 : 18} />
-            <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
+            <Text
+              allowFontScaling={false}
+              style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
               History
             </Text>
           </TestElement>
@@ -1028,7 +1064,9 @@ export class Wallet extends React.Component {
               name="bars"
               color={Theme.darkBlue}
               size={width < 350 ? 16 : 18 && width > 600 ? 24 : 18} />
-            <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
+            <Text
+              allowFontScaling={false}
+              style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
               Menu
             </Text>
           </TestElement>

@@ -54,12 +54,14 @@ export class SignUpWaiting extends React.Component {
     return (
       <View style={{flex: 1, justifyContent: 'space-between', backgroundColor: 'white'}}>
         <View style={{paddingVertical: 20, paddingTop: 30}} >
-          <Text style={{
-            paddingHorizontal: 15,
-            fontSize: 20,
-            textAlign: 'center',
-            color: Theme.darkBlue
-          }} >
+          <Text
+            allowFontScaling={false}
+            style={{
+              paddingHorizontal: 15,
+              fontSize: 20,
+              textAlign: 'center',
+              color: Theme.darkBlue
+            }} >
             Your card is on its way! Make sure you activate it when it arrives.
           </Text>
         </View>

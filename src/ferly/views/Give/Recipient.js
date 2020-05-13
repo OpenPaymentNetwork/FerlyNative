@@ -183,7 +183,9 @@ class Recipient extends React.Component {
           firstWord={firstName}
           secondWord={lastName}
           pictureUrl={uri} />
-        <Text style={{fontSize: 20, paddingLeft: 10}}>{name}</Text>
+        <Text
+          allowFontScaling={false}
+          style={{fontSize: 20, paddingLeft: 10}}>{name}</Text>
       </TestElement>
     );
   }
@@ -286,10 +288,14 @@ class Recipient extends React.Component {
                     firstWord={firstName}
                     secondWord={lastName} />
                   <View style={{justifyContent: 'center', marginLeft: 10}}>
-                    <Text style={{fontSize: width > 600 ? 28 : 24}}>
+                    <Text
+                      allowFontScaling={false}
+                      style={{fontSize: width > 600 ? 28 : 24}}>
                       {`${name}`}
                     </Text>
-                    <Text style={{fontSize: width > 600 ? 24 : 20, color: 'gray'}}>
+                    <Text
+                      allowFontScaling={false}
+                      style={{fontSize: width > 600 ? 24 : 20, color: 'gray'}}>
                       {'@' + customer.username}
                     </Text>
                   </View>
@@ -326,7 +332,8 @@ class Recipient extends React.Component {
       if (searchResults) {
         if (searchResults.length === 0) {
           display = (
-            <Text>
+            <Text
+              allowFontScaling={false}>
               {
                 'We\'re sorry, we couldn\'t find anyone matching \'' +
               searchText + '\'. Use invitations in the menu to invite ' +
@@ -345,7 +352,9 @@ class Recipient extends React.Component {
               value={this.state.searchText}
               placeholder='Search Ferly users'
               onChangeText={this.onChangeText.bind(this)}/>
-            <Text style={{fontSize: width > 600 ? 20 : 18, color: Theme.lightBlue}}>
+            <Text
+              allowFontScaling={false}
+              style={{fontSize: width > 600 ? 20 : 18, color: Theme.lightBlue}}>
               {this.state.searchResults === null ? 'Most Recent Recipients' : null}
             </Text>
             {display}
@@ -355,7 +364,8 @@ class Recipient extends React.Component {
         if (recents) {
           if (recents.length === 0) {
             display = (
-              <Text>
+              <Text
+                allowFontScaling={false}>
                 {
                   'Search for other users above. Use Contacts or Other to invite ' +
                   'someone you can\'t find.'
@@ -374,9 +384,11 @@ class Recipient extends React.Component {
               value={this.state.searchText}
               placeholder='Search Ferly users'
               onChangeText={this.onChangeText.bind(this)}/>
-            <Text style={{
-              fontSize: width > 600 ? 20 : 18, color: Theme.lightBlue, marginHorizontal: 10
-            }}>
+            <Text
+              allowFontScaling={false}
+              style={{
+                fontSize: width > 600 ? 20 : 18, color: Theme.lightBlue, marginHorizontal: 10
+              }}>
               {this.state.searchResults === null ? 'Most Recent Recipients' : null}
             </Text>
             {display}
@@ -387,12 +399,15 @@ class Recipient extends React.Component {
       body = (
         <View style={{paddingHorizontal: 10}}>
           <View style={styles.text}>
-            <Text style={{fontSize: width > 600 ? 18 : 16}}>
+            <Text
+              allowFontScaling={false}
+              style={{fontSize: width > 600 ? 18 : 16}}>
               Enter the recipients name and email address or phone number.
             </Text>
           </View>
           <View style={[styles.inputContainer, {marginTop: 25}]}>
             <TextInput
+              allowFontScaling={false}
               placeholder="Recipient Name"
               style={{fontSize: width > 600 ? 14 : 12}}
               onChangeText={(text) => this.setState({name: text})}
@@ -400,13 +415,14 @@ class Recipient extends React.Component {
           </View>
           <View style={[styles.inputContainer, {marginBottom: error === '' ? 25 : 5}]}>
             <TextInput
+              allowFontScaling={false}
               placeholder="Email Address or Phone Number"
               style={{fontSize: width > 600 ? 14 : 12}}
               returnKeyType='done'
               onChangeText={(text) => this.setState({contact: text})}
               maxLength={50}/>
           </View>
-          {error ? (<Text style={styles.error}>{error}</Text>) : null}
+          {error ? (<Text allowFontScaling={false}style={styles.error}>{error}</Text>) : null}
           <View style={{marginHorizontal: -15}}>
             <PrimaryButton
               title="Next"
@@ -424,7 +440,8 @@ class Recipient extends React.Component {
       let contactsList;
       if (searchContact) {
         if (searchContact.length === 0) {
-          contactsList = <Text>No contacts match your search.</Text>;
+          contactsList = <Text
+            allowFontScaling={false}>No contacts match your search.</Text>;
         } else {
           contactsList = (
             <ScrollView keyboardShouldPersistTaps='handled'>
@@ -447,7 +464,9 @@ class Recipient extends React.Component {
         body = (
           <View>
             <View style={{paddingVertical: 15, paddingHorizontal: 12}}>
-              <Text style={{fontSize: width > 600 ? 20 : 18}}>
+              <Text
+                allowFontScaling={false}
+                style={{fontSize: width > 600 ? 20 : 18}}>
               Enable contacts to easily send a gift to anyone in your contact list.
               </Text>
             </View>
@@ -457,7 +476,9 @@ class Recipient extends React.Component {
         body = (
           <View>
             <View style={{paddingVertical: 15, paddingHorizontal: 12}}>
-              <Text style={{fontSize: width > 600 ? 20 : 18}}>
+              <Text
+                allowFontScaling={false}
+                style={{fontSize: width > 600 ? 20 : 18}}>
                 Go to Settings and allow the Ferly app to access your Contacts to send gift to
                 someone in your contacts list.
               </Text>
@@ -499,7 +520,9 @@ class Recipient extends React.Component {
               alignItems: 'center'
             }}
             onPress={() => this.changeToContacts()}>
-            <Text style={{color: 'white', fontSize: width > 600 ? 18 : 16}}>
+            <Text
+              allowFontScaling={false}
+              style={{color: 'white', fontSize: width > 600 ? 18 : 16}}>
                 Contacts
             </Text>
           </TestElement>
@@ -515,7 +538,9 @@ class Recipient extends React.Component {
               alignItems: 'center'
             }}
             onPress={() => this.changeToUsers()}>
-            <Text style={{color: 'white', fontSize: width > 600 ? 18 : 16}}>
+            <Text
+              allowFontScaling={false}
+              style={{color: 'white', fontSize: width > 600 ? 18 : 16}}>
               Users
             </Text>
           </TestElement>
@@ -531,7 +556,9 @@ class Recipient extends React.Component {
               alignItems: 'center'
             }}
             onPress={() => this.changeToOther()}>
-            <Text style={{color: 'white', fontSize: width > 600 ? 18 : 16}}>
+            <Text
+              allowFontScaling={false}
+              style={{color: 'white', fontSize: width > 600 ? 18 : 16}}>
               Other
             </Text>
           </TestElement>

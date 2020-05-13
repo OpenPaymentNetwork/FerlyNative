@@ -201,7 +201,9 @@ export class Settings extends React.Component {
     return (
       <View style={{flex: 1, backgroundColor: 'white', justifyContent: 'space-between'}}>
         <ScrollView style={{padding: 20}}>
-          <Text style={{fontSize: 18, color: Theme.darkBlue}}>
+          <Text
+            allowFontScaling={false}
+            style={{fontSize: 18, color: Theme.darkBlue}}>
             Profile
           </Text>
           <TouchableOpacity
@@ -215,10 +217,14 @@ export class Settings extends React.Component {
                   secondWord={lastName}
                   pictureUrl={profileImage} />
                 <View style={{alignContent: 'center', paddingLeft: 10, justifyContent: 'center'}}>
-                  <Text style={{fontSize: 18, fontWeight: 'bold', color: Theme.darkBlue}}>
+                  <Text
+                    allowFontScaling={false}
+                    style={{fontSize: 18, fontWeight: 'bold', color: Theme.darkBlue}}>
                     {`${firstName} ${lastName}`}
                   </Text>
-                  <Text style={{fontSize: 16, color: Theme.darkBlue}}>
+                  <Text
+                    allowFontScaling={false}
+                    style={{fontSize: 16, color: Theme.darkBlue}}>
                     {'@' + username}
                   </Text>
                 </View>
@@ -226,7 +232,9 @@ export class Settings extends React.Component {
               {arrowIcon}
             </View>
           </TouchableOpacity>
-          <Text style={{fontSize: 18, paddingTop: width > 330 ? 20 : 15, color: Theme.darkBlue}}>
+          <Text
+            allowFontScaling={false}
+            style={{fontSize: 18, paddingTop: width > 330 ? 20 : 15, color: Theme.darkBlue}}>
             Ferly Card
           </Text>
           <TouchableOpacity
@@ -239,19 +247,23 @@ export class Settings extends React.Component {
                   name="md-card"
                   color={Theme.darkBlue}
                   size={width < 330 ? 20 : 22 && width > 600 ? 28 : 22} />
-                <Text style={{
-                  alignSelf: 'center',
-                  fontSize: 18,
-                  fontWeight: 'bold',
-                  color: Theme.darkBlue
-                }}>
+                <Text
+                  allowFontScaling={false}
+                  style={{
+                    alignSelf: 'center',
+                    fontSize: 18,
+                    fontWeight: 'bold',
+                    color: Theme.darkBlue
+                  }}>
                   Manage Card
                 </Text>
               </View>
               {arrowIcon}
             </View>
           </TouchableOpacity>
-          <Text style={{fontSize: 18, paddingTop: width > 330 ? 20 : 15, color: Theme.darkBlue}}>
+          <Text
+            allowFontScaling={false}
+            style={{fontSize: 18, paddingTop: width > 330 ? 20 : 15, color: Theme.darkBlue}}>
             Add Funds
           </Text>
           <TouchableOpacity
@@ -264,7 +276,9 @@ export class Settings extends React.Component {
                   name="plus-circle"
                   color={Theme.darkBlue}
                   size={width < 330 ? 18 : 20 && width > 600 ? 26 : 20} />
-                <Text style={styles.title}>{'Add Ferly Cash'}</Text>
+                <Text
+                  allowFontScaling={false}
+                  style={styles.title}>{'Add Ferly Cash'}</Text>
               </View>
               {arrowIcon}
             </View>
@@ -279,12 +293,16 @@ export class Settings extends React.Component {
                   name="md-gift"
                   color={Theme.darkBlue}
                   size={width < 330 ? 20 : 22 && width > 600 ? 28 : 22} />
-                <Text style={styles.title}>{'Redeem gift code'}</Text>
+                <Text
+                  allowFontScaling={false}
+                  style={styles.title}>{'Redeem gift code'}</Text>
               </View>
               {arrowIcon}
             </View>
           </TouchableOpacity>
-          <Text style={{fontSize: 18, paddingTop: width > 330 ? 20 : 15, color: Theme.darkBlue}}>
+          <Text
+            allowFontScaling={false}
+            style={{fontSize: 18, paddingTop: width > 330 ? 20 : 15, color: Theme.darkBlue}}>
             Other
           </Text>
           <TouchableOpacity
@@ -297,7 +315,9 @@ export class Settings extends React.Component {
                   name="md-settings"
                   color={Theme.darkBlue}
                   size={width < 330 ? 20 : 22 && width > 600 ? 28 : 22} />
-                <Text style={styles.title}>{'Settings'}</Text>
+                <Text
+                  allowFontScaling={false}
+                  style={styles.title}>{'Settings'}</Text>
               </View>
               {arrowIcon}
             </View>
@@ -312,7 +332,9 @@ export class Settings extends React.Component {
                   name="arrow-right-bold-box-outline"
                   color={Theme.darkBlue}
                   size={width < 330 ? 20 : 22 && width > 600 ? 28 : 22} />
-                <Text style={styles.title}>{'Sign Out'}</Text>
+                <Text
+                  allowFontScaling={false}
+                  style={styles.title}>{'Sign Out'}</Text>
               </View>
               {arrowIcon}
             </View>
@@ -342,7 +364,9 @@ export class Settings extends React.Component {
               name="md-wallet"
               color={Theme.darkBlue}
               size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
-            <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
+            <Text
+              allowFontScaling={false}
+              style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
                 Wallet
             </Text>
           </TestElement>
@@ -362,7 +386,9 @@ export class Settings extends React.Component {
               name="store-alt"
               color={Theme.darkBlue}
               size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
-            <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
+            <Text
+              allowFontScaling={false}
+              style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
                 Shop
             </Text>
           </TestElement>
@@ -382,7 +408,9 @@ export class Settings extends React.Component {
               name="history"
               color={Theme.darkBlue}
               size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
-            <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
+            <Text
+              allowFontScaling={false}
+              style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
                 History
             </Text>
           </TestElement>
@@ -402,7 +430,9 @@ export class Settings extends React.Component {
               name="bars"
               color={Theme.darkBlue}
               size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
-            <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
+            <Text
+              allowFontScaling={false}
+              style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
                 Menu
             </Text>
           </TestElement>

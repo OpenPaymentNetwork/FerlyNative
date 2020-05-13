@@ -231,13 +231,16 @@ export class UIDController extends React.Component {
         <Recaptcha onExecute={this.onExecute.bind(this)} action="uid" />);
       body = (
         <View>
-          <Text style={styles.subtitle}>
+          <Text
+            allowFontScaling={false}
+            style={styles.subtitle}>
             {`We sent a unique and temporary code to your ${type}. ` +
              `Enter the ${codeLength}-digit code below.`}
           </Text>
           <View style={styles.line}>
             <View style={styles.inputContainer}>
               <TextInput
+                allowFontScaling={false}
                 onChangeText={(text) => this.setState({code: text})}
                 autoFocus
                 underlineColorAndroid={'transparent'}
@@ -270,10 +273,13 @@ export class UIDController extends React.Component {
 
       body = (
         <View>
-          <Text style={styles.subtitle}>{message}</Text>
+          <Text
+            allowFontScaling={false}
+            style={styles.subtitle}>{message}</Text>
           <View style={styles.line}>
             <View style={styles.inputContainer}>
               <TextInput
+                allowFontScaling={false}
                 onChangeText={(text) => this.setState({formValue: text})}
                 autoFocus
                 returnKeyType='done'
@@ -294,7 +300,9 @@ export class UIDController extends React.Component {
     } else if (uid) {
       body = (
         <View style={styles.line}>
-          <Text style={{fontSize: width > 600 ? 18 : 16}}>{uid}</Text>
+          <Text
+            allowFontScaling={false}
+            style={{fontSize: width > 600 ? 18 : 16}}>{uid}</Text>
           <Button
             title="CHANGE"
             color={Theme.lightBlue}
@@ -317,12 +325,16 @@ export class UIDController extends React.Component {
 
     let error;
     if (invalid) {
-      error = <Text style={{color: 'red'}}>{invalid}</Text>;
+      error = <Text
+        allowFontScaling={false}
+        style={{color: 'red'}}>{invalid}</Text>;
     }
 
     return (
       <View style={styles.container}>
-        <Text style={styles.label}>{title}</Text>
+        <Text
+          allowFontScaling={false}
+          style={styles.label}>{title}</Text>
         {body}
         {error}
       </View>

@@ -106,7 +106,9 @@ export class HistoryEntry extends React.Component {
           alignItems: 'flex-start',
           width: width / 3
         }}>
-          <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 19 : 16}}>
+          <Text
+            allowFontScaling={false}
+            style={{color: Theme.darkBlue, fontSize: width > 600 ? 19 : 16}}>
             {dateDisplay}
           </Text>
         </View>
@@ -116,7 +118,9 @@ export class HistoryEntry extends React.Component {
           alignItems: 'flex-start',
           width: width / 3
         }}>
-          <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 19 : 16}}>
+          <Text
+            allowFontScaling={false}
+            style={{color: Theme.darkBlue, fontSize: width > 600 ? 19 : 16}}>
             {`${titleVerb}`}
           </Text>
         </View>
@@ -138,9 +142,11 @@ export class HistoryEntry extends React.Component {
               size={width < 330 ? 22 : 24 && width > 600 ? 30 : 24} />
             : null
           }
-          <Text style={{
-            color: Theme.darkBlue, fontSize: width > 600 ? 19 : 16
-          }}>
+          <Text
+            allowFontScaling={false}
+            style={{
+              color: Theme.darkBlue, fontSize: width > 600 ? 19 : 16
+            }}>
             {
               tradeDesign.length >= 1 && tradeDesign[1] === 'Ferly Rewards'
                 ? `${symbol}${rewardsAmount}` : `${symbol}$${amount}` &&

@@ -160,33 +160,39 @@ export class History extends React.Component {
               justifyContent: 'space-between',
               paddingHorizontal: 15
             }}>
-              <Text style={{
-                color: Theme.darkBlue,
-                width: width / 3,
-                fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
-                fontWeight: 'bold',
-                paddingTop: 10
-              }}>
+              <Text
+                allowFontScaling={false}
+                style={{
+                  color: Theme.darkBlue,
+                  width: width / 3,
+                  fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
+                  fontWeight: 'bold',
+                  paddingTop: 10
+                }}>
               Date
               </Text>
-              <Text style={{
-                color: Theme.darkBlue,
-                width: width / 3,
-                fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
-                fontWeight: 'bold',
-                paddingTop: 10
-              }}>
+              <Text
+                allowFontScaling={false}
+                style={{
+                  color: Theme.darkBlue,
+                  width: width / 3,
+                  fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
+                  fontWeight: 'bold',
+                  paddingTop: 10
+                }}>
               Type
               </Text>
-              <Text style={{
-                color: Theme.darkBlue,
-                width: width / 3,
-                textAlign: 'right',
-                fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
-                fontWeight: 'bold',
-                paddingTop: 10,
-                paddingRight: 30
-              }}>
+              <Text
+                allowFontScaling={false}
+                style={{
+                  color: Theme.darkBlue,
+                  width: width / 3,
+                  textAlign: 'right',
+                  fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
+                  fontWeight: 'bold',
+                  paddingTop: 10,
+                  paddingRight: 30
+                }}>
               Amount
               </Text>
             </View>
@@ -195,7 +201,9 @@ export class History extends React.Component {
               keyboardShouldPersistTaps='handled'
               onRefresh={() => this.props.apiRefresh(urls.history)}
               refreshing={false}
-              ListEmptyComponent={<Text style={{padding: 15}}>No transactions.</Text>}
+              ListEmptyComponent={<Text
+                allowFontScaling={false}
+                style={{padding: 15}}>No transactions.</Text>}
               initialNumToRender={20}
               getItemLayout={(data, index) => (
                 {length: 90, offset: index * 90, index})}
@@ -212,7 +220,9 @@ export class History extends React.Component {
       } else {
         list = (
           <View style={{flex: 1}}>
-            <Text style={{padding: 10}}>No complete transactions at this time.</Text>
+            <Text
+              allowFontScaling={false}
+              style={{padding: 10}}>No complete transactions at this time.</Text>
           </View>
         );
       }
@@ -225,28 +235,34 @@ export class History extends React.Component {
               justifyContent: 'space-between',
               paddingHorizontal: 15
             }}>
-              <Text style={{
-                color: Theme.darkBlue,
-                fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
-                fontWeight: 'bold',
-                paddingTop: 10
-              }}>
+              <Text
+                allowFontScaling={false}
+                style={{
+                  color: Theme.darkBlue,
+                  fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
+                  fontWeight: 'bold',
+                  paddingTop: 10
+                }}>
               Date
               </Text>
-              <Text style={{
-                color: Theme.darkBlue,
-                fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
-                fontWeight: 'bold',
-                paddingTop: 10
-              }}>
+              <Text
+                allowFontScaling={false}
+                style={{
+                  color: Theme.darkBlue,
+                  fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
+                  fontWeight: 'bold',
+                  paddingTop: 10
+                }}>
               Type
               </Text>
-              <Text style={{
-                color: Theme.darkBlue,
-                fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
-                fontWeight: 'bold',
-                paddingTop: 10
-              }}>
+              <Text
+                allowFontScaling={false}
+                style={{
+                  color: Theme.darkBlue,
+                  fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
+                  fontWeight: 'bold',
+                  paddingTop: 10
+                }}>
               Amount
               </Text>
             </View>
@@ -255,7 +271,9 @@ export class History extends React.Component {
               keyboardShouldPersistTaps='handled'
               onRefresh={() => this.props.apiRefresh(urls.history)}
               refreshing={false}
-              ListEmptyComponent={<Text style={{padding: 15}}>No pending transactions.</Text>}
+              ListEmptyComponent={<Text
+                allowFontScaling={false}
+                style={{padding: 15}}>No pending transactions.</Text>}
               initialNumToRender={20}
               getItemLayout={(data, index) => (
                 {length: 90, offset: index * 90, index})}
@@ -277,7 +295,9 @@ export class History extends React.Component {
               keyboardShouldPersistTaps='handled'
               onRefresh={() => this.props.apiRefresh(urls.history)}
               refreshing={false}
-              ListEmptyComponent={<Text style={{padding: 15}}>No pending transactions.</Text>}
+              ListEmptyComponent={<Text
+                allowFontScaling={false}
+                style={{padding: 15}}>No pending transactions.</Text>}
               initialNumToRender={20}
               getItemLayout={(data, index) => (
                 {length: 90, offset: index * 90, index})}
@@ -315,7 +335,9 @@ export class History extends React.Component {
               alignItems: 'center'
             }}
             onPress={() => this.changeToPending()}>
-            <Text style={{color: 'white', fontSize: width > 600 ? 18 : 16}}>
+            <Text
+              allowFontScaling={false}
+              style={{color: 'white', fontSize: width > 600 ? 18 : 16}}>
               Pending
             </Text>
           </TestElement>
@@ -331,7 +353,9 @@ export class History extends React.Component {
               alignItems: 'center'
             }}
             onPress={() => this.changeToCompleted()}>
-            <Text style={{color: 'white', fontSize: width > 600 ? 18 : 16}}>
+            <Text
+              allowFontScaling={false}
+              style={{color: 'white', fontSize: width > 600 ? 18 : 16}}>
               Completed
             </Text>
           </TestElement>
@@ -365,7 +389,9 @@ export class History extends React.Component {
               name="md-wallet"
               color={Theme.darkBlue}
               size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
-            <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
+            <Text
+              allowFontScaling={false}
+              style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
                 Wallet
             </Text>
           </TestElement>
@@ -385,7 +411,9 @@ export class History extends React.Component {
               name="store-alt"
               color={Theme.darkBlue}
               size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
-            <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
+            <Text
+              allowFontScaling={false}
+              style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
                 Shop
             </Text>
           </TestElement>
@@ -405,7 +433,9 @@ export class History extends React.Component {
               name="history"
               color={Theme.darkBlue}
               size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
-            <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
+            <Text
+              allowFontScaling={false}
+              style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
                 History
             </Text>
           </TestElement>
@@ -425,7 +455,9 @@ export class History extends React.Component {
               name="bars"
               color={Theme.darkBlue}
               size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
-            <Text style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
+            <Text
+              allowFontScaling={false}
+              style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
                 Menu
             </Text>
           </TestElement>
