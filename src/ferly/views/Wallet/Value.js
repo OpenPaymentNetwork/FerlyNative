@@ -75,7 +75,7 @@ export class Value extends React.Component {
         style={[styles.entry, {
           borderBottomWidth: 1,
           borderColor: Theme.darkBlue,
-          height: width < 350 ? 40 : 55 && width > 600 ? 80 : 55
+          height: width < 350 ? 40 : width > 600 ? 80 : 55
         }]}>
         <View style={{
           borderColor: 'white',
@@ -341,7 +341,7 @@ export class Value extends React.Component {
             allowFontScaling={false}
             style={{
               color: Theme.darkBlue,
-              fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
+              fontSize: width < 350 ? 14 : width > 600 ? 19 : 16,
               fontWeight: 'bold',
               paddingTop: 10
             }}>
@@ -358,7 +358,7 @@ export class Value extends React.Component {
             allowFontScaling={false}
             style={{
               color: Theme.darkBlue,
-              fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
+              fontSize: width < 350 ? 14 : width > 600 ? 19 : 16,
               fontWeight: 'bold',
               paddingTop: 10
             }}>
@@ -376,7 +376,7 @@ export class Value extends React.Component {
             allowFontScaling={false}
             style={{
               color: Theme.darkBlue,
-              fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
+              fontSize: width < 350 ? 14 : width > 600 ? 19 : 16,
               fontWeight: 'bold',
               paddingTop: 10
             }}>
@@ -397,7 +397,7 @@ export class Value extends React.Component {
           style={{
             color: Theme.darkBlue,
             width: width / 3,
-            fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
+            fontSize: width < 350 ? 14 : width > 600 ? 19 : 16,
             fontWeight: 'bold',
             paddingTop: 10
           }}>
@@ -408,7 +408,7 @@ export class Value extends React.Component {
           style={{
             color: Theme.darkBlue,
             width: width / 3,
-            fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
+            fontSize: width < 350 ? 14 : width > 600 ? 19 : 16,
             fontWeight: 'bold',
             paddingTop: 10
           }}>
@@ -419,7 +419,7 @@ export class Value extends React.Component {
           style={{
             color: Theme.darkBlue,
             width: width / 3,
-            fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
+            fontSize: width < 350 ? 14 : width > 600 ? 19 : 16,
             fontWeight: 'bold',
             textAlign: 'right',
             paddingRight: 30,
@@ -496,7 +496,7 @@ export class Value extends React.Component {
           <Text
             allowFontScaling={false}
             style={{
-              fontSize: width < 330 ? 19 : 22 && width > 600 ? 24 : 22,
+              fontSize: width < 330 ? 19 : width > 600 ? 24 : 22,
               marginTop: 20,
               marginBottom: 10,
               color: Theme.darkBlue
@@ -510,7 +510,7 @@ export class Value extends React.Component {
             ? <Text
               allowFontScaling={false}
               style={{
-                fontSize: width < 330 ? 14 : 16 && width > 600 ? 18 : 16,
+                fontSize: width < 330 ? 14 : width > 600 ? 18 : 16,
                 marginBottom: 10,
                 color: Theme.darkBlue
               }}>
@@ -524,7 +524,7 @@ export class Value extends React.Component {
                 label='test-id-card-page'
                 style={{
                   flexDirection: 'row',
-                  width: width / 4,
+                  width: width < 600 ? width / 4 : width / 7,
                   backgroundColor: Theme.darkBlue,
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -536,11 +536,11 @@ export class Value extends React.Component {
                   style={{paddingRight: 8}}
                   name="card-giftcard"
                   color={'white'}
-                  size={width < 350 ? 18 : 20 && width > 600 ? 26 : 20} />
+                  size={width < 350 ? 18 : width > 600 ? 24 : 20} />
                 <Text
                   allowFontScaling={false}
                   style={{
-                    fontSize: width < 350 ? 14 : 16 && width > 600 ? 18 : 16,
+                    fontSize: width < 350 ? 14 : width > 600 ? 18 : 16,
                     color: 'white'
                   }}>
                   {`Give`}
@@ -553,7 +553,7 @@ export class Value extends React.Component {
                 label='test-id-card-page'
                 style={{
                   flexDirection: 'row',
-                  width: width / 4,
+                  width: width < 600 ? width / 4 : width / 7,
                   backgroundColor: Theme.darkBlue,
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -565,11 +565,11 @@ export class Value extends React.Component {
                   style={{paddingRight: 8}}
                   name="plus-circle"
                   color={'white'}
-                  size={width < 350 ? 16 : 18 && width > 600 ? 24 : 18} />
+                  size={width < 350 ? 16 : width > 600 ? 22 : 18} />
                 <Text
                   allowFontScaling={false}
                   style={{
-                    fontSize: width < 350 ? 14 : 16 && width > 600 ? 18 : 16,
+                    fontSize: width < 350 ? 14 : width > 600 ? 18 : 16,
                     color: 'white'
                   }}>
                   {`Buy`}
@@ -598,7 +598,7 @@ export class Value extends React.Component {
             style={{
               backgroundColor: Theme.lightBlue,
               height: 32,
-              width: width / 4,
+              width: width < 600 ? width / 4 : width / 7,
               flexDirection: 'row',
               alignSelf: 'center',
               justifyContent: 'center',
@@ -615,7 +615,7 @@ export class Value extends React.Component {
               style={{paddingLeft: 8, alignSelf: 'center'}}
               name="arrow-right"
               color={Theme.darkBlue}
-              size={width < 350 ? 16 : 18 && width > 600 ? 24 : 18} />
+              size={width < 350 ? 16 : width > 600 ? 24 : 18} />
           </TouchableOpacity>
           <View style={{
             borderBottomWidth: 2,
@@ -655,12 +655,12 @@ export class Value extends React.Component {
             style={{
               backgroundColor: Theme.lightBlue,
               height: 32,
-              width: width / 3,
+              width: width < 600 ? width / 4 : width / 7,
               flexDirection: 'row',
-              alignItems: 'center',
+              alignSelf: 'center',
               justifyContent: 'center',
-              marginLeft: width / 3,
-              borderRadius: 5
+              borderRadius: 5,
+              marginVertical: 10
             }}
             onPress={this.openInMaps}>
             <Text
@@ -672,7 +672,7 @@ export class Value extends React.Component {
               style={{paddingLeft: 8, alignSelf: 'center'}}
               name="share-square"
               color={Theme.darkBlue}
-              size={width < 350 ? 16 : 18 && width > 600 ? 24 : 18} />
+              size={width < 350 ? 16 : width > 600 ? 24 : 18} />
           </TouchableOpacity>
           <Text
             allowFontScaling={false}
@@ -695,12 +695,12 @@ const styles = StyleSheet.create({
     color: Theme.darkBlue,
     alignSelf: 'center',
     fontWeight: 'bold',
-    fontSize: width < 350 ? 12 : 14 && width > 600 ? 16 : 14
+    fontSize: width < 350 ? 12 : width > 600 ? 16 : 14
   },
   amount: {
     color: Theme.darkBlue,
-    fontSize: width < 330 ? 28 : 35 && width > 600 ? 37 : 35,
-    marginBottom: width < 330 ? 6 : 8 && width > 600 ? 12 : 8
+    fontSize: width < 330 ? 28 : width > 600 ? 37 : 35,
+    marginBottom: width < 330 ? 6 : width > 600 ? 12 : 8
   },
   header: {
     color: Theme.darkBlue,

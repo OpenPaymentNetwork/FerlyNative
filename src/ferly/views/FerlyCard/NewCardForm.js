@@ -145,7 +145,7 @@ export class CardForm extends React.Component {
       if (newInvalid['']) {
         newInvalid.pan = newInvalid[''];
       }
-      this.setState({invalid: newInvalid});
+      this.setState({invalid: newInvalid, submitting: false});
       return false;
     } else {
       return json.result;

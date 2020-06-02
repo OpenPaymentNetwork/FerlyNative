@@ -165,7 +165,7 @@ export class History extends React.Component {
                 style={{
                   color: Theme.darkBlue,
                   width: width / 3,
-                  fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
+                  fontSize: width < 350 ? 14 : width > 600 ? 19 : 16,
                   fontWeight: 'bold',
                   paddingTop: 10
                 }}>
@@ -176,7 +176,7 @@ export class History extends React.Component {
                 style={{
                   color: Theme.darkBlue,
                   width: width / 3,
-                  fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
+                  fontSize: width < 350 ? 14 : width > 600 ? 19 : 16,
                   fontWeight: 'bold',
                   paddingTop: 10
                 }}>
@@ -188,7 +188,7 @@ export class History extends React.Component {
                   color: Theme.darkBlue,
                   width: width / 3,
                   textAlign: 'right',
-                  fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
+                  fontSize: width < 350 ? 14 : width > 600 ? 19 : 16,
                   fontWeight: 'bold',
                   paddingTop: 10,
                   paddingRight: 30
@@ -239,7 +239,7 @@ export class History extends React.Component {
                 allowFontScaling={false}
                 style={{
                   color: Theme.darkBlue,
-                  fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
+                  fontSize: width < 350 ? 14 : width > 600 ? 19 : 16,
                   fontWeight: 'bold',
                   paddingTop: 10
                 }}>
@@ -249,7 +249,7 @@ export class History extends React.Component {
                 allowFontScaling={false}
                 style={{
                   color: Theme.darkBlue,
-                  fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
+                  fontSize: width < 350 ? 14 : width > 600 ? 19 : 16,
                   fontWeight: 'bold',
                   paddingTop: 10
                 }}>
@@ -259,7 +259,7 @@ export class History extends React.Component {
                 allowFontScaling={false}
                 style={{
                   color: Theme.darkBlue,
-                  fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
+                  fontSize: width < 350 ? 14 : width > 600 ? 19 : 16,
                   fontWeight: 'bold',
                   paddingTop: 10
                 }}>
@@ -330,7 +330,7 @@ export class History extends React.Component {
               borderBottomWidth: this.state.page === 'Pending' ? 4 : 0,
               borderColor: 'white',
               height: width > 600 ? 70 : 50,
-              width: width > 600 ? 190 : 170 && width < 350 ? 150 : 170,
+              width: width > 600 ? 190 : width < 350 ? 150 : 170,
               justifyContent: 'center',
               alignItems: 'center'
             }}
@@ -348,7 +348,7 @@ export class History extends React.Component {
               borderBottomWidth: this.state.page === 'Completed' ? 4 : 0,
               borderColor: 'white',
               height: width > 600 ? 70 : 50,
-              width: width > 600 ? 190 : 170 && width < 350 ? 150 : 170,
+              width: width > 600 ? 190 : width < 350 ? 150 : 170,
               justifyContent: 'center',
               alignItems: 'center'
             }}
@@ -388,7 +388,7 @@ export class History extends React.Component {
             <I
               name="md-wallet"
               color={Theme.darkBlue}
-              size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
+              size={width < 330 ? 16 : width > 600 ? 24 : 18} />
             <Text
               allowFontScaling={false}
               style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
@@ -410,7 +410,7 @@ export class History extends React.Component {
             <Icons
               name="store-alt"
               color={Theme.darkBlue}
-              size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
+              size={width < 330 ? 16 : width > 600 ? 24 : 18} />
             <Text
               allowFontScaling={false}
               style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
@@ -432,7 +432,7 @@ export class History extends React.Component {
             <Icon
               name="history"
               color={Theme.darkBlue}
-              size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
+              size={width < 330 ? 16 : width > 600 ? 24 : 18} />
             <Text
               allowFontScaling={false}
               style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
@@ -454,7 +454,7 @@ export class History extends React.Component {
             <Icon
               name="bars"
               color={Theme.darkBlue}
-              size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
+              size={width < 330 ? 16 : width > 600 ? 24 : 18} />
             <Text
               allowFontScaling={false}
               style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>

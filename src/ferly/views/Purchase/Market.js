@@ -173,7 +173,7 @@ export class Market extends React.Component {
             <I
               name="md-wallet"
               color={Theme.darkBlue}
-              size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
+              size={width < 330 ? 16 : width > 600 ? 24 : 18} />
             <Text
               allowFontScaling={false}
               style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
@@ -195,7 +195,7 @@ export class Market extends React.Component {
             <Icons
               name="store-alt"
               color={Theme.darkBlue}
-              size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
+              size={width < 330 ? 16 : width > 600 ? 24 : 18} />
             <Text
               allowFontScaling={false}
               style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
@@ -217,7 +217,7 @@ export class Market extends React.Component {
             <Icon
               name="history"
               color={Theme.darkBlue}
-              size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
+              size={width < 330 ? 16 : width > 600 ? 24 : 18} />
             <Text
               allowFontScaling={false}
               style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
@@ -239,7 +239,7 @@ export class Market extends React.Component {
             <Icon
               name="bars"
               color={Theme.darkBlue}
-              size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
+              size={width < 330 ? 16 : width > 600 ? 24 : 18} />
             <Text
               allowFontScaling={false}
               style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>

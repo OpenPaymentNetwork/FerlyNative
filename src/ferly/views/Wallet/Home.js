@@ -279,7 +279,7 @@ export class Wallet extends React.Component {
             <Text
               allowFontScaling={false}
               style={{
-                fontSize: width < 350 ? 20 : 22 && width > 600 ? 26 : 22, color: text
+                fontSize: width < 350 ? 20 : width > 600 ? 28 : 22, color: text
               }}>
               {formatted}
             </Text>
@@ -289,7 +289,7 @@ export class Wallet extends React.Component {
               <Text
                 allowFontScaling={false}
                 style={{
-                  fontSize: width < 350 ? 16 : 18 && width > 600 ? 24 : 18,
+                  fontSize: width < 350 ? 16 : width > 600 ? 26 : 18,
                   fontWeight: 'bold',
                   color: Theme.darkBlue}}>{title}</Text>
             </View>
@@ -303,15 +303,15 @@ export class Wallet extends React.Component {
                   style={{paddingRight: 8}}
                   name="card-giftcard"
                   color={Theme.darkBlue}
-                  size={width < 350 ? 18 : 20 && width > 600 ? 26 : 20} />
+                  size={width < 350 ? 18 : width > 600 ? 28 : 20} />
                 <Text
                   allowFontScaling={false}
                   style={{
                     color: Theme.darkBlue,
-                    fontSize: width < 350 ? 11 : 12 && width > 600 ? 16 : 12,
+                    fontSize: width < 350 ? 11 : width > 600 ? 16 : 12,
                     fontWeight: 'bold'
                   }}>
-                GIVE
+                  GIVE
                 </Text>
               </TestElement>
               <TestElement
@@ -325,15 +325,15 @@ export class Wallet extends React.Component {
                   style={{paddingRight: 8}}
                   name="plus-circle"
                   color={Theme.darkBlue}
-                  size={width < 350 ? 16 : 18 && width > 600 ? 24 : 18} />
+                  size={width < 350 ? 16 : width > 600 ? 26 : 18} />
                 <Text
                   allowFontScaling={false}
                   style={{
                     color: Theme.darkBlue,
-                    fontSize: width < 350 ? 11 : 12 && width > 600 ? 16 : 12,
+                    fontSize: width < 350 ? 11 : width > 600 ? 16 : 12,
                     fontWeight: 'bold'
                   }}>
-                BUY
+                  BUY
                 </Text>
               </TestElement>
             </View>
@@ -351,12 +351,12 @@ export class Wallet extends React.Component {
           <Text
             allowFontScaling={false}
             style={{
-              marginTop: Platform.OS === 'ios' ? -20 : 235,
+              marginTop: Platform.OS === 'ios' ? width < 350 ? 25 : 50 : 150,
               marginHorizontal: 20,
               marginBottom: 20,
               fontSize: 18
             }}>
-          There’s nothing here! Visit the Shop to browse your favorite brands.
+            There’s nothing here! Visit the Shop to browse your favorite brands.
           </Text>
           <TestElement
             parent={TouchableOpacity}
@@ -371,11 +371,11 @@ export class Wallet extends React.Component {
               style={{paddingRight: 8}}
               name="store-alt"
               color={Theme.darkBlue}
-              size={width < 350 ? 14 : 16 && width > 600 ? 20 : 18} />
+              size={width < 350 ? 14 : width > 600 ? 22 : 18} />
             <Text
               allowFontScaling={false}
               style={[styles.cardManager, {
-                fontSize: width < 350 || Platform.OS === 'ios' ? 14 : 16 && width > 600 ? 18 : 16
+                fontSize: width < 350 || Platform.OS === 'ios' ? 14 : width > 600 ? 18 : 16
               }]}>
               {`Shop`}
             </Text>
@@ -409,11 +409,11 @@ export class Wallet extends React.Component {
                 style={{paddingRight: 8}}
                 name="store-alt"
                 color={Theme.darkBlue}
-                size={width < 350 ? 14 : 16 && width > 600 ? 20 : 18} />
+                size={width < 350 ? 14 : width > 600 ? 20 : 18} />
               <Text
                 allowFontScaling={false}
                 style={[styles.cardManager, {
-                  fontSize: width < 350 || Platform.OS === 'ios' ? 14 : 16 && width > 600 ? 18 : 16
+                  fontSize: width < 350 || Platform.OS === 'ios' ? 14 : width > 600 ? 18 : 16
                 }]}>
                 {`Shop`}
               </Text>
@@ -426,7 +426,7 @@ export class Wallet extends React.Component {
             keyboardShouldPersistTaps='handled'
             style={{
               marginTop: Platform.OS === 'android' ? 150 : 10 &&
-              width < 350 ? -20 : 50 && width > 600 ? 80 : 40
+              width < 350 ? -20 : width > 600 ? 80 : 40
             }}
             refreshControl={
               <RefreshControl
@@ -446,7 +446,7 @@ export class Wallet extends React.Component {
           keyboardShouldPersistTaps='handled'
           style={{
             marginTop: Platform.OS === 'android' ? 150 : 10 &&
-            width < 350 ? -20 : 50 && width > 600 ? 80 : 40
+            width < 350 ? -20 : width > 600 ? 80 : 40
           }}
           refreshControl={
             <RefreshControl
@@ -466,27 +466,57 @@ export class Wallet extends React.Component {
     post('get-expo-token', this.props.deviceToken)
       .then((response) => response.json())
       .then((json) => {
-        if (json.error || json.invalid) {
-          const text = {'text': 'Unsuccessful get expo token'};
-          post('log-info', this.props.deviceToken, text)
+        if (!(json.error || json.invalid)) {
+          post('delete-device-tokens', this.props.deviceToken)
             .then((response) => response.json())
-            .then((responseJson) => {
+            .then((json) => {
+              this.props.dispatch(apiErase());
+              device = makeid(32);
+              AsyncStorage.setItem('deviceToken', device).then(() => {
+                setTimeout(() => {
+                  const alertText = 'You have been successfully signed out.';
+                  Alert.alert('Done!', alertText);
+                  try {
+                    AsyncStorage.setItem('isCustomer', 'false').then((response) => {
+                      this.props.dispatch(setIsCustomer('false'));
+                      this.props.dispatch(setDeviceToken(device));
+                    });
+                  } catch (error) {
+                  }
+                }, 500);
+              });
             })
             .catch(() => {
-              console.log('log error');
+              const text = {'text': 'Call failed: delete expo token'};
+              post('log-info-inital', text)
+                .then((response) => response.json())
+                .then((responseJson) => {
+                })
+                .catch(() => {
+                  console.log('log error');
+                });
+              Alert.alert('Error trying to sign out!');
             });
-        }
-        const text = {'text': 'successful get expo token'};
-        post('log-info', this.props.deviceToken, text)
-          .then((response) => response.json())
-          .then((responseJson) => {
-          })
-          .catch(() => {
-            console.log('log error');
+          AsyncStorage.setItem('expoToken', json.expo_token).then(() => {
+            this.props.dispatch(setExpoToken(json.expo_token));
           });
-        AsyncStorage.setItem('expoToken', json.expo_token).then(() => {
-          this.props.dispatch(setExpoToken(json.expo_token));
-        });
+        } else {
+          this.props.dispatch(apiErase());
+          device = makeid(32);
+          AsyncStorage.setItem('deviceToken', device).then(() => {
+            setTimeout(() => {
+              const alertText = 'You have been successfully signed out.';
+              Alert.alert('Done!', alertText);
+              try {
+                AsyncStorage.setItem('isCustomer', 'false').then((response) => {
+                  this.props.dispatch(setIsCustomer('false'));
+                  this.props.dispatch(setDeviceToken(device));
+                });
+              } catch (error) {
+              }
+            }, 500);
+          });
+        }
       })
       .catch(() => {
         const text = {'text': 'Call failed: get expo token'};
@@ -499,54 +529,6 @@ export class Wallet extends React.Component {
           });
         Alert.alert('Error trying to get token!');
       });
-    post('delete-device-tokens', this.props.deviceToken)
-      .then((response) => response.json())
-      .then((json) => {
-        if (json.error || json.invalid) {
-          const text = {'text': 'Unsuccessful delete expo token'};
-          post('log-info', this.props.deviceToken, text)
-            .then((response) => response.json())
-            .then((responseJson) => {
-            })
-            .catch(() => {
-              console.log('log error');
-            });
-        }
-        const text = {'text': 'successful delete device token'};
-        post('log-info', this.props.deviceToken, text)
-          .then((response) => response.json())
-          .then((responseJson) => {
-          })
-          .catch(() => {
-            console.log('log error');
-          });
-      })
-      .catch(() => {
-        const text = {'text': 'Call failed: delete expo token'};
-        post('log-info', this.props.deviceToken, text)
-          .then((response) => response.json())
-          .then((responseJson) => {
-          })
-          .catch(() => {
-            console.log('log error');
-          });
-        Alert.alert('Error trying to sign out!');
-      });
-    this.props.dispatch(apiErase());
-    device = makeid(32);
-    AsyncStorage.setItem('deviceToken', device).then(() => {
-      setTimeout(() => {
-        const alertText = 'You have been successfully signed out.';
-        Alert.alert('Done!', alertText);
-        try {
-          AsyncStorage.setItem('isCustomer', 'false').then((response) => {
-            this.props.dispatch(setIsCustomer('false'));
-            this.props.dispatch(setDeviceToken(device));
-          });
-        } catch (error) {
-        }
-      }, 500);
-    });
   }
 
   showAddAccountRecoveryDialog () {
@@ -627,15 +609,12 @@ export class Wallet extends React.Component {
       if (!this.state.loaded) {
         interval = setTimeout(() => {
           this.changeLoaded();
-        }, 9000);
+        }, 6000);
       }
-      if (this.state.loaded) {
-        const buttons = [
-          {text: 'OK', onPress: null, style: 'cancel'},
-          {text: 'Sign Out', onPress: () => this.SignOut()}
-        ];
-        Alert.alert('Error', `Unable to get profile information. Please check internet ` +
-        `connection and try again.`, buttons);
+      if (this.state.loaded && count > 0) {
+        count = -1;
+        clearInterval(interval);
+        this.SignOut();
       }
       return <Spinner />;
     }
@@ -790,7 +769,7 @@ export class Wallet extends React.Component {
               parent={TouchableOpacity}
               label='test-id-give'
               style={[styles.theCard, {
-                width: width / 4,
+                width: width < 600 ? width / 4 : width / 7,
                 flexDirection: 'row'
               }]}
               onPress={() => this.props.navigation.navigate('Recipient', cash, rewards)}>
@@ -798,12 +777,12 @@ export class Wallet extends React.Component {
                 style={{paddingRight: 8}}
                 name="card-giftcard"
                 color={Theme.darkBlue}
-                size={width < 350 ? 18 : 20 && width > 600 ? 26 : 20} />
+                size={width < 350 ? 18 : width > 600 ? 22 : 20} />
               <Text
                 allowFontScaling={false}
                 style={[styles.cardManager, {
-                  fontSize: width < 350 && Platform.OS === 'ios' ? 14 : 16 &&
-                width > 600 && Platform.OS === 'ios' ? 24 : 16
+                  fontSize: width < 350 && Platform.OS === 'ios' ? 14
+                    : width > 600 && Platform.OS === 'ios' ? 20 : 16
                 }]}>
                 {`Give`}
               </Text>
@@ -817,7 +796,7 @@ export class Wallet extends React.Component {
               parent={TouchableOpacity}
               label='test-id-add'
               style={[styles.theCard, {
-                width: width / 4,
+                width: width < 600 ? width / 4 : width / 7,
                 flexDirection: 'row'
               }]}
               onPress={() => this.props.navigation.navigate('LoadingInstructions')}>
@@ -825,12 +804,12 @@ export class Wallet extends React.Component {
                 style={{paddingRight: 8}}
                 name="plus-circle"
                 color={Theme.darkBlue}
-                size={width < 350 ? 16 : 18 && width > 600 ? 24 : 18} />
+                size={width < 350 ? 16 : width > 600 ? 22 : 18} />
               <Text
                 allowFontScaling={false}
                 style={[styles.cardManager, {
-                  fontSize: width < 350 && Platform.OS === 'ios' ? 14 : 16 &&
-                width > 600 && Platform.OS === 'ios' ? 24 : 16
+                  fontSize: width < 350 && Platform.OS === 'ios' ? 14
+                    : width > 600 && Platform.OS === 'ios' ? 20 : 16
                 }]}>
                 {`Add`}
               </Text>
@@ -853,7 +832,7 @@ export class Wallet extends React.Component {
               allowFontScaling={false}
               style={[styles.cardManager, {
                 marginLeft: 10,
-                fontSize: width < 350 ? 14 : 16 && width > 600 ? 18 : 16
+                fontSize: width < 350 ? 14 : width > 600 ? 18 : 16
               }]}>
               {'Learn More'}
             </Text>
@@ -861,7 +840,7 @@ export class Wallet extends React.Component {
               style={{paddingLeft: 8}}
               name="arrow-right"
               color={Theme.darkBlue}
-              size={width < 350 ? 16 : 18 && width > 600 ? 24 : 18} />
+              size={width < 350 ? 16 : width > 600 ? 24 : 18} />
           </TestElement>
         </Animated.View>
       );
@@ -966,7 +945,7 @@ export class Wallet extends React.Component {
                 paddingHorizontal: 20,
                 paddingVertical: 15,
                 marginTop: width < 330 ? 8 : 17,
-                fontSize: width < 350 ? 16 : 18 && width > 600 ? 20 : 18,
+                fontSize: width < 350 ? 16 : width > 600 ? 20 : 18,
                 backgroundColor: 'white',
                 color: Theme.darkBlue
               }}>
@@ -997,7 +976,7 @@ export class Wallet extends React.Component {
             <I
               name="md-wallet"
               color={Theme.darkBlue}
-              size={width < 350 ? 16 : 18 && width > 600 ? 24 : 18} />
+              size={width < 350 ? 16 : width > 600 ? 24 : 18} />
             <Text
               allowFontScaling={false}
               style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
@@ -1019,7 +998,7 @@ export class Wallet extends React.Component {
             <Icons
               name="store-alt"
               color={Theme.darkBlue}
-              size={width < 350 ? 16 : 18 && width > 600 ? 24 : 18} />
+              size={width < 350 ? 16 : width > 600 ? 24 : 18} />
             <Text
               allowFontScaling={false}
               style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
@@ -1041,7 +1020,7 @@ export class Wallet extends React.Component {
             <Icon
               name="history"
               color={Theme.darkBlue}
-              size={width < 350 ? 16 : 18 && width > 600 ? 24 : 18} />
+              size={width < 350 ? 16 : width > 600 ? 24 : 18} />
             <Text
               allowFontScaling={false}
               style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
@@ -1063,7 +1042,7 @@ export class Wallet extends React.Component {
             <Icon
               name="bars"
               color={Theme.darkBlue}
-              size={width < 350 ? 16 : 18 && width > 600 ? 24 : 18} />
+              size={width < 350 ? 16 : width > 600 ? 24 : 18} />
             <Text
               allowFontScaling={false}
               style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
@@ -1085,19 +1064,12 @@ let cash = {};
 let rewards = {};
 
 let codeRedeemed = '';
-const HEADER_MIN_HEIGHT = width < 350 ? 50 : 120 && Platform.OS === 'ios' ? 50 : 120;
+const HEADER_MIN_HEIGHT = width < 350 ? 50 : Platform.OS === 'ios' ? 50 : 120;
 const HEADER_MAX_HEIGHT = width < 350 ? 150 : 200;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 let count = 0;
 let count2 = 0;
 const styles = StyleSheet.create({
-  header: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    overflow: 'hidden'
-  },
   animatedHeaderContainer: {
     position: 'absolute',
     top: 50,
@@ -1125,7 +1097,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginHorizontal: 20,
     marginBottom: 15,
-    height: width < 350 ? 90 : 100 && width > 600 ? 110 : 100,
+    height: width < 350 ? 90 : width > 600 ? 130 : 100,
     borderWidth: 1,
     borderRadius: 10,
     backgroundColor: 'white',
@@ -1135,7 +1107,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 1
   },
   cardImage: {
-    width: width < 350 ? 120 : 130 && width > 600 ? 170 : 130,
+    width: width < 350 ? 120 : width > 600 ? 220 : 130,
     alignItems: 'center',
     justifyContent: 'center',
     borderTopLeftRadius: 10,
@@ -1143,7 +1115,7 @@ const styles = StyleSheet.create({
   },
   theCard: {
     backgroundColor: Theme.lightBlue,
-    height: width < 350 ? 25 : 35 && width > 600 ? 35 : 35,
+    height: width < 350 ? 25 : width > 600 ? 35 : 35,
     borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center'

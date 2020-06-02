@@ -88,7 +88,7 @@ export class Settings extends React.Component {
       .then((json) => {
         if (json.error || json.invalid) {
           const text = {'text': 'Unsuccessful delete expo token'};
-          post('log-info', this.props.deviceToken, text)
+          post('log-info-inital', text)
             .then((response) => response.json())
             .then((responseJson) => {
             })
@@ -97,7 +97,7 @@ export class Settings extends React.Component {
             });
         }
         const text = {'text': 'successful delete device token'};
-        post('log-info', this.props.deviceToken, text)
+        post('log-info-inital', text)
           .then((response) => response.json())
           .then((responseJson) => {
           })
@@ -107,7 +107,7 @@ export class Settings extends React.Component {
       })
       .catch(() => {
         const text = {'text': 'Call failed: delete expo token'};
-        post('log-info', this.props.deviceToken, text)
+        post('log-info-inital', text)
           .then((response) => response.json())
           .then((responseJson) => {
           })
@@ -246,7 +246,7 @@ export class Settings extends React.Component {
                   style={{paddingRight: 15}}
                   name="md-card"
                   color={Theme.darkBlue}
-                  size={width < 330 ? 20 : 22 && width > 600 ? 28 : 22} />
+                  size={width < 330 ? 20 : width > 600 ? 28 : 22} />
                 <Text
                   allowFontScaling={false}
                   style={{
@@ -275,7 +275,7 @@ export class Settings extends React.Component {
                   style={{paddingRight: 10}}
                   name="plus-circle"
                   color={Theme.darkBlue}
-                  size={width < 330 ? 18 : 20 && width > 600 ? 26 : 20} />
+                  size={width < 330 ? 18 : width > 600 ? 26 : 20} />
                 <Text
                   allowFontScaling={false}
                   style={styles.title}>{'Add Ferly Cash'}</Text>
@@ -292,7 +292,7 @@ export class Settings extends React.Component {
                   style={{paddingRight: 15}}
                   name="md-gift"
                   color={Theme.darkBlue}
-                  size={width < 330 ? 20 : 22 && width > 600 ? 28 : 22} />
+                  size={width < 330 ? 20 : width > 600 ? 28 : 22} />
                 <Text
                   allowFontScaling={false}
                   style={styles.title}>{'Redeem gift code'}</Text>
@@ -314,7 +314,7 @@ export class Settings extends React.Component {
                   style={{paddingRight: 15}}
                   name="md-settings"
                   color={Theme.darkBlue}
-                  size={width < 330 ? 20 : 22 && width > 600 ? 28 : 22} />
+                  size={width < 330 ? 20 : width > 600 ? 28 : 22} />
                 <Text
                   allowFontScaling={false}
                   style={styles.title}>{'Settings'}</Text>
@@ -331,7 +331,7 @@ export class Settings extends React.Component {
                   style={{paddingRight: 15}}
                   name="arrow-right-bold-box-outline"
                   color={Theme.darkBlue}
-                  size={width < 330 ? 20 : 22 && width > 600 ? 28 : 22} />
+                  size={width < 330 ? 20 : width > 600 ? 28 : 22} />
                 <Text
                   allowFontScaling={false}
                   style={styles.title}>{'Sign Out'}</Text>
@@ -363,7 +363,7 @@ export class Settings extends React.Component {
             <I
               name="md-wallet"
               color={Theme.darkBlue}
-              size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
+              size={width < 330 ? 16 : width > 600 ? 24 : 18} />
             <Text
               allowFontScaling={false}
               style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
@@ -385,7 +385,7 @@ export class Settings extends React.Component {
             <Icons
               name="store-alt"
               color={Theme.darkBlue}
-              size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
+              size={width < 330 ? 16 : width > 600 ? 24 : 18} />
             <Text
               allowFontScaling={false}
               style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
@@ -407,7 +407,7 @@ export class Settings extends React.Component {
             <Icon
               name="history"
               color={Theme.darkBlue}
-              size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
+              size={width < 330 ? 16 : width > 600 ? 24 : 18} />
             <Text
               allowFontScaling={false}
               style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>
@@ -429,7 +429,7 @@ export class Settings extends React.Component {
             <Icon
               name="bars"
               color={Theme.darkBlue}
-              size={width < 330 ? 16 : 18 && width > 600 ? 24 : 18} />
+              size={width < 330 ? 16 : width > 600 ? 24 : 18} />
             <Text
               allowFontScaling={false}
               style={{color: Theme.darkBlue, fontSize: width > 600 ? 18 : 16}}>

@@ -31,12 +31,24 @@ export class Transfer extends React.Component {
     this.state = {
       click: false,
       submitting: false,
-      theDate: false
+      theDate: false,
+      panNumber: ''
     };
   }
 
   componentDidMount () {
+    const {transferDetails} = this.props;
     this.props.dispatch(apiRequire(this.props.transferUrl));
+    post('transfer', this.props.deviceToken, {transfer_id: transferDetails.id})
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if (responseJson.pan_redacted) {
+          this.setState({panNumber: responseJson.pan_redacted});
+        }
+      })
+      .catch(() => {
+        Alert.alert('Error please check internet connection!');
+      });
   }
 
   confirmTakeBack () {
@@ -67,6 +79,7 @@ export class Transfer extends React.Component {
               console.log('log error');
             });
           Alert.alert('Error!', 'Error trying to retract gift invite.');
+          this.setState({submitting: false});
         } else {
           Alert.alert('Success!', 'You have successfully retracted the invite with cash.');
         }
@@ -85,7 +98,8 @@ export class Transfer extends React.Component {
           .catch(() => {
             console.log('log error');
           });
-        Alert.alert('Error trying to retract invite!');
+        Alert.alert('Error!', 'Error trying to retract gift invite.');
+        this.setState({submitting: false});
       });
   }
 
@@ -119,6 +133,8 @@ export class Transfer extends React.Component {
             .catch(() => {
               console.log('log error');
             });
+          Alert.alert('Error', 'Check internet conection and try again.');
+          this.setState({submitting: false});
         }
         this.setState({submitting: false});
         const text = {'text': 'successful get transfer details'};
@@ -181,7 +197,7 @@ export class Transfer extends React.Component {
             console.log('log error');
           });
         Alert.alert('Error trying to send reminder!');
-        this.props.navigation.navigate('Wallet');
+        this.setState({submitting: false});
       });
   }
 
@@ -236,7 +252,6 @@ export class Transfer extends React.Component {
       transfer_designs: tranferDesigns,
       trade_Designs_Received: tradeDesignsReceived,
       card_acceptor: cardAcceptor,
-      pan_redacted: panNumber,
       available_amount: availableAmount,
       design_title: designTitle,
       counter_party: counterParty,
@@ -273,9 +288,16 @@ export class Transfer extends React.Component {
     }
     let theGift = {};
     let theLoyalty = {};
-    if (splitRedemption) {
-      theGift = splitRedemption[0];
-      theLoyalty = splitRedemption[1];
+    if (splitRedemption.length === 2) {
+      if (splitRedemption[0].title.includes('Loyalty')) {
+        theGift = splitRedemption[1];
+        theLoyalty = splitRedemption[0];
+      } else {
+        theGift = splitRedemption[0];
+        theLoyalty = splitRedemption[1];
+      }
+    } else {
+
     }
     let merchant = '';
     let merchantLoyalty = '';
@@ -302,8 +324,6 @@ export class Transfer extends React.Component {
           }
         }
       });
-    } else if (transferType === 'pending') {
-      return <Spinner />;
     }
     const b = timestamp.split(/\D+/);
     if (expireDate) {
@@ -570,7 +590,10 @@ export class Transfer extends React.Component {
           <Text
             allowFontScaling={false}
             style={{
-              fontSize: width > 600 ? 18 : 16, paddingLeft: 30, color: Theme.darkBlue, paddingTop: 10
+              fontSize: width > 600 ? 18 : 16,
+              paddingLeft: 30,
+              color: Theme.darkBlue,
+              paddingTop: 10
             }}>
             {message}
           </Text>
@@ -680,7 +703,7 @@ export class Transfer extends React.Component {
                 paddingBottom: 0,
                 justifyContent: 'flex-end'
               }]} >
-              {panNumber}
+              {this.state.panNumber}
             </Text>
           </View>
           <View style={{paddingLeft: 30, flexDirection: 'row'}} >
@@ -782,7 +805,7 @@ export class Transfer extends React.Component {
             <Ic
               name="md-ribbon"
               color={Theme.darkBlue}
-              size={width < 330 ? 20 : 23 && width > 600 ? 38 : 23} />
+              size={width < 330 ? 20 : width > 600 ? 38 : 23} />
             <Text
               allowFontScaling={false}
               style={{color: Theme.darkBlue, paddingLeft: 10, fontSize: 14}}>
@@ -810,7 +833,7 @@ export class Transfer extends React.Component {
                 <Ico
                   name="heart-box"
                   color={Theme.darkBlue}
-                  size={width < 330 ? 20 : 22 && width > 600 ? 24 : 22} />
+                  size={width < 330 ? 20 : width > 600 ? 24 : 22} />
                 <Text
                   allowFontScaling={false}
                   style={{
@@ -1314,7 +1337,7 @@ export class Transfer extends React.Component {
               allowFontScaling={false}
               style={styles.sectionHeader} >Details</Text>
           </View>
-          <View style={{paddingHorizontal: 30}} >
+          <View style={{paddingLeft: 30}} >
             <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
               <Text
                 allowFontScaling={false}
@@ -1343,7 +1366,7 @@ export class Transfer extends React.Component {
                   paddingBottom: 0,
                   justifyContent: 'flex-start'
                 }]} >
-              Ferly Card
+                Ferly Card
               </Text>
               <Text
                 allowFontScaling={false}
@@ -1352,7 +1375,7 @@ export class Transfer extends React.Component {
                   paddingBottom: 0,
                   justifyContent: 'flex-end'
                 }]} >
-                {panNumber}
+                {this.state.panNumber}
               </Text>
             </View>
             <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
@@ -1381,11 +1404,15 @@ export class Transfer extends React.Component {
           <View style={{borderBottomColor: Theme.lightBlue, borderBottomWidth: 2}}>
             <Text
               allowFontScaling={false}
-              style={styles.sectionHeader} >Payment Method</Text>
+              style={[styles.sectionHeader]} >Payment Method</Text>
           </View>
-          <View style={{paddingLeft: 30, flexDirection: 'row'}} >
-            {splitRedemption
-              ? <View style={{borderWidth: 1, borderColor: Theme.lightBlue, borderRadius: 5}}>
+          <View style={{paddingLeft: 30, flexDirection: 'row', paddingTop: 10}} >
+            {splitRedemption.length === 2
+              ? <View style={{
+                borderWidth: 1,
+                borderColor: Theme.lightBlue,
+                borderRadius: 5,
+                width: width - 45}}>
                 <View style={{paddingHorizontal: 15, paddingTop: 10}}>
                   <View style={styles.functionRow}>
                     <Text
@@ -1431,7 +1458,7 @@ export class Transfer extends React.Component {
                       paddingHorizontal: 15,
                       fontWeight: 'bold'
                     }]}>
-                  Total Purchase
+                    Total Purchase
                   </Text>
                   <Text
                     allowFontScaling={false}
@@ -1442,54 +1469,107 @@ export class Transfer extends React.Component {
                       paddingRight: 15,
                       fontWeight: 'bold'
                     }]}>
-                  ${!convenienceFee ? amount : amount + convenienceFee}
+                    ${!convenienceFee ? amount : amount + convenienceFee}
                   </Text>
                 </View>
               </View>
-              : <View style={{borderWidth: 1, borderColor: Theme.lightBlue, borderRadius: 5}}>
-                <View style={{paddingHorizontal: 15, paddingTop: 10}}>
-                  <View style={[styles.functionRow]}>
+              : splitRedemption[0].title.includes('Loyalty')
+                ? <View style={{
+                  borderWidth: 1,
+                  borderColor: Theme.lightBlue,
+                  borderRadius: 5,
+                  width: width - 45}}>
+                  <View style={{paddingHorizontal: 15, paddingTop: 10}}>
+                    <View style={[styles.functionRow]}>
+                      <Text
+                        allowFontScaling={false}
+                        style={[styles.sectionText, {paddingTop: 5, paddingBottom: 5}]}>
+                        {splitRedemption[0].title}
+                      </Text>
+                      <Text
+                        allowFontScaling={false}
+                        style={[styles.sectionText, {
+                          color: Theme.darkBlue,
+                          paddingBottom: 5,
+                          paddingTop: 5,
+                          paddingRight: 0
+                        }]}>
+                        ${splitRedemption[0].amount}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={[styles.functionRow, {backgroundColor: '#ABE0E0'}]}>
                     <Text
                       allowFontScaling={false}
-                      style={[styles.sectionText, {paddingTop: 5, paddingBottom: 5}]}>
-                      {designTitle}
+                      style={[styles.sectionText, {
+                        paddingTop: 15,
+                        paddingBottom: 15,
+                        paddingHorizontal: 15,
+                        fontWeight: 'bold'
+                      }]}>
+                      Total Purchase
                     </Text>
                     <Text
                       allowFontScaling={false}
                       style={[styles.sectionText, {
                         color: Theme.darkBlue,
-                        paddingBottom: 5,
-                        paddingTop: 5,
-                        paddingRight: 0
+                        paddingBottom: 15,
+                        paddingTop: 15,
+                        paddingRight: 15,
+                        fontWeight: 'bold'
                       }]}>
-                      ${amount}
+                      ${!convenienceFee ? amount : amount + convenienceFee}
                     </Text>
                   </View>
                 </View>
-                <View style={[styles.functionRow, {backgroundColor: '#ABE0E0'}]}>
-                  <Text
-                    allowFontScaling={false}
-                    style={[styles.sectionText, {
-                      paddingTop: 15,
-                      paddingBottom: 15,
-                      paddingHorizontal: 15,
-                      fontWeight: 'bold'
-                    }]}>
-                Total Purchase
-                  </Text>
-                  <Text
-                    allowFontScaling={false}
-                    style={[styles.sectionText, {
-                      color: Theme.darkBlue,
-                      paddingBottom: 15,
-                      paddingTop: 15,
-                      paddingRight: 15,
-                      fontWeight: 'bold'
-                    }]}>
-                ${!convenienceFee ? amount : amount + convenienceFee}
-                  </Text>
+                : <View style={{
+                  borderWidth: 1,
+                  borderColor: Theme.lightBlue,
+                  borderRadius: 5,
+                  width: width - 45}}>
+                  <View style={{paddingHorizontal: 15, paddingTop: 10}}>
+                    <View style={[styles.functionRow]}>
+                      <Text
+                        allowFontScaling={false}
+                        style={[styles.sectionText, {paddingTop: 5, paddingBottom: 5}]}>
+                        {designTitle}
+                      </Text>
+                      <Text
+                        allowFontScaling={false}
+                        style={[styles.sectionText, {
+                          color: Theme.darkBlue,
+                          paddingBottom: 5,
+                          paddingTop: 5,
+                          paddingRight: 0
+                        }]}>
+                        ${amount}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={[styles.functionRow, {backgroundColor: '#ABE0E0'}]}>
+                    <Text
+                      allowFontScaling={false}
+                      style={[styles.sectionText, {
+                        paddingTop: 15,
+                        paddingBottom: 15,
+                        paddingHorizontal: 15,
+                        fontWeight: 'bold'
+                      }]}>
+                      Total Purchase
+                    </Text>
+                    <Text
+                      allowFontScaling={false}
+                      style={[styles.sectionText, {
+                        color: Theme.darkBlue,
+                        paddingBottom: 15,
+                        paddingTop: 15,
+                        paddingRight: 15,
+                        fontWeight: 'bold'
+                      }]}>
+                      ${!convenienceFee ? amount : amount + convenienceFee}
+                    </Text>
+                  </View>
                 </View>
-              </View>
             }
           </View>
         </View>
@@ -1501,7 +1581,7 @@ export class Transfer extends React.Component {
           <View style={{
             alignItems: 'center',
             flexDirection: 'row',
-            height: width < 330 ? 85 : 110 && width > 600 ? 135 : 110,
+            height: width < 330 ? 85 : width > 600 ? 135 : 110,
             justifyContent: 'center',
             paddingTop: 10
           }}>
@@ -1510,13 +1590,13 @@ export class Transfer extends React.Component {
               ? <Icon
                 name="refresh"
                 color={Theme.darkBlue}
-                size={width < 330 ? 30 : 35 && width > 600 ? 40 : 35} />
+                size={width < 330 ? 30 : width > 600 ? 40 : 35} />
               : null
             }
             <Text
               allowFontScaling={false}
               style={{
-                color: Theme.darkBlue, fontSize: width < 330 ? 30 : 35 && width > 600 ? 40 : 35
+                color: Theme.darkBlue, fontSize: width < 330 ? 30 : width > 600 ? 40 : 35
               }}>
               {
                 verb === 'earned' ? `${symbol}${formatted}` : `${symbol}$${amount}`
@@ -1533,7 +1613,7 @@ export class Transfer extends React.Component {
               allowFontScaling={false}
               style={{
                 textAlign: 'center',
-                fontSize: width < 330 ? 16 : 18 && width > 600 ? 20 : 18,
+                fontSize: width < 330 ? 16 : width > 600 ? 20 : 18,
                 color: Theme.darkBlue
               }}>
               {
@@ -1555,7 +1635,7 @@ export class Transfer extends React.Component {
               style={[styles.sectionText, {
                 paddingTop: 5,
                 paddingBottom: 30,
-                fontSize: width < 330 ? 12 : 14 && width > 600 ? 16 : 14
+                fontSize: width < 330 ? 12 : width > 600 ? 16 : 14
               }]}>
               {dateDisplay}
             </Text>

@@ -138,7 +138,6 @@ export class Purchase extends React.Component {
             use your Ferly Card.
           </Text>
           <TouchableOpacity
-            // onPress={() => navigation.navigate('Locations', {design})}
             onPress={this.openInMaps}
           >
             <Image

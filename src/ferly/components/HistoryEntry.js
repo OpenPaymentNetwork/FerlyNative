@@ -139,7 +139,7 @@ export class HistoryEntry extends React.Component {
             ? <Icon
               name="refresh"
               color={Theme.darkBlue}
-              size={width < 330 ? 22 : 24 && width > 600 ? 30 : 24} />
+              size={width < 330 ? 22 : width > 600 ? 30 : 24} />
             : null
           }
           <Text
@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    height: width < 350 ? 55 : 75 && width > 600 ? 100 : 75,
+    height: width < 350 ? 55 : width > 600 ? 100 : 75,
     alignItems: 'center',
     borderBottomWidth: 1,
     borderColor: 'black',

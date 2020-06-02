@@ -298,14 +298,14 @@ export class EnterCode extends React.Component {
           justifyContent: 'space-between',
           backgroundColor: 'white'}}>
         <View style={{
-          paddingHorizontal: width < 330 ? 30 : 40 && width > 600 ? 50 : 40, paddingVertical: 30
+          paddingHorizontal: width < 330 ? 30 : width > 600 ? 50 : 40, paddingVertical: 30
         }}>
           <Text
             allowFontScaling={false}
             style={{fontSize: width > 600 ? 22 : 18, textAlign: 'center'}}>
             {`Enter gift code sent to your email or phone to accept a gift.`}
           </Text>
-          <View style={{paddingVertical: width < 330 ? 30 : 35 && width > 600 ? 40 : 35}}>
+          <View style={{paddingVertical: width < 330 ? 30 : width > 600 ? 40 : 35}}>
             <View style={{
               borderWidth: 1,
               width: width > 600 ? 160 : 150,

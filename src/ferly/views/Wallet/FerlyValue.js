@@ -85,7 +85,7 @@ export class FerlyValue extends React.Component {
         style={[styles.entry, {
           borderBottomWidth: 1,
           borderColor: Theme.darkBlue,
-          height: width < 350 ? 40 : 55 && width > 600 ? 80 : 55
+          height: width < 350 ? 40 : width > 600 ? 80 : 55
         }]}>
         <View style={{
           borderColor: 'white',
@@ -123,7 +123,7 @@ export class FerlyValue extends React.Component {
             ? <Icons
               name="refresh"
               color={Theme.darkBlue}
-              size={width < 330 ? 20 : 22 && width > 600 ? 28 : 22} />
+              size={width < 330 ? 20 : width > 600 ? 28 : 22} />
             : null
           }
           <Text
@@ -347,7 +347,7 @@ export class FerlyValue extends React.Component {
             allowFontScaling={false}
             style={{
               color: Theme.darkBlue,
-              fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
+              fontSize: width < 350 ? 14 : width > 600 ? 19 : 16,
               fontWeight: 'bold',
               paddingTop: 10
             }}>
@@ -364,7 +364,7 @@ export class FerlyValue extends React.Component {
             allowFontScaling={false}
             style={{
               color: Theme.darkBlue,
-              fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
+              fontSize: width < 350 ? 14 : width > 600 ? 19 : 16,
               fontWeight: 'bold',
               paddingTop: 10
             }}>
@@ -382,7 +382,7 @@ export class FerlyValue extends React.Component {
             allowFontScaling={false}
             style={{
               color: Theme.darkBlue,
-              fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
+              fontSize: width < 350 ? 14 : width > 600 ? 19 : 16,
               fontWeight: 'bold',
               paddingTop: 10
             }}>
@@ -403,7 +403,7 @@ export class FerlyValue extends React.Component {
           style={{
             color: Theme.darkBlue,
             width: width / 3,
-            fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
+            fontSize: width < 350 ? 14 : width > 600 ? 19 : 16,
             fontWeight: 'bold',
             paddingTop: 10
           }}>
@@ -414,7 +414,7 @@ export class FerlyValue extends React.Component {
           style={{
             color: Theme.darkBlue,
             width: width / 3,
-            fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
+            fontSize: width < 350 ? 14 : width > 600 ? 19 : 16,
             fontWeight: 'bold',
             paddingTop: 10
           }}>
@@ -425,7 +425,7 @@ export class FerlyValue extends React.Component {
           style={{
             color: Theme.darkBlue,
             width: width / 3,
-            fontSize: width < 350 ? 14 : 16 && width > 600 ? 19 : 16,
+            fontSize: width < 350 ? 14 : width > 600 ? 19 : 16,
             fontWeight: 'bold',
             textAlign: 'right',
             paddingRight: 30,
@@ -506,7 +506,7 @@ export class FerlyValue extends React.Component {
           <Text
             allowFontScaling={false}
             style={{
-              fontSize: width < 330 ? 19 : 22 && width > 600 ? 24 : 22,
+              fontSize: width < 330 ? 19 : width > 600 ? 24 : 22,
               marginTop: 20,
               marginBottom: 10,
               color: 'white'
@@ -519,7 +519,7 @@ export class FerlyValue extends React.Component {
           <Text
             allowFontScaling={false}
             style={{
-              fontSize: width < 330 ? 14 : 16 && width > 600 ? 18 : 16,
+              fontSize: width < 330 ? 14 : width > 600 ? 18 : 16,
               marginBottom: 10,
               color: 'white'
             }}>
@@ -544,7 +544,7 @@ export class FerlyValue extends React.Component {
                   <Text
                     allowFontScaling={false}
                     style={{
-                      fontSize: width < 350 ? 14 : 16 && width > 600 ? 18 : 16,
+                      fontSize: width < 350 ? 14 : width > 600 ? 18 : 16,
                       fontWeight: 'bold',
                       color: Theme.darkBlue
                     }}>
@@ -554,7 +554,7 @@ export class FerlyValue extends React.Component {
                     style={{paddingLeft: 8}}
                     name="arrow-right"
                     color={Theme.darkBlue}
-                    size={width < 350 ? 18 : 20 && width > 600 ? 26 : 20} />
+                    size={width < 350 ? 18 : width > 600 ? 26 : 20} />
                 </TestElement>
               </View>
             </View>
@@ -565,7 +565,7 @@ export class FerlyValue extends React.Component {
                   label='test-id-card-page'
                   style={{
                     flexDirection: 'row',
-                    width: width / 4,
+                    width: width < 600 ? width / 4 : width / 7,
                     backgroundColor: Theme.lightBlue,
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -577,11 +577,11 @@ export class FerlyValue extends React.Component {
                     style={{paddingRight: 8}}
                     name="card-giftcard"
                     color={Theme.darkBlue}
-                    size={width < 350 ? 18 : 20 && width > 600 ? 26 : 20} />
+                    size={width < 350 ? 18 : width > 600 ? 26 : 20} />
                   <Text
                     allowFontScaling={false}
                     style={{
-                      fontSize: width < 350 ? 14 : 16 && width > 600 ? 18 : 16,
+                      fontSize: width < 350 ? 14 : width > 600 ? 18 : 16,
                       fontWeight: 'bold',
                       color: Theme.darkBlue
                     }}>
@@ -595,7 +595,7 @@ export class FerlyValue extends React.Component {
                   label='test-id-card-page'
                   style={{
                     flexDirection: 'row',
-                    width: width / 4,
+                    width: width < 600 ? width / 4 : width / 7,
                     backgroundColor: Theme.lightBlue,
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -607,11 +607,11 @@ export class FerlyValue extends React.Component {
                     style={{paddingRight: 8}}
                     name="plus-circle"
                     color={Theme.darkBlue}
-                    size={width < 350 ? 16 : 18 && width > 600 ? 24 : 18} />
+                    size={width < 350 ? 16 : width > 600 ? 24 : 18} />
                   <Text
                     allowFontScaling={false}
                     style={{
-                      fontSize: width < 350 ? 14 : 16 && width > 600 ? 18 : 16,
+                      fontSize: width < 350 ? 14 : width > 600 ? 18 : 16,
                       fontWeight: 'bold',
                       color: Theme.darkBlue
                     }}>
@@ -643,7 +643,7 @@ export class FerlyValue extends React.Component {
               style={{
                 backgroundColor: Theme.lightBlue,
                 height: 35,
-                width: width / 4,
+                width: width < 600 ? width / 4 : width / 7,
                 flexDirection: 'row',
                 alignSelf: 'center',
                 justifyContent: 'center',
@@ -660,7 +660,7 @@ export class FerlyValue extends React.Component {
                 style={{paddingLeft: 8, alignSelf: 'center'}}
                 name="arrow-right"
                 color={Theme.darkBlue}
-                size={width < 350 ? 16 : 18 && width > 600 ? 24 : 18} />
+                size={width < 350 ? 16 : width > 600 ? 24 : 18} />
             </TouchableOpacity>
           </View>
           <View style={{
@@ -712,12 +712,12 @@ const styles = StyleSheet.create({
     color: Theme.darkBlue,
     alignSelf: 'center',
     fontWeight: 'bold',
-    fontSize: width < 350 ? 12 : 14 && width > 600 ? 16 : 14
+    fontSize: width < 350 ? 12 : width > 600 ? 16 : 14
   },
   amount: {
     color: 'white',
-    fontSize: width < 330 ? 28 : 35 && width > 600 ? 37 : 35,
-    marginBottom: width < 330 ? 8 : 12 && width > 600 ? 14 : 12
+    fontSize: width < 330 ? 28 : width > 600 ? 37 : 35,
+    marginBottom: width < 330 ? 8 : width > 600 ? 14 : 12
   },
   header: {
     color: Theme.darkBlue,

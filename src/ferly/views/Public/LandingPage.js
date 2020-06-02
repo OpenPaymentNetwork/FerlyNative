@@ -80,8 +80,8 @@ export class LandingPage extends React.Component {
           dot={
             <View style={{
               backgroundColor: 'white',
-              width: width < 350 ? 8 : 10 && width > 600 ? 16 : 10,
-              height: width < 350 ? 8 : 10 && width > 600 ? 16 : 10,
+              width: width < 350 ? 8 : width > 600 ? 16 : 10,
+              height: width < 350 ? 8 : width > 600 ? 16 : 10,
               borderRadius: width > 600 ? 8 : 5,
               marginLeft: 8,
               marginRight: 8,
@@ -92,8 +92,8 @@ export class LandingPage extends React.Component {
           activeDot={
             <View style={{
               backgroundColor: Theme.lightBlue,
-              width: width < 350 ? 10 : 12 && width > 600 ? 20 : 12,
-              height: width < 350 ? 10 : 12 && width > 600 ? 20 : 12,
+              width: width < 350 ? 10 : width > 600 ? 20 : 12,
+              height: width < 350 ? 10 : width > 600 ? 20 : 12,
               borderRadius: width > 600 ? 10 : 6,
               marginLeft: 8,
               marginRight: 8,

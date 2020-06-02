@@ -331,7 +331,7 @@ export class UIDController extends React.Component {
     }
 
     return (
-      <View style={styles.container}>
+      <View style={{padding: 20}}>
         <Text
           allowFontScaling={false}
           style={styles.label}>{title}</Text>
@@ -346,9 +346,6 @@ let count = 0;
 const {width} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 20
-  },
   label: {
     color: Theme.lightBlue,
     fontSize: width > 600 ? 18 : 16,

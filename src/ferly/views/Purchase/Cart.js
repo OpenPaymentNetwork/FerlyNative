@@ -649,7 +649,7 @@ export class Cart extends React.Component {
                         <I
                           name="heart-box"
                           color={Theme.darkBlue}
-                          size={width < 330 ? 20 : 23 && width > 600 ? 18 : 23}/>
+                          size={width < 330 ? 20 : width > 600 ? 18 : 23}/>
                         <Text
                           allowFontScaling={false}
                           style={[styles.sectionHeader, {
@@ -674,7 +674,7 @@ export class Cart extends React.Component {
                               }]}>
                               <Icon name="dollar"
                                 color={Theme.darkBlue}
-                                size={width < 330 ? 18 : 21 && width > 600 ? 18 : 21}/>
+                                size={width < 330 ? 18 : width > 600 ? 18 : 21}/>
                               <Text
                                 allowFontScaling={false}
                                 style={[styles.sectionText,
@@ -721,7 +721,7 @@ export class Cart extends React.Component {
                               <Ico
                                 name="md-ribbon"
                                 color={Theme.darkBlue}
-                                size={width < 330 ? 20 : 23 && width > 600 ? 23 : 23} />
+                                size={width < 330 ? 20 : width > 600 ? 23 : 23} />
                               <Text
                                 allowFontScaling={false}
                                 style={[styles.sectionText,
@@ -822,21 +822,6 @@ const styles = StyleSheet.create({
     fontSize: width > 600 ? 18 : 14
   },
   page: {flex: 1, justifyContent: 'space-between', backgroundColor: 'white'},
-  source: {
-    height: width > 600 ? 100 : 90,
-    marginHorizontal: 20,
-    marginVertical: 10,
-    backgroundColor: 'white',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 6,
-    borderWidth: 1,
-    borderColor: 'lightgray',
-    elevation: 1.8,
-    shadowOffset: {width: 2, height: 2},
-    shadowColor: 'lightgray',
-    shadowOpacity: 1
-  },
   error: {
     fontSize: width > 600 ? 16 : 14,
     color: 'red'

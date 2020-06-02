@@ -486,16 +486,29 @@ class Recipient extends React.Component {
           </View>
         );
       } else {
-        body = (
-          <View
-            style={{flex: 1, backgroundColor: 'white'}}>
-            <SearchBar
-              value={this.state.searchText}
-              onChangeText={this.onChangeContact.bind(this)}
-              placeholder='Search Contacts' />
-            {contactsList}
-          </View>
-        );
+        if (contactsList.props && contactsList.props.data && contactsList.props.data.length === 0) {
+          body = (
+            <View
+              style={{flex: 1, backgroundColor: 'white'}}>
+              <View style={{alignItems: 'center', paddingTop: 30}}>
+                <Text style={{fontSize: 16}}>
+                  No contacts available.
+                </Text>
+              </View>
+            </View>
+          );
+        } else {
+          body = (
+            <View
+              style={{flex: 1, backgroundColor: 'white'}}>
+              <SearchBar
+                value={this.state.searchText}
+                onChangeText={this.onChangeContact.bind(this)}
+                placeholder='Search Contacts' />
+              {contactsList}
+            </View>
+          );
+        }
       }
     }
 
